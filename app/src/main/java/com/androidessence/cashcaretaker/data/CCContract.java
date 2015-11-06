@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
+ * A contract class that include the Schema for the Cash CAretaker database.
+ *
  * Created by adammcneilly on 10/30/15.
  */
 public class CCContract {
@@ -21,6 +23,9 @@ public class CCContract {
     public static final String PATH_CATEGORY = "category";
     public static final String PATH_TRANSACTION = "transaction";
 
+    /**
+     * A class representing an Account entry in the database.
+     */
     public static final class AccountEntry implements BaseColumns {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_ACCOUNT).build();
@@ -39,6 +44,9 @@ public class CCContract {
         }
     }
 
+    /**
+     * A class representing a Category entry in the database.
+     */
     public static final class CategoryEntry implements BaseColumns {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_CATEGORY).build();
@@ -56,6 +64,9 @@ public class CCContract {
         }
     }
 
+    /**
+     * A class representing a Transaction entry in the database.
+     */
     public static final class TransactionEntry implements BaseColumns {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRANSACTION).build();

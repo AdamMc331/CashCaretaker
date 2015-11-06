@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
+ * Divider item decoration used to display a divider between RecyclerView elements.
+ *
  * Created by adammcneilly on 11/1/15.
  */
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {

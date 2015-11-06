@@ -20,13 +20,17 @@ import com.androidessence.cashcaretaker.adapters.TransactionAdapter;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
+ * Dialog that displays a list of Transactions for an account.
+ *
  * Created by adammcneilly on 11/1/15.
  */
 public class TransactionsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+    // UI Elements
     private RecyclerView mTransactionRecyclerView;
     private FloatingActionButton mAddTransactionFAB;
     private TransactionAdapter mTransactionAdapter;
 
+    // Account we are showing transactions for.
     private long mAccount;
     private static final String ARG_ACCOUNT = "accountArg";
     private static final int TRANSACTION_LOADER = 0;
@@ -59,6 +63,9 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         return view;
     }
 
+    /**
+     * Sets up the RecyclerView used to display transactions by setting the LayoutManager, ItemDecorator, and Adapter.
+     */
     private void setupRecyclerView(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -70,11 +77,17 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         mTransactionRecyclerView.setAdapter(mTransactionAdapter);
     }
 
+    /**
+     * Retrieves necessary UI elements for the fragment.
+     */
     private void getUIElements(View view){
         mTransactionRecyclerView = (RecyclerView) view.findViewById(R.id.transaction_recycler_view);
         mAddTransactionFAB = (FloatingActionButton) view.findViewById(R.id.add_transaction_fab);
     }
 
+    /**
+     * Sets any necessary click listeners in the fragment.
+     */
     private void setClickListeners(){
         mAddTransactionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +97,9 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         });
     }
 
+    /**
+     * Restarts the loader whenever the fragment resumes.
+     */
     @Override
     public void onResume() {
         super.onResume();

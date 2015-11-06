@@ -9,6 +9,8 @@ import com.androidessence.cashcaretaker.data.CCContract;
 import org.joda.time.LocalDate;
 
 /**
+ * Class representing a Transaction for an account.
+ *
  * Created by adammcneilly on 11/3/15.
  */
 public class Transaction {

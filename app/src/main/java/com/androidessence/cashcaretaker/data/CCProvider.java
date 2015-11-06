@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 
 /**
+ * Content provider used for accessing the data model of Cash Caretaker.
+ *
  * Created by adammcneilly on 10/30/15.
  */
 public class CCProvider extends ContentProvider {

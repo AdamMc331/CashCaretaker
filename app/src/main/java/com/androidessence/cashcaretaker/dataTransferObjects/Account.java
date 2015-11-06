@@ -8,6 +8,8 @@ import android.os.Parcelable;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
+ * Class representing an Account object.
+ *
  * Created by adammcneilly on 11/1/15.
  */
 public class Account implements Parcelable{

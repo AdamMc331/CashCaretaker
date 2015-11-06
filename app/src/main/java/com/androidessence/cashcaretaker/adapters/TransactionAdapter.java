@@ -22,9 +22,14 @@ import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
 
 /**
+ * An apter for displaying a list of Transaction objects.
+ *
  * Created by adammcneilly on 11/1/15.
  */
 public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAdapter.TransactionViewHolder>{
+    /**
+     * A list of data columns required for creating and displaying a Transaction object.
+     */
     public static final String[] TRANSACTION_COLUMNS = new String[] {
             CCContract.TransactionEntry.TABLE_NAME + "." + CCContract.TransactionEntry._ID,
             CCContract.TransactionEntry.COLUMN_DESCRIPTION,
@@ -37,6 +42,7 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
             CCContract.TransactionEntry.COLUMN_ACCOUNT
     };
 
+    // Indexes for each of the columns of display data.
     public static final int DESCRIPTION_INDEX = 1;
     public static final int AMOUNT_INDEX = 2;
     public static final int WITHDRAWAL_INDEX = 3;
@@ -44,12 +50,19 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
     public static final int DATE_INDEX = 5;
     public static final int CATEGORY_INDEX = 6;
 
+    // Colors used inside the ViewHolder.
     private int mRed;
     private int mGreen;
     private int mPrimaryText;
 
+    /**
+     * The ActionMode to be displayed for deleting a Transaction.
+     */
     private ActionMode mActionMode;
 
+    /**
+     * An Action mode callback used for the context menu.
+     */
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         // Called when the action mode is created; startActionMode() was called
         @Override
@@ -153,6 +166,7 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
     public void onBindViewHolder(TransactionViewHolder holder, int position) {
         mTempView.setTag(holder);
 
+        // Move cursor to the current position
         mCursorAdapter.getCursor().moveToPosition(position);
         mCursorAdapter.bindView(mTempView, mContext, mCursorAdapter.getCursor());
     }
@@ -180,9 +194,14 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
 
         @Override
         void bindCursor(Cursor cursor) {
+            // Set description
             mDescriptionTextView.setText(cursor.getString(DESCRIPTION_INDEX));
+
+            // Set amount
             double amount = cursor.getDouble(AMOUNT_INDEX);
             mAmountTextView.setText(Utility.getCurrencyString(amount));
+
+            // Set withdrawal. Depending on withdrawal, we need to color certain views.
             int isWithdrawal = cursor.getInt(WITHDRAWAL_INDEX);
             if(isWithdrawal == 1) {
                 mAmountTextView.setText(String.format("-%s", Utility.getCurrencyString(amount)));
@@ -194,6 +213,7 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
                 mIndicatorView.setBackgroundColor(mGreen);
             }
 
+            // Set date
             String dateString = cursor.getString(DATE_INDEX);
             mDateTextView.setText(Utility.getUIDateStringFromDB(dateString));
 
@@ -206,6 +226,7 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
                 mCategoryTextView.setText(category);
             }
 
+            // Set notes.
             mNotesTextView.setText(String.format("Notes: %s", cursor.getString(NOTES_INDEX)));
         }
 
@@ -221,7 +242,8 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
 
         @Override
         public boolean onLongClick(View view) {
-            mCursorAdapter.getCursor().moveToPosition(getPosition());
+            // Get current item and start action mode
+            mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
             startActionMode(new Transaction(mCursorAdapter.getCursor()));
             return true;
         }
