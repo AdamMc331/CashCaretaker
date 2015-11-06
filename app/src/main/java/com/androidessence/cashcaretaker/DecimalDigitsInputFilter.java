@@ -7,6 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Input filter that only allows two decimal digits in a number.
+ *
  * Created by adammcneilly on 11/1/15.
  */
 public class DecimalDigitsInputFilter implements InputFilter {

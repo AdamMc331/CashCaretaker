@@ -24,9 +24,12 @@ import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
 import org.joda.time.LocalDate;
 
 /**
+ * Fragment container for the UI to add a transaction.
+ *
  * Created by adammcneilly on 11/2/15.
  */
 public class AddTransactionFragment extends Fragment implements DatePickerDialog.OnDateSetListener, CategoryDialog.OnCategorySelectedListener{
+    // UI elements
     private EditText mDescription;
     private EditText mAmount;
     private EditText mNotes;
@@ -37,6 +40,7 @@ public class AddTransactionFragment extends Fragment implements DatePickerDialog
     private RadioButton mWithdrawal;
     private Button mSubmit;
 
+    // Account that we are adding a transaction for, and arguments for variables we want to record.
     private long mAccount;
     private static final String ARG_ACCOUNT = "accountArg";
     private static final String ARG_DATE = "dateArg";
@@ -88,6 +92,9 @@ public class AddTransactionFragment extends Fragment implements DatePickerDialog
         outState.putParcelable(ARG_CATEGORY, mCategory);
     }
 
+    /**
+     * Retrieves all necessary UI elements in the fragment.
+     */
     private void getUIElements(View view){
         mDescription = (EditText) view.findViewById(R.id.transaction_description);
         mAmount = (EditText) view.findViewById(R.id.transaction_amount);
@@ -98,6 +105,9 @@ public class AddTransactionFragment extends Fragment implements DatePickerDialog
         mSubmit = (Button) view.findViewById(R.id.submit);
     }
 
+    /**
+     * Sets all necesary click listeners used in the fragment.
+     */
     private void setClickListeners(){
         mDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,33 +129,51 @@ public class AddTransactionFragment extends Fragment implements DatePickerDialog
         });
     }
 
+    /**
+     * Displays a date picker dialog.
+     */
     private void showDatePickerFragment(){
         DatePickerFragment datePickerFragment = DatePickerFragment.NewInstance(mDate);
         datePickerFragment.setTargetFragment(this, 0);
         datePickerFragment.show(getFragmentManager(), "transactionDate");
     }
 
+    /**
+     * Sets an input filter to necessary EditTexts.
+     */
     private void setInputFilters(){
         InputFilter[] inputFilters = new InputFilter[] {new DecimalDigitsInputFilter()};
         mAmount.setFilters(inputFilters);
     }
 
+    /**
+     * Displays the category dialog.
+     */
     private void showCategoryDialog(){
         CategoryDialog dialog = new CategoryDialog();
         dialog.setTargetFragment(this, 0);
         dialog.show(getFragmentManager(), "transactionCategory");
     }
 
+    /**
+     * Sets the transaction date.
+     */
     private void setDate(LocalDate date) {
         this.mDate = date;
         this.mDateEditText.setText(Utility.getUIDateString(date));
     }
 
+    /**
+     * Handles the selection of a date in the DatePickerDialog.
+     */
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         setDate(new LocalDate(year, monthOfYear + 1, dayOfMonth));
     }
 
+    /**
+     * Retrieves the default category to be used.
+     */
     private void getDefaultCategory(){
         //TODO: Don't hard code this, put it in settings or something
         String defaultCategory = "None";
@@ -169,16 +197,25 @@ public class AddTransactionFragment extends Fragment implements DatePickerDialog
         cursor.close();
     }
 
+    /**
+     * Sets the transaction category.
+     */
     private void setCategory(Category category){
         this.mCategory = category;
         this.mCategoryEditText.setText(mCategory.getDescription());
     }
 
+    /**
+     * Handles the selection of a category in the CategoryDialog.
+     */
     @Override
     public void onCategorySelected(Category category) {
         setCategory(category);
     }
 
+    /**
+     * Validates all required input for the transaction.
+     */
     private boolean validateInput(){
         boolean isValid = true;
 
@@ -195,6 +232,9 @@ public class AddTransactionFragment extends Fragment implements DatePickerDialog
         return isValid;
     }
 
+    /**
+     * Submits a transaction to the database.
+     */
     private void submitTransaction(){
         if(!validateInput()) {
             return;
@@ -217,6 +257,9 @@ public class AddTransactionFragment extends Fragment implements DatePickerDialog
         ((OnTransactionSubmittedListener)getActivity()).onTransactionSubmitted();
     }
 
+    /**
+     * Interface that calls back to the activity when a transaction is submitted.
+     */
     public interface OnTransactionSubmittedListener {
         void onTransactionSubmitted();
     }

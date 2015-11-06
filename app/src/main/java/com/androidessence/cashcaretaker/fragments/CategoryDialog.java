@@ -19,6 +19,8 @@ import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Category;
 
 /**
+ * Dialog that displays a list of transaction categories for the user to select.
+ *
  * Created by adammcneilly on 10/16/15.
  */
 public class CategoryDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{

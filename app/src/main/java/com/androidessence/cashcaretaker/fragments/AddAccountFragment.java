@@ -17,9 +17,12 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 
 /**
+ * Fragment container for the UI of adding an account to the database.
+ *
  * Created by adammcneilly on 11/1/15.
  */
 public class AddAccountFragment extends Fragment{
+    // UI Elements
     private EditText mAccountName;
     private EditText mStartingBalance;
     private Button mSubmit;
@@ -36,17 +39,26 @@ public class AddAccountFragment extends Fragment{
         return view;
     }
 
+    /**
+     * Retrieves necessary UI elements from the fragment.
+     */
     private void getUIElements(View view){
         mAccountName = (EditText) view.findViewById(R.id.account_name);
         mStartingBalance = (EditText) view.findViewById(R.id.starting_balance);
         mSubmit = (Button) view.findViewById(R.id.submit);
     }
 
+    /**
+     * Sets any Inputfilters to the EditTexts in the fragment.
+     */
     private void setInputFilters(){
         InputFilter[] inputFilters = new InputFilter[] {new DecimalDigitsInputFilter()};
         mStartingBalance.setFilters(inputFilters);
     }
 
+    /**
+     * Sets click listeners to the appropriate UI elements.
+     */
     private void setClickListeners(){
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +68,9 @@ public class AddAccountFragment extends Fragment{
         });
     }
 
+    /**
+     * Submits an Account to the database.
+     */
     private void submitAccount(){
         if(!validateInput()){
             return;
@@ -74,6 +89,10 @@ public class AddAccountFragment extends Fragment{
         }
     }
 
+    /**
+     * Validates the input of the Fragment.
+     * @return True if the required input fields have values, false otherwise.
+     */
     private boolean validateInput(){
         boolean isValid = true;
 

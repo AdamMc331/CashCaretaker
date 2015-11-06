@@ -24,20 +24,28 @@ import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 
 /**
+ * RecyclerView.Adapter used to display the user's list of accounts.
+ *
  * Created by adammcneilly on 11/1/15.
  */
 public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.AccountViewHolder> {
 
+    /**
+     * The necessary data fields to display for each account.
+     */
     public static final String[] ACCOUNT_COLUMNS = new String[] {
             CCContract.AccountEntry.TABLE_NAME + "." + CCContract.AccountEntry._ID,
             CCContract.AccountEntry.COLUMN_NAME,
             CCContract.AccountEntry.COLUMN_BALANCE
     };
 
-    public static final int ID_INDEX = 0;
+    // Indexes for each of the columns of display data.
     public static final int NAME_INDEX = 1;
     public static final int BALANCE_INDEX = 2;
 
+    /**
+     * The ActionMode used to delete an Account.
+     */
     private ActionMode mActionMode;
 
     /**
@@ -149,11 +157,20 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
         mCursorAdapter.bindView(mTempView, mContext, mCursorAdapter.getCursor());
     }
 
+    /**
+     * Starts the TransactionsActivity for an Account.
+     * @param account The account item from the list to view Transaction information for.
+     */
     private void startTransactionActivity(Account account){
+        // Create intent
         Intent transactionsActivity = new Intent(mContext, TransactionsActivity.class);
+
+        // Build and set arguments.
         Bundle args = new Bundle();
         args.putParcelable(TransactionsActivity.ARG_ACCOUNT, account);
         transactionsActivity.putExtras(args);
+
+        // Start activity
         mContext.startActivity(transactionsActivity);
     }
 
@@ -173,7 +190,10 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
 
         @Override
         void bindCursor(Cursor cursor) {
+            // Set name
             nameTextView.setText(cursor.getString(NAME_INDEX));
+
+            // Set balance
             double balance = cursor.getDouble(BALANCE_INDEX);
             balanceTextView.setText(Utility.getCurrencyString(balance));
         }
@@ -192,13 +212,14 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
 
         @Override
         public void onClick(View v) {
-            // Get current cursor
+            // Get cursor for item clicked.
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
             startTransactionActivity(new Account(mCursorAdapter.getCursor()));
         }
 
         @Override
         public boolean onLongClick(View v) {
+            // Get cursor for item clicked.
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
             startActionMode(new Account(mCursorAdapter.getCursor()));
             return true;

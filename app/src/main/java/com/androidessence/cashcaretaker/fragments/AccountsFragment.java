@@ -22,12 +22,17 @@ import com.androidessence.cashcaretaker.activities.AddAccountActivity;
 import com.androidessence.cashcaretaker.adapters.AccountAdapter;
 
 /**
+ * Fragment used to display a list of Accounts.
+ *
  * Created by adammcneilly on 11/1/15.
  */
 public class AccountsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+    // UI Elements
     private RecyclerView mAccountRecyclerView;
     private AccountAdapter mAccountAdapter;
     private FloatingActionButton mFloatingActionButton;
+
+    // Loader identifier for the CursorLoader.
     private static final int ACCOUNT_LOADER = 0;
 
     @Nullable
@@ -42,11 +47,17 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
         return view;
     }
 
+    /**
+     * Retrieves all necessary elements for the Fragment.
+     */
     private void getUIElements(View view){
         mAccountRecyclerView = (RecyclerView) view.findViewById(R.id.account_recycler_view);
         mFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.add_account_fab);
     }
 
+    /**
+     * Prepares the RecyclerView of the fragment by setting the LayoutManager, ItemDecorator, and Adapter.
+     */
     private void setupRecyclerView(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -58,6 +69,9 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
         mAccountRecyclerView.setAdapter(mAccountAdapter);
     }
 
+    /**
+     * Prepares the FloatingActionButton of the fragment by setting its click listener.
+     */
     private void setupFloatingActionButton(){
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,11 +81,17 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
         });
     }
 
+    /**
+     * Starts the Activity for adding a new account.
+     */
     private void startAddAccountActivity(){
         Intent addAccount = new Intent(getActivity(), AddAccountActivity.class);
         startActivity(addAccount);
     }
 
+    /**
+     * Restart the CursorLoader when the fragment resumes.
+     */
     @Override
     public void onResume() {
         super.onResume();

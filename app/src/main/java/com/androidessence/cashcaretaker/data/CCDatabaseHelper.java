@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
+ * A class used for creating the Cash Caretaker database.
+ *
  * Created by adammcneilly on 10/30/15.
  */
 public class CCDatabaseHelper extends SQLiteOpenHelper {
@@ -32,6 +34,9 @@ public class CCDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * Creates the Account table.
+     */
     private void buildAccountTable(SQLiteDatabase db){
         db.execSQL(
                 "CREATE TABLE " + CCContract.AccountEntry.TABLE_NAME + " (" +
@@ -41,6 +46,9 @@ public class CCDatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
+    /**
+     * Creates the Category table.
+     */
     private void buildCategoryTable(SQLiteDatabase db){
         db.execSQL(
                 "CREATE TABLE " + CCContract.CategoryEntry.TABLE_NAME + " (" +
@@ -55,6 +63,9 @@ public class CCDatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
+    /**
+     * Creates the Transaction table.
+     */
     private void buildTransactionTable(SQLiteDatabase db){
         db.execSQL(
                 "CREATE TABLE " + CCContract.TransactionEntry.TABLE_NAME + " (" +
@@ -73,6 +84,9 @@ public class CCDatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
+    /**
+     * Creates a trigger that updates the Account balance any time a withdrawal is inserted.
+     */
     private void addUpdateBalanceForWithdrawalTrigger(SQLiteDatabase db) {
         db.execSQL(
                 "CREATE TRIGGER update_balance_for_withdrawal " +
@@ -85,6 +99,9 @@ public class CCDatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
+    /**
+     * Creates a trigger that updates the Account balance any time a deposit is inserted.
+     */
     private void addUpdateBalanceForDepositTrigger(SQLiteDatabase db) {
         db.execSQL(
                 "CREATE TRIGGER update_balance_for_deposit " +
@@ -97,6 +114,9 @@ public class CCDatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
+    /**
+     * Creates a trigger that deletes all transactions from an Account before deleting the Account.
+     */
     private void addTransactionCascadeDeleteTrigger(SQLiteDatabase db) {
         db.execSQL(
                 "CREATE TRIGGER delete_transactions_for_account " +
@@ -107,6 +127,9 @@ public class CCDatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
+    /**
+     * Creates a trigger that updates the Account balance whenever a Withdrawal is deleted.
+     */
     private void addUpdateBalanceForWithdrawalDeleteTrigger(SQLiteDatabase db) {
         db.execSQL(
                 "CREATE TRIGGER update_balance_for_withdrawal_delete " +
@@ -119,6 +142,9 @@ public class CCDatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
+    /**
+     * Creates a trigger that updates the Account balance whenever a Deposit is deleted.
+     */
     private void addUpdateBalanceForDepositDeleteTrigger(SQLiteDatabase db) {
         db.execSQL(
                 "CREATE TRIGGER update_balance_for_deposit_delete " +

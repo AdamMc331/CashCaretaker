@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
+ * Abstract class used to ensure the developer implements `bindCursor` for each ViewHolder class.
+ *
  * Created by adammcneilly on 11/1/15.
  */
 public abstract class RecyclerViewCursorViewHolder extends RecyclerView.ViewHolder {

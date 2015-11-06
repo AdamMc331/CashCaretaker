@@ -9,6 +9,8 @@ import android.support.v4.app.DialogFragment;
 import org.joda.time.LocalDate;
 
 /**
+ * Dialog that allows a user to select a date.
+ *
  * Created by adammcneilly on 10/15/15.
  */
 public class DatePickerFragment extends DialogFragment{

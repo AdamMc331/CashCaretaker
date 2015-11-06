@@ -7,6 +7,8 @@ import android.os.Parcelable;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
+ * Class pertaining information of a Category of transactions.
+ *
  * Created by adammcneilly on 11/2/15.
  */
 public class Category implements Parcelable{

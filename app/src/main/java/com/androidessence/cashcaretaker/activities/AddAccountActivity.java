@@ -6,6 +6,9 @@ import android.support.v7.widget.Toolbar;
 
 import com.androidessence.cashcaretaker.R;
 
+/**
+ * Context for allowing a user to add a new account.
+ */
 public class AddAccountActivity extends AppCompatActivity {
 
     @Override
@@ -13,9 +16,11 @@ public class AddAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_account);
 
+        // Set toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Allow back.
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
