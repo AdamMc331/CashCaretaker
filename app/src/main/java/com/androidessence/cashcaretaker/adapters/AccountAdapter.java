@@ -40,8 +40,8 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
     };
 
     // Indexes for each of the columns of display data.
-    public static final int NAME_INDEX = 1;
-    public static final int BALANCE_INDEX = 2;
+    private static final int NAME_INDEX = 1;
+    private static final int BALANCE_INDEX = 2;
 
     /**
      * The ActionMode used to delete an Account.

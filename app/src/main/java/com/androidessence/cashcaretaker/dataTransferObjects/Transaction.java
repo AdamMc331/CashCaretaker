@@ -50,15 +50,15 @@ public class Transaction {
         return identifier;
     }
 
-    public void setIdentifier(long identifier) {
+    private void setIdentifier(long identifier) {
         this.identifier = identifier;
     }
 
-    public long getAccount() {
+    private long getAccount() {
         return account;
     }
 
-    public void setAccount(long account) {
+    private void setAccount(long account) {
         this.account = account;
     }
 
@@ -66,47 +66,47 @@ public class Transaction {
         return description;
     }
 
-    public void setDescription(String description) {
+    private void setDescription(String description) {
         this.description = description;
     }
 
-    public double getAmount() {
+    private double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    private void setAmount(double amount) {
         this.amount = amount;
     }
 
-    public String getNotes() {
+    private String getNotes() {
         return notes;
     }
 
-    public void setNotes(String notes) {
+    private void setNotes(String notes) {
         this.notes = notes;
     }
 
-    public LocalDate getDate() {
+    private LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    private void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public long getCategory() {
+    private long getCategory() {
         return category;
     }
 
-    public void setCategory(long category) {
+    private void setCategory(long category) {
         this.category = category;
     }
 
-    public boolean isWithdrawal() {
+    private boolean isWithdrawal() {
         return withdrawal;
     }
 
-    public void setWithdrawal(boolean withdrawal) {
+    private void setWithdrawal(boolean withdrawal) {
         this.withdrawal = withdrawal;
     }
 

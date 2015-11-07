@@ -49,7 +49,7 @@ public class AddAccountFragment extends Fragment{
     }
 
     /**
-     * Sets any Inputfilters to the EditTexts in the fragment.
+     * Sets any InputFilters to the EditTexts in the fragment.
      */
     private void setInputFilters(){
         InputFilter[] inputFilters = new InputFilter[] {new DecimalDigitsInputFilter()};

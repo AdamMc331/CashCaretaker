@@ -15,19 +15,19 @@ public abstract class RecyclerViewCursorAdapter<T extends RecyclerViewCursorView
     /**
      * The Context of the adapter.
      */
-    protected Context mContext;
+    final Context mContext;
 
     /**
      * The CursorAdapter used to display data with.
      */
-    protected CursorAdapter mCursorAdapter;
+    CursorAdapter mCursorAdapter;
 
     /**
      * A temporary view used to pass the holder from the RecyclerView.Adapter into the CursorAdapter.
      */
-    protected View mTempView;
+    final View mTempView;
 
-    protected RecyclerViewCursorAdapter(Context context){
+    RecyclerViewCursorAdapter(Context context){
         this.mContext = context;
         this.mTempView = new View(mContext);
     }

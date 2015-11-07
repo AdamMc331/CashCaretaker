@@ -52,14 +52,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.AccountsActivity" />
         </activity>
-        <activity android:name=".activities.AddTransactionActivity"
-            android:label="@string/add_transaction"
-            android:parentActivityName=".activities.TransactionsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.AddTransactionActivity"/>
-        </activity>
     </application>
 
 </manifest>

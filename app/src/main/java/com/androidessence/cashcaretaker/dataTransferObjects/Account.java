@@ -28,7 +28,7 @@ public class Account implements Parcelable{
         setBalance(cursor.getDouble(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE)));
     }
 
-    public Account(Parcel parcel){
+    private Account(Parcel parcel){
         setIdentifier(parcel.readLong());
         setName(parcel.readString());
         setBalance(parcel.readDouble());
@@ -50,7 +50,7 @@ public class Account implements Parcelable{
         return identifier;
     }
 
-    public void setIdentifier(long identifier) {
+    private void setIdentifier(long identifier) {
         this.identifier = identifier;
     }
 
@@ -58,15 +58,15 @@ public class Account implements Parcelable{
         return name;
     }
 
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
 
-    public double getBalance() {
+    private double getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    private void setBalance(double balance) {
         this.balance = balance;
     }
 

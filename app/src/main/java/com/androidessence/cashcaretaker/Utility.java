@@ -15,7 +15,7 @@ public class Utility {
     // Formats
     private static final String DB_DATE_FORMAT = "yyyy-MM-dd";
     private static final String UI_DATE_FORMAT = "MMMM dd, yyyy";
-    private static NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+    private static final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
 
     /**
      * Converts a LocalDate to a string to be saved in the database.

@@ -5,13 +5,13 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
- * A contract class that include the Schema for the Cash CAretaker database.
+ * A contract class that include the Schema for the Cash Caretaker database.
  *
  * Created by adammcneilly on 10/30/15.
  */
 public class CCContract {
     // Content authority is a name for the entire content provider
-    // similar to a domain and its website. This string is guaranteed to be unqiue.
+    // similar to a domain and its website. This string is guaranteed to be unique.
     public static final String CONTENT_AUTHORITY = "com.androidessence.cashcaretaker";
 
     // Use the content authority to provide the base

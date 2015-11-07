@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  *
  * Created by adammcneilly on 10/30/15.
  */
-public class CCDatabaseHelper extends SQLiteOpenHelper {
+class CCDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "cashcaretaker.db";
     private static final int DATABASE_VERSION = 1;
 

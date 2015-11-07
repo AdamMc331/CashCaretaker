@@ -1,20 +1,14 @@
 package com.androidessence.cashcaretaker.activities;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 import com.androidessence.cashcaretaker.fragments.AddTransactionFragment;
 import com.androidessence.cashcaretaker.fragments.TransactionsFragment;
-
-import org.joda.time.LocalDate;
 
 /**
  * Context for both displaying a list of Transactions for an Account and allowing the user to add a transaction for that account.
@@ -45,16 +39,8 @@ public class TransactionsActivity extends AppCompatActivity implements Transacti
      */
     private static final String ARG_STATE = "stateArg";
 
-    /**
-     * The current AddTransactionFragment being shown.
-     */
-    private AddTransactionFragment addTransactionFragment;
     private static final String ADD_TRANSACTION_FRAGMENT_TAG = "addTransactionFragment";
 
-    /**
-     * The current TransactionsFragment being shown.
-     */
-    private TransactionsFragment transactionsFragment;
     private static final String TRANSACTIONS_FRAGMENT_TAG = "transactionsFragmentTag";
 
     /**
@@ -82,14 +68,20 @@ public class TransactionsActivity extends AppCompatActivity implements Transacti
          */
         switch (mState) {
             case STATE_TRANSACTIONS:
-                transactionsFragment = (TransactionsFragment) getSupportFragmentManager().findFragmentByTag(TRANSACTIONS_FRAGMENT_TAG);
+                /*
+      The current TransactionsFragment being shown.
+     */
+                TransactionsFragment transactionsFragment = (TransactionsFragment) getSupportFragmentManager().findFragmentByTag(TRANSACTIONS_FRAGMENT_TAG);
                 if(transactionsFragment == null){
                     showTransactionsFragment();
                 }
                 break;
             case STATE_ADD_TRANSACTION:
                 // If fragment exists already, don't recreate it
-                addTransactionFragment = (AddTransactionFragment) getSupportFragmentManager().findFragmentByTag(ADD_TRANSACTION_FRAGMENT_TAG);
+                /*
+      The current AddTransactionFragment being shown.
+     */
+                AddTransactionFragment addTransactionFragment = (AddTransactionFragment) getSupportFragmentManager().findFragmentByTag(ADD_TRANSACTION_FRAGMENT_TAG);
                 if (addTransactionFragment == null) {
                     showAddTransactionFragment();
                 }
