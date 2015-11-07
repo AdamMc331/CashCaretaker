@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_white_24dp"
+        app:layout_behavior="com.androidessence.cashcaretaker.FABScrollBehavior"
         app:layout_anchor="@id/account_recycler_view"
         app:layout_anchorGravity="bottom|end" />
 
