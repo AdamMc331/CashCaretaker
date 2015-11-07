@@ -1,13 +1,8 @@
 <resources>
     <string name="app_name">Cash Caretaker</string>
-    <string name="title_account_detail">Account Detail</string>
     <string name="add_account">Add Account</string>
     <string name="account_name">Account Name</string>
     <string name="starting_balance">Starting Balance</string>
-    <string name="use_allowance">Use Allowance</string>
-    <string name="allowance">Allowance</string>
-    <string name="spending_period">Spending Period</string>
-    <string name="spending_period_start_date">Start Date</string>
     <string name="submit">Submit</string>
     <string name="add_transaction">Add Transaction</string>
     <string name="description">Description</string>

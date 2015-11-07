@@ -9,6 +9,8 @@ import android.test.AndroidTestCase;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
+ * Test cases the ensure the quality of the Content Provider for Cash Caretaker.
+ *
  * Created by adammcneilly on 11/1/15.
  */
 public class TestProvider extends AndroidTestCase {
@@ -61,7 +63,7 @@ public class TestProvider extends AndroidTestCase {
     public void testInsertReadAccount(){
         ContentValues accountContentValues = getAccountContentValues();
         Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
-        long accontRowID = ContentUris.parseId(accountInsertUri);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
     }
 
     private ContentValues getAccountContentValues(){

@@ -14,7 +14,6 @@ import org.joda.time.LocalDate;
  * Created by adammcneilly on 10/15/15.
  */
 public class DatePickerFragment extends DialogFragment{
-    private LocalDate mDate;
     private static final String ARG_DATE = "dateArg";
 
     public static DatePickerFragment NewInstance(LocalDate date){
@@ -28,7 +27,7 @@ public class DatePickerFragment extends DialogFragment{
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mDate = (LocalDate) getArguments().getSerializable(ARG_DATE);
+        LocalDate mDate = (LocalDate) getArguments().getSerializable(ARG_DATE);
 
         // Use mDate
         assert mDate != null;

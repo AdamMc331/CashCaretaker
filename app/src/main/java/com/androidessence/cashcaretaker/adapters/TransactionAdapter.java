@@ -43,17 +43,17 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
     };
 
     // Indexes for each of the columns of display data.
-    public static final int DESCRIPTION_INDEX = 1;
-    public static final int AMOUNT_INDEX = 2;
-    public static final int WITHDRAWAL_INDEX = 3;
-    public static final int NOTES_INDEX = 4;
-    public static final int DATE_INDEX = 5;
-    public static final int CATEGORY_INDEX = 6;
+    private static final int DESCRIPTION_INDEX = 1;
+    private static final int AMOUNT_INDEX = 2;
+    private static final int WITHDRAWAL_INDEX = 3;
+    private static final int NOTES_INDEX = 4;
+    private static final int DATE_INDEX = 5;
+    private static final int CATEGORY_INDEX = 6;
 
     // Colors used inside the ViewHolder.
-    private int mRed;
-    private int mGreen;
-    private int mPrimaryText;
+    private final int mRed;
+    private final int mGreen;
+    private final int mPrimaryText;
 
     /**
      * The ActionMode to be displayed for deleting a Transaction.

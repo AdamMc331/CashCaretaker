@@ -33,7 +33,7 @@ public class Category implements Parcelable{
         setDescription(cursor.getString(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_DESCRIPTION)));
     }
 
-    public Category(Parcel parcel){
+    private Category(Parcel parcel){
         setIdentifier(parcel.readLong());
         setDescription(parcel.readString());
     }
@@ -47,7 +47,7 @@ public class Category implements Parcelable{
         return identifier;
     }
 
-    public void setIdentifier(long identifier) {
+    private void setIdentifier(long identifier) {
         this.identifier = identifier;
     }
 
@@ -55,7 +55,7 @@ public class Category implements Parcelable{
         return description;
     }
 
-    public void setDescription(String description) {
+    private void setDescription(String description) {
         this.description = description;
     }
 

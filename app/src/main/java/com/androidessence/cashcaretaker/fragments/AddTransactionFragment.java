@@ -106,7 +106,7 @@ public class AddTransactionFragment extends Fragment implements DatePickerDialog
     }
 
     /**
-     * Sets all necesary click listeners used in the fragment.
+     * Sets all necessary click listeners used in the fragment.
      */
     private void setClickListeners(){
         mDateEditText.setOnClickListener(new View.OnClickListener() {

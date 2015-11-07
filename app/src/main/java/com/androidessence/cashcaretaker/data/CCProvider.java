@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
@@ -24,7 +25,7 @@ public class CCProvider extends ContentProvider {
     private static final int TRANSACTION_FOR_ACCOUNT = 22;
 
     private CCDatabaseHelper mOpenHelper;
-    private UriMatcher sUriMatcher = buildUriMatcher();
+    private final UriMatcher sUriMatcher = buildUriMatcher();
 
     private static UriMatcher buildUriMatcher() {
         String content = CCContract.CONTENT_AUTHORITY;
@@ -59,7 +60,7 @@ public class CCProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
         long _id;
         Cursor retCursor;
@@ -139,13 +140,14 @@ public class CCProvider extends ContentProvider {
         }
 
         // Notify any followers
+        assert getContext() != null;
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
     }
 
     @Nullable
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (sUriMatcher.match(uri)) {
             case ACCOUNT:
                 return CCContract.AccountEntry.CONTENT_TYPE;
@@ -160,7 +162,7 @@ public class CCProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         long _id;
         Uri returnUri;
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
@@ -195,12 +197,13 @@ public class CCProvider extends ContentProvider {
         }
 
         // Notify change
+        assert getContext() != null;
         getContext().getContentResolver().notifyChange(uri, null);
         return returnUri;
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         int rows;
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
 
@@ -219,13 +222,14 @@ public class CCProvider extends ContentProvider {
         }
 
         if (rows != 0 || selection == null) {
+            assert getContext() != null;
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rows;
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int rows;
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
 
@@ -238,6 +242,7 @@ public class CCProvider extends ContentProvider {
         }
 
         if (rows != 0) {
+            assert getContext() != null;
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rows;
