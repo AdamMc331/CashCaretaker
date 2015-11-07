@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.DividerItemDecoration;
@@ -31,6 +32,7 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
     private RecyclerView mAccountRecyclerView;
     private AccountAdapter mAccountAdapter;
     private FloatingActionButton mFloatingActionButton;
+    private TextView mAddFirstAccount;
 
     // Loader identifier for the CursorLoader.
     private static final int ACCOUNT_LOADER = 0;
@@ -53,6 +55,7 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
     private void getUIElements(View view){
         mAccountRecyclerView = (RecyclerView) view.findViewById(R.id.account_recycler_view);
         mFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.add_account_fab);
+        mAddFirstAccount = (TextView) view.findViewById(R.id.add_first_account_text_view);
     }
 
     /**
@@ -120,6 +123,9 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
         switch(loader.getId()){
             case ACCOUNT_LOADER:
                 mAccountAdapter.swapCursor(data);
+                // If we have no data, hide the recyclerview and show the text view
+                mAccountRecyclerView.setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
+                mAddFirstAccount.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());

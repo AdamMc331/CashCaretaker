@@ -5,6 +5,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/add_first_transaction_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.30"
+        android:gravity="center"
+        android:padding="30dp"
+        android:text="@string/add_first_transaction"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:visibility="gone" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/transaction_recycler_view"
         android:layout_width="match_parent"

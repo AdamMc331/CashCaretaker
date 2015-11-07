@@ -14,4 +14,6 @@
     <string name="deposit">Deposit</string>
     <string name="delete_transaction">Delete Transaction</string>
     <string name="delete_account">Delete Account</string>
+    <string name="add_first_account">Click the button below to add your first account.</string>
+    <string name="add_first_transaction">Click the button below to add your first transaction.</string>
 </resources>

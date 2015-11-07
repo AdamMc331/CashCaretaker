@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.DividerItemDecoration;
 import com.androidessence.cashcaretaker.R;
@@ -29,6 +30,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
     private RecyclerView mTransactionRecyclerView;
     private FloatingActionButton mAddTransactionFAB;
     private TransactionAdapter mTransactionAdapter;
+    private TextView mAddFirstTrasaction;
 
     // Account we are showing transactions for.
     private long mAccount;
@@ -83,6 +85,7 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
     private void getUIElements(View view){
         mTransactionRecyclerView = (RecyclerView) view.findViewById(R.id.transaction_recycler_view);
         mAddTransactionFAB = (FloatingActionButton) view.findViewById(R.id.add_transaction_fab);
+        mAddFirstTrasaction = (TextView) view.findViewById(R.id.add_first_transaction_text_view);
     }
 
     /**
@@ -128,6 +131,10 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
         switch(loader.getId()){
             case TRANSACTION_LOADER:
                 mTransactionAdapter.swapCursor(data);
+                // If the cursor is empty hide the recyclerview.
+                mTransactionRecyclerView.setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
+                // If the cursor is empty show the textview.
+                mAddFirstTrasaction.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
