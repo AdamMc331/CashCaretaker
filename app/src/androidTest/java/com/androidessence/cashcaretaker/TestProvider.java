@@ -18,7 +18,14 @@ import java.util.Set;
  */
 public class TestProvider extends AndroidTestCase {
     private static final String TEST_ACCOUNT_NAME = "Checking";
+    private static final String TEST_UPDATE_ACCOUNT_NAME = "Checking1";
     private static final double TEST_ACCOUNT_BALANCE = 100.40;
+
+    private static final String TEST_TRANSACTION_DESCRIPTION = "Speedway";
+    private static final String TEST_UPDATE_TRANSACTION_DESCRIPTION = "Speedway1";
+    private static final double TEST_TRANSACTION_AMOUNT = 33.56;
+    private static final String TEST_TRANSACTION_DATE = "2015-11-08";
+    private static final String TEST_TRANSACTION_NOTES = "Some Notes";
 
     @Override
     protected void setUp() throws Exception {
@@ -107,6 +114,7 @@ public class TestProvider extends AndroidTestCase {
      * Tests that an account can be inserted and read back properly.
      */
     public void testInsertReadAccount(){
+        // Get content values and insert Account entry
         ContentValues accountContentValues = getAccountContentValues();
         Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
         long accountRowID = ContentUris.parseId(accountInsertUri);
@@ -140,6 +148,115 @@ public class TestProvider extends AndroidTestCase {
     }
 
     /**
+     * Tests to ensure that an account entry can be updated.
+     */
+    public void testUpdateAccount() {
+        // Get content values and insert account entry.
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Update content values
+        accountContentValues.put(CCContract.AccountEntry.COLUMN_NAME, TEST_UPDATE_ACCOUNT_NAME);
+
+        // Update
+        int rows = mContext.getContentResolver().update(
+                CCContract.AccountEntry.CONTENT_URI,
+                accountContentValues,
+                CCContract.AccountEntry._ID + " = ?",
+                new String[]{String.valueOf(accountRowID)}
+        );
+
+        // Assert we updated one row
+        assertEquals(1, rows);
+
+        // Validate
+        Cursor accountCursor = mContext.getContentResolver().query(
+                CCContract.AccountEntry.buildAccountUri(accountRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(accountCursor);
+        assertEquals(1, accountCursor.getCount());
+        validateCursor(accountCursor, accountContentValues);
+        accountCursor.close();
+    }
+
+    /**
+     * Categories are hard coded inserted in the beginning, and as of version 1.0.1 we only support
+     * reading those categories, just verify that rows come back.
+     */
+    public void testReadCategories() {
+        Cursor categoryCursor = mContext.getContentResolver().query(
+                CCContract.CategoryEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(categoryCursor);
+        assertTrue(categoryCursor.getCount() > 0);
+        categoryCursor.close();
+    }
+
+    /**
+     * Tests that a transaction can be inserted into the database. This tests three queries:
+     * TRANSACTION, TRANSACTION_ID, and TRANSACTION_FOR_ACCOUNT
+     */
+    public void testInsertReadTransaction() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Get content values and insert transaction
+        ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, true);
+        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+        long transactionRowID = ContentUris.parseId(transactionInsertUri);
+
+        // Query for all transactions
+        Cursor transactionCursor = mContext.getContentResolver().query(
+                CCContract.TransactionEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(transactionCursor);
+        assertEquals(1, transactionCursor.getCount());
+        validateCursor(transactionCursor, transactionContentValues);
+        transactionCursor.close();
+
+        // Query for specific transaction
+        transactionCursor = mContext.getContentResolver().query(
+                CCContract.TransactionEntry.buildTransactionUri(transactionRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(transactionCursor);
+        assertEquals(1, transactionCursor.getCount());
+        validateCursor(transactionCursor, transactionContentValues);
+        transactionCursor.close();
+
+        // Query for account transactions
+        transactionCursor = mContext.getContentResolver().query(
+                CCContract.TransactionEntry.buildTransactionsForAccountUri(accountRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(transactionCursor);
+        assertEquals(1, transactionCursor.getCount());
+        validateCursor(transactionCursor, transactionContentValues);
+        transactionCursor.close();
+    }
+
+    /**
      * Retrieves ContentValues for a test account entry.
      */
     private ContentValues getAccountContentValues(){
@@ -147,6 +264,27 @@ public class TestProvider extends AndroidTestCase {
 
         contentValues.put(CCContract.AccountEntry.COLUMN_NAME, TEST_ACCOUNT_NAME);
         contentValues.put(CCContract.AccountEntry.COLUMN_BALANCE, TEST_ACCOUNT_BALANCE);
+
+        return contentValues;
+    }
+
+    /**
+     * Retrieves ContentValues for a test transaction entry.
+     * @param account The account to insert a transaction for.
+     */
+    private ContentValues getTransactionContentValues(long account, long category, boolean useNotes, boolean isWithdrawal) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(CCContract.TransactionEntry.COLUMN_ACCOUNT, account);
+        contentValues.put(CCContract.TransactionEntry.COLUMN_CATEGORY, category);
+        contentValues.put(CCContract.TransactionEntry.COLUMN_DESCRIPTION, TEST_TRANSACTION_DESCRIPTION);
+        contentValues.put(CCContract.TransactionEntry.COLUMN_AMOUNT, TEST_TRANSACTION_AMOUNT);
+        contentValues.put(CCContract.TransactionEntry.COLUMN_DATE, TEST_TRANSACTION_DATE);
+        contentValues.put(CCContract.TransactionEntry.COLUMN_WITHDRAWAL, isWithdrawal ? 1 : 0);
+
+        if(useNotes) {
+            contentValues.put(CCContract.TransactionEntry.COLUMN_NOTES, TEST_TRANSACTION_NOTES);
+        }
 
         return contentValues;
     }
