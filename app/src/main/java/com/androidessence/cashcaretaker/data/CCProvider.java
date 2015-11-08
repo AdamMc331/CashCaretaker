@@ -155,6 +155,11 @@ public class CCProvider extends ContentProvider {
                 return CCContract.AccountEntry.CONTENT_ITEM_TYPE;
             case CATEGORY:
                 return CCContract.CategoryEntry.CONTENT_TYPE;
+            case TRANSACTION:
+            case TRANSACTION_FOR_ACCOUNT:
+                return CCContract.TransactionEntry.CONTENT_TYPE;
+            case TRANSACTION_ID:
+                return CCContract.TransactionEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
