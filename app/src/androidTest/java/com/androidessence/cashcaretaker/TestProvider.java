@@ -257,6 +257,180 @@ public class TestProvider extends AndroidTestCase {
     }
 
     /**
+     * Tests that the Account balance is updated after a withdrawal is inserted.
+     */
+    public void testInsertWithdrawalTrigger() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Get content values and insert transaction
+        ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, true);
+        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+
+        // Query for account
+        Cursor accountCursor = mContext.getContentResolver().query(
+                CCContract.AccountEntry.buildAccountUri(accountRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(accountCursor);
+
+        // The account balance should be the test balance - test withdrawal amount
+        double expectedAmount = TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT;
+        assertTrue(accountCursor.moveToFirst());
+        assertEquals(expectedAmount, accountCursor.getDouble(accountCursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE)));
+    }
+
+    /**
+     * Tests that the Account balance is updated after a deposit is inserted.
+     */
+    public void testInsertDepositTrigger() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Get content values and insert transaction
+        ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, false);
+        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+
+        // Query for account
+        Cursor accountCursor = mContext.getContentResolver().query(
+                CCContract.AccountEntry.buildAccountUri(accountRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(accountCursor);
+
+        // The account balance should be the test balance + test withdrawal amount
+        double expectedAmount = TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT;
+        assertTrue(accountCursor.moveToFirst());
+        assertEquals(expectedAmount, accountCursor.getDouble(accountCursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE)));
+    }
+
+    /**
+     * Tests that the account balance is updated after a withdrawal is deleted.
+     */
+    public void testDeleteWithdrawalTrigger() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Get content values and insert transaction
+        ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, true);
+        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+        long transactionRowID = ContentUris.parseId(transactionInsertUri);
+
+        // Delete transaction
+        int rows = mContext.getContentResolver().delete(
+                CCContract.TransactionEntry.CONTENT_URI,
+                CCContract.TransactionEntry._ID + " = ?",
+                new String[]{String.valueOf(transactionRowID)}
+        );
+
+        // Ensure one row was deleted
+        assertEquals(1, rows);
+
+        // Query for account
+        Cursor accountCursor = mContext.getContentResolver().query(
+                CCContract.AccountEntry.buildAccountUri(accountRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(accountCursor);
+
+        // The account balance should be the same as the beginning
+        double expectedAmount = TEST_ACCOUNT_BALANCE;
+        assertTrue(accountCursor.moveToFirst());
+        assertEquals(expectedAmount, accountCursor.getDouble(accountCursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE)));
+    }
+
+    /**
+     * Tests that the account balance is updated after a deposit is deleted.
+     */
+    public void testDeleteDepositTrigger() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Get content values and insert transaction
+        ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, false);
+        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+        long transactionRowID = ContentUris.parseId(transactionInsertUri);
+
+        // Delete transaction
+        int rows = mContext.getContentResolver().delete(
+                CCContract.TransactionEntry.CONTENT_URI,
+                CCContract.TransactionEntry._ID + " = ?",
+                new String[]{String.valueOf(transactionRowID)}
+        );
+
+        // Ensure one row was deleted
+        assertEquals(1, rows);
+
+        // Query for account
+        Cursor accountCursor = mContext.getContentResolver().query(
+                CCContract.AccountEntry.buildAccountUri(accountRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(accountCursor);
+
+        // The account balance should be the same as the beginning
+        double expectedAmount = TEST_ACCOUNT_BALANCE;
+        assertTrue(accountCursor.moveToFirst());
+        assertEquals(expectedAmount, accountCursor.getDouble(accountCursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE)));
+    }
+
+    /**
+     * Tests that all transactions for an account are deleted when an account is deleted.
+     */
+    public void testCascadeDeleteTransactionTrigger() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Get content values and insert transaction
+        ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, true);
+        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+        long transactionRowID = ContentUris.parseId(transactionInsertUri);
+
+        // Delete account
+        int rows = mContext.getContentResolver().delete(
+                CCContract.AccountEntry.CONTENT_URI,
+                CCContract.AccountEntry._ID + " = ?",
+                new String[]{String.valueOf(accountRowID)}
+        );
+        assertEquals(1, rows);
+
+        // Query for transactions, should have none.
+        Cursor transactionCursor = mContext.getContentResolver().query(
+                CCContract.TransactionEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(transactionCursor);
+        assertEquals(0, transactionCursor.getCount());
+        transactionCursor.close();
+
+    }
+
+    /**
      * Retrieves ContentValues for a test account entry.
      */
     private ContentValues getAccountContentValues(){
