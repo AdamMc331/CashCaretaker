@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="@dimen/text_padding">
 
     <TextView
         android:id="@+id/account_name"
