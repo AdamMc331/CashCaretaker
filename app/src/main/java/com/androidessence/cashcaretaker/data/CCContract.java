@@ -22,6 +22,8 @@ public class CCContract {
     public static final String PATH_ACCOUNT = "account";
     public static final String PATH_CATEGORY = "category";
     public static final String PATH_TRANSACTION = "transaction";
+    public static final String PATH_REPEATING_PERIOD = "repeatingPeriod";
+    public static final String PATH_REPEATING_TRANSACTION = "repeatingTransaction";
 
     /**
      * A class representing an Account entry in the database.
@@ -92,6 +94,53 @@ public class CCContract {
         public static Uri buildTransactionsForAccountUri(long account){
             Uri accountUri = CONTENT_URI.buildUpon().appendPath(PATH_ACCOUNT).build();
             return ContentUris.withAppendedId(accountUri, account);
+        }
+    }
+
+    /**
+     * Class representing an entry for a repeating period (monthly, yearly, etc).
+     */
+    public static final class RepeatingPeriodEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_REPEATING_PERIOD).build();
+
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_URI + "/" + PATH_REPEATING_PERIOD;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_URI + "/" + PATH_REPEATING_PERIOD;
+
+        public static final String TABLE_NAME = "repeatingPeriodTable";
+        public static final String COLUMN_NAME = "repeatingPeriodName";
+
+        public static Uri buildRepeatingPeriodUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
+    /**
+     * Class representing an entry for a repeating transaction.
+     */
+    public static final class RepeatingTransactionEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_REPEATING_TRANSACTION).build();
+
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_URI + "/" + PATH_REPEATING_TRANSACTION;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_URI + "/" + PATH_REPEATING_TRANSACTION;
+
+        public static final String TABLE_NAME = "repeatingTransactionTable";
+        public static final String COLUMN_REPEATING_PERIOD = "repTransRepeatingPeriod";
+        public static final String COLUMN_ACCOUNT = "repTransAccount";
+        public static final String COLUMN_DESCRIPTION = "repTransDescription";
+        public static final String COLUMN_AMOUNT = "repTransAmount";
+        public static final String COLUMN_NOTES = "repTransNotes";
+        public static final String COLUMN_CATEGORY = "repTransCategory";
+        public static final String COLUMN_NEXT_DATE = "repTransNextDate";
+        public static final String COLUMN_WITHDRAWAL = "repTransWithdrawal";
+
+        public static Uri buildRepeatingTransactionUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }
 }
