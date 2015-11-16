@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 class CCDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "cashcaretaker.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public CCDatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -31,7 +31,15 @@ class CCDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        // If we are upgrading to version 2, we need to add our new tables.
+        switch(newVersion) {
+            case 2:
+                buildRepeatingPeriodTable(db);
+                buildRepeatingTransactionTable(db);
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -81,6 +89,48 @@ class CCDatabaseHelper extends SQLiteOpenHelper {
                         "REFERENCES " + CCContract.CategoryEntry.TABLE_NAME + " (" + CCContract.CategoryEntry._ID + "), " +
                         "FOREIGN KEY (" + CCContract.TransactionEntry.COLUMN_ACCOUNT + ") " +
                         "REFERENCES " + CCContract.AccountEntry.TABLE_NAME + " (" + CCContract.AccountEntry._ID + " ));"
+        );
+    }
+
+    /**
+     * Builds the repeating transaction table and inserts default values of monthly and yearly.
+     */
+    private void buildRepeatingPeriodTable(SQLiteDatabase db) {
+        db.execSQL(
+                "CREATE TABLE " + CCContract.RepeatingPeriodEntry.TABLE_NAME + " (" +
+                        CCContract.RepeatingPeriodEntry._ID + " INTEGER PRIMARY KEY, " +
+                        CCContract.RepeatingPeriodEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL);"
+        );
+
+        db.execSQL(
+                "INSERT INTO " + CCContract.RepeatingPeriodEntry.TABLE_NAME + " " +
+                        "(" + CCContract.RepeatingPeriodEntry._ID + ", " + CCContract.RepeatingPeriodEntry.COLUMN_NAME + ") " +
+                        " VALUES " +
+                        "(1, 'Monthly'), (2, 'Yearly');"
+        );
+    }
+
+    /**
+     * Builds the repeating transaction table.
+     */
+    private void buildRepeatingTransactionTable(SQLiteDatabase db) {
+        db.execSQL(
+                "CREATE TABLE " + CCContract.RepeatingTransactionEntry.TABLE_NAME + " (" +
+                        CCContract.RepeatingTransactionEntry._ID + " INTEGER PRIMARY KEY, " +
+                        CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD + " INTEGER NOT NULL, " +
+                        CCContract.RepeatingTransactionEntry.COLUMN_ACCOUNT + " INTEGER NOT NULL, " +
+                        CCContract.RepeatingTransactionEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
+                        CCContract.RepeatingTransactionEntry.COLUMN_AMOUNT + " REAL NOT NULL, " +
+                        CCContract.RepeatingTransactionEntry.COLUMN_NOTES + " TEXT DEFAULT '', " +
+                        CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE + " TEXT NOT NULL, " +
+                        CCContract.RepeatingTransactionEntry.COLUMN_CATEGORY + " INTEGER NOT NULL, " +
+                        CCContract.RepeatingTransactionEntry.COLUMN_WITHDRAWAL + " INTEGER NOT NULL, " +
+                        "FOREIGN KEY (" + CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD + ") " +
+                        "REFERENCES " + CCContract.RepeatingPeriodEntry.TABLE_NAME + " (" + CCContract.RepeatingPeriodEntry._ID + "), " +
+                        "FOREIGN KEY (" + CCContract.RepeatingTransactionEntry.COLUMN_ACCOUNT + ") " +
+                        "REFERENCES " + CCContract.AccountEntry.TABLE_NAME + " (" + CCContract.AccountEntry._ID + "), " +
+                        "FOREIGN KEY (" + CCContract.RepeatingTransactionEntry.COLUMN_CATEGORY + ") " +
+                        "REFERENCES " + CCContract.CategoryEntry.TABLE_NAME + " (" + CCContract.CategoryEntry._ID + "));"
         );
     }
 

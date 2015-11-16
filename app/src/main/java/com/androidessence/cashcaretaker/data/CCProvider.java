@@ -23,6 +23,9 @@ public class CCProvider extends ContentProvider {
     private static final int TRANSACTION = 20;
     private static final int TRANSACTION_ID = 21;
     private static final int TRANSACTION_FOR_ACCOUNT = 22;
+    private static final int REPEATING_PERIOD = 30;
+    private static final int REPEATING_TRANSACTION = 40;
+    private static final int REPEATING_TRANSACTION_ID = 41;
 
     private CCDatabaseHelper mOpenHelper;
     private final UriMatcher sUriMatcher = buildUriMatcher();
@@ -37,6 +40,9 @@ public class CCProvider extends ContentProvider {
         matcher.addURI(content, CCContract.PATH_TRANSACTION, TRANSACTION);
         matcher.addURI(content, CCContract.PATH_TRANSACTION + "/#", TRANSACTION_ID);
         matcher.addURI(content, CCContract.PATH_TRANSACTION + "/" + CCContract.PATH_ACCOUNT + "/#", TRANSACTION_FOR_ACCOUNT);
+        matcher.addURI(content, CCContract.PATH_REPEATING_PERIOD, REPEATING_PERIOD);
+        matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION, REPEATING_TRANSACTION);
+        matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION + "/#", REPEATING_TRANSACTION_ID);
 
         return matcher;
     }
@@ -135,6 +141,40 @@ public class CCProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
+            case REPEATING_PERIOD:
+                retCursor = db.query(
+                        CCContract.RepeatingPeriodEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case REPEATING_TRANSACTION:
+                retCursor = db.query(
+                        CCContract.RepeatingTransactionEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case REPEATING_TRANSACTION_ID:
+                _id = ContentUris.parseId(uri);
+                retCursor = db.query(
+                        CCContract.RepeatingTransactionEntry.TABLE_NAME,
+                        projection,
+                        CCContract.RepeatingTransactionEntry._ID + " = ?",
+                        new String[]{String.valueOf(_id)},
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -160,6 +200,12 @@ public class CCProvider extends ContentProvider {
                 return CCContract.TransactionEntry.CONTENT_TYPE;
             case TRANSACTION_ID:
                 return CCContract.TransactionEntry.CONTENT_ITEM_TYPE;
+            case REPEATING_PERIOD:
+                return CCContract.RepeatingPeriodEntry.CONTENT_TYPE;
+            case REPEATING_TRANSACTION:
+                return CCContract.RepeatingTransactionEntry.CONTENT_TYPE;
+            case REPEATING_TRANSACTION_ID:
+                return CCContract.RepeatingTransactionEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -197,6 +243,14 @@ public class CCProvider extends ContentProvider {
                     throw new UnsupportedOperationException("Unable to insert row into: " + uri);
                 }
                 break;
+            case REPEATING_TRANSACTION:
+                _id = db.insert(CCContract.RepeatingTransactionEntry.TABLE_NAME, null, values);
+                if(_id > 0) {
+                    returnUri = CCContract.RepeatingTransactionEntry.buildRepeatingTransactionUri(_id);
+                } else {
+                    throw new UnsupportedOperationException("Unable to insert row into: " + uri);
+                }
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -222,6 +276,9 @@ public class CCProvider extends ContentProvider {
             case TRANSACTION:
                 rows = db.delete(CCContract.TransactionEntry.TABLE_NAME, selection, selectionArgs);
                 break;
+            case REPEATING_TRANSACTION:
+                rows = db.delete(CCContract.RepeatingTransactionEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -241,6 +298,12 @@ public class CCProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case ACCOUNT:
                 rows = db.update(CCContract.AccountEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case TRANSACTION:
+                rows = db.update(CCContract.TransactionEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case REPEATING_TRANSACTION:
+                rows = db.update(CCContract.RepeatingTransactionEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
