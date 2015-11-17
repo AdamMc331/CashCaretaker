@@ -46,7 +46,7 @@ public class CCProvider extends ContentProvider {
         matcher.addURI(content, CCContract.PATH_REPEATING_PERIOD, REPEATING_PERIOD);
         matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION, REPEATING_TRANSACTION);
         matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION + "/#", REPEATING_TRANSACTION_ID);
-        matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION_WITH_DETAILS, REPEATING_TRANSACTION_DETAILS);
+        matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION + "/" + CCContract.PATH_DETAILS, REPEATING_TRANSACTION_DETAILS);
 
         return matcher;
     }
