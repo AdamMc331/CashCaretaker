@@ -1,6 +1,7 @@
 package com.androidessence.cashcaretaker.dataTransferObjects;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
@@ -20,6 +21,20 @@ public class RepeatingTransaction {
     private LocalDate nextDate;
     private long category;
     private boolean withdrawal;
+
+    public RepeatingTransaction(Cursor cursor) {
+        setIdentifier(cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry._ID)));
+        setRepeatingPeriod(cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD)));
+        setAccount(cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_ACCOUNT)));
+        setDescription(cursor.getString(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_DESCRIPTION)));
+        setAmount(cursor.getDouble(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_AMOUNT)));
+        setNotes(cursor.getString(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_NOTES)));
+        String nextDateString = cursor.getString(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE));
+        setNextDate(Utility.getDateFromDb(nextDateString));
+        setCategory(cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_CATEGORY)));
+        int withdrawalInt = cursor.getInt(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_WITHDRAWAL));
+        setWithdrawal(withdrawalInt == 1);
+    }
 
     public RepeatingTransaction(long repeatingPeriod, long account, String description, double amount, String notes, LocalDate nextDate, long category, boolean withdrawal) {
         setRepeatingPeriod(repeatingPeriod);

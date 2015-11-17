@@ -99,7 +99,7 @@ public class RepeatingTransactionsFragment extends Fragment implements LoaderMan
     @Override
     public void onResume() {
         super.onResume();
-        getLoaderManager().initLoader(REPEATING_TRANSACTION_LOADER, null, this);
+        getLoaderManager().restartLoader(REPEATING_TRANSACTION_LOADER, null, this);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class RepeatingTransactionsFragment extends Fragment implements LoaderMan
                         RepeatingTransactionAdapter.REPEATING_TRANSACTION_COLUMNS,
                         null,
                         null,
-                        null
+                        CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE + " ASC"
                 );
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + id);

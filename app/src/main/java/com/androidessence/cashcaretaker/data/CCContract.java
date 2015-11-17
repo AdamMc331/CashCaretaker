@@ -24,7 +24,7 @@ public class CCContract {
     public static final String PATH_TRANSACTION = "transaction";
     public static final String PATH_REPEATING_PERIOD = "repeatingPeriod";
     public static final String PATH_REPEATING_TRANSACTION = "repeatingTransaction";
-    public static final String PATH_REPEATING_TRANSACTION_WITH_DETAILS = "repeatingTransactionDetails";
+    public static final String PATH_DETAILS = "details";
 
     /**
      * A class representing an Account entry in the database.
@@ -126,7 +126,7 @@ public class CCContract {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_REPEATING_TRANSACTION).build();
 
         public static final Uri CONTENT_DETAILS_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_REPEATING_TRANSACTION_WITH_DETAILS).build();
+                CONTENT_URI.buildUpon().appendPath(PATH_DETAILS).build();
 
         public static final String CONTENT_TYPE =
                 "vnd.android.cursor.dir/" + CONTENT_URI + "/" + PATH_REPEATING_TRANSACTION;
