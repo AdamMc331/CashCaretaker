@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker.fragments;
 
+import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
@@ -19,6 +21,7 @@ import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 import com.androidessence.cashcaretaker.dataTransferObjects.Category;
 import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
 
 import org.joda.time.LocalDate;
 
@@ -27,7 +30,7 @@ import org.joda.time.LocalDate;
  *
  * Created by adammcneilly on 11/16/15.
  */
-public class AddRepeatingTransactionFragment extends Fragment implements RepeatingPeriodDialog.OnRepeatingPeriodSelectedListener, AccountDialog.OnAccountSelectedListener{
+public class AddRepeatingTransactionFragment extends Fragment implements RepeatingPeriodDialog.OnRepeatingPeriodSelectedListener, AccountDialog.OnAccountSelectedListener, CategoryDialog.OnCategorySelectedListener, DatePickerDialog.OnDateSetListener{
     private EditText mRepeatingPeriodEditText;
     private RepeatingPeriod mRepeatingPeriod;
     private EditText mAccountEditText;
@@ -130,6 +133,24 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
                 showAccountDialog();
             }
         });
+        mCategoryEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCategoryDialog();
+            }
+        });
+        mDateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerFragment();
+            }
+        });
+        mSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitRepeatingTransaction();
+            }
+        });
     }
 
     /**
@@ -148,6 +169,56 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
         AccountDialog accountDialog = new AccountDialog();
         accountDialog.setTargetFragment(this, 0);
         accountDialog.show(getFragmentManager(), "account");
+    }
+
+    /**
+     * Submits a repeating transaction entry to the database.
+     */
+    private void submitRepeatingTransaction() {
+        if(!validateInput()) {
+            return;
+        }
+
+        RepeatingTransaction repeatingTransaction = new RepeatingTransaction(
+                mRepeatingPeriod.getIdentifier(),
+                mAccount.getIdentifier(),
+                mDescription.getText().toString(),
+                Double.parseDouble(mAmount.getText().toString()),
+                mNotes.getText().toString(),
+                mDate,
+                mCategory.getIdentifier(),
+                mWithdrawal.isChecked()
+        );
+
+        // Submit row
+        getActivity().getContentResolver().insert(CCContract.RepeatingTransactionEntry.CONTENT_URI, repeatingTransaction.getContentValues());
+        getActivity().finish();
+    }
+
+    /**
+     * Validates all required input.
+     * @return True if the input in the fragment is valid, false otherwise.
+     */
+    private boolean validateInput() {
+        boolean isValid = true;
+
+        // Do not check RepeatingPeriod, Category they are both set by default.
+        if(mAccount == null) {
+            mAccountEditText.setError("Account must be selected.");
+            isValid = false;
+        }
+
+        if(mDescription.getText().toString().isEmpty()) {
+            mDescription.setError("Description cannot be blank.");
+            isValid = false;
+        }
+
+        if(mAmount.getText().toString().isEmpty()) {
+            mAmount.setError("Amount cannot be blank.");
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     /**
@@ -227,6 +298,8 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
     private void setAccount(Account account) {
         mAccount = account;
         mAccountEditText.setText(mAccount.getName());
+        // Remove error if it was there
+        mAccountEditText.setError(null);
     }
 
     @Override
@@ -237,5 +310,36 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
     @Override
     public void onAccountSelected(Account account) {
         setAccount(account);
+    }
+
+    /**
+     * Displays the category dialog.
+     */
+    private void showCategoryDialog(){
+        CategoryDialog dialog = new CategoryDialog();
+        dialog.setTargetFragment(this, 0);
+        dialog.show(getFragmentManager(), "transactionCategory");
+    }
+
+    @Override
+    public void onCategorySelected(Category category) {
+        setCategory(category);
+    }
+
+    /**
+     * Handles the selection of a date in the DatePickerDialog.
+     */
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        setDate(new LocalDate(year, monthOfYear + 1, dayOfMonth));
+    }
+
+    /**
+     * Displays a date picker dialog.
+     */
+    private void showDatePickerFragment(){
+        DatePickerFragment datePickerFragment = DatePickerFragment.NewInstance(mDate);
+        datePickerFragment.setTargetFragment(this, 0);
+        datePickerFragment.show(getFragmentManager(), "transactionDate");
     }
 }
