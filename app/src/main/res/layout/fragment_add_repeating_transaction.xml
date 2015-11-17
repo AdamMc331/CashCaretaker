@@ -25,7 +25,9 @@
                 android:id="@+id/transaction_repeating_period"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences"
+                android:inputType="text"
+                android:focusable="false"
+                android:clickable="true"
                 android:hint="@string/repeats"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -37,7 +39,9 @@
                 android:id="@+id/transaction_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences"
+                android:inputType="text"
+                android:focusable="false"
+                android:clickable="true"
                 android:hint="@string/account"/>
         </android.support.design.widget.TextInputLayout>
 
