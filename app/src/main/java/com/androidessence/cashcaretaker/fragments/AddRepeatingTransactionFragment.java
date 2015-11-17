@@ -23,9 +23,11 @@ import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
 import org.joda.time.LocalDate;
 
 /**
+ * Fragment for adding a repeating transaction.
+ *
  * Created by adammcneilly on 11/16/15.
  */
-public class AddRepeatingTransactionFragment extends Fragment implements RepeatingPeriodDialog.OnRepeatingPeriodSelectedListener{
+public class AddRepeatingTransactionFragment extends Fragment implements RepeatingPeriodDialog.OnRepeatingPeriodSelectedListener, AccountDialog.OnAccountSelectedListener{
     private EditText mRepeatingPeriodEditText;
     private RepeatingPeriod mRepeatingPeriod;
     private EditText mAccountEditText;
@@ -122,6 +124,12 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
                 showRepeatingPeriodDialog();
             }
         });
+        mAccountEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAccountDialog();
+            }
+        });
     }
 
     /**
@@ -131,6 +139,15 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
         RepeatingPeriodDialog repeatingPeriodDialog = new RepeatingPeriodDialog();
         repeatingPeriodDialog.setTargetFragment(this, 0);
         repeatingPeriodDialog.show(getFragmentManager(), "repeatingPeriod");
+    }
+
+    /**
+     * Displays the dialog for selecting an account.
+     */
+    private void showAccountDialog() {
+        AccountDialog accountDialog = new AccountDialog();
+        accountDialog.setTargetFragment(this, 0);
+        accountDialog.show(getFragmentManager(), "account");
     }
 
     /**
@@ -215,5 +232,10 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
     @Override
     public void onRepeatingPeriodSelected(RepeatingPeriod repeatingPeriod) {
         setRepeatingPeriod(repeatingPeriod);
+    }
+
+    @Override
+    public void onAccountSelected(Account account) {
+        setAccount(account);
     }
 }
