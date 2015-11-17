@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
+
 /**
  * Content provider used for accessing the data model of Cash Caretaker.
  *
@@ -26,6 +28,7 @@ public class CCProvider extends ContentProvider {
     private static final int REPEATING_PERIOD = 30;
     private static final int REPEATING_TRANSACTION = 40;
     private static final int REPEATING_TRANSACTION_ID = 41;
+    private static final int REPEATING_TRANSACTION_DETAILS = 42;
 
     private CCDatabaseHelper mOpenHelper;
     private final UriMatcher sUriMatcher = buildUriMatcher();
@@ -43,6 +46,7 @@ public class CCProvider extends ContentProvider {
         matcher.addURI(content, CCContract.PATH_REPEATING_PERIOD, REPEATING_PERIOD);
         matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION, REPEATING_TRANSACTION);
         matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION + "/#", REPEATING_TRANSACTION_ID);
+        matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION_WITH_DETAILS, REPEATING_TRANSACTION_DETAILS);
 
         return matcher;
     }
@@ -55,6 +59,20 @@ public class CCProvider extends ContentProvider {
                 CCContract.TransactionEntry.TABLE_NAME + " " +
                         "LEFT JOIN " + CCContract.CategoryEntry.TABLE_NAME + " ON " +
                         CCContract.CategoryEntry.TABLE_NAME + "." + CCContract.CategoryEntry._ID + " = " + CCContract.TransactionEntry.COLUMN_CATEGORY
+        );
+    }
+
+    private static final SQLiteQueryBuilder sRepeatingTransactionDetailsBuilder;
+    static {
+        sRepeatingTransactionDetailsBuilder = new SQLiteQueryBuilder();
+        sRepeatingTransactionDetailsBuilder.setTables(
+                CCContract.RepeatingTransactionEntry.TABLE_NAME + " " +
+                        "LEFT JOIN " + CCContract.CategoryEntry.TABLE_NAME + " ON " +
+                        CCContract.CategoryEntry.TABLE_NAME + "." + CCContract.CategoryEntry._ID + " = " + CCContract.RepeatingTransactionEntry.COLUMN_CATEGORY + " " +
+                        "LEFT JOIN " + CCContract.AccountEntry.TABLE_NAME + " ON " +
+                        CCContract.AccountEntry.TABLE_NAME + "." + CCContract.AccountEntry._ID + " = " + CCContract.RepeatingTransactionEntry.COLUMN_ACCOUNT + " " +
+                        "LEFT JOIN " + CCContract.RepeatingPeriodEntry.TABLE_NAME + " ON " +
+                        CCContract.RepeatingPeriodEntry.TABLE_NAME + "." + CCContract.RepeatingPeriodEntry._ID + " = " + CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD
         );
     }
 
@@ -175,6 +193,17 @@ public class CCProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
+            case REPEATING_TRANSACTION_DETAILS:
+                retCursor = sRepeatingTransactionDetailsBuilder.query(
+                        db,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -203,6 +232,7 @@ public class CCProvider extends ContentProvider {
             case REPEATING_PERIOD:
                 return CCContract.RepeatingPeriodEntry.CONTENT_TYPE;
             case REPEATING_TRANSACTION:
+            case REPEATING_TRANSACTION_DETAILS:
                 return CCContract.RepeatingTransactionEntry.CONTENT_TYPE;
             case REPEATING_TRANSACTION_ID:
                 return CCContract.RepeatingTransactionEntry.CONTENT_ITEM_TYPE;

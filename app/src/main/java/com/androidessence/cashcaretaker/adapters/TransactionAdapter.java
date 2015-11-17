@@ -227,6 +227,7 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
             }
 
             // Set notes.
+            //TODO: Use resource
             mNotesTextView.setText(String.format("Notes: %s", cursor.getString(NOTES_INDEX)));
         }
 

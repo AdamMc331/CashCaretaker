@@ -60,11 +60,24 @@
             </intent-filter>
         </receiver>
 
-        <!-- Service for repeating transactions. Since exported is false this service is only
-        available in this app. -->
+        <!--
+        Service for repeating transactions. Since exported is false this service is only
+        available in this app.
+        -->
         <service
             android:name=".alarms.RepeatingTransactionService"
             android:exported="false" />
+
+        <activity
+            android:name=".activities.RepeatingTransactionsActivity"
+            android:label="@string/manage_repeating_transactions"
+            android:parentActivityName=".activities.AccountsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.AccountsActivity" />
+        </activity>
+
     </application>
 
 </manifest>
