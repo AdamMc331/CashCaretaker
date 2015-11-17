@@ -137,4 +137,18 @@ public class RepeatingTransaction {
 
         return values;
     }
+
+    public ContentValues getTransactionContentValues() {
+        ContentValues values = new ContentValues();
+
+        values.put(CCContract.TransactionEntry.COLUMN_ACCOUNT, getAccount());
+        values.put(CCContract.TransactionEntry.COLUMN_DESCRIPTION, getDescription());
+        values.put(CCContract.TransactionEntry.COLUMN_AMOUNT, getAmount());
+        values.put(CCContract.TransactionEntry.COLUMN_NOTES, getNotes());
+        values.put(CCContract.TransactionEntry.COLUMN_DATE, Utility.getDBDateString(getNextDate()));
+        values.put(CCContract.TransactionEntry.COLUMN_CATEGORY, getCategory());
+        values.put(CCContract.TransactionEntry.COLUMN_WITHDRAWAL, isWithdrawal() ? 1 : 0);
+
+        return values;
+    }
 }
