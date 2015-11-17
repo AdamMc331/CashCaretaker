@@ -77,7 +77,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.AccountsActivity" />
         </activity>
-
+        <activity
+            android:name=".activities.AddRepeatingTransactionActivity"
+            android:label="@string/title_activity_add_repeating_transaction"
+            android:parentActivityName=".activities.RepeatingTransactionsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.androidessence.cashcaretaker.activities.RepeatingTransactionsActivity" />
+        </activity>
     </application>
 
 </manifest>
