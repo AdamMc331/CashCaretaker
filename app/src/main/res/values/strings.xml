@@ -20,4 +20,6 @@
     <string name="repeats">Repeats</string>
     <string name="account">Account</string>
     <string name="manage_repeating_transactions">Manage Repeating Transactions</string>
+    <string name="title_activity_add_repeating_transaction">Add Repeating Transaction</string>
+    <string name="action_settings">Settings</string>
 </resources>
