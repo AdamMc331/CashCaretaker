@@ -52,6 +52,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.AccountsActivity" />
         </activity>
+
+        <!-- Boot receiver that restarts our IntentService for repeating transactions -->
+        <receiver android:name=".alarms.AutoLaunchService">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Service for repeating transactions. Since exported is false this service is only
+        available in this app. -->
+        <service
+            android:name=".alarms.RepeatingTransactionService"
+            android:exported="false" />
     </application>
 
 </manifest>
