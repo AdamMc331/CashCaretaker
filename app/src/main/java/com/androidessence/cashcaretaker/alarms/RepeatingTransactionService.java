@@ -1,16 +1,15 @@
 package com.androidessence.cashcaretaker.alarms;
 
 import android.app.IntentService;
-import android.app.Service;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
 
 import org.joda.time.LocalDate;
 
@@ -26,33 +25,75 @@ public class RepeatingTransactionService extends IntentService {
         super("RepeatingTransactionService");
     }
 
+    // Keep track of indexes for repeating periods. These are hard coded.
+    //TODO: Find better idea
+    private static final int MONTHLY = 1;
+    private static final int YEARLY = 2;
+
     @Override
     protected void onHandleIntent(Intent intent) {
         mContext = getApplicationContext();
 
         // Check for any alarms prior to today
-        getCurrentOrPreviousTransactions();
+        getCurrentOrPreviousRepeatingTransactions();
     }
 
-    private void getCurrentOrPreviousTransactions() {
+    private void getCurrentOrPreviousRepeatingTransactions() {
         String currentDate = Utility.getDBDateString(LocalDate.now());
 
-        Cursor repeatingTransactions = mContext.getContentResolver().query(
+        Cursor cursor = mContext.getContentResolver().query(
                 CCContract.RepeatingTransactionEntry.CONTENT_URI,
                 null,
-                CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE + " <= ",
+                CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE + " <= ?",
                 new String[]{currentDate},
                 null
         );
 
-        assert repeatingTransactions != null;
+        assert cursor != null;
 
-        while(repeatingTransactions.moveToNext()) {
-            String description = repeatingTransactions.getString(repeatingTransactions.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_DESCRIPTION));
+        while(cursor.moveToNext()) {
+            // Get repeating transaction
+            RepeatingTransaction repeatingTransaction = new RepeatingTransaction(cursor);
 
-            Log.v("ADAM", description);
+            // Insert transaction
+            mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, repeatingTransaction.getTransactionContentValues());
+
+            // Switch based on update
+            String nextTransDate = cursor.getString(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE));
+            LocalDate nextDate = Utility.getDateFromDb(nextTransDate);
+            LocalDate futureDate = null;
+            switch(cursor.getInt(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD))) {
+                case MONTHLY:
+                    // Update monthly
+                    futureDate = nextDate.plusMonths(1);
+                    break;
+                case YEARLY:
+                    // Update yearly
+                    futureDate = nextDate.plusYears(1);
+                    break;
+                default:
+                    break;
+            }
+
+            if(futureDate != null) {
+                String description = cursor.getString(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_DESCRIPTION));
+                Log.v("ADAM", description);
+                Log.v("ADAM", "Current date: " + nextTransDate);
+                Log.v("ADAM", "Future date: " + Utility.getDBDateString(futureDate));
+
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE, Utility.getDBDateString(futureDate));
+
+                // Update next date
+                mContext.getContentResolver().update(
+                        CCContract.RepeatingTransactionEntry.CONTENT_URI,
+                        contentValues,
+                        CCContract.RepeatingTransactionEntry._ID + " = ?",
+                        new String[]{String.valueOf(cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry._ID)))}
+                );
+            }
         }
 
-        repeatingTransactions.close();
+        cursor.close();
     }
 }

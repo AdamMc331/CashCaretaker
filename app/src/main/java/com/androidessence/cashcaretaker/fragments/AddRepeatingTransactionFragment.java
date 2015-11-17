@@ -1,6 +1,7 @@
 package com.androidessence.cashcaretaker.fragments;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.RadioButton;
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.Utility;
+import com.androidessence.cashcaretaker.alarms.RepeatingTransactionService;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 import com.androidessence.cashcaretaker.dataTransferObjects.Category;
@@ -192,6 +194,11 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
 
         // Submit row
         getActivity().getContentResolver().insert(CCContract.RepeatingTransactionEntry.CONTENT_URI, repeatingTransaction.getContentValues());
+
+        // Start service
+        getActivity().startService(new Intent(getActivity(), RepeatingTransactionService.class));
+
+        // Finish activity.
         getActivity().finish();
     }
 
