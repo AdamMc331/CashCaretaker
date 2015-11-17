@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker.fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.DividerItemDecoration;
 import com.androidessence.cashcaretaker.R;
+import com.androidessence.cashcaretaker.activities.AddRepeatingTransactionActivity;
 import com.androidessence.cashcaretaker.adapters.RepeatingTransactionAdapter;
 import com.androidessence.cashcaretaker.data.CCContract;
 
@@ -42,6 +44,7 @@ public class RepeatingTransactionsFragment extends Fragment implements LoaderMan
 
         getUIElements(view);
         setupRecyclerView();
+        setupFloatingActionButton();
 
         return view;
     }
@@ -68,6 +71,26 @@ public class RepeatingTransactionsFragment extends Fragment implements LoaderMan
 
         mRepeatingTransactionAdapter = new RepeatingTransactionAdapter(getActivity());
         mRepeatingTransactionRecyclerView.setAdapter(mRepeatingTransactionAdapter);
+    }
+
+    /**
+     * Sets up the FAB by attaching a click listener to start the AddRPTTransActivity
+     */
+    private void setupFloatingActionButton() {
+        mAddRepeatingTransactionFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startAddRepeatingTransactionActivity();
+            }
+        });
+    }
+
+    /**
+     * Starts the activity for adding a repeating transaction.
+     */
+    private void startAddRepeatingTransactionActivity() {
+        Intent addRepeatingTransactionIntent = new Intent(getActivity(), AddRepeatingTransactionActivity.class);
+        startActivity(addRepeatingTransactionIntent);
     }
 
     /**
