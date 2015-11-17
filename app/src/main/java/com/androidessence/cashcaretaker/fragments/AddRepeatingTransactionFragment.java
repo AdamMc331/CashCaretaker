@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import com.androidessence.cashcaretaker.DecimalDigitsInputFilter;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
@@ -23,7 +25,7 @@ import org.joda.time.LocalDate;
 /**
  * Created by adammcneilly on 11/16/15.
  */
-public class AddRepeatingTransactionFragment extends Fragment {
+public class AddRepeatingTransactionFragment extends Fragment implements RepeatingPeriodDialog.OnRepeatingPeriodSelectedListener{
     private EditText mRepeatingPeriodEditText;
     private RepeatingPeriod mRepeatingPeriod;
     private EditText mAccountEditText;
@@ -49,7 +51,10 @@ public class AddRepeatingTransactionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_repeating_transaction, container, false);
 
         getUIElements(view);
+        setTextFilters();
+        setClickListeners();
 
+        // Retrieve any saved values.
         if(savedInstanceState != null && savedInstanceState.containsKey(ARG_REPEATING_PERIOD)) {
             setRepeatingPeriod((RepeatingPeriod) savedInstanceState.getParcelable(ARG_REPEATING_PERIOD));
         } else {
@@ -97,6 +102,35 @@ public class AddRepeatingTransactionFragment extends Fragment {
         outState.putParcelable(ARG_ACCOUNT, mAccount);
         outState.putSerializable(ARG_DATE, mDate);
         outState.putParcelable(ARG_CATEGORY, mCategory);
+    }
+
+    /**
+     * Sets input filters to necessary EditTexts.
+     */
+    private void setTextFilters() {
+        InputFilter[] inputFilters = new InputFilter[] {new DecimalDigitsInputFilter()};
+        mAmount.setFilters(inputFilters);
+    }
+
+    /**
+     * Sets the appropriate click listeners for this fragment.
+     */
+    private void setClickListeners() {
+        mRepeatingPeriodEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRepeatingPeriodDialog();
+            }
+        });
+    }
+
+    /**
+     * Displays the dialog for selecting a repeating period.
+     */
+    private void showRepeatingPeriodDialog() {
+        RepeatingPeriodDialog repeatingPeriodDialog = new RepeatingPeriodDialog();
+        repeatingPeriodDialog.setTargetFragment(this, 0);
+        repeatingPeriodDialog.show(getFragmentManager(), "repeatingPeriod");
     }
 
     /**
@@ -176,5 +210,10 @@ public class AddRepeatingTransactionFragment extends Fragment {
     private void setAccount(Account account) {
         mAccount = account;
         mAccountEditText.setText(mAccount.getName());
+    }
+
+    @Override
+    public void onRepeatingPeriodSelected(RepeatingPeriod repeatingPeriod) {
+        setRepeatingPeriod(repeatingPeriod);
     }
 }
