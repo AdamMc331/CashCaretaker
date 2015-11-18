@@ -9,6 +9,8 @@ import com.androidessence.cashcaretaker.data.CCContract;
 import org.joda.time.LocalDate;
 
 /**
+ * Object for a repeatingtransaction that occurs monthly or yearly.
+ *
  * Created by adammcneilly on 11/17/15.
  */
 public class RepeatingTransaction {
