@@ -43,6 +43,10 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
     private static final int NAME_INDEX = 1;
     private static final int BALANCE_INDEX = 2;
 
+    // Colors used inside the ViewHolder.
+    private final int mRed;
+    private final int mPrimaryText;
+
     /**
      * The ActionMode used to delete an Account.
      */
@@ -124,6 +128,9 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
     public AccountAdapter(Context context){
         super(context);
 
+        mRed = mContext.getResources().getColor(R.color.red);
+        mPrimaryText = mContext.getResources().getColor(android.R.color.primary_text_light);
+
         this.mCursorAdapter = new CursorAdapter(mContext, null, 0) {
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -196,6 +203,13 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
             // Set balance
             double balance = cursor.getDouble(BALANCE_INDEX);
             balanceTextView.setText(Utility.getCurrencyString(balance));
+
+            // If balance is negative set red
+            if(balance < 0.00) {
+                balanceTextView.setTextColor(mRed);
+            } else {
+                balanceTextView.setTextColor(mPrimaryText);
+            }
         }
 
         void startActionMode(Account account){
