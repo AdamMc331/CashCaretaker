@@ -27,6 +27,8 @@ class CCDatabaseHelper extends SQLiteOpenHelper {
         addTransactionCascadeDeleteTrigger(db);
         addUpdateBalanceForWithdrawalDeleteTrigger(db);
         addUpdateBalanceForDepositDeleteTrigger(db);
+        buildRepeatingPeriodTable(db);
+        buildRepeatingTransactionTable(db);
     }
 
     @Override
@@ -34,6 +36,7 @@ class CCDatabaseHelper extends SQLiteOpenHelper {
         // If we are upgrading to version 2, we need to add our new tables.
         switch(newVersion) {
             case 2:
+                // These tables were added in version 2.
                 buildRepeatingPeriodTable(db);
                 buildRepeatingTransactionTable(db);
                 break;
