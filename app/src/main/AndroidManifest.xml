@@ -52,6 +52,41 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.AccountsActivity" />
         </activity>
+
+        <!-- Boot receiver that restarts our IntentService for repeating transactions -->
+        <receiver android:name=".alarms.RepeatingTransactionAlarm">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!--
+        Service for repeating transactions. Since exported is false this service is only
+        available in this app.
+        -->
+        <service
+            android:name=".alarms.RepeatingTransactionService"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.RepeatingTransactionsActivity"
+            android:label="@string/manage_repeating_transactions"
+            android:parentActivityName=".activities.AccountsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.AccountsActivity" />
+        </activity>
+        <activity
+            android:name=".activities.AddRepeatingTransactionActivity"
+            android:label="@string/title_activity_add_repeating_transaction"
+            android:parentActivityName=".activities.RepeatingTransactionsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.androidessence.cashcaretaker.activities.RepeatingTransactionsActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -19,36 +19,39 @@ import android.widget.TextView;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
 import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
 
 /**
- * An apter for displaying a list of Transaction objects.
+ * Adapter for repeating transaction objects.
  *
- * Created by adammcneilly on 11/1/15.
+ * Created by adammcneilly on 11/16/15.
  */
-public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAdapter.TransactionViewHolder>{
-    /**
-     * A list of data columns required for creating and displaying a Transaction object.
-     */
-    public static final String[] TRANSACTION_COLUMNS = new String[] {
-            CCContract.TransactionEntry.TABLE_NAME + "." + CCContract.TransactionEntry._ID,
-            CCContract.TransactionEntry.COLUMN_DESCRIPTION,
-            CCContract.TransactionEntry.COLUMN_AMOUNT,
-            CCContract.TransactionEntry.COLUMN_WITHDRAWAL,
-            CCContract.TransactionEntry.COLUMN_NOTES,
-            CCContract.TransactionEntry.COLUMN_DATE,
+public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<RepeatingTransactionAdapter.RepeatingTransactionViewHolder>{
+
+    public static final String[] REPEATING_TRANSACTION_COLUMNS = new String[] {
+            CCContract.RepeatingTransactionEntry.TABLE_NAME + "." + CCContract.RepeatingTransactionEntry._ID,
+            CCContract.RepeatingTransactionEntry.COLUMN_DESCRIPTION,
+            CCContract.RepeatingTransactionEntry.COLUMN_AMOUNT,
+            CCContract.RepeatingTransactionEntry.COLUMN_WITHDRAWAL,
+            CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE,
+            CCContract.RepeatingTransactionEntry.COLUMN_NOTES,
+            CCContract.AccountEntry.COLUMN_NAME,
             CCContract.CategoryEntry.COLUMN_DESCRIPTION,
-            CCContract.TransactionEntry.COLUMN_CATEGORY,
-            CCContract.TransactionEntry.COLUMN_ACCOUNT
+            CCContract.RepeatingTransactionEntry.COLUMN_ACCOUNT,
+            CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD,
+            CCContract.RepeatingTransactionEntry.COLUMN_CATEGORY,
+            CCContract.RepeatingPeriodEntry.COLUMN_NAME
     };
 
-    // Indexes for each of the columns of display data.
-    private static final int DESCRIPTION_INDEX = 1;
-    private static final int AMOUNT_INDEX = 2;
-    private static final int WITHDRAWAL_INDEX = 3;
-    private static final int NOTES_INDEX = 4;
-    private static final int DATE_INDEX = 5;
-    private static final int CATEGORY_INDEX = 6;
+    public static final int DESCRIPTION_INDEX = 1;
+    public static final int AMOUNT_INDEX = 2;
+    public static final int WITHDRAWAL_INDEX = 3;
+    public static final int NEXT_DATE_INDEX = 4;
+    public static final int NOTES_INDEX = 5;
+    public static final int ACCOUNT_INDEX = 6;
+    public static final int CATEGORY_INDEX = 7;
 
     // Colors used inside the ViewHolder.
     private final int mRed;
@@ -87,7 +90,7 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
                 case R.id.action_delete_transaction:
                     // The transaction that was selected is passed as the tag
                     // for the action mode.
-                    showDeleteAlertDialog((Transaction) mActionMode.getTag());
+                    showDeleteAlertDialog((RepeatingTransaction) mActionMode.getTag());
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
@@ -108,9 +111,9 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
      *
      * Returns true if the transaction was deleted, false otherwise.
      */
-    private void showDeleteAlertDialog(final Transaction transaction){
+    private void showDeleteAlertDialog(final RepeatingTransaction transaction){
         final AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
-        alertDialog.setTitle("Delete Transaction");
+        alertDialog.setTitle("Delete Repeating Transaction");
         alertDialog.setMessage("Are you sure you want to delete " + transaction.getDescription() + "?");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
                 new DialogInterface.OnClickListener() {
@@ -119,11 +122,10 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
                         //TODO: Handle update
                         // Remove
                         mContext.getContentResolver().delete(
-                                CCContract.TransactionEntry.CONTENT_URI,
-                                CCContract.TransactionEntry._ID + " = ?",
+                                CCContract.RepeatingTransactionEntry.CONTENT_URI,
+                                CCContract.RepeatingTransactionEntry._ID + " = ?",
                                 new String[]{String.valueOf(transaction.getIdentifier())}
                         );
-                        Log.v("TRANSACTION_ADAPTER", "Deleting transaction: " + transaction.getIdentifier());
                         alertDialog.dismiss();
                     }
                 });
@@ -136,7 +138,7 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
         alertDialog.show();
     }
 
-    public TransactionAdapter(Context context){
+    public RepeatingTransactionAdapter(Context context) {
         super(context);
 
         mRed = mContext.getResources().getColor(R.color.red);
@@ -146,45 +148,48 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
         this.mCursorAdapter = new CursorAdapter(mContext, null, 0) {
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                return LayoutInflater.from(context).inflate(R.layout.list_item_transaction, parent, false);
+                return LayoutInflater.from(context).inflate(R.layout.list_item_repeating_transaction, parent, false);
             }
 
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
-                TransactionViewHolder viewHolder = (TransactionViewHolder) view.getTag();
+                // Get view holder
+                RepeatingTransactionViewHolder viewHolder = (RepeatingTransactionViewHolder) view.getTag();
                 viewHolder.bindCursor(cursor);
             }
         };
     }
 
     @Override
-    public TransactionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new TransactionViewHolder(mCursorAdapter.newView(mContext, mCursorAdapter.getCursor(), parent));
+    public RepeatingTransactionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new RepeatingTransactionViewHolder(mCursorAdapter.newView(mContext, mCursorAdapter.getCursor(), parent));
     }
 
     @Override
-    public void onBindViewHolder(TransactionViewHolder holder, int position) {
+    public void onBindViewHolder(RepeatingTransactionViewHolder holder, int position) {
         mTempView.setTag(holder);
 
-        // Move cursor to the current position
         mCursorAdapter.getCursor().moveToPosition(position);
         mCursorAdapter.bindView(mTempView, mContext, mCursorAdapter.getCursor());
     }
 
-    public class TransactionViewHolder extends RecyclerViewCursorViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class RepeatingTransactionViewHolder extends RecyclerViewCursorViewHolder implements View.OnClickListener, View.OnLongClickListener {
         public final TextView mDescriptionTextView;
         public final TextView mAmountTextView;
-        public final TextView mDateTextView;
+        public final TextView mNextDateTextView;
         public final TextView mCategoryTextView;
+        public final TextView mAccountTextView;
         public final TextView mNotesTextView;
         public final View mIndicatorView;
 
-        public TransactionViewHolder(View view){
+        public RepeatingTransactionViewHolder(View view) {
             super(view);
+
             mDescriptionTextView = (TextView) view.findViewById(R.id.transaction_description);
             mAmountTextView = (TextView) view.findViewById(R.id.transaction_amount);
-            mDateTextView = (TextView) view.findViewById(R.id.transaction_date);
+            mNextDateTextView = (TextView) view.findViewById(R.id.transaction_date);
             mCategoryTextView = (TextView) view.findViewById(R.id.transaction_category);
+            mAccountTextView = (TextView) view.findViewById(R.id.transaction_account);
             mNotesTextView = (TextView) view.findViewById(R.id.transaction_notes);
             mIndicatorView = view.findViewById(R.id.transaction_indicator);
 
@@ -214,8 +219,8 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
             }
 
             // Set date
-            String dateString = cursor.getString(DATE_INDEX);
-            mDateTextView.setText(Utility.getUIDateStringFromDB(dateString));
+            String dateString = cursor.getString(NEXT_DATE_INDEX);
+            mNextDateTextView.setText(String.format("Next date: %s", Utility.getUIDateStringFromDB(dateString)));
 
             //TODO: Globals somewhere
             String defaultCategory = "None";
@@ -225,6 +230,8 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
             } else{
                 mCategoryTextView.setText(category);
             }
+
+            mAccountTextView.setText(String.format("Account: %s", cursor.getString(ACCOUNT_INDEX)));
 
             // Set notes.
             //TODO: Use resource
@@ -245,11 +252,11 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
         public boolean onLongClick(View view) {
             // Get current item and start action mode
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
-            startActionMode(new Transaction(mCursorAdapter.getCursor()));
+            startActionMode(new RepeatingTransaction(mCursorAdapter.getCursor()));
             return true;
         }
 
-        private void startActionMode(Transaction transaction){
+        private void startActionMode(RepeatingTransaction transaction){
             // Don't fire if action mode is already being used
             if(mActionMode == null){
                 // Start the CAB using the ActionMode.Callback already defined
