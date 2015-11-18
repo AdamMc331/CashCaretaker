@@ -54,7 +54,7 @@
         </activity>
 
         <!-- Boot receiver that restarts our IntentService for repeating transactions -->
-        <receiver android:name=".alarms.AutoLaunchService">
+        <receiver android:name=".alarms.RepeatingTransactionAlarm">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
