@@ -27,6 +27,9 @@ public class TestProvider extends AndroidTestCase {
     private static final String TEST_TRANSACTION_DATE = "2015-11-08";
     private static final String TEST_TRANSACTION_NOTES = "Some Notes";
 
+    // Monthly repeating period
+    private static final long TEST_REPEATING_PERIOD = 1;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -52,6 +55,24 @@ public class TestProvider extends AndroidTestCase {
 
         Cursor cursor = mContext.getContentResolver().query(
                 CCContract.TransactionEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(cursor);
+        assertEquals(0, cursor.getCount());
+        cursor.close();
+
+        // Delete repeating transactions
+        mContext.getContentResolver().delete(
+                CCContract.RepeatingTransactionEntry.CONTENT_URI,
+                null,
+                null
+        );
+
+        cursor = mContext.getContentResolver().query(
+                CCContract.RepeatingTransactionEntry.CONTENT_URI,
                 null,
                 null,
                 null,
@@ -108,6 +129,18 @@ public class TestProvider extends AndroidTestCase {
         //-- TRANSACTION_FOR_ACCOUNT --//
         type = mContext.getContentResolver().getType(CCContract.TransactionEntry.buildTransactionsForAccountUri(0));
         assertEquals(CCContract.TransactionEntry.CONTENT_TYPE, type);
+
+        //-- REPEATING_PERIOD --//
+        type = mContext.getContentResolver().getType(CCContract.RepeatingPeriodEntry.CONTENT_URI);
+        assertEquals(CCContract.RepeatingPeriodEntry.CONTENT_TYPE, type);
+
+        //-- REPEATING_TRANSACTION --//
+        type = mContext.getContentResolver().getType(CCContract.RepeatingTransactionEntry.CONTENT_URI);
+        assertEquals(CCContract.RepeatingTransactionEntry.CONTENT_TYPE, type);
+
+        //-- REPEATING_TRANSACTION_ID --//
+        type = mContext.getContentResolver().getType(CCContract.RepeatingTransactionEntry.buildRepeatingTransactionUri(0));
+        assertEquals(CCContract.RepeatingTransactionEntry.CONTENT_ITEM_TYPE, type);
     }
 
     /**
@@ -431,6 +464,125 @@ public class TestProvider extends AndroidTestCase {
     }
 
     /**
+     * Tests that we can update a transaction entry.
+     */
+    public void testUpdateTransaction() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Get content values and insert transaction
+        ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, true);
+        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+        long transactionRowID = ContentUris.parseId(transactionInsertUri);
+
+        // Update content values
+        transactionContentValues.put(CCContract.TransactionEntry.COLUMN_DESCRIPTION, TEST_UPDATE_TRANSACTION_DESCRIPTION);
+
+        // Update
+        int rows = mContext.getContentResolver().update(
+                CCContract.TransactionEntry.CONTENT_URI,
+                transactionContentValues,
+                CCContract.TransactionEntry._ID + " = ?",
+                new String[]{String.valueOf(transactionRowID)}
+        );
+
+        // Verify we updated a single row
+        assertEquals(1, rows);
+
+        // Query for this transaction and validate
+        Cursor transactionCursor = mContext.getContentResolver().query(
+                CCContract.TransactionEntry.buildTransactionUri(transactionRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(transactionCursor);
+        validateCursor(transactionCursor, transactionContentValues);
+        transactionCursor.close();
+    }
+
+    /**
+     * Tests to ensure we can insert and read a RepeatingTransaction entry.
+     */
+    public void testInsertReadRepeatingTransaction() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        ContentValues repeatingTransactionContentValues = getRepeatingTransactionContentValues(accountRowID, 1, false, true);
+        Uri repeatingTransactionInsertUri = mContext.getContentResolver().insert(CCContract.RepeatingTransactionEntry.CONTENT_URI, repeatingTransactionContentValues);
+        long repeatingTransactionRowID = ContentUris.parseId(repeatingTransactionInsertUri);
+
+        // Query for all repeating transactions
+        Cursor repeatingTransactionCursor = mContext.getContentResolver().query(
+                CCContract.RepeatingTransactionEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(repeatingTransactionCursor);
+        validateCursor(repeatingTransactionCursor, repeatingTransactionContentValues);
+        repeatingTransactionCursor.close();
+
+        // Query for specific transaction
+        repeatingTransactionCursor = mContext.getContentResolver().query(
+                CCContract.RepeatingTransactionEntry.buildRepeatingTransactionUri(repeatingTransactionRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(repeatingTransactionCursor);
+        validateCursor(repeatingTransactionCursor, repeatingTransactionContentValues);
+        repeatingTransactionCursor.close();
+    }
+
+    /**
+     * Tests that we can update a repeating transaction entry.
+     */
+    public void testUpdateRepeatingTransaction() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        ContentValues repeatingTransactionContentValues = getRepeatingTransactionContentValues(accountRowID, 1, false, true);
+        Uri repeatingTransactionInsertUri = mContext.getContentResolver().insert(CCContract.RepeatingTransactionEntry.CONTENT_URI, repeatingTransactionContentValues);
+        long repeatingTransactionRowID = ContentUris.parseId(repeatingTransactionInsertUri);
+
+        // Update content values
+        repeatingTransactionContentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_DESCRIPTION, TEST_UPDATE_TRANSACTION_DESCRIPTION);
+
+        // Update
+        int updatedRows = mContext.getContentResolver().update(
+                CCContract.RepeatingTransactionEntry.CONTENT_URI,
+                repeatingTransactionContentValues,
+                CCContract.RepeatingTransactionEntry._ID + " = ?",
+                new String[]{String.valueOf(repeatingTransactionRowID)}
+        );
+
+        // Verify we updated a single row
+        assertEquals(1, updatedRows);
+
+        // Query for this row and validate
+        Cursor repeatingTransactionCursor = mContext.getContentResolver().query(
+                CCContract.RepeatingTransactionEntry.buildRepeatingTransactionUri(repeatingTransactionRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(repeatingTransactionCursor);
+        validateCursor(repeatingTransactionCursor, repeatingTransactionContentValues);
+        repeatingTransactionCursor.close();
+    }
+
+    /**
      * Retrieves ContentValues for a test account entry.
      */
     private ContentValues getAccountContentValues(){
@@ -459,6 +611,28 @@ public class TestProvider extends AndroidTestCase {
         if(useNotes) {
             contentValues.put(CCContract.TransactionEntry.COLUMN_NOTES, TEST_TRANSACTION_NOTES);
         }
+
+        return contentValues;
+    }
+
+    /**
+     * Retrieves test content values for a repeating transaction entry.
+     */
+    private ContentValues getRepeatingTransactionContentValues(long account, long category, boolean useNotes, boolean isWithdrawal) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_ACCOUNT, account);
+        contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_CATEGORY, category);
+        contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD, TEST_REPEATING_PERIOD);
+        contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_DESCRIPTION, TEST_TRANSACTION_DESCRIPTION);
+        contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_AMOUNT, TEST_TRANSACTION_AMOUNT);
+        contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE, TEST_TRANSACTION_DATE);
+        contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_WITHDRAWAL, isWithdrawal ? 1 : 0);
+
+        if(useNotes) {
+            contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_NOTES, TEST_TRANSACTION_NOTES);
+        }
+
 
         return contentValues;
     }

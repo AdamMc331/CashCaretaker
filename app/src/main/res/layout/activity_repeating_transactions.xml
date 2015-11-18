@@ -8,13 +8,13 @@
     <include layout="@layout/appbar"/>
 
     <fragment
-        android:id="@+id/fragment_add_account"
-        android:name="com.androidessence.cashcaretaker.fragments.AddAccountFragment"
+        android:id="@+id/fragment_repeating_transactions"
+        android:name="com.androidessence.cashcaretaker.fragments.RepeatingTransactionsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".fragments.AddAccountFragment"
+        tools:context=".fragments.RepeatingTransactionsFragment"
         tools:ignore="MergeRootFrame"
-        tools:layout="@layout/fragment_accounts" />
+        tools:layout="@layout/fragment_repeating_transactions" />
 
 </android.support.design.widget.CoordinatorLayout>
