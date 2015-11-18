@@ -7,6 +7,8 @@ import android.os.Parcelable;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
+ * Object representing a RepeatingPeriod entry in the database.
+ *
  * Created by adammcneilly on 11/16/15.
  */
 public class RepeatingPeriod implements Parcelable {

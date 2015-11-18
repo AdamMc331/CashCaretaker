@@ -20,6 +20,8 @@ import com.androidessence.cashcaretaker.dataTransferObjects.Category;
 import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
 
 /**
+ * Dialog that displays a list of repeating periods for the user to select.
+ *
  * Created by adammcneilly on 11/17/15.
  */
 public class RepeatingPeriodDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{
