@@ -20,6 +20,7 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
+import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
 
 /**
  * An apter for displaying a list of Transaction objects.
@@ -54,87 +55,6 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
     private final int mRed;
     private final int mGreen;
     private final int mPrimaryText;
-
-    /**
-     * The ActionMode to be displayed for deleting a Transaction.
-     */
-    private ActionMode mActionMode;
-
-    /**
-     * An Action mode callback used for the context menu.
-     */
-    private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        // Called when the action mode is created; startActionMode() was called
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.transaction_context_menu, menu);
-            return true;
-        }
-
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
-        }
-
-        // Called when the user selects a contextual menu item
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_delete_transaction:
-                    // The transaction that was selected is passed as the tag
-                    // for the action mode.
-                    showDeleteAlertDialog((Transaction) mActionMode.getTag());
-                    mode.finish(); // Action picked, so close the CAB
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        // Called when the user exits the action mode
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
-        }
-    };
-
-    /**
-     * Alerts the user that they are about to delete a transaction and ensures that they
-     * are okay with it.
-     *
-     * Returns true if the transaction was deleted, false otherwise.
-     */
-    private void showDeleteAlertDialog(final Transaction transaction){
-        final AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
-        alertDialog.setTitle("Delete Transaction");
-        alertDialog.setMessage("Are you sure you want to delete " + transaction.getDescription() + "?");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //TODO: Handle update
-                        // Remove
-                        mContext.getContentResolver().delete(
-                                CCContract.TransactionEntry.CONTENT_URI,
-                                CCContract.TransactionEntry._ID + " = ?",
-                                new String[]{String.valueOf(transaction.getIdentifier())}
-                        );
-                        Log.v("TRANSACTION_ADAPTER", "Deleting transaction: " + transaction.getIdentifier());
-                        alertDialog.dismiss();
-                    }
-                });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                alertDialog.dismiss();
-            }
-        });
-        alertDialog.show();
-    }
 
     public TransactionAdapter(Context context){
         super(context);
@@ -243,23 +163,14 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
 
         @Override
         public boolean onLongClick(View view) {
-            // Get current item and start action mode
+            // Get current item and call back to activity
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
-            startActionMode(new Transaction(mCursorAdapter.getCursor()));
+            ((OnTransactionLongClickListener)mContext).onTransactionLongClick(new TransactionDetails(mCursorAdapter.getCursor()));
             return true;
         }
+    }
 
-        private void startActionMode(Transaction transaction){
-            // Don't fire if action mode is already being used
-            if(mActionMode == null){
-                // Start the CAB using the ActionMode.Callback already defined
-                mActionMode = ((AppCompatActivity)mContext).startSupportActionMode(mActionModeCallback);
-                // Get name to set as title for action bar
-                // Need to subtract one to account for Header position
-                mActionMode.setTitle(transaction.getDescription());
-                // Get account ID to pass as tag.
-                mActionMode.setTag(transaction);
-            }
-        }
+    public interface OnTransactionLongClickListener {
+        void onTransactionLongClick(TransactionDetails transaction);
     }
 }

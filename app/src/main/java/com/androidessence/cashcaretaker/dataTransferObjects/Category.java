@@ -28,6 +28,11 @@ public class Category implements Parcelable{
         }
     };
 
+    public Category(long identifier, String description) {
+        setIdentifier(identifier);
+        setDescription(description);
+    }
+
     public Category(Cursor cursor){
         setIdentifier(cursor.getLong(cursor.getColumnIndex(CCContract.CategoryEntry._ID)));
         setDescription(cursor.getString(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_DESCRIPTION)));
