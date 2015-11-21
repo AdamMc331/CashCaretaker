@@ -28,7 +28,7 @@ import org.joda.time.LocalDate;
  *
  * Created by adammcneilly on 11/2/15.
  */
-public class AddTransactionFragment extends Fragment implements DatePickerDialog.OnDateSetListener, CategoryDialog.OnCategorySelectedListener{
+public class TransactionFragment extends Fragment implements DatePickerDialog.OnDateSetListener, CategoryDialog.OnCategorySelectedListener{
     // UI elements
     private EditText mDescription;
     private EditText mAmount;
@@ -46,10 +46,10 @@ public class AddTransactionFragment extends Fragment implements DatePickerDialog
     private static final String ARG_DATE = "dateArg";
     private static final String ARG_CATEGORY = "categoryArg";
 
-    public static AddTransactionFragment NewInstance(long account){
+    public static TransactionFragment NewInstance(long account){
         Bundle args = new Bundle();
         args.putLong(ARG_ACCOUNT, account);
-        AddTransactionFragment fragment = new AddTransactionFragment();
+        TransactionFragment fragment = new TransactionFragment();
         fragment.setArguments(args);
         return fragment;
     }

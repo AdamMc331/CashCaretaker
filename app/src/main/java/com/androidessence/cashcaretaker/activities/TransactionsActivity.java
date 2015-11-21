@@ -7,13 +7,13 @@ import android.view.MenuItem;
 
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
-import com.androidessence.cashcaretaker.fragments.AddTransactionFragment;
-import com.androidessence.cashcaretaker.fragments.TransactionsFragment;
+import com.androidessence.cashcaretaker.fragments.AccountTransactionsFragment;
+import com.androidessence.cashcaretaker.fragments.TransactionFragment;
 
 /**
  * Context for both displaying a list of Transactions for an Account and allowing the user to add a transaction for that account.
  */
-public class TransactionsActivity extends AppCompatActivity implements TransactionsFragment.OnAddTransactionFABClickedListener, AddTransactionFragment.OnTransactionSubmittedListener {
+public class TransactionsActivity extends AppCompatActivity implements AccountTransactionsFragment.OnAddTransactionFABClickedListener, TransactionFragment.OnTransactionSubmittedListener {
     /**
      * An argument representing the account to show transactions for, or to add a transaction to.
      */
@@ -69,20 +69,20 @@ public class TransactionsActivity extends AppCompatActivity implements Transacti
         switch (mState) {
             case STATE_TRANSACTIONS:
                 /*
-      The current TransactionsFragment being shown.
+      The current AccountTransactionsFragment being shown.
      */
-                TransactionsFragment transactionsFragment = (TransactionsFragment) getSupportFragmentManager().findFragmentByTag(TRANSACTIONS_FRAGMENT_TAG);
-                if(transactionsFragment == null){
+                AccountTransactionsFragment accountTransactionsFragment = (AccountTransactionsFragment) getSupportFragmentManager().findFragmentByTag(TRANSACTIONS_FRAGMENT_TAG);
+                if(accountTransactionsFragment == null){
                     showTransactionsFragment();
                 }
                 break;
             case STATE_ADD_TRANSACTION:
                 // If fragment exists already, don't recreate it
                 /*
-      The current AddTransactionFragment being shown.
+      The current TransactionFragment being shown.
      */
-                AddTransactionFragment addTransactionFragment = (AddTransactionFragment) getSupportFragmentManager().findFragmentByTag(ADD_TRANSACTION_FRAGMENT_TAG);
-                if (addTransactionFragment == null) {
+                TransactionFragment transactionFragment = (TransactionFragment) getSupportFragmentManager().findFragmentByTag(ADD_TRANSACTION_FRAGMENT_TAG);
+                if (transactionFragment == null) {
                     showAddTransactionFragment();
                 }
                 break;
@@ -104,8 +104,8 @@ public class TransactionsActivity extends AppCompatActivity implements Transacti
      */
     private void showAddTransactionFragment() {
         // Display fragment
-        AddTransactionFragment addTransactionFragment = AddTransactionFragment.NewInstance(mAccount.getIdentifier());
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, addTransactionFragment, ADD_TRANSACTION_FRAGMENT_TAG).commit();
+        TransactionFragment transactionFragment = TransactionFragment.NewInstance(mAccount.getIdentifier());
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, transactionFragment, ADD_TRANSACTION_FRAGMENT_TAG).commit();
 
         // Set title
         assert getSupportActionBar() != null;
@@ -120,8 +120,8 @@ public class TransactionsActivity extends AppCompatActivity implements Transacti
      */
     private void showTransactionsFragment() {
         // Display fragment.
-        TransactionsFragment transactionsFragment = TransactionsFragment.NewInstance(mAccount.getIdentifier());
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, transactionsFragment).commit();
+        AccountTransactionsFragment accountTransactionsFragment = AccountTransactionsFragment.NewInstance(mAccount.getIdentifier());
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, accountTransactionsFragment).commit();
 
         // Set title
         assert getSupportActionBar() != null;
@@ -132,7 +132,7 @@ public class TransactionsActivity extends AppCompatActivity implements Transacti
     }
 
     /**
-     * Interface implementation that handles when the FAB is clicked inside the TransactionsFragment.
+     * Interface implementation that handles when the FAB is clicked inside the AccountTransactionsFragment.
      */
     @Override
     public void addTransactionFABClicked() {
@@ -160,7 +160,7 @@ public class TransactionsActivity extends AppCompatActivity implements Transacti
     }
 
     /**
-     * Interface implementation that handles when a transaction is submitted so the `TransactionsFragment` is displayed again.
+     * Interface implementation that handles when a transaction is submitted so the `AccountTransactionsFragment` is displayed again.
      */
     @Override
     public void onTransactionSubmitted() {
