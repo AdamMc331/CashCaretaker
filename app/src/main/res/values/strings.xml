@@ -22,4 +22,6 @@
     <string name="manage_repeating_transactions">Manage Repeating Transactions</string>
     <string name="title_activity_add_repeating_transaction">Add Repeating Transaction</string>
     <string name="action_settings">Settings</string>
+    <string name="edit_transaction">Edit Transaction</string>
+    <string name="submit_changes">Submit Changes</string>
 </resources>

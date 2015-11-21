@@ -2,6 +2,8 @@ package com.androidessence.cashcaretaker.dataTransferObjects;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
@@ -13,15 +15,38 @@ import org.joda.time.LocalDate;
  *
  * Created by adammcneilly on 11/3/15.
  */
-public class Transaction {
+public class Transaction implements Parcelable{
     private long identifier;
     private long account;
     private String description;
     private double amount;
     private String notes;
     private LocalDate date;
-    private long category;
+    private long categoryID;
     private boolean withdrawal;
+
+    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
+        @Override
+        public Transaction createFromParcel(Parcel source) {
+            return new Transaction(source);
+        }
+
+        @Override
+        public Transaction[] newArray(int size) {
+            return new Transaction[size];
+        }
+    };
+
+    public Transaction(Parcel source) {
+        setIdentifier(source.readLong());
+        setAccount(source.readLong());
+        setDescription(source.readString());
+        setAmount(source.readDouble());
+        setNotes(source.readString());
+        setDate((LocalDate) source.readSerializable());
+        setCategoryID(source.readLong());
+        setWithdrawal(source.readInt() == 1);
+    }
 
     public Transaction(Cursor cursor){
         setIdentifier(cursor.getLong(cursor.getColumnIndex(CCContract.TransactionEntry._ID)));
@@ -31,18 +56,18 @@ public class Transaction {
         setNotes(cursor.getString(cursor.getColumnIndex(CCContract.TransactionEntry.COLUMN_NOTES)));
         String dateString = cursor.getString(cursor.getColumnIndex(CCContract.TransactionEntry.COLUMN_DATE));
         setDate(Utility.getDateFromDb(dateString));
-        setCategory(cursor.getLong(cursor.getColumnIndex(CCContract.TransactionEntry.COLUMN_CATEGORY)));
+        setCategoryID(cursor.getLong(cursor.getColumnIndex(CCContract.TransactionEntry.COLUMN_CATEGORY)));
         int withdrawalInt = cursor.getInt(cursor.getColumnIndex(CCContract.TransactionEntry.COLUMN_WITHDRAWAL));
         setWithdrawal(withdrawalInt == 1);
     }
 
-    public Transaction(long account, String description, double amount, String notes, LocalDate date, long category, boolean withdrawal) {
+    public Transaction(long account, String description, double amount, String notes, LocalDate date, long categoryID, boolean withdrawal) {
         setAccount(account);
         setDescription(description);
         setAmount(amount);
         setNotes(notes);
         setDate(date);
-        setCategory(category);
+        setCategoryID(categoryID);
         setWithdrawal(withdrawal);
     }
 
@@ -70,7 +95,7 @@ public class Transaction {
         this.description = description;
     }
 
-    private double getAmount() {
+    public double getAmount() {
         return amount;
     }
 
@@ -78,7 +103,7 @@ public class Transaction {
         this.amount = amount;
     }
 
-    private String getNotes() {
+    public String getNotes() {
         return notes;
     }
 
@@ -86,7 +111,7 @@ public class Transaction {
         this.notes = notes;
     }
 
-    private LocalDate getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -94,15 +119,15 @@ public class Transaction {
         this.date = date;
     }
 
-    private long getCategory() {
-        return category;
+    public long getCategoryID() {
+        return categoryID;
     }
 
-    private void setCategory(long category) {
-        this.category = category;
+    private void setCategoryID(long category) {
+        this.categoryID = category;
     }
 
-    private boolean isWithdrawal() {
+    public boolean isWithdrawal() {
         return withdrawal;
     }
 
@@ -122,9 +147,26 @@ public class Transaction {
         values.put(CCContract.TransactionEntry.COLUMN_AMOUNT, getAmount());
         values.put(CCContract.TransactionEntry.COLUMN_NOTES, getNotes());
         values.put(CCContract.TransactionEntry.COLUMN_DATE, Utility.getDBDateString(getDate()));
-        values.put(CCContract.TransactionEntry.COLUMN_CATEGORY, getCategory());
+        values.put(CCContract.TransactionEntry.COLUMN_CATEGORY, getCategoryID());
         values.put(CCContract.TransactionEntry.COLUMN_WITHDRAWAL, isWithdrawal() ? 1 : 0);
 
         return values;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(getIdentifier());
+        dest.writeLong(getAccount());
+        dest.writeString(getDescription());
+        dest.writeDouble(getAmount());
+        dest.writeString(getNotes());
+        dest.writeSerializable(getDate());
+        dest.writeLong(getCategoryID());
+        dest.writeInt(isWithdrawal() ? 1 : 0);
     }
 }
