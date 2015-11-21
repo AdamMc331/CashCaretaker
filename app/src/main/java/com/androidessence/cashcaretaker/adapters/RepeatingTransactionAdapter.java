@@ -72,7 +72,7 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
             MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.transaction_context_menu, menu);
+            inflater.inflate(R.menu.repeating_transaction_context_menu, menu);
             return true;
         }
 
