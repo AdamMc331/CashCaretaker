@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 class CCDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "cashcaretaker.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public CCDatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -27,6 +27,10 @@ class CCDatabaseHelper extends SQLiteOpenHelper {
         addTransactionCascadeDeleteTrigger(db);
         addUpdateBalanceForWithdrawalDeleteTrigger(db);
         addUpdateBalanceForDepositDeleteTrigger(db);
+        addUpdateBalanceForDepositChangeTrigger(db);
+        addUpdateBalanceForWithdrawalChangeTrigger(db);
+        addUpdateBalanceForDepositToWithdrawalChangeTrigger(db);
+        addUpdateBalanceForWithdrawalToDepositChangeTrigger(db);
         buildRepeatingPeriodTable(db);
         buildRepeatingTransactionTable(db);
     }
@@ -39,6 +43,19 @@ class CCDatabaseHelper extends SQLiteOpenHelper {
                 // These tables were added in version 2.
                 buildRepeatingPeriodTable(db);
                 buildRepeatingTransactionTable(db);
+                break;
+            case 3:
+                // If user goes from 1-3, they need old tables
+                if(oldVersion == 1) {
+                    buildRepeatingPeriodTable(db);
+                    buildRepeatingTransactionTable(db);
+                }
+
+                // Added editing a transaction, required new triggers.
+                addUpdateBalanceForDepositChangeTrigger(db);
+                addUpdateBalanceForWithdrawalChangeTrigger(db);
+                addUpdateBalanceForDepositToWithdrawalChangeTrigger(db);
+                addUpdateBalanceForWithdrawalToDepositChangeTrigger(db);
                 break;
             default:
                 break;
@@ -207,6 +224,74 @@ class CCDatabaseHelper extends SQLiteOpenHelper {
                         "UPDATE " + CCContract.AccountEntry.TABLE_NAME + " " +
                         "SET " + CCContract.AccountEntry.COLUMN_BALANCE + " = " + CCContract.AccountEntry.COLUMN_BALANCE + " - old." + CCContract.TransactionEntry.COLUMN_AMOUNT + " " +
                         "WHERE " + CCContract.AccountEntry._ID + " = old." + CCContract.TransactionEntry.COLUMN_ACCOUNT + "; END;"
+        );
+    }
+
+    /**
+     * Updates the account balance any time a transaction is updated from a deposit to a withdrawal.
+     *
+     * The new balance is balance - old amount for deposit - new amount for withdrawal
+     */
+    private void addUpdateBalanceForDepositToWithdrawalChangeTrigger(SQLiteDatabase db) {
+        db.execSQL(
+                "CREATE TRIGGER update_balance_for_deposit_to_withdrawal_change " +
+                        "AFTER UPDATE ON " + CCContract.TransactionEntry.TABLE_NAME + " " +
+                        "WHEN NOT old." + CCContract.TransactionEntry.COLUMN_WITHDRAWAL + " AND new." + CCContract.TransactionEntry.COLUMN_WITHDRAWAL + " " +
+                        "BEGIN " +
+                        "UPDATE " + CCContract.AccountEntry.TABLE_NAME + " " +
+                        "SET " + CCContract.AccountEntry.COLUMN_BALANCE + " = " + CCContract.AccountEntry.COLUMN_BALANCE + " - old." + CCContract.TransactionEntry.COLUMN_AMOUNT + " - new." + CCContract.TransactionEntry.COLUMN_AMOUNT + " " +
+                        "WHERE " + CCContract.AccountEntry._ID + " = new." + CCContract.TransactionEntry.COLUMN_ACCOUNT + "; END;"
+        );
+    }
+
+    /**
+     * Updates the account balance any time a transaction is updated from a withdrawal to a deposit.
+     *
+     * The new balance is balance + old amount for withdrawal + new amount for deposit
+     */
+    private void addUpdateBalanceForWithdrawalToDepositChangeTrigger(SQLiteDatabase db) {
+        db.execSQL(
+                "CREATE TRIGGER update_balance_for_withdrawal_to_deposit_change " +
+                        "AFTER UPDATE ON " + CCContract.TransactionEntry.TABLE_NAME + " " +
+                        "WHEN old." + CCContract.TransactionEntry.COLUMN_WITHDRAWAL + " AND NOT new." + CCContract.TransactionEntry.COLUMN_WITHDRAWAL + " " +
+                        "BEGIN " +
+                        "UPDATE " + CCContract.AccountEntry.TABLE_NAME + " " +
+                        "SET " + CCContract.AccountEntry.COLUMN_BALANCE + " = " + CCContract.AccountEntry.COLUMN_BALANCE + " + old." + CCContract.TransactionEntry.COLUMN_AMOUNT + " + new." + CCContract.TransactionEntry.COLUMN_AMOUNT + " " +
+                        "WHERE " + CCContract.AccountEntry._ID + " = new." + CCContract.TransactionEntry.COLUMN_ACCOUNT + "; END;"
+        );
+    }
+
+    /**
+     * Updates the account balance any time a transaction deposit balance changes.
+     *
+     * For deposits, the new balance is balance - old amount + new amount
+     */
+    private void addUpdateBalanceForDepositChangeTrigger(SQLiteDatabase db) {
+        db.execSQL(
+                "CREATE TRIGGER update_balance_for_deposit_amount_change " +
+                        "AFTER UPDATE ON " + CCContract.TransactionEntry.TABLE_NAME + " " +
+                        "WHEN NOT old." + CCContract.TransactionEntry.COLUMN_WITHDRAWAL + " AND NOT new." + CCContract.TransactionEntry.COLUMN_WITHDRAWAL + " " +
+                        "BEGIN " +
+                        "UPDATE " + CCContract.AccountEntry.TABLE_NAME + " " +
+                        "SET " + CCContract.AccountEntry.COLUMN_BALANCE + " = " + CCContract.AccountEntry.COLUMN_BALANCE + " - old." + CCContract.TransactionEntry.COLUMN_AMOUNT + " + new." + CCContract.TransactionEntry.COLUMN_AMOUNT + " " +
+                        "WHERE " + CCContract.AccountEntry._ID + " = old." + CCContract.TransactionEntry.COLUMN_ACCOUNT + "; END"
+        );
+    }
+
+    /**
+     * Updates the account balance any time a transaction withdrawal balance changes.
+     *
+     * For withdrawal, the new balance is balance + old amount - new amount
+     */
+    private void addUpdateBalanceForWithdrawalChangeTrigger(SQLiteDatabase db) {
+        db.execSQL(
+                "CREATE TRIGGER update_balance_for_withdrawal_amount_change " +
+                        "AFTER UPDATE ON " + CCContract.TransactionEntry.TABLE_NAME + " " +
+                        "WHEN old." + CCContract.TransactionEntry.COLUMN_WITHDRAWAL + " AND new." + CCContract.TransactionEntry.COLUMN_WITHDRAWAL + " " +
+                        "BEGIN " +
+                        "UPDATE " + CCContract.AccountEntry.TABLE_NAME + " " +
+                        "SET " + CCContract.AccountEntry.COLUMN_BALANCE + " = " + CCContract.AccountEntry.COLUMN_BALANCE + " + old." + CCContract.TransactionEntry.COLUMN_AMOUNT + " - new." + CCContract.TransactionEntry.COLUMN_AMOUNT + " " +
+                        "WHERE " + CCContract.AccountEntry._ID + " = old." + CCContract.TransactionEntry.COLUMN_ACCOUNT + "; END"
         );
     }
 }
