@@ -26,6 +26,7 @@ public class TestProvider extends AndroidTestCase {
     private static final double TEST_TRANSACTION_AMOUNT = 33.56;
     private static final String TEST_TRANSACTION_DATE = "2015-11-08";
     private static final String TEST_TRANSACTION_NOTES = "Some Notes";
+    private static final double TEST_TRANSACTION_UPDATE_AMOUNT = 10.00;
 
     // Monthly repeating period
     private static final long TEST_REPEATING_PERIOD = 1;
@@ -580,6 +581,184 @@ public class TestProvider extends AndroidTestCase {
         assertNotNull(repeatingTransactionCursor);
         validateCursor(repeatingTransactionCursor, repeatingTransactionContentValues);
         repeatingTransactionCursor.close();
+    }
+
+    /**
+     * Tests that the account balance changes when a deposit is changed to a withdrawal
+     */
+    public void testUpdateDepositToWithdrawalTrigger() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Get content values and insert transaction
+        ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, false);
+        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+        long transactionRowId = ContentUris.parseId(transactionInsertUri);
+
+        // Set withdrawal flag to 1
+        transactionContentValues.put(CCContract.TransactionEntry.COLUMN_WITHDRAWAL, 1);
+
+        // Update
+        int rows = mContext.getContentResolver().update(
+                CCContract.TransactionEntry.CONTENT_URI,
+                transactionContentValues,
+                CCContract.TransactionEntry._ID + " = ?",
+                new String[]{String.valueOf(transactionRowId)}
+        );
+
+        // Verify we updated one row
+        assertEquals(1, rows);
+
+        // Query for account balance.
+        Cursor accountCursor = mContext.getContentResolver().query(
+                CCContract.AccountEntry.buildAccountUri(accountRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(accountCursor);
+
+        // The expected balance is now the test balance MINUS the test amount.
+        double expectedAmount = TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT;
+        assertTrue(accountCursor.moveToFirst());
+        assertEquals(expectedAmount, accountCursor.getDouble(accountCursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE)));
+    }
+
+    /**
+     * Tests that the account balance changes when a withdrawal is changed to a deposit
+     */
+    public void testUpdateWithdrawalToDepositTrigger() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Get content values and insert transaction
+        ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, true);
+        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+        long transactionRowId = ContentUris.parseId(transactionInsertUri);
+
+        // Set withdrawal flag to 0
+        transactionContentValues.put(CCContract.TransactionEntry.COLUMN_WITHDRAWAL, 0);
+
+        // Update
+        int rows = mContext.getContentResolver().update(
+                CCContract.TransactionEntry.CONTENT_URI,
+                transactionContentValues,
+                CCContract.TransactionEntry._ID + " = ?",
+                new String[]{String.valueOf(transactionRowId)}
+        );
+
+        // Verify we updated one row
+        assertEquals(1, rows);
+
+        // Query for account balance.
+        Cursor accountCursor = mContext.getContentResolver().query(
+                CCContract.AccountEntry.buildAccountUri(accountRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(accountCursor);
+
+        // The expected balance is now the test balance PLUS the test amount.
+        double expectedAmount = TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT;
+        assertTrue(accountCursor.moveToFirst());
+        assertEquals(expectedAmount, accountCursor.getDouble(accountCursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE)));
+    }
+
+    /**
+     * Tests that the account balance changes when a deposit amount is changed.
+     */
+    public void testUpdateDepositAmountTrigger() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Get content values and insert transaction
+        // For deposit
+        ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, false);
+        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+        long transactionRowId = ContentUris.parseId(transactionInsertUri);
+
+        // Change balance
+        transactionContentValues.put(CCContract.TransactionEntry.COLUMN_AMOUNT, TEST_TRANSACTION_UPDATE_AMOUNT);
+
+        // Update
+        int rows = mContext.getContentResolver().update(
+                CCContract.TransactionEntry.CONTENT_URI,
+                transactionContentValues,
+                CCContract.TransactionEntry._ID + " = ?",
+                new String[]{String.valueOf(transactionRowId)}
+        );
+
+        // Verify we updated one row
+        assertEquals(1, rows);
+
+        // Query for account balance.
+        Cursor accountCursor = mContext.getContentResolver().query(
+                CCContract.AccountEntry.buildAccountUri(accountRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(accountCursor);
+
+        // The expected balance is now the test balance PLUS the updated amount.
+        double expectedAmount = TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_UPDATE_AMOUNT;
+        assertTrue(accountCursor.moveToFirst());
+        assertEquals(expectedAmount, accountCursor.getDouble(accountCursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE)));
+    }
+
+    /**
+     * Tests that the account balance changes when a withdrawal amount is changed.
+     */
+    public void testUpdateWithdrawalAmountTrigger() {
+        // Get content values and insert Account entry
+        ContentValues accountContentValues = getAccountContentValues();
+        Uri accountInsertUri = mContext.getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, accountContentValues);
+        long accountRowID = ContentUris.parseId(accountInsertUri);
+
+        // Get content values and insert transaction
+        // For withdrawal
+        ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, true);
+        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+        long transactionRowId = ContentUris.parseId(transactionInsertUri);
+
+        // Change balance
+        transactionContentValues.put(CCContract.TransactionEntry.COLUMN_AMOUNT, TEST_TRANSACTION_UPDATE_AMOUNT);
+
+        // Update
+        int rows = mContext.getContentResolver().update(
+                CCContract.TransactionEntry.CONTENT_URI,
+                transactionContentValues,
+                CCContract.TransactionEntry._ID + " = ?",
+                new String[]{String.valueOf(transactionRowId)}
+        );
+
+        // Verify we updated one row
+        assertEquals(1, rows);
+
+        // Query for account balance.
+        Cursor accountCursor = mContext.getContentResolver().query(
+                CCContract.AccountEntry.buildAccountUri(accountRowID),
+                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(accountCursor);
+
+        // The expected balance is now the test balance MINUS the updated amount.
+        double expectedAmount = TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_UPDATE_AMOUNT;
+        assertTrue(accountCursor.moveToFirst());
+        assertEquals(expectedAmount, accountCursor.getDouble(accountCursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE)));
     }
 
     /**
