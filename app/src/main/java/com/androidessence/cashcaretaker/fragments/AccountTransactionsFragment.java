@@ -25,7 +25,7 @@ import com.androidessence.cashcaretaker.data.CCContract;
  *
  * Created by adammcneilly on 11/1/15.
  */
-public class TransactionsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class AccountTransactionsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     // UI Elements
     private RecyclerView mTransactionRecyclerView;
     private FloatingActionButton mAddTransactionFAB;
@@ -37,11 +37,11 @@ public class TransactionsFragment extends Fragment implements LoaderManager.Load
     private static final String ARG_ACCOUNT = "accountArg";
     private static final int TRANSACTION_LOADER = 0;
 
-    public static TransactionsFragment NewInstance(long account){
+    public static AccountTransactionsFragment NewInstance(long account){
         Bundle args = new Bundle();
         args.putLong(ARG_ACCOUNT, account);
 
-        TransactionsFragment fragment = new TransactionsFragment();
+        AccountTransactionsFragment fragment = new AccountTransactionsFragment();
         fragment.setArguments(args);
         return fragment;
     }
