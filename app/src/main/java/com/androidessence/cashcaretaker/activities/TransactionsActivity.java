@@ -1,6 +1,8 @@
 package com.androidessence.cashcaretaker.activities;
 
 import android.content.DialogInterface;
+import android.os.Build;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +26,8 @@ import com.androidessence.cashcaretaker.fragments.TransactionFragment;
  * Context for both displaying a list of Transactions for an Account and allowing the user to add a transaction for that account.
  */
 public class TransactionsActivity extends AppCompatActivity implements AccountTransactionsFragment.OnAddTransactionFABClickedListener, TransactionFragment.OnTransactionSubmittedListener, TransactionAdapter.OnTransactionLongClickListener{
+    private AppBarLayout mAppBar;
+
     /**
      * An argument representing the account to show transactions for, or to add a transaction to.
      */
@@ -138,7 +142,6 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
                                 CCContract.TransactionEntry._ID + " = ?",
                                 new String[]{String.valueOf(transaction.getIdentifier())}
                         );
-                        Log.v("TRANSACTION_ADAPTER", "Deleting transaction: " + transaction.getIdentifier());
                         alertDialog.dismiss();
                     }
                 });
@@ -156,6 +159,9 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions);
 
+        // Get appbar
+        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
+
         // Set toolbar, allow going back.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -171,6 +177,9 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
          */
         switch (mState) {
             case STATE_TRANSACTIONS:
+                // When showing transactions we also show account balance, so remove elevation
+                // on appbar. Requires API 21
+                setAppBarElevation(false);
                 /*
                 The current AccountTransactionsFragment being shown.
                 */
@@ -180,6 +189,9 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
                 }
                 break;
             case STATE_ADD_TRANSACTION:
+                // When showing transactions we also show account balance, so make sure elevation
+                // appears now. Requires API 21.
+                setAppBarElevation(true);
                 // If fragment exists already, don't recreate it
                 /*
                 The current TransactionFragment being shown.
@@ -190,6 +202,9 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
                 }
                 break;
             case STATE_EDIT_TRANSACTION:
+                // When showing transactions we also show account balance, so make sure elevation
+                // appears now. Requires API 21.
+                setAppBarElevation(true);
                 // If fragment exists already, don't recreate it
                 /*
                 The current TransactionFragment being shown.
@@ -226,6 +241,10 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
 
         // Set state
         mState = STATE_ADD_TRANSACTION;
+
+        // When showing transactions we also show account balance, so show elevation
+        // on appbar.
+        setAppBarElevation(true);
     }
 
     /**
@@ -241,6 +260,10 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
 
         // Set state
         mState = STATE_EDIT_TRANSACTION;
+
+        // When showing transactions we also show account balance, so show elevation
+        // on appbar.
+        setAppBarElevation(true);
     }
 
     /**
@@ -257,6 +280,10 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
 
         // Set state
         mState = STATE_TRANSACTIONS;
+
+        // When showing transactions we also show account balance, so remove elevation
+        // on appbar. Requires API 21
+        setAppBarElevation(false);
     }
 
     /**
@@ -319,6 +346,12 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
             mActionMode.setTitle(transaction.getDescription());
             // Get account ID to pass as tag.
             mActionMode.setTag(transaction);
+        }
+    }
+
+    private void setAppBarElevation(boolean showElevation) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mAppBar.setElevation(showElevation ? getResources().getDimension(R.dimen.appbar_elevation) : 0);
         }
     }
 }

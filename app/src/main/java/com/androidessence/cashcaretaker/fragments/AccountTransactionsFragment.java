@@ -1,6 +1,7 @@
 package com.androidessence.cashcaretaker.fragments;
 
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,12 +14,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.DividerItemDecoration;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.adapters.TransactionAdapter;
 import com.androidessence.cashcaretaker.data.CCContract;
+
+import java.text.MessageFormat;
 
 /**
  * Dialog that displays a list of Transactions for an account.
@@ -30,12 +34,23 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
     private RecyclerView mTransactionRecyclerView;
     private FloatingActionButton mAddTransactionFAB;
     private TransactionAdapter mTransactionAdapter;
-    private TextView mAddFirstTrasaction;
+    private TextView mAddFirstTransaction;
+    private TextView mAccountBalanceTextView;
+
+    // Format to display header
+    private MessageFormat mAccountBalanceFormat;
 
     // Account we are showing transactions for.
     private long mAccount;
     private static final String ARG_ACCOUNT = "accountArg";
     private static final int TRANSACTION_LOADER = 0;
+    private static final int ACCOUNT_BALANCE_LOADER = 1;
+
+    private static final String[] ACCOUNT_BALANCE_COLUMNS = new String[] {
+            CCContract.AccountEntry.COLUMN_BALANCE
+    };
+
+    private static final int ACCOUNT_BALANCE_INDEX = 0;
 
     public static AccountTransactionsFragment NewInstance(long account){
         Bundle args = new Bundle();
@@ -51,6 +66,8 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
         super.onCreate(savedInstanceState);
 
         mAccount = getArguments().getLong(ARG_ACCOUNT, 0);
+
+        mAccountBalanceFormat = new MessageFormat(getActivity().getString(R.string.account_balance));
     }
 
     @Nullable
@@ -85,7 +102,8 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
     private void getUIElements(View view){
         mTransactionRecyclerView = (RecyclerView) view.findViewById(R.id.transaction_recycler_view);
         mAddTransactionFAB = (FloatingActionButton) view.findViewById(R.id.add_transaction_fab);
-        mAddFirstTrasaction = (TextView) view.findViewById(R.id.add_first_transaction_text_view);
+        mAddFirstTransaction = (TextView) view.findViewById(R.id.add_first_transaction_text_view);
+        mAccountBalanceTextView = (TextView) view.findViewById(R.id.account_balance_header);
     }
 
     /**
@@ -107,6 +125,7 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
     public void onResume() {
         super.onResume();
         getLoaderManager().restartLoader(TRANSACTION_LOADER, null, this);
+        getLoaderManager().restartLoader(ACCOUNT_BALANCE_LOADER, null, this);
     }
 
     @Override
@@ -121,6 +140,15 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
                         null,
                         CCContract.TransactionEntry.COLUMN_DATE + " DESC"
                 );
+            case ACCOUNT_BALANCE_LOADER:
+                return new CursorLoader(
+                        getActivity(),
+                        CCContract.AccountEntry.buildAccountUri(mAccount),
+                        ACCOUNT_BALANCE_COLUMNS,
+                        null,
+                        null,
+                        null
+                );
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + id);
         }
@@ -134,7 +162,16 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
                 // If the cursor is empty hide the recyclerview.
                 mTransactionRecyclerView.setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
                 // If the cursor is empty show the textview.
-                mAddFirstTrasaction.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
+                mAddFirstTransaction.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
+                break;
+            case ACCOUNT_BALANCE_LOADER:
+                double accountBalance = 0;
+
+                if(data.moveToFirst()) {
+                    accountBalance = data.getDouble(ACCOUNT_BALANCE_INDEX);
+                }
+
+                mAccountBalanceTextView.setText(mAccountBalanceFormat.format(new Object[] {accountBalance}));
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -146,6 +183,8 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
         switch(loader.getId()){
             case TRANSACTION_LOADER:
                 mTransactionAdapter.swapCursor(null);
+                break;
+            case ACCOUNT_BALANCE_LOADER:
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
