@@ -64,6 +64,10 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
 
     private static final String EDIT_TRANSACTION_FRAGMENT_TAG = "editTransactionFragment";
 
+    // Fragments
+    private TransactionFragment mTransactionFragment;
+    private AccountTransactionsFragment mAccountTransactionsFragment;
+
     /**
      * The account we are viewing/adding transactions for.
      */
@@ -142,6 +146,8 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
                                 CCContract.TransactionEntry._ID + " = ?",
                                 new String[]{String.valueOf(transaction.getIdentifier())}
                         );
+                        // Restart loader in fragment
+                        mAccountTransactionsFragment.restartAccountBalanceLoader();
                         alertDialog.dismiss();
                     }
                 });
@@ -232,8 +238,8 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
      */
     private void showAddTransactionFragment() {
         // Display fragment
-        TransactionFragment transactionFragment = TransactionFragment.NewInstance(mAccount.getIdentifier(), TransactionFragment.MODE_ADD, null);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, transactionFragment, ADD_TRANSACTION_FRAGMENT_TAG).commit();
+        mTransactionFragment = TransactionFragment.NewInstance(mAccount.getIdentifier(), TransactionFragment.MODE_ADD, null);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, mTransactionFragment, ADD_TRANSACTION_FRAGMENT_TAG).commit();
 
         // Set title
         assert getSupportActionBar() != null;
@@ -251,8 +257,8 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
      * Displays the fragment used for editing a transaction.
      */
     private void showEditTransactionFragment(TransactionDetails transaction) {
-        TransactionFragment transactionFragment = TransactionFragment.NewInstance(mAccount.getIdentifier(), TransactionFragment.MODE_EDIT, transaction);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, transactionFragment, EDIT_TRANSACTION_FRAGMENT_TAG).commit();
+        mTransactionFragment = TransactionFragment.NewInstance(mAccount.getIdentifier(), TransactionFragment.MODE_EDIT, transaction);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, mTransactionFragment, EDIT_TRANSACTION_FRAGMENT_TAG).commit();
 
         // Set title
         assert getSupportActionBar() != null;
@@ -271,8 +277,8 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
      */
     private void showTransactionsFragment() {
         // Display fragment.
-        AccountTransactionsFragment accountTransactionsFragment = AccountTransactionsFragment.NewInstance(mAccount.getIdentifier());
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, accountTransactionsFragment).commit();
+        mAccountTransactionsFragment = AccountTransactionsFragment.NewInstance(mAccount.getIdentifier());
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, mAccountTransactionsFragment).commit();
 
         // Set title
         assert getSupportActionBar() != null;
