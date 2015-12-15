@@ -13,7 +13,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/white"
         android:background="@color/colorPrimary"
-        android:elevation="4dp"
+        android:elevation="@dimen/mds_elevation_appbar"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:paddingLeft="64dp"

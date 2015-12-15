@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.AlertDialog;
@@ -22,6 +23,8 @@ import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
+import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
+import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
 
 /**
  * RecyclerView.Adapter used to display the user's list of accounts.
@@ -128,23 +131,15 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
     public AccountAdapter(Context context){
         super(context);
 
-        mRed = mContext.getResources().getColor(R.color.red);
-        mPrimaryText = mContext.getResources().getColor(android.R.color.primary_text_light);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mRed = mContext.getColor(R.color.mds_red_500);
+            mPrimaryText = mContext.getColor(android.R.color.primary_text_light);
+        } else {
+            mRed = mContext.getResources().getColor(R.color.mds_red_500);
+            mPrimaryText = mContext.getResources().getColor(android.R.color.primary_text_light);
+        }
 
-        this.mCursorAdapter = new CursorAdapter(mContext, null, 0) {
-            @Override
-            public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                return LayoutInflater.from(context).inflate(R.layout.list_item_account, parent, false);
-            }
-
-            @Override
-            public void bindView(View view, Context context, Cursor cursor) {
-                AccountViewHolder viewHolder = (AccountViewHolder) view.getTag();
-
-                // Bind item
-                viewHolder.bindCursor(cursor);
-            }
-        };
+        setupCursorAdapter(null, 0, R.layout.list_item_account, false);
     }
 
     @Override
@@ -154,14 +149,14 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
 
     @Override
     public void onBindViewHolder(AccountViewHolder holder, int position) {
-        // Set tag
-        mTempView.setTag(holder);
+        // Set holder
+        setViewHolder(holder);
 
         // Move Cursor to this item
         mCursorAdapter.getCursor().moveToPosition(position);
 
         // Bind view
-        mCursorAdapter.bindView(mTempView, mContext, mCursorAdapter.getCursor());
+        mCursorAdapter.bindView(null, mContext, mCursorAdapter.getCursor());
     }
 
     /**
@@ -196,7 +191,7 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
         }
 
         @Override
-        void bindCursor(Cursor cursor) {
+        public void bindCursor(Cursor cursor) {
             // Set name
             nameTextView.setText(cursor.getString(NAME_INDEX));
 

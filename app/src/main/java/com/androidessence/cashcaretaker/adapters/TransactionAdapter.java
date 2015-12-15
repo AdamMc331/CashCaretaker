@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.os.Build;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,13 +22,15 @@ import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
 import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
+import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
+import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
 
 /**
  * An apter for displaying a list of Transaction objects.
  *
  * Created by adammcneilly on 11/1/15.
  */
-public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAdapter.TransactionViewHolder>{
+public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAdapter.TransactionViewHolder> {
     /**
      * A list of data columns required for creating and displaying a Transaction object.
      */
@@ -59,22 +62,17 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
     public TransactionAdapter(Context context){
         super(context);
 
-        mRed = mContext.getResources().getColor(R.color.red);
-        mGreen = mContext.getResources().getColor(R.color.green);
-        mPrimaryText = mContext.getResources().getColor(android.R.color.primary_text_light);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mRed = mContext.getColor(R.color.mds_red_500);
+            mGreen = mContext.getColor(R.color.mds_green_500);
+            mPrimaryText = mContext.getColor(android.R.color.primary_text_light);
+        } else {
+            mRed = mContext.getResources().getColor(R.color.mds_red_500);
+            mGreen = mContext.getResources().getColor(R.color.mds_green_500);
+            mPrimaryText = mContext.getResources().getColor(android.R.color.primary_text_light);
+        }
 
-        this.mCursorAdapter = new CursorAdapter(mContext, null, 0) {
-            @Override
-            public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                return LayoutInflater.from(context).inflate(R.layout.list_item_transaction, parent, false);
-            }
-
-            @Override
-            public void bindView(View view, Context context, Cursor cursor) {
-                TransactionViewHolder viewHolder = (TransactionViewHolder) view.getTag();
-                viewHolder.bindCursor(cursor);
-            }
-        };
+        setupCursorAdapter(null, 0, R.layout.list_item_transaction, false);
     }
 
     @Override
@@ -84,11 +82,11 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
 
     @Override
     public void onBindViewHolder(TransactionViewHolder holder, int position) {
-        mTempView.setTag(holder);
+        setViewHolder(holder);
 
         // Move cursor to the current position
         mCursorAdapter.getCursor().moveToPosition(position);
-        mCursorAdapter.bindView(mTempView, mContext, mCursorAdapter.getCursor());
+        mCursorAdapter.bindView(null, mContext, mCursorAdapter.getCursor());
     }
 
     public class TransactionViewHolder extends RecyclerViewCursorViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -113,7 +111,7 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
         }
 
         @Override
-        void bindCursor(Cursor cursor) {
+        public void bindCursor(Cursor cursor) {
             // Set description
             mDescriptionTextView.setText(cursor.getString(DESCRIPTION_INDEX));
 
