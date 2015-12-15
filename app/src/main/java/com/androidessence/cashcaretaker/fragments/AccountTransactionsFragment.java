@@ -191,6 +191,10 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
         }
     }
 
+    public void restartAccountBalanceLoader() {
+        getLoaderManager().restartLoader(ACCOUNT_BALANCE_LOADER, null, this);
+    }
+
     public interface OnAddTransactionFABClickedListener {
         void addTransactionFABClicked();
     }
