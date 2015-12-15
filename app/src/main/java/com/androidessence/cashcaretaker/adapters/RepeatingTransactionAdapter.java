@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.os.Build;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,13 +23,15 @@ import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
 import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
 import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
+import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
+import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
 
 /**
  * Adapter for repeating transaction objects.
  *
  * Created by adammcneilly on 11/16/15.
  */
-public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<RepeatingTransactionAdapter.RepeatingTransactionViewHolder>{
+public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<RepeatingTransactionAdapter.RepeatingTransactionViewHolder> {
 
     public static final String[] REPEATING_TRANSACTION_COLUMNS = new String[] {
             CCContract.RepeatingTransactionEntry.TABLE_NAME + "." + CCContract.RepeatingTransactionEntry._ID,
@@ -141,23 +144,17 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
     public RepeatingTransactionAdapter(Context context) {
         super(context);
 
-        mRed = mContext.getResources().getColor(R.color.red);
-        mGreen = mContext.getResources().getColor(R.color.green);
-        mPrimaryText = mContext.getResources().getColor(android.R.color.primary_text_light);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mRed = mContext.getColor(R.color.mds_red_500);
+            mGreen = mContext.getColor(R.color.mds_green_500);
+            mPrimaryText = mContext.getColor(android.R.color.primary_text_light);
+        } else {
+            mRed = mContext.getResources().getColor(R.color.mds_red_500);
+            mGreen = mContext.getResources().getColor(R.color.mds_green_500);
+            mPrimaryText = mContext.getResources().getColor(android.R.color.primary_text_light);
+        }
 
-        this.mCursorAdapter = new CursorAdapter(mContext, null, 0) {
-            @Override
-            public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                return LayoutInflater.from(context).inflate(R.layout.list_item_repeating_transaction, parent, false);
-            }
-
-            @Override
-            public void bindView(View view, Context context, Cursor cursor) {
-                // Get view holder
-                RepeatingTransactionViewHolder viewHolder = (RepeatingTransactionViewHolder) view.getTag();
-                viewHolder.bindCursor(cursor);
-            }
-        };
+        setupCursorAdapter(null, 0, R.layout.list_item_repeating_transaction, false);
     }
 
     @Override
@@ -167,10 +164,10 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
 
     @Override
     public void onBindViewHolder(RepeatingTransactionViewHolder holder, int position) {
-        mTempView.setTag(holder);
+        setViewHolder(holder);
 
         mCursorAdapter.getCursor().moveToPosition(position);
-        mCursorAdapter.bindView(mTempView, mContext, mCursorAdapter.getCursor());
+        mCursorAdapter.bindView(null, mContext, mCursorAdapter.getCursor());
     }
 
     public class RepeatingTransactionViewHolder extends RecyclerViewCursorViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -198,7 +195,7 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
         }
 
         @Override
-        void bindCursor(Cursor cursor) {
+        public void bindCursor(Cursor cursor) {
             // Set description
             mDescriptionTextView.setText(cursor.getString(DESCRIPTION_INDEX));
 
