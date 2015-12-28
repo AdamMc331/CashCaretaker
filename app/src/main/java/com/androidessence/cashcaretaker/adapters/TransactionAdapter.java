@@ -18,12 +18,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
 import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
+import com.androidessence.utility.Utility;
 
 /**
  * An apter for displaying a list of Transaction objects.
