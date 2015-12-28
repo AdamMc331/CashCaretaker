@@ -3,8 +3,8 @@ package com.androidessence.cashcaretaker.dataTransferObjects;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
+import com.androidessence.utility.Utility;
 
 import org.joda.time.LocalDate;
 

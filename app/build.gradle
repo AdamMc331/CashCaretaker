@@ -31,7 +31,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.android.support:design:23.1.1'
-    compile 'joda-time:joda-time:2.7'
     compile 'com.androidessence:recyclerviewcursoradapter:1.0.0'
     compile 'com.androidessence:materialdesignspecs:1.0.4'
+    compile 'com.google.android.gms:play-services:8.4.0'
+    compile project(':utility')
 }

@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
+import com.androidessence.utility.Utility;
 
 import org.joda.time.LocalDate;
 

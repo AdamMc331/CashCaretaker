@@ -16,11 +16,11 @@ import android.widget.RadioButton;
 
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter;
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Category;
 import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
 import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
+import com.androidessence.utility.Utility;
 
 import org.joda.time.LocalDate;
 

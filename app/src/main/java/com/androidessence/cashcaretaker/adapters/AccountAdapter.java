@@ -21,10 +21,10 @@ import android.widget.TextView;
 import com.androidessence.cashcaretaker.activities.TransactionsActivity;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
+import com.androidessence.utility.Utility;
 
 /**
  * RecyclerView.Adapter used to display the user's list of accounts.

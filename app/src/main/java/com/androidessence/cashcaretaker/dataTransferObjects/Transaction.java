@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.androidessence.cashcaretaker.Utility;
 import com.androidessence.cashcaretaker.data.CCContract;
+import com.androidessence.utility.Utility;
 
 import org.joda.time.LocalDate;
 
