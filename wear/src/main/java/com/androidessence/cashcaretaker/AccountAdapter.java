@@ -29,7 +29,7 @@ public class AccountAdapter extends BaseAdapter {
         this.mContext = context;
         this.mAccounts = accounts;
 
-        mTotalFormat = new MessageFormat(mContext.getString(R.string.account_header));
+        mTotalFormat = new MessageFormat(mContext.getString(R.string.total_message));
 
         // Calculate total
         for(Account account : mAccounts) {

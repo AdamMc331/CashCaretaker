@@ -7,6 +7,9 @@ import android.os.Parcelable;
 
 import com.androidessence.cashcaretaker.data.CCContract;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Class representing an Account object.
  *
@@ -62,7 +65,7 @@ public class Account implements Parcelable{
         this.name = name;
     }
 
-    private double getBalance() {
+    public double getBalance() {
         return balance;
     }
 

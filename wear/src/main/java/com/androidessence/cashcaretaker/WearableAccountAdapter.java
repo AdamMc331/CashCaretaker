@@ -1,12 +1,10 @@
 package com.androidessence.cashcaretaker;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.support.wearable.view.WearableListView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.androidessence.utility.Utility;
@@ -32,7 +30,7 @@ public class WearableAccountAdapter extends WearableListView.Adapter{
         this.mContext = context;
         this.mAccounts = accounts;
 
-        mTotalFormat = new MessageFormat(mContext.getString(R.string.account_header));
+        mTotalFormat = new MessageFormat(mContext.getString(R.string.total_message));
 
         // Calculate total
         for(Account account : mAccounts) {

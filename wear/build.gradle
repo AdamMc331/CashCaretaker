@@ -6,7 +6,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.adammcneilly.cashcaretaker"
+        applicationId "com.androidessence.cashcaretaker"
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
