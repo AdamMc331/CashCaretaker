@@ -3,8 +3,6 @@ package com.androidessence.cashcaretaker;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
-import android.support.wearable.view.WatchViewStub;
-import android.support.wearable.view.WearableListView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +11,8 @@ import android.widget.TextView;
 import com.androidessence.utility.Utility;
 
 /**
+ * Adapter that displays accounts from the database on an Android wear device.
+ *
  * Created by adammcneilly on 12/28/15.
  */
 public class AccountCursorAdapter extends CursorAdapter {

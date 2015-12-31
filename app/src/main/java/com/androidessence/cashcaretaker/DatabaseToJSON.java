@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Helper class to convert some database information to JSON objects to be sent from the handheld to
+ * the Wear device.
+ *
  * Created by adammcneilly on 12/28/15.
  */
 public class DatabaseToJSON {

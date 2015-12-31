@@ -16,7 +16,6 @@ import android.widget.ListView;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.adapters.RepeatingPeriodAdapter;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.Category;
 import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
 
 /**

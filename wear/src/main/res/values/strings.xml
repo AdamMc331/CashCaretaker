@@ -1,6 +1,3 @@
 <resources>
-    <string name="app_name">CashCaretaker</string>
-    <string name="hello_round">Hello Round World!</string>
-    <string name="hello_square">Hello Square World!</string>
-    <string name="total_message">Total: {0, number, currency}</string>
+    <string name="app_name">Cash Caretaker</string>
 </resources>

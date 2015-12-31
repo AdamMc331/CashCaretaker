@@ -11,8 +11,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
-
 /**
  * Content provider used for accessing the data model of Cash Caretaker.
  *

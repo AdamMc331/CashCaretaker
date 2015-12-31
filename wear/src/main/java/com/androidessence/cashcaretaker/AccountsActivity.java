@@ -9,9 +9,6 @@ import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import java.text.MessageFormat;
 
 public class AccountsActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor>{
     private AccountCursorAdapter mAdapter;
