@@ -1,25 +1,14 @@
 package com.androidessence.cashcaretaker.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Build;
-import android.support.v4.widget.CursorAdapter;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
 import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;

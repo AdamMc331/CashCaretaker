@@ -16,11 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.DividerItemDecoration;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.activities.AddAccountActivity;
 import com.androidessence.cashcaretaker.adapters.AccountAdapter;
+import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
  * Fragment used to display a list of Accounts.

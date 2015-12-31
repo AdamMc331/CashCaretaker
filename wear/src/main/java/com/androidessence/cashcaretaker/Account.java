@@ -6,6 +6,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
+ * Object representing a row in the Account table.
+ *
  * Created by adammcneilly on 12/27/15.
  */
 public class Account {

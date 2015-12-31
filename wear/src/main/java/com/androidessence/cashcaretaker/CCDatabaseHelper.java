@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
+ * Creates and updates the database on an Android wear device.
+ *
  * Created by adammcneilly on 12/28/15.
  */
 public class CCDatabaseHelper extends SQLiteOpenHelper {

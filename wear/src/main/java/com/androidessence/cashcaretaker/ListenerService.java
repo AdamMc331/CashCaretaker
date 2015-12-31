@@ -1,8 +1,6 @@
 package com.androidessence.cashcaretaker;
 
 import android.content.ContentValues;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.wearable.MessageEvent;
@@ -11,9 +9,6 @@ import com.google.android.gms.wearable.WearableListenerService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Service that listens for a message from the mobile handset.

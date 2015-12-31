@@ -1,7 +1,7 @@
 package com.androidessence.cashcaretaker.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.androidessence.cashcaretaker.R;

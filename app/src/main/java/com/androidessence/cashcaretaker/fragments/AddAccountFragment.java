@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter;
 import com.androidessence.cashcaretaker.R;
+import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 
 /**

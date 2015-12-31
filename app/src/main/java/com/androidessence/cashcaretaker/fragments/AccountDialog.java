@@ -17,7 +17,6 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.adapters.SimpleAccountAdapter;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
-import com.androidessence.cashcaretaker.dataTransferObjects.Category;
 
 /**
  * Dialog that displays a list of account names for the user to select.
