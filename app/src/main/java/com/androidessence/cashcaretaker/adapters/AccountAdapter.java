@@ -116,6 +116,7 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
                                 CCContract.AccountEntry._ID + " = ?",
                                 new String[]{String.valueOf(account.getIdentifier())}
                         );
+                        ((OnAccountDeletedListener)mContext).onAccountDeleted(account.getIdentifier());
                         alertDialog.dismiss();
                     }
                 });
@@ -233,5 +234,9 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
             startActionMode(new Account(mCursorAdapter.getCursor()));
             return true;
         }
+    }
+
+    public interface OnAccountDeletedListener {
+        void onAccountDeleted(long id);
     }
 }

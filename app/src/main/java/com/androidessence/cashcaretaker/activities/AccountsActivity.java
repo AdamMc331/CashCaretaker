@@ -13,18 +13,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.androidessence.cashcaretaker.R;
+import com.androidessence.cashcaretaker.adapters.AccountAdapter;
 import com.androidessence.cashcaretaker.alarms.RepeatingTransactionAlarm;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
+import com.androidessence.cashcaretaker.DatabaseToJSON;
+
+import org.json.JSONException;
 
 /**
  * Context for displaying the list of accounts to a user.
  */
-public class AccountsActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class AccountsActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AccountAdapter.OnAccountDeletedListener {
     private GoogleApiClient mGoogleClient;
 
     @Override
@@ -96,10 +101,13 @@ public class AccountsActivity extends AppCompatActivity implements GoogleApiClie
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        // Just send a message
-        String message = "Hello wearable";
-        new SendToDataLayerThread("/message_path", message).start();
-        Log.v("ADAM", "Sending message.");
+        // Send over accounts
+        try{
+            String accountsJson = (new DatabaseToJSON(this)).getAccountJSON().toString();
+            new SendToDataLayerThread(getString(R.string.add_account_path), accountsJson).start();
+        } catch(JSONException joe) {
+            // TODO:
+        }
     }
 
     @Override
@@ -148,5 +156,11 @@ public class AccountsActivity extends AppCompatActivity implements GoogleApiClie
                 }
             }
         }
+    }
+
+    @Override
+    public void onAccountDeleted(long id) {
+        // Send id as string
+        new SendToDataLayerThread(getString(R.string.delete_account_path), String.valueOf(id)).start();
     }
 }
