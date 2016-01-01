@@ -35,4 +35,5 @@ dependencies {
     compile 'com.androidessence:materialdesignspecs:1.0.4'
     compile 'com.google.android.gms:play-services:8.4.0'
     compile project(':utility')
+    wearApp project(':wear')
 }

@@ -6,14 +6,20 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.wearable.view.DismissOverlayView;
 import android.support.wearable.view.WatchViewStub;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class AccountsActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor>{
     private AccountCursorAdapter mAdapter;
-
     private static final int ACCOUNT_LOADER = 0;
+
+    private DismissOverlayView mDismissOverlay;
+    private GestureDetector mDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +33,8 @@ public class AccountsActivity extends Activity implements LoaderManager.LoaderCa
                 setupListView();
             }
         });
+
+        setupDismissOverlay();
     }
 
     private void setupListView() {
@@ -42,6 +50,15 @@ public class AccountsActivity extends Activity implements LoaderManager.LoaderCa
         View footerView = getLayoutInflater().inflate(R.layout.list_item_account_footer, null, false);
         listView.setFooterDividersEnabled(true);
         listView.addFooterView(footerView);
+
+        //TODO: test
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mDismissOverlay.show();
+                return true;
+            }
+        });
     }
 
     @Override
@@ -87,5 +104,23 @@ public class AccountsActivity extends Activity implements LoaderManager.LoaderCa
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
         }
+    }
+
+    private void setupDismissOverlay() {
+        mDismissOverlay = (DismissOverlayView) findViewById(R.id.dismiss_overlay);
+        // mDismissOverlay.setIntroText(android.R.string.long_press_intro);
+        // mDismissOverlay.showIntroIfNecessary();
+
+        mDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public void onLongPress(MotionEvent e) {
+                mDismissOverlay.show();
+            }
+        });
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return mDetector.onTouchEvent(event) || super.onTouchEvent(event);
     }
 }
