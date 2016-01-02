@@ -14,3 +14,7 @@ Version History
 - 1.1.0 - Added support for repeating transactions. Now displays account balance in red if it is negative.
 - 1.0.1 - Hid FloatingActionButton when user scrolled account or transaction list. Also showed instructions for adding the first account or transaction instead of viewing a blank screen.
 - 1.0.0 - Initial release.
+
+License
+----
+This application is released under the MIT license. You are free to improve it in any way.
