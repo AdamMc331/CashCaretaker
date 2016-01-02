@@ -6,3 +6,5 @@
 .DS_Store
 /build
 /captures
+## Directory-based project format:
+.idea/
