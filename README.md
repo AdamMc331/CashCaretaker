@@ -8,9 +8,9 @@ All information for Cash Caretaker is entered by the user, and stored locally on
 
 Version History
 ----
-1.3.0 - Implemented support for Android Wear.
-1.2.1 - Displays account balance on the transaction screen.
-1.2.0 - Added support for editing a transaction. Only available to regular transactions, not repeating ones.
-1.1.0 - Added support for repeating transactions. Now displays account balance in red if it is negative.
-1.0.1 - Hid FloatingActionButton when user scrolled account or transaction list. Also showed instructions for adding the first account or transaction instead of viewing a blank screen.
-1.0.0 - Initial release.
+- 1.3.0 - Implemented support for Android Wear.
+- 1.2.1 - Displays account balance on the transaction screen.
+- 1.2.0 - Added support for editing a transaction. Only available to regular transactions, not repeating ones.
+- 1.1.0 - Added support for repeating transactions. Now displays account balance in red if it is negative.
+- 1.0.1 - Hid FloatingActionButton when user scrolled account or transaction list. Also showed instructions for adding the first account or transaction instead of viewing a blank screen.
+- 1.0.0 - Initial release.
