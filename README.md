@@ -1,4 +1,4 @@
-Cash Caretaker can be downloaded from the Google Play store for free [here](https://play.google.com/store/apps/details?id=com.androidessence.cashcaretaker&hl=en).
+[<img src="http://new.dafdealer.co.uk/image-uploads/images/google_play_icon.png" width="300" height="100">](https://play.google.com/store/apps/details?id=com.androidessence.cashcaretaker&hl=en)
 
 Description
 ----
