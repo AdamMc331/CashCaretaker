@@ -96,6 +96,15 @@ public class CCContract {
             Uri accountUri = CONTENT_URI.buildUpon().appendPath(PATH_ACCOUNT).build();
             return ContentUris.withAppendedId(accountUri, account);
         }
+
+        public static Uri buildTransactionsForAccountWithDescriptionUri(long account, String description) {
+            Uri transactionUri = CONTENT_URI.buildUpon().appendPath(description).appendPath(PATH_ACCOUNT).build();
+            return ContentUris.withAppendedId(transactionUri, account);
+        }
+
+        public static String getDescriptionFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
     }
 
     /**

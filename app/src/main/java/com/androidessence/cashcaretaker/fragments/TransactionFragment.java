@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FilterQueryProvider;
 import android.widget.RadioButton;
 
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter;
@@ -31,7 +34,7 @@ import org.joda.time.LocalDate;
  */
 public class TransactionFragment extends Fragment implements DatePickerDialog.OnDateSetListener, CategoryDialog.OnCategorySelectedListener{
     // UI elements
-    private EditText mDescription;
+    private AppCompatAutoCompleteTextView mDescription;
     private EditText mAmount;
     private EditText mNotes;
     private EditText mDateEditText;
@@ -59,6 +62,13 @@ public class TransactionFragment extends Fragment implements DatePickerDialog.On
     // Possible modes of fragment
     public static final int MODE_ADD = 1;
     public static final int MODE_EDIT = 2;
+
+    public static final String[] TRANSACTION_COLUMNS = new String[] {
+            CCContract.TransactionEntry.TABLE_NAME + "." + CCContract.TransactionEntry._ID,
+            CCContract.TransactionEntry.COLUMN_DESCRIPTION
+    };
+
+    private static final int DESCRIPTION_INDEX = 1;
 
     public static TransactionFragment NewInstance(long account, int fragmentMode, Transaction transaction){
         // If mode is add and transaction is not null, bad input
@@ -101,6 +111,7 @@ public class TransactionFragment extends Fragment implements DatePickerDialog.On
         getUIElements(view);
         setClickListeners();
         setInputFilters();
+        setupDescriptionTextView();
 
         // If saved instance state is not null pull values.
         // Should be there, do checks anyways
@@ -167,7 +178,7 @@ public class TransactionFragment extends Fragment implements DatePickerDialog.On
      * Retrieves all necessary UI elements in the fragment.
      */
     private void getUIElements(View view){
-        mDescription = (EditText) view.findViewById(R.id.transaction_description);
+        mDescription = (AppCompatAutoCompleteTextView) view.findViewById(R.id.transaction_description);
         mAmount = (EditText) view.findViewById(R.id.transaction_amount);
         mNotes = (EditText) view.findViewById(R.id.transaction_notes);
         mDateEditText = (EditText) view.findViewById(R.id.transaction_date);
@@ -338,6 +349,43 @@ public class TransactionFragment extends Fragment implements DatePickerDialog.On
         }
 
         ((OnTransactionSubmittedListener)getActivity()).onTransactionSubmitted();
+    }
+
+    private void setupDescriptionTextView() {
+        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(
+                getActivity(),
+                R.layout.list_textview,
+                null,
+                new String[] {CCContract.TransactionEntry.COLUMN_DESCRIPTION},
+                new int[] {R.id.list_item_text_view},
+                0
+        );
+
+        simpleCursorAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+            @Override
+            public Cursor runQuery(CharSequence constraint) {
+                return getCursor(constraint.toString());
+            }
+        });
+
+        simpleCursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
+            @Override
+            public CharSequence convertToString(Cursor cursor) {
+                return cursor.getString(DESCRIPTION_INDEX);
+            }
+        });
+
+        mDescription.setAdapter(simpleCursorAdapter);
+    }
+
+    private Cursor getCursor(String description) {
+        return getActivity().getContentResolver().query(
+                CCContract.TransactionEntry.buildTransactionsForAccountWithDescriptionUri(mAccount, description),
+                TRANSACTION_COLUMNS,
+                null,
+                null,
+                CCContract.TransactionEntry.COLUMN_DESCRIPTION
+        );
     }
 
     /**

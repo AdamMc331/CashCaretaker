@@ -23,6 +23,7 @@ public class CCProvider extends ContentProvider {
     private static final int TRANSACTION = 20;
     private static final int TRANSACTION_ID = 21;
     private static final int TRANSACTION_FOR_ACCOUNT = 22;
+    private static final int TRANSACTION_FOR_ACCOUNT_DESCRIPTION = 23;
     private static final int REPEATING_PERIOD = 30;
     private static final int REPEATING_TRANSACTION = 40;
     private static final int REPEATING_TRANSACTION_ID = 41;
@@ -41,6 +42,7 @@ public class CCProvider extends ContentProvider {
         matcher.addURI(content, CCContract.PATH_TRANSACTION, TRANSACTION);
         matcher.addURI(content, CCContract.PATH_TRANSACTION + "/#", TRANSACTION_ID);
         matcher.addURI(content, CCContract.PATH_TRANSACTION + "/" + CCContract.PATH_ACCOUNT + "/#", TRANSACTION_FOR_ACCOUNT);
+        matcher.addURI(content, CCContract.PATH_TRANSACTION + "/*/" + CCContract.PATH_ACCOUNT + "/#", TRANSACTION_FOR_ACCOUNT_DESCRIPTION);
         matcher.addURI(content, CCContract.PATH_REPEATING_PERIOD, REPEATING_PERIOD);
         matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION, REPEATING_TRANSACTION);
         matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION + "/#", REPEATING_TRANSACTION_ID);
@@ -152,6 +154,19 @@ public class CCProvider extends ContentProvider {
                         projection,
                         CCContract.TransactionEntry.COLUMN_ACCOUNT + " = ?",
                         new String[]{String.valueOf(_id)},
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case TRANSACTION_FOR_ACCOUNT_DESCRIPTION:
+                _id = ContentUris.parseId(uri);
+                String description = CCContract.TransactionEntry.getDescriptionFromUri(uri);
+                retCursor = db.query(
+                        CCContract.TransactionEntry.TABLE_NAME,
+                        projection,
+                        CCContract.TransactionEntry.COLUMN_ACCOUNT + " = ? AND " + CCContract.TransactionEntry.COLUMN_DESCRIPTION + " LIKE ?",
+                        new String[] {String.valueOf(_id), "%" + description + "%"},
                         null,
                         null,
                         sortOrder
