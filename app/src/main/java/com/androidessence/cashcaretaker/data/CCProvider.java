@@ -160,13 +160,14 @@ public class CCProvider extends ContentProvider {
                 );
                 break;
             case TRANSACTION_FOR_ACCOUNT_DESCRIPTION:
-                _id = ContentUris.parseId(uri);
+                // Decided not to query by account, but all transaction descriptions.
+                // _id = ContentUris.parseId(uri);
                 String description = CCContract.TransactionEntry.getDescriptionFromUri(uri);
                 retCursor = db.query(
                         CCContract.TransactionEntry.TABLE_NAME,
                         projection,
-                        CCContract.TransactionEntry.COLUMN_ACCOUNT + " = ? AND " + CCContract.TransactionEntry.COLUMN_DESCRIPTION + " LIKE ?",
-                        new String[] {String.valueOf(_id), "%" + description + "%"},
+                        CCContract.TransactionEntry.COLUMN_DESCRIPTION + " LIKE ?",
+                        new String[] {"%" + description + "%"},
                         null,
                         null,
                         sortOrder
