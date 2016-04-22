@@ -17,4 +17,4 @@ Version History
 
 License
 ----
-This application is released under the MIT license. You are free to improve it in any way.
+This application is released under the [MIT license](https://opensource.org/licenses/MIT). You are free to improve it in any way.
