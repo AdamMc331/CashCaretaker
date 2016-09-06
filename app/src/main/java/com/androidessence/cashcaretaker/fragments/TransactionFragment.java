@@ -30,6 +30,9 @@ import org.joda.time.LocalDate;
  * Created by adammcneilly on 11/2/15.
  */
 public class TransactionFragment extends Fragment implements DatePickerDialog.OnDateSetListener, CategoryDialog.OnCategorySelectedListener{
+    public static final String FRAGMENT_TAG_ADD = "AddTransactionFragment";
+    public static final String FRAGMENT_TAG_EDIT = "EditTransactionFragment";
+
     // UI elements
     private EditText mDescription;
     private EditText mAmount;

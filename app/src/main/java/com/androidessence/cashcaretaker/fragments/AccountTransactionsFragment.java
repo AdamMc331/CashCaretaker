@@ -28,6 +28,8 @@ import java.text.MessageFormat;
  * Created by adammcneilly on 11/1/15.
  */
 public class AccountTransactionsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+    public static final String FRAGMENT_TAG = "AccountTransactionsFragment";
+
     // UI Elements
     private RecyclerView mTransactionRecyclerView;
     private FloatingActionButton mAddTransactionFAB;
