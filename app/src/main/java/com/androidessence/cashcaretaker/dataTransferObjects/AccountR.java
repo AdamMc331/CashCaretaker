@@ -13,7 +13,6 @@ import com.androidessence.cashcaretaker.data.CCContract;
  * Created by adam.mcneilly on 9/5/16.
  */
 public class AccountR extends CoreDTO {
-    private long identifier;
     private String name;
     private double balance;
 
@@ -41,13 +40,9 @@ public class AccountR extends CoreDTO {
     }
 
     public AccountR(Parcel parcel) {
-        this.identifier = parcel.readLong();
+        super(parcel);
         this.name = parcel.readString();
         this.balance = parcel.readDouble();
-    }
-
-    public long getIdentifier() {
-        return identifier;
     }
 
     public String getName() {
@@ -74,7 +69,7 @@ public class AccountR extends CoreDTO {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(identifier);
+        super.writeToParcel(dest, flags);
         dest.writeString(name);
         dest.writeDouble(balance);
     }
