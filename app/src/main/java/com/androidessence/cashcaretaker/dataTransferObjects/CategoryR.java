@@ -13,7 +13,6 @@ import com.androidessence.cashcaretaker.data.CCContract;
  * Created by adam.mcneilly on 9/5/16.
  */
 public class CategoryR extends CoreDTO {
-    private long identifier;
     private String description;
 
     public static Creator<CategoryR> CREATOR = new Creator<CategoryR>() {
@@ -40,7 +39,7 @@ public class CategoryR extends CoreDTO {
     }
 
     private CategoryR(Parcel parcel){
-        this.identifier = parcel.readLong();
+        super(parcel);
         this.description = parcel.readString();
     }
 
@@ -72,7 +71,7 @@ public class CategoryR extends CoreDTO {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(getIdentifier());
+        super.writeToParcel(dest, flags);
         dest.writeString(getDescription());
     }
 }
