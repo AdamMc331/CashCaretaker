@@ -5,9 +5,11 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
+import static android.support.v7.widget.LinearLayoutManager.HORIZONTAL;
 
 /**
  * Divider item decoration used to display a divider between RecyclerView elements.
@@ -19,10 +21,6 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
     };
-
-    private static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
-
-    public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
 
     private final Drawable mDivider;
 
@@ -36,7 +34,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     private void setOrientation(int orientation) {
-        if (orientation != HORIZONTAL_LIST && orientation != VERTICAL_LIST) {
+        if (orientation != HORIZONTAL && orientation != VERTICAL) {
             throw new IllegalArgumentException("invalid orientation");
         }
         mOrientation = orientation;
@@ -44,7 +42,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent) {
-        if (mOrientation == VERTICAL_LIST) {
+        if (mOrientation == VERTICAL) {
             drawVertical(c, parent);
         } else {
             drawHorizontal(c, parent);
@@ -85,7 +83,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     @Override
     public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
-        if (mOrientation == VERTICAL_LIST) {
+        if (mOrientation == VERTICAL) {
             outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
         } else {
             outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
