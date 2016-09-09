@@ -11,21 +11,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.TransactionAdapter;
+import com.androidessence.cashcaretaker.adapters.TransactionAdapterR;
 import com.androidessence.cashcaretaker.core.CoreActivity;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
 import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
-import com.androidessence.cashcaretaker.fragments.AccountTransactionsFragment;
-import com.androidessence.cashcaretaker.fragments.TransactionFragment;
+import com.androidessence.cashcaretaker.fragments.AccountTransactionsFragmentR;
+import com.androidessence.cashcaretaker.fragments.TransactionFragmentR;
 
 /**
  * Activity that allows the user to add, edit, and view transactions.
  *
  * Created by adam.mcneilly on 9/5/16.
  */
-public class TransactionsActivityR extends CoreActivity implements AccountTransactionsFragment.OnAddTransactionFABClickedListener, TransactionFragment.OnTransactionSubmittedListener, TransactionAdapter.OnTransactionLongClickListener{
+public class TransactionsActivityR extends CoreActivity implements AccountTransactionsFragmentR.OnAddTransactionFABClickedListener, TransactionFragmentR.OnTransactionSubmittedListener, TransactionAdapterR.OnTransactionLongClickListener{
     private AppBarLayout appBar;
     private ActionMode actionMode;
 
@@ -72,8 +72,8 @@ public class TransactionsActivityR extends CoreActivity implements AccountTransa
     private Account account;
     private ViewStates viewState;
 
-    private TransactionFragment transactionFragment;
-    private AccountTransactionsFragment accountTransactionsFragment;
+    private TransactionFragmentR transactionFragment;
+    private AccountTransactionsFragmentR accountTransactionsFragment;
 
     private enum ViewStates {
         VIEW,
@@ -128,21 +128,21 @@ public class TransactionsActivityR extends CoreActivity implements AccountTransa
                 // When showing transactions we also show account balance, so remove elevation
                 // on app bar. Requires API 21
                 setAppBarElevation(false);
-                AccountTransactionsFragment accountTransactionsFragment = (AccountTransactionsFragment) getSupportFragmentManager().findFragmentByTag(AccountTransactionsFragment.FRAGMENT_TAG);
+                AccountTransactionsFragmentR accountTransactionsFragment = (AccountTransactionsFragmentR) getSupportFragmentManager().findFragmentByTag(AccountTransactionsFragmentR.FRAGMENT_TAG);
                 if(accountTransactionsFragment == null) {
                     showTransactionsFragment();
                 }
                 break;
             case ADD:
                 setAppBarElevation(true);
-                TransactionFragment transactionFragment = (TransactionFragment) getSupportFragmentManager().findFragmentByTag(TransactionFragment.FRAGMENT_TAG_ADD);
+                TransactionFragmentR transactionFragment = (TransactionFragmentR) getSupportFragmentManager().findFragmentByTag(TransactionFragmentR.FRAGMENT_TAG_ADD);
                 if(transactionFragment == null) {
                     showAddTransactionFragment();
                 }
                 break;
             case EDIT:
                 setAppBarElevation(true);
-                TransactionFragment editTransactionFragment = (TransactionFragment) getSupportFragmentManager().findFragmentByTag(TransactionFragment.FRAGMENT_TAG_EDIT);
+                TransactionFragmentR editTransactionFragment = (TransactionFragmentR) getSupportFragmentManager().findFragmentByTag(TransactionFragmentR.FRAGMENT_TAG_EDIT);
                 if(editTransactionFragment == null) {
                     showAddTransactionFragment();
                 }
@@ -160,8 +160,8 @@ public class TransactionsActivityR extends CoreActivity implements AccountTransa
     }
 
     private void showAddTransactionFragment() {
-        transactionFragment = TransactionFragment.NewInstance(account.getIdentifier(), TransactionFragment.MODE_ADD, null);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, transactionFragment, TransactionFragment.FRAGMENT_TAG_ADD).commit();
+        transactionFragment = TransactionFragmentR.newInstance(account.getIdentifier(), TransactionFragmentR.MODE_ADD, null);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, transactionFragment, TransactionFragmentR.FRAGMENT_TAG_ADD).commit();
 
         setToolbarTitle(getString(R.string.add_transaction));
 
@@ -171,7 +171,8 @@ public class TransactionsActivityR extends CoreActivity implements AccountTransa
     }
 
     private void showEditTransactionFragment(TransactionDetails transactionDetails) {
-        transactionFragment = TransactionFragment.NewInstance(account.getIdentifier(), TransactionFragment.MODE_EDIT, transactionDetails);
+        transactionFragment = TransactionFragmentR.newInstance(account.getIdentifier(), TransactionFragmentR.MODE_EDIT, transactionDetails);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, transactionFragment, TransactionFragmentR.FRAGMENT_TAG_EDIT).commit();
 
         setToolbarTitle(getString(R.string.edit_transaction));
 
@@ -181,8 +182,8 @@ public class TransactionsActivityR extends CoreActivity implements AccountTransa
     }
 
     private void showTransactionsFragment() {
-        accountTransactionsFragment = AccountTransactionsFragment.NewInstance(account.getIdentifier());
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, accountTransactionsFragment, AccountTransactionsFragment.FRAGMENT_TAG).commit();
+        accountTransactionsFragment = AccountTransactionsFragmentR.newInstance(account.getIdentifier());
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, accountTransactionsFragment, AccountTransactionsFragmentR.FRAGMENT_TAG).commit();
 
         setToolbarTitle(account.getName() + " Transactions");
 

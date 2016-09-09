@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.activities.AddAccountActivity;
-import com.androidessence.cashcaretaker.adapters.AccountAdapter;
+import com.androidessence.cashcaretaker.activities.AddAccountActivityR;
+import com.androidessence.cashcaretaker.adapters.AccountAdapterR;
 import com.androidessence.cashcaretaker.core.CoreRecyclerViewFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
 
@@ -29,7 +29,7 @@ import com.androidessence.cashcaretaker.data.CCContract;
  */
 public class AccountsFragmentR extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     // UI Elements
-    private AccountAdapter mAccountAdapter;
+    private AccountAdapterR mAccountAdapter;
     private FloatingActionButton mFloatingActionButton;
     private TextView mAddFirstAccount;
 
@@ -59,7 +59,7 @@ public class AccountsFragmentR extends CoreRecyclerViewFragment implements Loade
     protected void setupRecyclerView(int orientation) {
         super.setupRecyclerView(orientation);
 
-        mAccountAdapter = new AccountAdapter(getActivity());
+        mAccountAdapter = new AccountAdapterR(getActivity());
         recyclerView.setAdapter(mAccountAdapter);
     }
 
@@ -79,7 +79,7 @@ public class AccountsFragmentR extends CoreRecyclerViewFragment implements Loade
      * Starts the Activity for adding a new account.
      */
     private void startAddAccountActivity(){
-        Intent addAccount = new Intent(getActivity(), AddAccountActivity.class);
+        Intent addAccount = new Intent(getActivity(), AddAccountActivityR.class);
         startActivity(addAccount);
     }
 
@@ -99,7 +99,7 @@ public class AccountsFragmentR extends CoreRecyclerViewFragment implements Loade
                 return new CursorLoader(
                         getActivity(),
                         CCContract.AccountEntry.CONTENT_URI,
-                        AccountAdapter.ACCOUNT_COLUMNS,
+                        AccountAdapterR.ACCOUNT_COLUMNS,
                         null,
                         null,
                         CCContract.AccountEntry.COLUMN_NAME

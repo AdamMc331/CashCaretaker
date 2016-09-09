@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.activities.TransactionsActivity;
+import com.androidessence.cashcaretaker.activities.TransactionsActivityR;
 import com.androidessence.cashcaretaker.core.CoreActivity;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
@@ -136,11 +136,11 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
 
     private void startTransactionActivity(Account account){
         // Create intent
-        Intent transactionsActivity = new Intent(mContext, TransactionsActivity.class);
+        Intent transactionsActivity = new Intent(mContext, TransactionsActivityR.class);
 
         // Build and set arguments.
         Bundle args = new Bundle();
-        args.putParcelable(TransactionsActivity.ARG_ACCOUNT, account);
+        args.putParcelable(TransactionsActivityR.ARG_ACCOUNT, account);
         transactionsActivity.putExtras(args);
 
         // Start activity

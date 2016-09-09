@@ -29,6 +29,8 @@ import com.androidessence.utility.Utility;
 import org.joda.time.LocalDate;
 
 /**
+ * Fragment that allows the user to add a repeating transaction.
+ *
  * Created by adam.mcneilly on 9/8/16.
  */
 public class AddRepeatingTransactionFragmentR extends CoreFragment implements RepeatingPeriodDialog.OnRepeatingPeriodSelectedListener, AccountDialog.OnAccountSelectedListener, CategoryDialog.OnCategorySelectedListener, DatePickerDialog.OnDateSetListener{

@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.CategoryAdapter;
+import com.androidessence.cashcaretaker.adapters.CategoryAdapterR;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Category;
 
@@ -24,7 +24,7 @@ import com.androidessence.cashcaretaker.dataTransferObjects.Category;
  * Created by adammcneilly on 10/16/15.
  */
 public class CategoryDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private CategoryAdapter mAdapter;
+    private CategoryAdapterR mAdapter;
 
     private static final int CATEGORY_LOADER = 0;
 
@@ -34,7 +34,7 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
         View view = inflater.inflate(R.layout.dialog_category, container, false);
 
         final ListView listView = (ListView) view.findViewById(R.id.category_list_view);
-        mAdapter = new CategoryAdapter(getActivity());
+        mAdapter = new CategoryAdapterR(getActivity());
         listView.setAdapter(mAdapter);
 
         getDialog().setTitle("Category");
