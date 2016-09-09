@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.RepeatingPeriodAdapter;
+import com.androidessence.cashcaretaker.adapters.RepeatingPeriodAdapterR;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
 
@@ -24,7 +24,7 @@ import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
  * Created by adammcneilly on 11/17/15.
  */
 public class RepeatingPeriodDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private RepeatingPeriodAdapter mAdapter;
+    private RepeatingPeriodAdapterR mAdapter;
 
     private static final int REPEATING_PERIOD_LOADER = 0;
 
@@ -34,7 +34,7 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
         View view = inflater.inflate(R.layout.dialog_category, container, false);
 
         final ListView listView = (ListView) view.findViewById(R.id.category_list_view);
-        mAdapter = new RepeatingPeriodAdapter(getActivity());
+        mAdapter = new RepeatingPeriodAdapterR(getActivity());
         listView.setAdapter(mAdapter);
 
         getDialog().setTitle("Repeating Period");
@@ -64,7 +64,7 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
                 return new CursorLoader(
                         getActivity(),
                         CCContract.RepeatingPeriodEntry.CONTENT_URI,
-                        RepeatingPeriodAdapter.REPEATING_PERIOD_COLUMNS,
+                        RepeatingPeriodAdapterR.REPEATING_PERIOD_COLUMNS,
                         null,
                         null,
                         null

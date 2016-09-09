@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.TransactionAdapter;
+import com.androidessence.cashcaretaker.adapters.TransactionAdapterR;
 import com.androidessence.cashcaretaker.core.CoreRecyclerViewFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
 
@@ -32,7 +32,7 @@ public class AccountTransactionsFragmentR extends CoreRecyclerViewFragment imple
 
     // UI Elements
     private FloatingActionButton mAddTransactionFAB;
-    private TransactionAdapter mTransactionAdapter;
+    private TransactionAdapterR mTransactionAdapter;
     private TextView mAddFirstTransaction;
     private TextView mAccountBalanceTextView;
 
@@ -51,11 +51,11 @@ public class AccountTransactionsFragmentR extends CoreRecyclerViewFragment imple
 
     private static final int ACCOUNT_BALANCE_INDEX = 0;
 
-    public static AccountTransactionsFragment newInstance(long account){
+    public static AccountTransactionsFragmentR newInstance(long account){
         Bundle args = new Bundle();
         args.putLong(ARG_ACCOUNT, account);
 
-        AccountTransactionsFragment fragment = new AccountTransactionsFragment();
+        AccountTransactionsFragmentR fragment = new AccountTransactionsFragmentR();
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,7 +85,7 @@ public class AccountTransactionsFragmentR extends CoreRecyclerViewFragment imple
     protected void setupRecyclerView(int orientation) {
         super.setupRecyclerView(orientation);
 
-        mTransactionAdapter = new TransactionAdapter(getActivity());
+        mTransactionAdapter = new TransactionAdapterR(getActivity());
         recyclerView.setAdapter(mTransactionAdapter);
     }
 
@@ -126,7 +126,7 @@ public class AccountTransactionsFragmentR extends CoreRecyclerViewFragment imple
                 return new CursorLoader(
                         getActivity(),
                         CCContract.TransactionEntry.buildTransactionsForAccountUri(mAccount),
-                        TransactionAdapter.TRANSACTION_COLUMNS,
+                        TransactionAdapterR.TRANSACTION_COLUMNS,
                         null,
                         null,
                         CCContract.TransactionEntry.COLUMN_DATE + " DESC"

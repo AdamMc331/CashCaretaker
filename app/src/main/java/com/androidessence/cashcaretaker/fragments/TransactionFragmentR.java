@@ -64,7 +64,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
     public static final int MODE_ADD = 1;
     public static final int MODE_EDIT = 2;
 
-    public static TransactionFragment newInstance(long account, int fragmentMode, Transaction transaction){
+    public static TransactionFragmentR newInstance(long account, int fragmentMode, Transaction transaction){
         // If mode is add and transaction is not null, bad input
         if(fragmentMode == MODE_ADD && transaction != null) {
             throw new IllegalArgumentException("Cannot specify a transaction for ADD form mode.");
@@ -78,7 +78,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
         args.putLong(ARG_ACCOUNT, account);
         args.putInt(ARG_FORM_MODE, fragmentMode);
         args.putParcelable(ARG_TRANSACTION, transaction);
-        TransactionFragment fragment = new TransactionFragment();
+        TransactionFragmentR fragment = new TransactionFragmentR();
         fragment.setArguments(args);
         return fragment;
     }

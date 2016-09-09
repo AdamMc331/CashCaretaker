@@ -30,7 +30,7 @@
             android:writePermission="writePermissionString" />
 
         <activity
-            android:name=".activities.AccountsActivity"
+            android:name=".activities.AccountsActivityR"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -40,21 +40,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.AddAccountActivity"
+            android:name=".activities.AddAccountActivityR"
             android:label="@string/add_account"
-            android:parentActivityName=".activities.AccountsActivity"
+            android:parentActivityName=".activities.AccountsActivityR"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.AccountsActivity" />
+                android:value=".activities.AccountsActivityR" />
         </activity>
         <activity
-            android:name=".activities.TransactionsActivity"
-            android:parentActivityName=".activities.AccountsActivity"
+            android:name=".activities.TransactionsActivityR"
+            android:parentActivityName=".activities.AccountsActivityR"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.AccountsActivity" />
+                android:value=".activities.AccountsActivityR" />
         </activity>
 
         <!-- Boot receiver that restarts our IntentService for repeating transactions -->
@@ -73,23 +73,23 @@
             android:exported="false" />
 
         <activity
-            android:name=".activities.RepeatingTransactionsActivity"
+            android:name=".activities.RepeatingTransactionsActivityR"
             android:label="@string/manage_repeating_transactions"
-            android:parentActivityName=".activities.AccountsActivity"
+            android:parentActivityName=".activities.AccountsActivityR"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.AccountsActivity" />
+                android:value=".activities.AccountsActivityR" />
         </activity>
         <activity
-            android:name=".activities.AddRepeatingTransactionActivity"
+            android:name=".activities.AddRepeatingTransactionActivityR"
             android:label="@string/title_activity_add_repeating_transaction"
-            android:parentActivityName=".activities.RepeatingTransactionsActivity"
+            android:parentActivityName=".activities.RepeatingTransactionsActivityR"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.androidessence.cashcaretaker.activities.RepeatingTransactionsActivity" />
+                android:value="com.androidessence.cashcaretaker.activities.RepeatingTransactionsActivityR" />
         </activity>
     </application>
 

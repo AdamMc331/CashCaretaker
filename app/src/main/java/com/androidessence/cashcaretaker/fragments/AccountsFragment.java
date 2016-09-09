@@ -16,10 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.androidessence.cashcaretaker.DividerItemDecoration;
+import com.androidessence.cashcaretaker.DividerItemDecorationR;
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.activities.AddAccountActivity;
-import com.androidessence.cashcaretaker.adapters.AccountAdapter;
+import com.androidessence.cashcaretaker.activities.AddAccountActivityR;
+import com.androidessence.cashcaretaker.adapters.AccountAdapterR;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
@@ -30,7 +30,7 @@ import com.androidessence.cashcaretaker.data.CCContract;
 public class AccountsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     // UI Elements
     private RecyclerView mAccountRecyclerView;
-    private AccountAdapter mAccountAdapter;
+    private AccountAdapterR mAccountAdapter;
     private FloatingActionButton mFloatingActionButton;
     private TextView mAddFirstAccount;
 
@@ -66,9 +66,9 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mAccountRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mAccountRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        mAccountRecyclerView.addItemDecoration(new DividerItemDecorationR(getActivity(), LinearLayoutManager.VERTICAL));
 
-        mAccountAdapter = new AccountAdapter(getActivity());
+        mAccountAdapter = new AccountAdapterR(getActivity());
         mAccountRecyclerView.setAdapter(mAccountAdapter);
     }
 
@@ -88,7 +88,7 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
      * Starts the Activity for adding a new account.
      */
     private void startAddAccountActivity(){
-        Intent addAccount = new Intent(getActivity(), AddAccountActivity.class);
+        Intent addAccount = new Intent(getActivity(), AddAccountActivityR.class);
         startActivity(addAccount);
     }
 
@@ -108,7 +108,7 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
                 return new CursorLoader(
                         getActivity(),
                         CCContract.AccountEntry.CONTENT_URI,
-                        AccountAdapter.ACCOUNT_COLUMNS,
+                        AccountAdapterR.ACCOUNT_COLUMNS,
                         null,
                         null,
                         CCContract.AccountEntry.COLUMN_NAME

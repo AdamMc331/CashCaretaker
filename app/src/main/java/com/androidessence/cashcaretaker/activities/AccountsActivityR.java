@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 import com.androidessence.cashcaretaker.DatabaseToJSON;
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.AccountAdapter;
+import com.androidessence.cashcaretaker.adapters.AccountAdapterR;
 import com.androidessence.cashcaretaker.alarms.RepeatingTransactionAlarm;
 import com.androidessence.cashcaretaker.core.CoreActivity;
 import com.google.android.gms.common.ConnectionResult;
@@ -28,7 +28,7 @@ import org.json.JSONException;
  *
  * Created by adam.mcneilly on 9/5/16.
  */
-public class AccountsActivityR extends CoreActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AccountAdapter.OnAccountDeletedListener {
+public class AccountsActivityR extends CoreActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AccountAdapterR.OnAccountDeletedListener {
     private static final String LOG_TAG = AccountsActivityR.class.getSimpleName();
     private GoogleApiClient mGoogleClient;
 
@@ -60,7 +60,7 @@ public class AccountsActivityR extends CoreActivity implements GoogleApiClient.C
     }
 
     private void startRepeatingTransactionsActivity() {
-        Intent repeatingTransactionsIntent = new Intent(this, RepeatingTransactionsActivity.class);
+        Intent repeatingTransactionsIntent = new Intent(this, RepeatingTransactionsActivityR.class);
         startActivity(repeatingTransactionsIntent);
     }
 

@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.SimpleAccountAdapter;
+import com.androidessence.cashcaretaker.adapters.SimpleAccountAdapterR;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 
@@ -24,7 +24,7 @@ import com.androidessence.cashcaretaker.dataTransferObjects.Account;
  * Created by adammcneilly on 11/17/15.
  */
 public class AccountDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private SimpleAccountAdapter mAdapter;
+    private SimpleAccountAdapterR mAdapter;
 
     private static final int CATEGORY_LOADER = 0;
 
@@ -34,7 +34,7 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
         View view = inflater.inflate(R.layout.dialog_account, container, false);
 
         final ListView listView = (ListView) view.findViewById(R.id.account_list_view);
-        mAdapter = new SimpleAccountAdapter(getActivity());
+        mAdapter = new SimpleAccountAdapterR(getActivity());
         listView.setAdapter(mAdapter);
 
         getDialog().setTitle("Account");
@@ -64,7 +64,7 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
                 return new CursorLoader(
                         getActivity(),
                         CCContract.AccountEntry.CONTENT_URI,
-                        SimpleAccountAdapter.ACCOUNT_COLUMNS,
+                        SimpleAccountAdapterR.ACCOUNT_COLUMNS,
                         null,
                         null,
                         CCContract.AccountEntry.COLUMN_NAME + " ASC"
