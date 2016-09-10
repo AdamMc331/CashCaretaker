@@ -249,14 +249,11 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
      * Retrieves the default category to be used.
      */
     private void getDefaultCategory(){
-        //TODO: Don't hard code this, put it in settings or something
-        String defaultCategory = "None";
-
         Cursor cursor = getActivity().getContentResolver().query(
                 CCContract.CategoryEntry.CONTENT_URI,
                 null,
-                CCContract.CategoryEntry.COLUMN_DESCRIPTION + " = ?",
-                new String[] {defaultCategory},
+                CCContract.CategoryEntry.COLUMN_IS_DEFAULT + " = ?",
+                new String[] {"1"},
                 null
         );
 
