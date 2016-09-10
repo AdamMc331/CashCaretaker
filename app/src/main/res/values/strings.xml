@@ -25,4 +25,5 @@
     <string name="edit_transaction">Edit Transaction</string>
     <string name="submit_changes">Submit Changes</string>
     <string name="account_balance">Account Balance: {0, number, currency}</string>
+    <string name="default_category">None</string>
 </resources>
