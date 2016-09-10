@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransactionR;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
 import com.androidessence.utility.Utility;
@@ -80,7 +80,7 @@ public class RepeatingTransactionAdapterR extends RecyclerViewCursorAdapter<Repe
                 case R.id.action_delete_transaction:
                     // The transaction that was selected is passed as the tag
                     // for the action mode.
-                    showDeleteAlertDialog((RepeatingTransaction) actionMode.getTag());
+                    showDeleteAlertDialog((RepeatingTransactionR) actionMode.getTag());
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
@@ -95,7 +95,7 @@ public class RepeatingTransactionAdapterR extends RecyclerViewCursorAdapter<Repe
         }
     };
 
-    private void showDeleteAlertDialog(final RepeatingTransaction transaction){
+    private void showDeleteAlertDialog(final RepeatingTransactionR transaction){
         new AlertDialog.Builder(mContext)
                 .setTitle("Delete Repeating Transaction")
                 .setMessage("Are you sure you want to delete " + transaction.getDescription() + "?")
@@ -220,11 +220,11 @@ public class RepeatingTransactionAdapterR extends RecyclerViewCursorAdapter<Repe
         public boolean onLongClick(View view) {
             // Get current item and start action mode
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
-            startActionMode(new RepeatingTransaction(mCursorAdapter.getCursor()));
+            startActionMode(new RepeatingTransactionR(mCursorAdapter.getCursor()));
             return true;
         }
 
-        private void startActionMode(RepeatingTransaction transaction){
+        private void startActionMode(RepeatingTransactionR transaction){
             // Don't fire if action mode is already being used
             if(actionMode == null){
                 // Start the CAB using the ActionMode.Callback already defined

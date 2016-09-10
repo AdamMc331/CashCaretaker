@@ -15,7 +15,7 @@ import com.androidessence.cashcaretaker.DecimalDigitsInputFilter;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.core.CoreFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.Account;
+import com.androidessence.cashcaretaker.dataTransferObjects.AccountR;
 
 /**
  * Fragment that allows the user to add an account.
@@ -75,7 +75,7 @@ public class AddAccountFragmentR extends CoreFragment{
             return;
         }
 
-        Account account = new Account(
+        AccountR account = new AccountR(
                 mAccountName.getText().toString(),
                 Double.parseDouble(mStartingBalance.getText().toString())
         );

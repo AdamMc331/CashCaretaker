@@ -14,9 +14,9 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.adapters.TransactionAdapterR;
 import com.androidessence.cashcaretaker.core.CoreActivity;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.Account;
-import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
-import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
+import com.androidessence.cashcaretaker.dataTransferObjects.AccountR;
+import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetailsR;
+import com.androidessence.cashcaretaker.dataTransferObjects.TransactionR;
 import com.androidessence.cashcaretaker.fragments.AccountTransactionsFragmentR;
 import com.androidessence.cashcaretaker.fragments.TransactionFragmentR;
 
@@ -47,12 +47,12 @@ public class TransactionsActivityR extends CoreActivity implements AccountTransa
                 case R.id.action_delete_transaction:
                     // The transaction that was selected is passed as the tag
                     // for the action mode.
-                    showDeleteAlertDialog((Transaction) actionMode.getTag());
+                    showDeleteAlertDialog((TransactionR) actionMode.getTag());
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 case R.id.action_edit_transaction:
                     // Edit the transaction selected. Close CAB when done.
-                    showEditTransactionFragment((TransactionDetails) actionMode.getTag());
+                    showEditTransactionFragment((TransactionDetailsR) actionMode.getTag());
                     mode.finish();
                     return true;
                 default:
@@ -69,7 +69,7 @@ public class TransactionsActivityR extends CoreActivity implements AccountTransa
     public static final String ARG_ACCOUNT = "account";
     private static final String ARG_VIEW_STATE = "viewState";
 
-    private Account account;
+    private AccountR account;
     private ViewStates viewState;
 
     private TransactionFragmentR transactionFragment;
@@ -81,7 +81,7 @@ public class TransactionsActivityR extends CoreActivity implements AccountTransa
         EDIT
     }
 
-    private void showDeleteAlertDialog(final Transaction transaction) {
+    private void showDeleteAlertDialog(final TransactionR transaction) {
         new AlertDialog.Builder(this)
                 .setTitle("Delete Transaction")
                 .setMessage("Are you sure you want to delete " + transaction.getDescription() + "?")
@@ -170,7 +170,7 @@ public class TransactionsActivityR extends CoreActivity implements AccountTransa
         setAppBarElevation(true);
     }
 
-    private void showEditTransactionFragment(TransactionDetails transactionDetails) {
+    private void showEditTransactionFragment(TransactionDetailsR transactionDetails) {
         transactionFragment = TransactionFragmentR.newInstance(account.getIdentifier(), TransactionFragmentR.MODE_EDIT, transactionDetails);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, transactionFragment, TransactionFragmentR.FRAGMENT_TAG_EDIT).commit();
 
@@ -224,11 +224,11 @@ public class TransactionsActivityR extends CoreActivity implements AccountTransa
     }
 
     @Override
-    public void onTransactionLongClick(TransactionDetails transaction) {
+    public void onTransactionLongClick(TransactionDetailsR transaction) {
         startActionMode(transaction);
     }
 
-    private void startActionMode(TransactionDetails transactionDetails) {
+    private void startActionMode(TransactionDetailsR transactionDetails) {
         // Don't fire if already being used
         if(actionMode == null) {
             actionMode = startSupportActionMode(actionModeCallback);

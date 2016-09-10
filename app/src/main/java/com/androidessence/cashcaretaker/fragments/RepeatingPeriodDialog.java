@@ -16,7 +16,7 @@ import android.widget.ListView;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.adapters.RepeatingPeriodAdapterR;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriodR;
 
 /**
  * Dialog that displays a list of repeating periods for the user to select.
@@ -43,7 +43,7 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor item = (Cursor) listView.getItemAtPosition(position);
-                ((OnRepeatingPeriodSelectedListener)getTargetFragment()).onRepeatingPeriodSelected(new RepeatingPeriod(item));
+                ((OnRepeatingPeriodSelectedListener)getTargetFragment()).onRepeatingPeriodSelected(new RepeatingPeriodR(item));
                 dismiss();
             }
         });
@@ -97,6 +97,6 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
     }
 
     public interface OnRepeatingPeriodSelectedListener {
-        void onRepeatingPeriodSelected(RepeatingPeriod repeatingPeriod);
+        void onRepeatingPeriodSelected(RepeatingPeriodR repeatingPeriod);
     }
 }

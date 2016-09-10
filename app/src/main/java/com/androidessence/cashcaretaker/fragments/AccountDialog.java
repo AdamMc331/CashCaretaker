@@ -16,7 +16,7 @@ import android.widget.ListView;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.adapters.SimpleAccountAdapterR;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.Account;
+import com.androidessence.cashcaretaker.dataTransferObjects.AccountR;
 
 /**
  * Dialog that displays a list of account names for the user to select.
@@ -43,7 +43,7 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor item = (Cursor) listView.getItemAtPosition(position);
-                ((OnAccountSelectedListener)getTargetFragment()).onAccountSelected(new Account(item));
+                ((OnAccountSelectedListener)getTargetFragment()).onAccountSelected(new AccountR(item));
                 dismiss();
             }
         });
@@ -97,6 +97,6 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
     }
 
     public interface OnAccountSelectedListener {
-        void onAccountSelected(Account account);
+        void onAccountSelected(AccountR account);
     }
 }

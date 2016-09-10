@@ -18,7 +18,7 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.activities.TransactionsActivityR;
 import com.androidessence.cashcaretaker.core.CoreActivity;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.Account;
+import com.androidessence.cashcaretaker.dataTransferObjects.AccountR;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
 import com.androidessence.utility.Utility;
@@ -67,7 +67,7 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
                 case R.id.action_delete_account:
                     // The account that was selected is passed as the tag
                     // for the action mode.
-                    showAccountDeleteAlertDialog((Account) actionMode.getTag());
+                    showAccountDeleteAlertDialog((AccountR) actionMode.getTag());
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
@@ -82,7 +82,7 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
         }
     };
 
-    private void showAccountDeleteAlertDialog(final Account account){
+    private void showAccountDeleteAlertDialog(final AccountR account){
         new AlertDialog.Builder(mContext)
                 .setTitle("Delete Account")
                 .setMessage("Are you sure you want to delete " + account.getName() + "?")
@@ -134,7 +134,7 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
         mCursorAdapter.bindView(null, mContext, mCursorAdapter.getCursor());
     }
 
-    private void startTransactionActivity(Account account){
+    private void startTransactionActivity(AccountR account){
         // Create intent
         Intent transactionsActivity = new Intent(mContext, TransactionsActivityR.class);
 
@@ -177,7 +177,7 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
             );
         }
 
-        void startActionMode(Account account){
+        void startActionMode(AccountR account){
             // Don't fire if the action mode is already active.
             if (actionMode == null) {
                 // Start the CAB using the ActionMode.Callback already defined
@@ -193,14 +193,14 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
         public void onClick(View v) {
             // Get cursor for item clicked.
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
-            startTransactionActivity(new Account(mCursorAdapter.getCursor()));
+            startTransactionActivity(new AccountR(mCursorAdapter.getCursor()));
         }
 
         @Override
         public boolean onLongClick(View v) {
             // Get cursor for item clicked.
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
-            startActionMode(new Account(mCursorAdapter.getCursor()));
+            startActionMode(new AccountR(mCursorAdapter.getCursor()));
             return true;
         }
     }
