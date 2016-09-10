@@ -75,7 +75,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
 
     private static final int DESCRIPTION_INDEX = 1;
 
-    public static TransactionFragment NewInstance(long account, int fragmentMode, Transaction transaction){
+    public static TransactionFragmentR newInstance(long account, int fragmentMode, TransactionR transaction){
         // If mode is add and transaction is not null, bad input
         if(fragmentMode == MODE_ADD && transaction != null) {
             throw new IllegalArgumentException("Cannot specify a transaction for ADD form mode.");
@@ -261,9 +261,6 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
      * Retrieves the default category to be used.
      */
     private void getDefaultCategory(){
-        //TODO: Don't hard code this, put it in settings or something
-        String defaultCategory = "None";
-
         Cursor cursor = getActivity().getContentResolver().query(
                 CCContract.CategoryEntry.CONTENT_URI,
                 null,
