@@ -53,6 +53,12 @@ public class CategoryR extends CoreDTO {
         this.isDefault = false;
     }
 
+    public CategoryR(String description) {
+        this.identifier = 0;
+        this.description = description;
+        this.isDefault = false;
+    }
+
     public long getIdentifier() {
         return identifier;
     }

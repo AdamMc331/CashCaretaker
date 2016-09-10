@@ -54,6 +54,9 @@ public class AccountsActivityR extends CoreActivity implements GoogleApiClient.C
             case R.id.action_manage_repeating_transactions:
                 startRepeatingTransactionsActivity();
                 return true;
+            case R.id.action_manage_categories:
+                startManageCategoriesActivity();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -62,6 +65,11 @@ public class AccountsActivityR extends CoreActivity implements GoogleApiClient.C
     private void startRepeatingTransactionsActivity() {
         Intent repeatingTransactionsIntent = new Intent(this, RepeatingTransactionsActivityR.class);
         startActivity(repeatingTransactionsIntent);
+    }
+
+    private void startManageCategoriesActivity() {
+        Intent manageCategories = new Intent(this, ManageCategoriesActivity.class);
+        startActivity(manageCategories);
     }
 
     private void startAlarm(){
