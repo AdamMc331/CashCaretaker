@@ -20,10 +20,12 @@ public class CategoryAdapterR extends CursorAdapter {
 
     public static final String[] CATEGORY_COLUMNS = new String[] {
             CCContract.CategoryEntry.TABLE_NAME + "." + CCContract.CategoryEntry._ID,
-            CCContract.CategoryEntry.COLUMN_DESCRIPTION
+            CCContract.CategoryEntry.COLUMN_DESCRIPTION,
+            CCContract.CategoryEntry.COLUMN_IS_DEFAULT
     };
 
     private static final int DESCRIPTION_INDEX = 1;
+    private static final int DEFAULT_INDEX = 2;
 
     public CategoryAdapterR(Context context){
         super(context, null, 0);

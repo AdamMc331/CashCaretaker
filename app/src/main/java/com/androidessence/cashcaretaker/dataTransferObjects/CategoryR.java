@@ -14,6 +14,7 @@ import com.androidessence.cashcaretaker.data.CCContract;
  */
 public class CategoryR extends CoreDTO {
     private String description;
+    private boolean isDefault;
 
     public static Creator<CategoryR> CREATOR = new Creator<CategoryR>() {
 
@@ -36,16 +37,26 @@ public class CategoryR extends CoreDTO {
     public CategoryR(Cursor cursor){
         this.identifier = cursor.getLong(cursor.getColumnIndex(CCContract.CategoryEntry._ID));
         this.description = cursor.getString(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_DESCRIPTION));
+        int defaultInt = cursor.getInt(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_IS_DEFAULT));
+        this.isDefault = defaultInt == 1;
     }
 
     private CategoryR(Parcel parcel){
         super(parcel);
         this.description = parcel.readString();
+        this.isDefault = parcel.readInt() == 1;
     }
 
     public CategoryR(){
         this.identifier = 0;
         this.description = "";
+        this.isDefault = false;
+    }
+
+    public CategoryR(String description) {
+        this.identifier = 0;
+        this.description = description;
+        this.isDefault = false;
     }
 
     public long getIdentifier() {
@@ -54,6 +65,10 @@ public class CategoryR extends CoreDTO {
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
     }
 
     @Override
@@ -65,6 +80,7 @@ public class CategoryR extends CoreDTO {
         }
 
         values.put(CCContract.CategoryEntry.COLUMN_DESCRIPTION, description);
+        values.put(CCContract.CategoryEntry.COLUMN_IS_DEFAULT, isDefault ? 1 : 0);
 
         return values;
     }
@@ -73,5 +89,6 @@ public class CategoryR extends CoreDTO {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeString(getDescription());
+        dest.writeInt(isDefault ? 1 : 0);
     }
 }
