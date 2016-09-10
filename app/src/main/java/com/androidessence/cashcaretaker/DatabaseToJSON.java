@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.Account;
+import com.androidessence.cashcaretaker.dataTransferObjects.AccountR;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,9 +29,9 @@ public class DatabaseToJSON {
     public JSONArray getAccountJSON() throws JSONException {
         JSONArray root = new JSONArray();
 
-        List<Account> accounts = getAccounts();
+        List<AccountR> accounts = getAccounts();
 
-        for(Account account: accounts) {
+        for(AccountR account: accounts) {
             JSONObject object = new JSONObject();
 
             object.put(CCContract.AccountEntry._ID, account.getIdentifier());
@@ -44,8 +44,8 @@ public class DatabaseToJSON {
         return root;
     }
 
-    private List<Account> getAccounts() {
-        List<Account> accounts = new ArrayList<>();
+    private List<AccountR> getAccounts() {
+        List<AccountR> accounts = new ArrayList<>();
 
         Cursor cursor = mContext.getContentResolver().query(
                 CCContract.AccountEntry.CONTENT_URI,
@@ -57,7 +57,7 @@ public class DatabaseToJSON {
 
         assert cursor != null;
         while(cursor.moveToNext()) {
-            accounts.add(new Account(cursor));
+            accounts.add(new AccountR(cursor));
         }
 
         cursor.close();

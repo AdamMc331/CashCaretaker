@@ -18,9 +18,9 @@ import com.androidessence.cashcaretaker.DecimalDigitsInputFilter;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.core.CoreFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.Category;
-import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
-import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
+import com.androidessence.cashcaretaker.dataTransferObjects.CategoryR;
+import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetailsR;
+import com.androidessence.cashcaretaker.dataTransferObjects.TransactionR;
 import com.androidessence.utility.Utility;
 
 import org.joda.time.LocalDate;
@@ -41,7 +41,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
     private EditText mDateEditText;
     private LocalDate mDate;
     private EditText mCategoryEditText;
-    private Category mCategory;
+    private CategoryR mCategory;
     private RadioButton mWithdrawal;
     private RadioButton mDeposit;
     private Button mSubmit;
@@ -51,7 +51,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
 
     // Form mode we have
     private int mFormMode;
-    private TransactionDetails mTransaction;
+    private TransactionDetailsR mTransaction;
 
     // Arguments for variables to record or receive
     private static final String ARG_ACCOUNT = "accountArg";
@@ -64,7 +64,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
     public static final int MODE_ADD = 1;
     public static final int MODE_EDIT = 2;
 
-    public static TransactionFragmentR newInstance(long account, int fragmentMode, Transaction transaction){
+    public static TransactionFragmentR newInstance(long account, int fragmentMode, TransactionR transaction){
         // If mode is add and transaction is not null, bad input
         if(fragmentMode == MODE_ADD && transaction != null) {
             throw new IllegalArgumentException("Cannot specify a transaction for ADD form mode.");
@@ -116,7 +116,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
             }
 
             if(savedInstanceState.containsKey(ARG_CATEGORY)) {
-                setCategory((Category) savedInstanceState.getParcelable(ARG_CATEGORY));
+                setCategory((CategoryR) savedInstanceState.getParcelable(ARG_CATEGORY));
             } else {
                 getDefaultCategory();
             }
@@ -262,10 +262,10 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
 
         assert cursor != null;
         if(cursor.moveToFirst()){
-            setCategory(new Category(cursor));
+            setCategory(new CategoryR(cursor));
         } else{
             // Bad input, just set empty for now.
-            setCategory(new Category());
+            setCategory(new CategoryR());
         }
 
         cursor.close();
@@ -274,7 +274,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
     /**
      * Sets the transaction category.
      */
-    private void setCategory(Category category){
+    private void setCategory(CategoryR category){
         this.mCategory = category;
         this.mCategoryEditText.setText(mCategory.getDescription());
     }
@@ -283,7 +283,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
      * Handles the selection of a category in the CategoryDialog.
      */
     @Override
-    public void onCategorySelected(Category category) {
+    public void onCategorySelected(CategoryR category) {
         setCategory(category);
     }
 
@@ -315,7 +315,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
         }
 
         // Build transaction
-        Transaction transaction = new Transaction(
+        TransactionR transaction = new TransactionR(
                 mAccount,
                 mDescription.getText().toString(),
                 Double.parseDouble(mAmount.getText().toString()),

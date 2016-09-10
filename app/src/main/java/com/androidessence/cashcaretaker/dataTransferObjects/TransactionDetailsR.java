@@ -11,18 +11,18 @@ import com.androidessence.cashcaretaker.data.CCContract;
  * Created by adam.mcneilly on 9/7/16.
  */
 public class TransactionDetailsR extends TransactionR {
-    private Category category;
+    private CategoryR category;
 
     public TransactionDetailsR(Cursor cursor) {
         super(cursor);
         // Get category name
         String categoryName = cursor.getString(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_DESCRIPTION));
-        setCategory(new Category(getCategoryID(), categoryName));
+        setCategory(new CategoryR(getCategoryID(), categoryName));
     }
 
     public TransactionDetailsR(Parcel source) {
         super(source);
-        setCategory((Category) source.readParcelable(Category.class.getClassLoader()));
+        setCategory((CategoryR) source.readParcelable(CategoryR.class.getClassLoader()));
     }
 
     public static final Creator<TransactionDetailsR> CREATOR = new Creator<TransactionDetailsR>() {
@@ -37,11 +37,11 @@ public class TransactionDetailsR extends TransactionR {
         }
     };
 
-    public Category getCategory() {
+    public CategoryR getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(CategoryR category) {
         this.category = category;
     }
 

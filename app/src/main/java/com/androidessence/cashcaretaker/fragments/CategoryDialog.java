@@ -16,7 +16,7 @@ import android.widget.ListView;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.adapters.CategoryAdapterR;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.Category;
+import com.androidessence.cashcaretaker.dataTransferObjects.CategoryR;
 
 /**
  * Dialog that displays a list of transaction categories for the user to select.
@@ -43,7 +43,7 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor item = (Cursor) listView.getItemAtPosition(position);
-                ((OnCategorySelectedListener)getTargetFragment()).onCategorySelected(new Category(item));
+                ((OnCategorySelectedListener)getTargetFragment()).onCategorySelected(new CategoryR(item));
                 dismiss();
             }
         });
@@ -97,6 +97,6 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
     }
 
     public interface OnCategorySelectedListener{
-        void onCategorySelected(Category category);
+        void onCategorySelected(CategoryR category);
     }
 }

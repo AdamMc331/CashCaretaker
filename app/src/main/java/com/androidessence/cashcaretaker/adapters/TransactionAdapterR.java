@@ -2,7 +2,6 @@ package com.androidessence.cashcaretaker.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
+import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetailsR;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
 import com.androidessence.utility.Utility;
@@ -141,12 +140,12 @@ public class TransactionAdapterR extends RecyclerViewCursorAdapter<TransactionAd
         public boolean onLongClick(View view) {
             // Get current item and call back to activity
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
-            ((OnTransactionLongClickListener)mContext).onTransactionLongClick(new TransactionDetails(mCursorAdapter.getCursor()));
+            ((OnTransactionLongClickListener)mContext).onTransactionLongClick(new TransactionDetailsR(mCursorAdapter.getCursor()));
             return true;
         }
     }
 
     public interface OnTransactionLongClickListener {
-        void onTransactionLongClick(TransactionDetails transaction);
+        void onTransactionLongClick(TransactionDetailsR transaction);
     }
 }

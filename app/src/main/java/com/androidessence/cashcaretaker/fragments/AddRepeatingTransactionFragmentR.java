@@ -20,10 +20,10 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.alarms.RepeatingTransactionService;
 import com.androidessence.cashcaretaker.core.CoreFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.Account;
-import com.androidessence.cashcaretaker.dataTransferObjects.Category;
-import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
-import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
+import com.androidessence.cashcaretaker.dataTransferObjects.AccountR;
+import com.androidessence.cashcaretaker.dataTransferObjects.CategoryR;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriodR;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransactionR;
 import com.androidessence.utility.Utility;
 
 import org.joda.time.LocalDate;
@@ -35,16 +35,16 @@ import org.joda.time.LocalDate;
  */
 public class AddRepeatingTransactionFragmentR extends CoreFragment implements RepeatingPeriodDialog.OnRepeatingPeriodSelectedListener, AccountDialog.OnAccountSelectedListener, CategoryDialog.OnCategorySelectedListener, DatePickerDialog.OnDateSetListener{
     private EditText mRepeatingPeriodEditText;
-    private RepeatingPeriod mRepeatingPeriod;
+    private RepeatingPeriodR mRepeatingPeriod;
     private EditText mAccountEditText;
-    private Account mAccount;
+    private AccountR mAccount;
     private EditText mDescription;
     private EditText mAmount;
     private EditText mNotes;
     private EditText mDateEditText;
     private LocalDate mDate;
     private EditText mCategoryEditText;
-    private Category mCategory;
+    private CategoryR mCategory;
     private RadioButton mWithdrawal;
     private Button mSubmit;
 
@@ -64,13 +64,13 @@ public class AddRepeatingTransactionFragmentR extends CoreFragment implements Re
 
         // Retrieve any saved values.
         if(savedInstanceState != null && savedInstanceState.containsKey(ARG_REPEATING_PERIOD)) {
-            setRepeatingPeriod((RepeatingPeriod) savedInstanceState.getParcelable(ARG_REPEATING_PERIOD));
+            setRepeatingPeriod((RepeatingPeriodR) savedInstanceState.getParcelable(ARG_REPEATING_PERIOD));
         } else {
             getDefaultRepeatingPeriod();
         }
 
         if(savedInstanceState != null && savedInstanceState.containsKey(ARG_ACCOUNT)) {
-            setAccount((Account) savedInstanceState.getParcelable(ARG_ACCOUNT));
+            setAccount((AccountR) savedInstanceState.getParcelable(ARG_ACCOUNT));
         }
 
         if(savedInstanceState != null && savedInstanceState.containsKey(ARG_DATE)) {
@@ -80,7 +80,7 @@ public class AddRepeatingTransactionFragmentR extends CoreFragment implements Re
         }
 
         if(savedInstanceState != null && savedInstanceState.containsKey(ARG_CATEGORY)) {
-            setCategory((Category) savedInstanceState.getParcelable(ARG_CATEGORY));
+            setCategory((CategoryR) savedInstanceState.getParcelable(ARG_CATEGORY));
         } else {
             getDefaultCategory();
         }
@@ -180,7 +180,7 @@ public class AddRepeatingTransactionFragmentR extends CoreFragment implements Re
             return;
         }
 
-        RepeatingTransaction repeatingTransaction = new RepeatingTransaction(
+        RepeatingTransactionR repeatingTransaction = new RepeatingTransactionR(
                 mRepeatingPeriod.getIdentifier(),
                 mAccount.getIdentifier(),
                 mDescription.getText().toString(),
@@ -244,10 +244,10 @@ public class AddRepeatingTransactionFragmentR extends CoreFragment implements Re
 
         assert cursor != null;
         if(cursor.moveToFirst()){
-            setCategory(new Category(cursor));
+            setCategory(new CategoryR(cursor));
         } else{
             // Bad input, just set empty for now.
-            setCategory(new Category());
+            setCategory(new CategoryR());
         }
 
         cursor.close();
@@ -268,10 +268,10 @@ public class AddRepeatingTransactionFragmentR extends CoreFragment implements Re
         assert cursor != null;
 
         if(cursor.moveToFirst()) {
-            setRepeatingPeriod(new RepeatingPeriod(cursor));
+            setRepeatingPeriod(new RepeatingPeriodR(cursor));
         } else {
             // Bad input, set empty.
-            setRepeatingPeriod(new RepeatingPeriod());
+            setRepeatingPeriod(new RepeatingPeriodR());
         }
 
         cursor.close();
@@ -285,7 +285,7 @@ public class AddRepeatingTransactionFragmentR extends CoreFragment implements Re
     /**
      * Sets the repeating period for the transaction.
      */
-    private void setRepeatingPeriod(RepeatingPeriod repeatingPeriod) {
+    private void setRepeatingPeriod(RepeatingPeriodR repeatingPeriod) {
         mRepeatingPeriod = repeatingPeriod;
         mRepeatingPeriodEditText.setText(repeatingPeriod.getName());
     }
@@ -293,7 +293,7 @@ public class AddRepeatingTransactionFragmentR extends CoreFragment implements Re
     /**
      * Sets the transaction category.
      */
-    private void setCategory(Category category){
+    private void setCategory(CategoryR category){
         this.mCategory = category;
         this.mCategoryEditText.setText(mCategory.getDescription());
     }
@@ -301,7 +301,7 @@ public class AddRepeatingTransactionFragmentR extends CoreFragment implements Re
     /**
      * Sets the account for the transaction.
      */
-    private void setAccount(Account account) {
+    private void setAccount(AccountR account) {
         mAccount = account;
         mAccountEditText.setText(mAccount.getName());
         // Remove error if it was there
@@ -309,12 +309,12 @@ public class AddRepeatingTransactionFragmentR extends CoreFragment implements Re
     }
 
     @Override
-    public void onRepeatingPeriodSelected(RepeatingPeriod repeatingPeriod) {
+    public void onRepeatingPeriodSelected(RepeatingPeriodR repeatingPeriod) {
         setRepeatingPeriod(repeatingPeriod);
     }
 
     @Override
-    public void onAccountSelected(Account account) {
+    public void onAccountSelected(AccountR account) {
         setAccount(account);
     }
 
@@ -328,7 +328,7 @@ public class AddRepeatingTransactionFragmentR extends CoreFragment implements Re
     }
 
     @Override
-    public void onCategorySelected(Category category) {
+    public void onCategorySelected(CategoryR category) {
         setCategory(category);
     }
 
