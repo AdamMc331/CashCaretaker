@@ -61,6 +61,7 @@ public class CCContract {
 
         public static final String TABLE_NAME = "categoryTable";
         public static final String COLUMN_DESCRIPTION = "categoryDescription";
+        public static final String COLUMN_IS_DEFAULT = "categoryIsDefault";
 
         public static Uri buildCategoryUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);

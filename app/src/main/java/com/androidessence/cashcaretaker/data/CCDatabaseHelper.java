@@ -1,8 +1,11 @@
 package com.androidessence.cashcaretaker.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.androidessence.cashcaretaker.R;
 
 /**
  * A class used for creating the Cash Caretaker database.
@@ -11,10 +14,13 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 class CCDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "cashcaretaker.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
+
+    private Context context;
 
     public CCDatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -57,11 +63,25 @@ class CCDatabaseHelper extends SQLiteOpenHelper {
                 addUpdateBalanceForDepositToWithdrawalChangeTrigger(db);
                 addUpdateBalanceForWithdrawalToDepositChangeTrigger(db);
                 break;
+            case 4:
+                db.execSQL("ALTER TABLE " + CCContract.CategoryEntry.TABLE_NAME + " ADD COLUMN " + CCContract.CategoryEntry.COLUMN_IS_DEFAULT + " INTEGER DEFAULT 0");
+
+                // Update default
+                ContentValues values = new ContentValues();
+                values.put(CCContract.CategoryEntry.COLUMN_IS_DEFAULT, 1);
+                db.update(
+                        CCContract.CategoryEntry.TABLE_NAME,
+                        values,
+                        CCContract.CategoryEntry.COLUMN_DESCRIPTION + " = ?",
+                        new String[] {context.getString(R.string.default_category)}
+                );
+                break;
             default:
                 break;
         }
     }
 
+    //region Build Tables
     /**
      * Creates the Account table.
      */
@@ -81,13 +101,32 @@ class CCDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE " + CCContract.CategoryEntry.TABLE_NAME + " (" +
                         CCContract.CategoryEntry._ID + " INTEGER PRIMARY KEY, " +
-                        CCContract.CategoryEntry.COLUMN_DESCRIPTION + " TEXT UNIQUE NOT NULL);"
+                        CCContract.CategoryEntry.COLUMN_DESCRIPTION + " TEXT UNIQUE NOT NULL, " +
+                        CCContract.CategoryEntry.COLUMN_IS_DEFAULT + " INTEGER DEFAULT 0);"
         );
 
-        db.execSQL(
-                "INSERT INTO " + CCContract.CategoryEntry.TABLE_NAME + " (" + CCContract.CategoryEntry.COLUMN_DESCRIPTION + ") " +
-                        "VALUES " +
-                        "('ATM'), ('Automotive'), ('Bills'), ('Food'), ('Gasoline'), ('Home'), ('Paycheck'), ('None');"
+        insertDefaultCategories(db);
+    }
+
+    /**
+     * Inserts the initial categories into the database.
+     */
+    private void insertDefaultCategories(SQLiteDatabase db) {
+        String colValues = "('" + context.getString(R.string.default_category) + "', 1), ";
+        String[] categories = context.getResources().getStringArray(R.array.default_categories);
+        for(int i = 0; i < categories.length; i++) {
+            colValues += "('" + categories[i] + "', 0)";
+
+            // If it's not the last row, add column
+            if(i != categories.length - 1) {
+                colValues += ", ";
+            }
+        }
+
+        db.execSQL("INSERT INTO " + CCContract.CategoryEntry.TABLE_NAME + " " +
+                "(" + CCContract.CategoryEntry.COLUMN_DESCRIPTION + ", " + CCContract.CategoryEntry.COLUMN_IS_DEFAULT + ") " +
+                "VALUES " +
+                colValues + ";"
         );
     }
 
@@ -153,7 +192,9 @@ class CCDatabaseHelper extends SQLiteOpenHelper {
                         "REFERENCES " + CCContract.CategoryEntry.TABLE_NAME + " (" + CCContract.CategoryEntry._ID + "));"
         );
     }
+    //endregion
 
+    //region riggers
     /**
      * Creates a trigger that updates the Account balance any time a withdrawal is inserted.
      */
@@ -294,4 +335,5 @@ class CCDatabaseHelper extends SQLiteOpenHelper {
                         "WHERE " + CCContract.AccountEntry._ID + " = old." + CCContract.TransactionEntry.COLUMN_ACCOUNT + "; END"
         );
     }
+    //endregion
 }
