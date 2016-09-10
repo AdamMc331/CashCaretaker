@@ -168,7 +168,7 @@ public class CCProvider extends ContentProvider {
                         projection,
                         CCContract.TransactionEntry.COLUMN_DESCRIPTION + " LIKE ?",
                         new String[] {"%" + description + "%"},
-                        null,
+                        CCContract.TransactionEntry.COLUMN_DESCRIPTION, // Get unique descriptions by grouping by them
                         null,
                         sortOrder
                 );
