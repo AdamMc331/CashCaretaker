@@ -3,7 +3,6 @@ package com.androidessence.cashcaretaker.dataTransferObjects;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.androidessence.cashcaretaker.core.CoreDTO;
 import com.androidessence.cashcaretaker.data.CCContract;
@@ -13,32 +12,32 @@ import com.androidessence.cashcaretaker.data.CCContract;
  *
  * Created by adam.mcneilly on 9/7/16.
  */
-public class RepeatingPeriodR extends CoreDTO {
+public class RepeatingPeriod extends CoreDTO {
     private String name;
 
-    public static final Creator<RepeatingPeriodR> CREATOR = new Creator<RepeatingPeriodR>() {
+    public static final Creator<RepeatingPeriod> CREATOR = new Creator<RepeatingPeriod>() {
         @Override
-        public RepeatingPeriodR createFromParcel(Parcel source) {
-            return new RepeatingPeriodR(source);
+        public RepeatingPeriod createFromParcel(Parcel source) {
+            return new RepeatingPeriod(source);
         }
 
         @Override
-        public RepeatingPeriodR[] newArray(int size) {
-            return new RepeatingPeriodR[size];
+        public RepeatingPeriod[] newArray(int size) {
+            return new RepeatingPeriod[size];
         }
     };
 
-    public RepeatingPeriodR(Cursor cursor) {
+    public RepeatingPeriod(Cursor cursor) {
         setIdentifier(cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingPeriodEntry._ID)));
         setName(cursor.getString(cursor.getColumnIndex(CCContract.RepeatingPeriodEntry.COLUMN_NAME)));
     }
 
-    public RepeatingPeriodR(Parcel parcel) {
+    public RepeatingPeriod(Parcel parcel) {
         super(parcel);
         setName(parcel.readString());
     }
 
-    public RepeatingPeriodR() {
+    public RepeatingPeriod() {
         setIdentifier(0);
         setName("");
     }

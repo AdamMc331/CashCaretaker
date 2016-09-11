@@ -15,7 +15,7 @@ import org.joda.time.LocalDate;
  *
  * Created by adam.mcneilly on 9/7/16.
  */
-public class RepeatingTransactionR extends CoreDTO {
+public class RepeatingTransaction extends CoreDTO {
     private long repeatingPeriod;
     private long account;
     private String description;
@@ -25,19 +25,19 @@ public class RepeatingTransactionR extends CoreDTO {
     private long category;
     private boolean withdrawal;
 
-    public static Creator<RepeatingTransactionR> CREATOR = new Creator<RepeatingTransactionR>() {
+    public static Creator<RepeatingTransaction> CREATOR = new Creator<RepeatingTransaction>() {
         @Override
-        public RepeatingTransactionR createFromParcel(Parcel source) {
-            return new RepeatingTransactionR(source);
+        public RepeatingTransaction createFromParcel(Parcel source) {
+            return new RepeatingTransaction(source);
         }
 
         @Override
-        public RepeatingTransactionR[] newArray(int size) {
-            return new RepeatingTransactionR[size];
+        public RepeatingTransaction[] newArray(int size) {
+            return new RepeatingTransaction[size];
         }
     };
 
-    public RepeatingTransactionR(Parcel parcel) {
+    public RepeatingTransaction(Parcel parcel) {
         super(parcel);
         this.repeatingPeriod = parcel.readLong();
         this.account = parcel.readLong();
@@ -49,7 +49,7 @@ public class RepeatingTransactionR extends CoreDTO {
         this.withdrawal = parcel.readInt() == 1;
     }
 
-    public RepeatingTransactionR(Cursor cursor) {
+    public RepeatingTransaction(Cursor cursor) {
         setIdentifier(cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry._ID)));
         setRepeatingPeriod(cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD)));
         setAccount(cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_ACCOUNT)));
@@ -63,7 +63,7 @@ public class RepeatingTransactionR extends CoreDTO {
         setWithdrawal(withdrawalInt == 1);
     }
 
-    public RepeatingTransactionR(long repeatingPeriod, long account, String description, double amount, String notes, LocalDate nextDate, long category, boolean withdrawal) {
+    public RepeatingTransaction(long repeatingPeriod, long account, String description, double amount, String notes, LocalDate nextDate, long category, boolean withdrawal) {
         setRepeatingPeriod(repeatingPeriod);
         setAccount(account);
         setDescription(description);

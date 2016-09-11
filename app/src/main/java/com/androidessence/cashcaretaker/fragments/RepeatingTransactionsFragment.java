@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.activities.AddRepeatingTransactionActivityR;
-import com.androidessence.cashcaretaker.adapters.RepeatingTransactionAdapterR;
+import com.androidessence.cashcaretaker.activities.AddRepeatingTransactionActivity;
+import com.androidessence.cashcaretaker.adapters.RepeatingTransactionAdapter;
 import com.androidessence.cashcaretaker.core.CoreRecyclerViewFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
 
@@ -27,9 +27,9 @@ import com.androidessence.cashcaretaker.data.CCContract;
  *
  * Created by adam.mcneilly on 9/8/16.
  */
-public class RepeatingTransactionsFragmentR extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class RepeatingTransactionsFragment extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor>{
     // UI Elements
-    private RepeatingTransactionAdapterR mRepeatingTransactionAdapter;
+    private RepeatingTransactionAdapter mRepeatingTransactionAdapter;
     private FloatingActionButton mAddRepeatingTransactionFloatingActionButton;
     private TextView mAddFirstRepeatingTransaction;
 
@@ -59,7 +59,7 @@ public class RepeatingTransactionsFragmentR extends CoreRecyclerViewFragment imp
     protected void setupRecyclerView(int orientation) {
         super.setupRecyclerView(orientation);
 
-        mRepeatingTransactionAdapter = new RepeatingTransactionAdapterR(getActivity());
+        mRepeatingTransactionAdapter = new RepeatingTransactionAdapter(getActivity());
         recyclerView.setAdapter(mRepeatingTransactionAdapter);
     }
 
@@ -79,7 +79,7 @@ public class RepeatingTransactionsFragmentR extends CoreRecyclerViewFragment imp
      * Starts the activity for adding a repeating transaction.
      */
     private void startAddRepeatingTransactionActivity() {
-        Intent addRepeatingTransactionIntent = new Intent(getActivity(), AddRepeatingTransactionActivityR.class);
+        Intent addRepeatingTransactionIntent = new Intent(getActivity(), AddRepeatingTransactionActivity.class);
         startActivity(addRepeatingTransactionIntent);
     }
 
@@ -99,7 +99,7 @@ public class RepeatingTransactionsFragmentR extends CoreRecyclerViewFragment imp
                 return new CursorLoader(
                         getActivity(),
                         CCContract.RepeatingTransactionEntry.CONTENT_DETAILS_URI,
-                        RepeatingTransactionAdapterR.REPEATING_TRANSACTION_COLUMNS,
+                        RepeatingTransactionAdapter.REPEATING_TRANSACTION_COLUMNS,
                         null,
                         null,
                         CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE + " ASC"

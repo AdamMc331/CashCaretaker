@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.activities.AddAccountActivityR;
-import com.androidessence.cashcaretaker.adapters.AccountAdapterR;
+import com.androidessence.cashcaretaker.activities.AddAccountActivity;
+import com.androidessence.cashcaretaker.adapters.AccountAdapter;
 import com.androidessence.cashcaretaker.core.CoreRecyclerViewFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
 
@@ -27,9 +27,9 @@ import com.androidessence.cashcaretaker.data.CCContract;
  *
  * Created by adam.mcneilly on 9/8/16.
  */
-public class AccountsFragmentR extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class AccountsFragment extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     // UI Elements
-    private AccountAdapterR mAccountAdapter;
+    private AccountAdapter mAccountAdapter;
     private FloatingActionButton mFloatingActionButton;
     private TextView mAddFirstAccount;
 
@@ -59,7 +59,7 @@ public class AccountsFragmentR extends CoreRecyclerViewFragment implements Loade
     protected void setupRecyclerView(int orientation) {
         super.setupRecyclerView(orientation);
 
-        mAccountAdapter = new AccountAdapterR(getActivity());
+        mAccountAdapter = new AccountAdapter(getActivity());
         recyclerView.setAdapter(mAccountAdapter);
     }
 
@@ -79,7 +79,7 @@ public class AccountsFragmentR extends CoreRecyclerViewFragment implements Loade
      * Starts the Activity for adding a new account.
      */
     private void startAddAccountActivity(){
-        Intent addAccount = new Intent(getActivity(), AddAccountActivityR.class);
+        Intent addAccount = new Intent(getActivity(), AddAccountActivity.class);
         startActivity(addAccount);
     }
 
@@ -99,7 +99,7 @@ public class AccountsFragmentR extends CoreRecyclerViewFragment implements Loade
                 return new CursorLoader(
                         getActivity(),
                         CCContract.AccountEntry.CONTENT_URI,
-                        AccountAdapterR.ACCOUNT_COLUMNS,
+                        AccountAdapter.ACCOUNT_COLUMNS,
                         null,
                         null,
                         CCContract.AccountEntry.COLUMN_NAME

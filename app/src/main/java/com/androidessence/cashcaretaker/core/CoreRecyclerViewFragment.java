@@ -3,7 +3,7 @@ package com.androidessence.cashcaretaker.core;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.androidessence.cashcaretaker.DividerItemDecorationR;
+import com.androidessence.cashcaretaker.DividerItemDecoration;
 
 
 /**
@@ -24,6 +24,6 @@ public abstract class CoreRecyclerViewFragment extends CoreFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(orientation);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecorationR(getActivity(), orientation));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), orientation));
     }
 }

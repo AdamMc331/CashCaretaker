@@ -14,9 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.RepeatingPeriodAdapterR;
+import com.androidessence.cashcaretaker.adapters.RepeatingPeriodAdapter;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriodR;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
 
 /**
  * Dialog that displays a list of repeating periods for the user to select.
@@ -24,7 +24,7 @@ import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriodR;
  * Created by adammcneilly on 11/17/15.
  */
 public class RepeatingPeriodDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private RepeatingPeriodAdapterR mAdapter;
+    private RepeatingPeriodAdapter mAdapter;
 
     private static final int REPEATING_PERIOD_LOADER = 0;
 
@@ -34,7 +34,7 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
         View view = inflater.inflate(R.layout.dialog_category, container, false);
 
         final ListView listView = (ListView) view.findViewById(R.id.category_list_view);
-        mAdapter = new RepeatingPeriodAdapterR(getActivity());
+        mAdapter = new RepeatingPeriodAdapter(getActivity());
         listView.setAdapter(mAdapter);
 
         getDialog().setTitle("Repeating Period");
@@ -43,7 +43,7 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor item = (Cursor) listView.getItemAtPosition(position);
-                ((OnRepeatingPeriodSelectedListener)getTargetFragment()).onRepeatingPeriodSelected(new RepeatingPeriodR(item));
+                ((OnRepeatingPeriodSelectedListener)getTargetFragment()).onRepeatingPeriodSelected(new RepeatingPeriod(item));
                 dismiss();
             }
         });
@@ -64,7 +64,7 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
                 return new CursorLoader(
                         getActivity(),
                         CCContract.RepeatingPeriodEntry.CONTENT_URI,
-                        RepeatingPeriodAdapterR.REPEATING_PERIOD_COLUMNS,
+                        RepeatingPeriodAdapter.REPEATING_PERIOD_COLUMNS,
                         null,
                         null,
                         null
@@ -97,6 +97,6 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
     }
 
     public interface OnRepeatingPeriodSelectedListener {
-        void onRepeatingPeriodSelected(RepeatingPeriodR repeatingPeriod);
+        void onRepeatingPeriodSelected(RepeatingPeriod repeatingPeriod);
     }
 }
