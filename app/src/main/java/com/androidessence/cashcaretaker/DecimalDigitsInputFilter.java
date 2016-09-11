@@ -12,10 +12,10 @@ import java.util.regex.Pattern;
  * Created by adammcneilly on 11/1/15.
  */
 public class DecimalDigitsInputFilter implements InputFilter {
-    private final Pattern mPattern;
+    private final Pattern pattern;
 
     public DecimalDigitsInputFilter() {
-        mPattern = Pattern.compile("[0-9]*+((\\.[0-9]{0,2})?)||(\\.)?");
+        pattern = Pattern.compile("[0-9]*+((\\.[0-9]{0,2})?)||(\\.)?");
     }
 
     /**
@@ -23,9 +23,9 @@ public class DecimalDigitsInputFilter implements InputFilter {
      */
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-        //Matcher matcher = mPattern.matcher(dest.subSequence(0, dstart) +
+        //Matcher matcher = pattern.matcher(dest.subSequence(0, dstart) +
         // source.subSequence(start, end) + dest.subSequence(dend, dest.length()));
-        Matcher matcher = mPattern.matcher(dest.subSequence(0, dstart).toString() + source.subSequence(start, end).toString() + dest.subSequence(dend, dest.length()));
+        Matcher matcher = pattern.matcher(dest.subSequence(0, dstart).toString() + source.subSequence(start, end).toString() + dest.subSequence(dend, dest.length()));
         if (!matcher.matches()) {
             return "";
         } else {

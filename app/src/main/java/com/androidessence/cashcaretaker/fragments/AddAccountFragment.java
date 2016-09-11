@@ -24,9 +24,9 @@ import com.androidessence.cashcaretaker.dataTransferObjects.Account;
  */
 public class AddAccountFragment extends CoreFragment{
     // UI Elements
-    private EditText mAccountName;
-    private EditText mStartingBalance;
-    private Button mSubmit;
+    private EditText accountName;
+    private EditText startingBalance;
+    private Button submit;
 
     @Nullable
     @Override
@@ -42,9 +42,9 @@ public class AddAccountFragment extends CoreFragment{
 
     @Override
     protected void getElements(View view) {
-        mAccountName = (EditText) view.findViewById(R.id.account_name);
-        mStartingBalance = (EditText) view.findViewById(R.id.starting_balance);
-        mSubmit = (Button) view.findViewById(R.id.submit);
+        accountName = (EditText) view.findViewById(R.id.account_name);
+        startingBalance = (EditText) view.findViewById(R.id.starting_balance);
+        submit = (Button) view.findViewById(R.id.submit);
     }
 
     /**
@@ -52,14 +52,14 @@ public class AddAccountFragment extends CoreFragment{
      */
     private void setInputFilters(){
         InputFilter[] inputFilters = new InputFilter[] {new DecimalDigitsInputFilter()};
-        mStartingBalance.setFilters(inputFilters);
+        startingBalance.setFilters(inputFilters);
     }
 
     /**
      * Sets click listeners to the appropriate UI elements.
      */
     private void setClickListeners(){
-        mSubmit.setOnClickListener(new View.OnClickListener() {
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submitAccount();
@@ -76,15 +76,15 @@ public class AddAccountFragment extends CoreFragment{
         }
 
         Account account = new Account(
-                mAccountName.getText().toString(),
-                Double.parseDouble(mStartingBalance.getText().toString())
+                accountName.getText().toString(),
+                Double.parseDouble(startingBalance.getText().toString())
         );
 
         try {
             getActivity().getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, account.getContentValues());
             getActivity().finish();
         } catch(SQLiteException se){
-            mAccountName.setError("Account name already exists.");
+            accountName.setError("Account name already exists.");
         }
     }
 
@@ -95,13 +95,13 @@ public class AddAccountFragment extends CoreFragment{
     private boolean validateInput(){
         boolean isValid = true;
 
-        if(mAccountName.getText().toString().isEmpty()){
-            mAccountName.setError("Account name cannot be blank.");
+        if(accountName.getText().toString().isEmpty()){
+            accountName.setError("Account name cannot be blank.");
             isValid = false;
         }
 
-        if(mStartingBalance.getText().toString().isEmpty()){
-            mStartingBalance.setError("Starting balance cannot be blank.");
+        if(startingBalance.getText().toString().isEmpty()){
+            startingBalance.setError("Starting balance cannot be blank.");
             isValid = false;
         }
 

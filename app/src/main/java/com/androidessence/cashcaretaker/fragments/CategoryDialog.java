@@ -24,7 +24,7 @@ import com.androidessence.cashcaretaker.dataTransferObjects.Category;
  * Created by adammcneilly on 10/16/15.
  */
 public class CategoryDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private CategoryAdapter mAdapter;
+    private CategoryAdapter categoryAdapter;
 
     private static final int CATEGORY_LOADER = 0;
 
@@ -34,8 +34,8 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
         View view = inflater.inflate(R.layout.dialog_category, container, false);
 
         final ListView listView = (ListView) view.findViewById(R.id.category_list_view);
-        mAdapter = new CategoryAdapter(getActivity());
-        listView.setAdapter(mAdapter);
+        categoryAdapter = new CategoryAdapter(getActivity());
+        listView.setAdapter(categoryAdapter);
 
         getDialog().setTitle("Category");
 
@@ -78,7 +78,7 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch(loader.getId()){
             case CATEGORY_LOADER:
-                mAdapter.swapCursor(data);
+                categoryAdapter.swapCursor(data);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -89,7 +89,7 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
     public void onLoaderReset(Loader<Cursor> loader) {
         switch(loader.getId()){
             case CATEGORY_LOADER:
-                mAdapter.swapCursor(null);
+                categoryAdapter.swapCursor(null);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
