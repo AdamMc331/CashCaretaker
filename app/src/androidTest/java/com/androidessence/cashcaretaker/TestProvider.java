@@ -301,7 +301,7 @@ public class TestProvider extends AndroidTestCase {
 
         // Get content values and insert transaction
         ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, true);
-        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+        mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
 
         // Query for account
         Cursor accountCursor = mContext.getContentResolver().query(
@@ -330,7 +330,7 @@ public class TestProvider extends AndroidTestCase {
 
         // Get content values and insert transaction
         ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, false);
-        Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
+        mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
 
         // Query for account
         Cursor accountCursor = mContext.getContentResolver().query(
@@ -440,7 +440,7 @@ public class TestProvider extends AndroidTestCase {
         // Get content values and insert transaction
         ContentValues transactionContentValues = getTransactionContentValues(accountRowID, 1, false, true);
         Uri transactionInsertUri = mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transactionContentValues);
-        long transactionRowID = ContentUris.parseId(transactionInsertUri);
+        ContentUris.parseId(transactionInsertUri);
 
         // Delete account
         int rows = mContext.getContentResolver().delete(
