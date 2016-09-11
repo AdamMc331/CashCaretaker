@@ -17,8 +17,8 @@ public class CCProvider extends ContentProvider {
     private static final int ACCOUNT = 0;
 
 
-    private CCDatabaseHelper mOpenHelper;
-    private static UriMatcher sUriMatcher = buildUriMatcher();
+    private CCDatabaseHelper openHelper;
+    private static UriMatcher uriMatcher = buildUriMatcher();
 
     private static UriMatcher buildUriMatcher() {
         String content = CCContract.CONTENT_AUTHORITY;
@@ -32,7 +32,7 @@ public class CCProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mOpenHelper = new CCDatabaseHelper(getContext());
+        openHelper = new CCDatabaseHelper(getContext());
 
         return true;
     }
@@ -41,9 +41,9 @@ public class CCProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor retCursor;
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        SQLiteDatabase db = openHelper.getReadableDatabase();
 
-        switch(sUriMatcher.match(uri)) {
+        switch(uriMatcher.match(uri)) {
             case ACCOUNT:
                 retCursor = db.query(
                         CCContract.AccountEntry.TABLE_NAME,
@@ -68,7 +68,7 @@ public class CCProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(Uri uri) {
-        switch(sUriMatcher.match(uri)) {
+        switch(uriMatcher.match(uri)) {
             case ACCOUNT:
                 return CCContract.AccountEntry.CONTENT_TYPE;
             default:
@@ -81,9 +81,9 @@ public class CCProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         long _id;
         Uri returnUri;
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        SQLiteDatabase db = openHelper.getReadableDatabase();
 
-        switch(sUriMatcher.match(uri)) {
+        switch(uriMatcher.match(uri)) {
             case ACCOUNT:
                 _id = db.insertWithOnConflict(CCContract.AccountEntry.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
                 if(_id > 0) {
@@ -105,9 +105,9 @@ public class CCProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int rows;
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        SQLiteDatabase db = openHelper.getReadableDatabase();
 
-        switch(sUriMatcher.match(uri)) {
+        switch(uriMatcher.match(uri)) {
             case ACCOUNT:
                 rows = db.delete(CCContract.AccountEntry.TABLE_NAME, selection, selectionArgs);
                 break;
@@ -130,9 +130,9 @@ public class CCProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        SQLiteDatabase db = openHelper.getReadableDatabase();
 
-        switch(sUriMatcher.match(uri)) {
+        switch(uriMatcher.match(uri)) {
             case ACCOUNT:
                 db.beginTransaction();
                 int returnCount = 0;

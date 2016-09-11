@@ -20,10 +20,10 @@ import java.util.List;
  * Created by adammcneilly on 12/28/15.
  */
 public class DatabaseToJSON {
-    private Context mContext;
+    private Context context;
 
     public DatabaseToJSON(Context context) {
-        this.mContext = context;
+        this.context = context;
     }
 
     public JSONArray getAccountJSON() throws JSONException {
@@ -47,7 +47,7 @@ public class DatabaseToJSON {
     private List<Account> getAccounts() {
         List<Account> accounts = new ArrayList<>();
 
-        Cursor cursor = mContext.getContentResolver().query(
+        Cursor cursor = context.getContentResolver().query(
                 CCContract.AccountEntry.CONTENT_URI,
                 null,
                 null,

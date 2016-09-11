@@ -30,7 +30,7 @@ import org.json.JSONException;
  */
 public class AccountsActivity extends CoreActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AccountAdapter.OnAccountDeletedListener {
     private static final String LOG_TAG = AccountsActivity.class.getSimpleName();
-    private GoogleApiClient mGoogleClient;
+    private GoogleApiClient googleApiClient;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class AccountsActivity extends CoreActivity implements GoogleApiClient.Co
     }
 
     private void setupClient() {
-        mGoogleClient = new GoogleApiClient.Builder(this)
+        googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -94,7 +94,7 @@ public class AccountsActivity extends CoreActivity implements GoogleApiClient.Co
         super.onStart();
 
         // Connect to data layer
-        mGoogleClient.connect();
+        googleApiClient.connect();
     }
 
     @Override
@@ -111,8 +111,8 @@ public class AccountsActivity extends CoreActivity implements GoogleApiClient.Co
     @Override
     protected void onStop() {
         // Disconnect
-        if(mGoogleClient != null && mGoogleClient.isConnected()) {
-            mGoogleClient.disconnect();
+        if(googleApiClient != null && googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
         }
 
         super.onStop();
@@ -139,9 +139,9 @@ public class AccountsActivity extends CoreActivity implements GoogleApiClient.Co
 
         @Override
         public void run() {
-            NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mGoogleClient).await();
+            NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(googleApiClient).await();
             for(Node node : nodes.getNodes()) {
-                Wearable.MessageApi.sendMessage(mGoogleClient, node.getId(), mPath, mMessage.getBytes()).await();
+                Wearable.MessageApi.sendMessage(googleApiClient, node.getId(), mPath, mMessage.getBytes()).await();
             }
         }
     }
