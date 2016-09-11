@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.TransactionAdapterR;
+import com.androidessence.cashcaretaker.adapters.TransactionAdapter;
 import com.androidessence.cashcaretaker.core.CoreRecyclerViewFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
 
@@ -27,12 +27,12 @@ import java.text.MessageFormat;
  *
  * Created by adam.mcneilly on 9/8/16.
  */
-public class AccountTransactionsFragmentR extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class AccountTransactionsFragment extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor>{
     public static final String FRAGMENT_TAG = "AccountTransactionsFragment";
 
     // UI Elements
     private FloatingActionButton mAddTransactionFAB;
-    private TransactionAdapterR mTransactionAdapter;
+    private TransactionAdapter mTransactionAdapter;
     private TextView mAddFirstTransaction;
     private TextView mAccountBalanceTextView;
 
@@ -51,11 +51,11 @@ public class AccountTransactionsFragmentR extends CoreRecyclerViewFragment imple
 
     private static final int ACCOUNT_BALANCE_INDEX = 0;
 
-    public static AccountTransactionsFragmentR newInstance(long account){
+    public static AccountTransactionsFragment newInstance(long account){
         Bundle args = new Bundle();
         args.putLong(ARG_ACCOUNT, account);
 
-        AccountTransactionsFragmentR fragment = new AccountTransactionsFragmentR();
+        AccountTransactionsFragment fragment = new AccountTransactionsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,7 +85,7 @@ public class AccountTransactionsFragmentR extends CoreRecyclerViewFragment imple
     protected void setupRecyclerView(int orientation) {
         super.setupRecyclerView(orientation);
 
-        mTransactionAdapter = new TransactionAdapterR(getActivity());
+        mTransactionAdapter = new TransactionAdapter(getActivity());
         recyclerView.setAdapter(mTransactionAdapter);
     }
 
@@ -126,7 +126,7 @@ public class AccountTransactionsFragmentR extends CoreRecyclerViewFragment imple
                 return new CursorLoader(
                         getActivity(),
                         CCContract.TransactionEntry.buildTransactionsForAccountUri(mAccount),
-                        TransactionAdapterR.TRANSACTION_COLUMNS,
+                        TransactionAdapter.TRANSACTION_COLUMNS,
                         null,
                         null,
                         CCContract.TransactionEntry.COLUMN_DATE + " DESC"

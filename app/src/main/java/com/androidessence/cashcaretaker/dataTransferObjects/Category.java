@@ -12,48 +12,48 @@ import com.androidessence.cashcaretaker.data.CCContract;
  *
  * Created by adam.mcneilly on 9/5/16.
  */
-public class CategoryR extends CoreDTO {
+public class Category extends CoreDTO {
     private String description;
     private boolean isDefault;
 
-    public static Creator<CategoryR> CREATOR = new Creator<CategoryR>() {
+    public static Creator<Category> CREATOR = new Creator<Category>() {
 
         @Override
-        public CategoryR createFromParcel(Parcel source) {
-            return new CategoryR(source);
+        public Category createFromParcel(Parcel source) {
+            return new Category(source);
         }
 
         @Override
-        public CategoryR[] newArray(int size) {
-            return new CategoryR[size];
+        public Category[] newArray(int size) {
+            return new Category[size];
         }
     };
 
-    public CategoryR(long identifier, String description) {
+    public Category(long identifier, String description) {
         this.identifier = identifier;
         this.description = description;
     }
 
-    public CategoryR(Cursor cursor){
+    public Category(Cursor cursor){
         this.identifier = cursor.getLong(cursor.getColumnIndex(CCContract.CategoryEntry._ID));
         this.description = cursor.getString(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_DESCRIPTION));
         int defaultInt = cursor.getInt(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_IS_DEFAULT));
         this.isDefault = defaultInt == 1;
     }
 
-    private CategoryR(Parcel parcel){
+    private Category(Parcel parcel){
         super(parcel);
         this.description = parcel.readString();
         this.isDefault = parcel.readInt() == 1;
     }
 
-    public CategoryR(){
+    public Category(){
         this.identifier = 0;
         this.description = "";
         this.isDefault = false;
     }
 
-    public CategoryR(String description) {
+    public Category(String description) {
         this.identifier = 0;
         this.description = description;
         this.isDefault = false;

@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransactionR;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
 import com.androidessence.utility.Utility;
@@ -25,7 +25,7 @@ import com.androidessence.utility.Utility;
  *
  * Created by adam.mcneilly on 9/5/16.
  */
-public class RepeatingTransactionAdapterR extends RecyclerViewCursorAdapter<RepeatingTransactionAdapterR.RepeatingTransactionViewHolder> {
+public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<RepeatingTransactionAdapter.RepeatingTransactionViewHolder> {
 
     public static final String[] REPEATING_TRANSACTION_COLUMNS = new String[] {
             CCContract.RepeatingTransactionEntry.TABLE_NAME + "." + CCContract.RepeatingTransactionEntry._ID,
@@ -80,7 +80,7 @@ public class RepeatingTransactionAdapterR extends RecyclerViewCursorAdapter<Repe
                 case R.id.action_delete_transaction:
                     // The transaction that was selected is passed as the tag
                     // for the action mode.
-                    showDeleteAlertDialog((RepeatingTransactionR) actionMode.getTag());
+                    showDeleteAlertDialog((RepeatingTransaction) actionMode.getTag());
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
@@ -95,7 +95,7 @@ public class RepeatingTransactionAdapterR extends RecyclerViewCursorAdapter<Repe
         }
     };
 
-    private void showDeleteAlertDialog(final RepeatingTransactionR transaction){
+    private void showDeleteAlertDialog(final RepeatingTransaction transaction){
         new AlertDialog.Builder(mContext)
                 .setTitle("Delete Repeating Transaction")
                 .setMessage("Are you sure you want to delete " + transaction.getDescription() + "?")
@@ -121,7 +121,7 @@ public class RepeatingTransactionAdapterR extends RecyclerViewCursorAdapter<Repe
                 .create().show();
     }
 
-    public RepeatingTransactionAdapterR(Context context) {
+    public RepeatingTransactionAdapter(Context context) {
         super(context);
 
         red = ContextCompat.getColor(mContext, R.color.mds_red_500);
@@ -220,11 +220,11 @@ public class RepeatingTransactionAdapterR extends RecyclerViewCursorAdapter<Repe
         public boolean onLongClick(View view) {
             // Get current item and start action mode
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
-            startActionMode(new RepeatingTransactionR(mCursorAdapter.getCursor()));
+            startActionMode(new RepeatingTransaction(mCursorAdapter.getCursor()));
             return true;
         }
 
-        private void startActionMode(RepeatingTransactionR transaction){
+        private void startActionMode(RepeatingTransaction transaction){
             // Don't fire if action mode is already being used
             if(actionMode == null){
                 // Start the CAB using the ActionMode.Callback already defined

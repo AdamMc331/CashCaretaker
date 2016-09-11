@@ -16,7 +16,7 @@ import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
  *
  * Created by adam.mcneilly on 9/8/16.
  */
-public class DividerItemDecorationR extends RecyclerView.ItemDecoration{
+public class DividerItemDecoration extends RecyclerView.ItemDecoration{
 
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
@@ -25,7 +25,7 @@ public class DividerItemDecorationR extends RecyclerView.ItemDecoration{
     private final Drawable mDivider;
     private int mOrientation;
 
-    public DividerItemDecorationR(Context context, @SuppressWarnings("SameParameterValue") int orientation) {
+    public DividerItemDecoration(Context context, @SuppressWarnings("SameParameterValue") int orientation) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();

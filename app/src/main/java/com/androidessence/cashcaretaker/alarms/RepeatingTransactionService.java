@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransactionR;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
 import com.androidessence.utility.Utility;
 
 import org.joda.time.LocalDate;
@@ -83,7 +83,7 @@ public class RepeatingTransactionService extends IntentService {
             while(cursor.moveToNext()) {
                 hasTrans = true;
                 // Get repeating transaction
-                RepeatingTransactionR repeatingTransaction = new RepeatingTransactionR(cursor);
+                RepeatingTransaction repeatingTransaction = new RepeatingTransaction(cursor);
 
                 // Insert transaction
                 mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, repeatingTransaction.getTransactionContentValues());
