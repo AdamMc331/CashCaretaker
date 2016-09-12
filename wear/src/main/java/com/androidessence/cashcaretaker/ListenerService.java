@@ -48,7 +48,7 @@ public class ListenerService extends WearableListenerService {
         } else if(messageEvent.getPath().equals(getString(R.string.delete_account_path))) {
             String identifer = new String(messageEvent.getData());
 
-            getContentResolver().delete(
+            int rows = getContentResolver().delete(
                     CCContract.AccountEntry.CONTENT_URI,
                     CCContract.AccountEntry._ID + " = ?",
                     new String[] {identifer}
