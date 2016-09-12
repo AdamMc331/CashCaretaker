@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.InputFilter;
@@ -22,9 +21,9 @@ import com.androidessence.cashcaretaker.DecimalDigitsInputFilter;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.core.CoreFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.CategoryR;
-import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetailsR;
-import com.androidessence.cashcaretaker.dataTransferObjects.TransactionR;
+import com.androidessence.cashcaretaker.dataTransferObjects.Category;
+import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
+import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
 import com.androidessence.utility.Utility;
 
 import org.joda.time.LocalDate;
@@ -34,28 +33,28 @@ import org.joda.time.LocalDate;
  *
  * Created by adam.mcneilly on 9/8/16.
  */
-public class TransactionFragmentR extends CoreFragment implements DatePickerDialog.OnDateSetListener, CategoryDialog.OnCategorySelectedListener{
+public class TransactionFragment extends CoreFragment implements DatePickerDialog.OnDateSetListener, CategoryDialog.OnCategorySelectedListener{
     public static final String FRAGMENT_TAG_ADD = "AddTransactionFragment";
     public static final String FRAGMENT_TAG_EDIT = "EditTransactionFragment";
 
     // UI elements
-    private AppCompatAutoCompleteTextView mDescription;
-    private EditText mAmount;
-    private EditText mNotes;
-    private EditText mDateEditText;
-    private LocalDate mDate;
-    private EditText mCategoryEditText;
-    private CategoryR mCategory;
-    private RadioButton mWithdrawal;
-    private RadioButton mDeposit;
-    private Button mSubmit;
+    private AppCompatAutoCompleteTextView description;
+    private EditText amount;
+    private EditText notes;
+    private EditText dateEditText;
+    private LocalDate date;
+    private EditText categoryEditText;
+    private Category category;
+    private RadioButton withdrawal;
+    private RadioButton deposit;
+    private Button submit;
 
     // Account that we are adding a transaction for,
-    private long mAccount;
+    private long account;
 
     // Form mode we have
-    private int mFormMode;
-    private TransactionDetailsR mTransaction;
+    private int formMode;
+    private TransactionDetails transaction;
 
     // Arguments for variables to record or receive
     private static final String ARG_ACCOUNT = "accountArg";
@@ -75,7 +74,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
 
     private static final int DESCRIPTION_INDEX = 1;
 
-    public static TransactionFragmentR newInstance(long account, int fragmentMode, TransactionR transaction){
+    public static TransactionFragment newInstance(long account, int fragmentMode, Transaction transaction){
         // If mode is add and transaction is not null, bad input
         if(fragmentMode == MODE_ADD && transaction != null) {
             throw new IllegalArgumentException("Cannot specify a transaction for ADD form mode.");
@@ -89,7 +88,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
         args.putLong(ARG_ACCOUNT, account);
         args.putInt(ARG_FORM_MODE, fragmentMode);
         args.putParcelable(ARG_TRANSACTION, transaction);
-        TransactionFragmentR fragment = new TransactionFragmentR();
+        TransactionFragment fragment = new TransactionFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -98,13 +97,13 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAccount = getArguments().getLong(ARG_ACCOUNT, 0);
+        account = getArguments().getLong(ARG_ACCOUNT, 0);
 
         // Didn't set default - handled all errors in NewInstance method
-        mFormMode = getArguments().getInt(ARG_FORM_MODE);
+        formMode = getArguments().getInt(ARG_FORM_MODE);
 
-        if(mFormMode == MODE_EDIT) {
-            mTransaction = getArguments().getParcelable(ARG_TRANSACTION);
+        if(formMode == MODE_EDIT) {
+            transaction = getArguments().getParcelable(ARG_TRANSACTION);
         }
     }
 
@@ -128,7 +127,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
             }
 
             if(savedInstanceState.containsKey(ARG_CATEGORY)) {
-                setCategory((CategoryR) savedInstanceState.getParcelable(ARG_CATEGORY));
+                setCategory((Category) savedInstanceState.getParcelable(ARG_CATEGORY));
             } else {
                 getDefaultCategory();
             }
@@ -149,65 +148,65 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(ARG_DATE, mDate);
-        outState.putParcelable(ARG_CATEGORY, mCategory);
+        outState.putSerializable(ARG_DATE, date);
+        outState.putParcelable(ARG_CATEGORY, category);
     }
 
     /**
      * Determines whether or not we are editing a transaction.
      */
     private boolean areEditing() {
-        return mFormMode == MODE_EDIT;
+        return formMode == MODE_EDIT;
     }
 
     /**
      * Populates the fields for the transaction to be edited.
      */
     private void populateFieldsForTransaction() {
-        mDescription.setText(mTransaction.getDescription());
-        mAmount.setText(String.valueOf(mTransaction.getAmount()));
-        mNotes.setText(mTransaction.getNotes());
-        setDate(mTransaction.getDate());
-        setCategory(mTransaction.getCategory());
-        if(mTransaction.isWithdrawal()) {
-            mWithdrawal.setChecked(true);
+        description.setText(transaction.getDescription());
+        amount.setText(String.valueOf(transaction.getAmount()));
+        notes.setText(transaction.getNotes());
+        setDate(transaction.getDate());
+        setCategory(transaction.getCategory());
+        if(transaction.isWithdrawal()) {
+            withdrawal.setChecked(true);
         } else {
-            mDeposit.setChecked(true);
+            deposit.setChecked(true);
         }
 
         // If we are editing, change submit button text
-        mSubmit.setText(getString(R.string.submit_changes));
+        submit.setText(getString(R.string.submit_changes));
     }
 
     @Override
     protected void getElements(View view) {
-        mDescription = (AppCompatAutoCompleteTextView) view.findViewById(R.id.transaction_description);
-        mAmount = (EditText) view.findViewById(R.id.transaction_amount);
-        mNotes = (EditText) view.findViewById(R.id.transaction_notes);
-        mDateEditText = (EditText) view.findViewById(R.id.transaction_date);
-        mCategoryEditText = (EditText) view.findViewById(R.id.transaction_category);
-        mWithdrawal = (RadioButton) view.findViewById(R.id.transaction_withdrawal);
-        mDeposit = (RadioButton) view.findViewById(R.id.transaction_deposit);
-        mSubmit = (Button) view.findViewById(R.id.submit);
+        description = (AppCompatAutoCompleteTextView) view.findViewById(R.id.transaction_description);
+        amount = (EditText) view.findViewById(R.id.transaction_amount);
+        notes = (EditText) view.findViewById(R.id.transaction_notes);
+        dateEditText = (EditText) view.findViewById(R.id.transaction_date);
+        categoryEditText = (EditText) view.findViewById(R.id.transaction_category);
+        withdrawal = (RadioButton) view.findViewById(R.id.transaction_withdrawal);
+        deposit = (RadioButton) view.findViewById(R.id.transaction_deposit);
+        submit = (Button) view.findViewById(R.id.submit);
     }
 
     /**
      * Sets all necessary click listeners used in the fragment.
      */
     private void setClickListeners(){
-        mDateEditText.setOnClickListener(new View.OnClickListener() {
+        dateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePickerFragment();
             }
         });
-        mCategoryEditText.setOnClickListener(new View.OnClickListener() {
+        categoryEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showCategoryDialog();
             }
         });
-        mSubmit.setOnClickListener(new View.OnClickListener() {
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submitTransaction();
@@ -219,7 +218,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
      * Displays a date picker dialog.
      */
     private void showDatePickerFragment(){
-        DatePickerFragment datePickerFragment = DatePickerFragment.NewInstance(mDate);
+        DatePickerFragment datePickerFragment = DatePickerFragment.NewInstance(date);
         datePickerFragment.setTargetFragment(this, 0);
         datePickerFragment.show(getFragmentManager(), "transactionDate");
     }
@@ -229,7 +228,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
      */
     private void setInputFilters(){
         InputFilter[] inputFilters = new InputFilter[] {new DecimalDigitsInputFilter()};
-        mAmount.setFilters(inputFilters);
+        amount.setFilters(inputFilters);
     }
 
     /**
@@ -245,8 +244,8 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
      * Sets the transaction date.
      */
     private void setDate(LocalDate date) {
-        this.mDate = date;
-        this.mDateEditText.setText(Utility.getUIDateString(date));
+        this.date = date;
+        this.dateEditText.setText(Utility.getUIDateString(date));
     }
 
     /**
@@ -271,10 +270,10 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
 
         assert cursor != null;
         if(cursor.moveToFirst()){
-            setCategory(new CategoryR(cursor));
+            setCategory(new Category(cursor));
         } else{
             // Bad input, just set empty for now.
-            setCategory(new CategoryR());
+            setCategory(new Category());
         }
 
         cursor.close();
@@ -283,16 +282,16 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
     /**
      * Sets the transaction category.
      */
-    private void setCategory(CategoryR category){
-        this.mCategory = category;
-        this.mCategoryEditText.setText(mCategory.getDescription());
+    private void setCategory(Category category){
+        this.category = category;
+        this.categoryEditText.setText(this.category.getDescription());
     }
 
     /**
      * Handles the selection of a category in the CategoryDialog.
      */
     @Override
-    public void onCategorySelected(CategoryR category) {
+    public void onCategorySelected(Category category) {
         setCategory(category);
     }
 
@@ -302,13 +301,13 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
     private boolean validateInput(){
         boolean isValid = true;
 
-        if(mDescription.getText().toString().isEmpty()) {
-            mDescription.setError("Description cannot be blank.");
+        if(description.getText().toString().isEmpty()) {
+            description.setError("Description cannot be blank.");
             isValid = false;
         }
 
-        if(mAmount.getText().toString().isEmpty()) {
-            mAmount.setError("Amount cannot be blank.");
+        if(amount.getText().toString().isEmpty()) {
+            amount.setError("Amount cannot be blank.");
             isValid = false;
         }
 
@@ -324,14 +323,14 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
         }
 
         // Build transaction
-        TransactionR transaction = new TransactionR(
-                mAccount,
-                mDescription.getText().toString(),
-                Double.parseDouble(mAmount.getText().toString()),
-                mNotes.getText().toString(),
-                mDate,
-                mCategory.getIdentifier(),
-                mWithdrawal.isChecked()
+        Transaction transaction = new Transaction(
+                account,
+                description.getText().toString(),
+                Double.parseDouble(amount.getText().toString()),
+                notes.getText().toString(),
+                date,
+                category.getIdentifier(),
+                withdrawal.isChecked()
         );
 
         // Update if we are editing, insert otherwise
@@ -341,7 +340,7 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
                     CCContract.TransactionEntry.CONTENT_URI,
                     transaction.getContentValues(),
                     CCContract.TransactionEntry._ID + " = ?",
-                    new String[]{String.valueOf(mTransaction.getIdentifier())}
+                    new String[]{String.valueOf(this.transaction.getIdentifier())}
             );
         } else{
             // Insert
@@ -375,12 +374,12 @@ public class TransactionFragmentR extends CoreFragment implements DatePickerDial
             }
         });
 
-        mDescription.setAdapter(simpleCursorAdapter);
+        description.setAdapter(simpleCursorAdapter);
     }
 
     private Cursor getCursor(String description) {
         return getActivity().getContentResolver().query(
-                CCContract.TransactionEntry.buildTransactionsForAccountWithDescriptionUri(mAccount, description),
+                CCContract.TransactionEntry.buildTransactionsForAccountWithDescriptionUri(account, description),
                 TRANSACTION_COLUMNS,
                 null,
                 null,

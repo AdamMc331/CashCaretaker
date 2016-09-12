@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.activities.AddRepeatingTransactionActivityR;
-import com.androidessence.cashcaretaker.adapters.RepeatingTransactionAdapterR;
+import com.androidessence.cashcaretaker.activities.AddRepeatingTransactionActivity;
+import com.androidessence.cashcaretaker.adapters.RepeatingTransactionAdapter;
 import com.androidessence.cashcaretaker.core.CoreRecyclerViewFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
 
@@ -27,11 +27,11 @@ import com.androidessence.cashcaretaker.data.CCContract;
  *
  * Created by adam.mcneilly on 9/8/16.
  */
-public class RepeatingTransactionsFragmentR extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class RepeatingTransactionsFragment extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor>{
     // UI Elements
-    private RepeatingTransactionAdapterR mRepeatingTransactionAdapter;
-    private FloatingActionButton mAddRepeatingTransactionFloatingActionButton;
-    private TextView mAddFirstRepeatingTransaction;
+    private RepeatingTransactionAdapter repeatingTransactionAdapter;
+    private FloatingActionButton addRepeatingTransactionFAB;
+    private TextView addFirstRepeatingTransaction;
 
     // Loader identifier for the CursorLoader
     private static final int REPEATING_TRANSACTION_LOADER = 0;
@@ -51,23 +51,23 @@ public class RepeatingTransactionsFragmentR extends CoreRecyclerViewFragment imp
     @Override
     protected void getElements(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.repeating_transaction_recycler_view);
-        mAddRepeatingTransactionFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.add_repeating_transaction_fab);
-        mAddFirstRepeatingTransaction = (TextView) view.findViewById(R.id.add_first_repeating_transaction_text_view);
+        addRepeatingTransactionFAB = (FloatingActionButton) view.findViewById(R.id.add_repeating_transaction_fab);
+        addFirstRepeatingTransaction = (TextView) view.findViewById(R.id.add_first_repeating_transaction_text_view);
     }
 
     @Override
     protected void setupRecyclerView(int orientation) {
         super.setupRecyclerView(orientation);
 
-        mRepeatingTransactionAdapter = new RepeatingTransactionAdapterR(getActivity());
-        recyclerView.setAdapter(mRepeatingTransactionAdapter);
+        repeatingTransactionAdapter = new RepeatingTransactionAdapter(getActivity());
+        recyclerView.setAdapter(repeatingTransactionAdapter);
     }
 
     /**
      * Sets up the FAB by attaching a click listener to start the AddRPTTransActivity
      */
     private void setupFloatingActionButton() {
-        mAddRepeatingTransactionFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        addRepeatingTransactionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startAddRepeatingTransactionActivity();
@@ -79,7 +79,7 @@ public class RepeatingTransactionsFragmentR extends CoreRecyclerViewFragment imp
      * Starts the activity for adding a repeating transaction.
      */
     private void startAddRepeatingTransactionActivity() {
-        Intent addRepeatingTransactionIntent = new Intent(getActivity(), AddRepeatingTransactionActivityR.class);
+        Intent addRepeatingTransactionIntent = new Intent(getActivity(), AddRepeatingTransactionActivity.class);
         startActivity(addRepeatingTransactionIntent);
     }
 
@@ -99,7 +99,7 @@ public class RepeatingTransactionsFragmentR extends CoreRecyclerViewFragment imp
                 return new CursorLoader(
                         getActivity(),
                         CCContract.RepeatingTransactionEntry.CONTENT_DETAILS_URI,
-                        RepeatingTransactionAdapterR.REPEATING_TRANSACTION_COLUMNS,
+                        RepeatingTransactionAdapter.REPEATING_TRANSACTION_COLUMNS,
                         null,
                         null,
                         CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE + " ASC"
@@ -113,11 +113,11 @@ public class RepeatingTransactionsFragmentR extends CoreRecyclerViewFragment imp
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch(loader.getId()) {
             case REPEATING_TRANSACTION_LOADER:
-                mRepeatingTransactionAdapter.swapCursor(data);
+                repeatingTransactionAdapter.swapCursor(data);
 
                 // If data was empty show text view. Otherwise, show recyclerview.
                 recyclerView.setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
-                mAddFirstRepeatingTransaction.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
+                addFirstRepeatingTransaction.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -128,7 +128,7 @@ public class RepeatingTransactionsFragmentR extends CoreRecyclerViewFragment imp
     public void onLoaderReset(Loader<Cursor> loader) {
         switch(loader.getId()) {
             case REPEATING_TRANSACTION_LOADER:
-                mRepeatingTransactionAdapter.swapCursor(null);
+                repeatingTransactionAdapter.swapCursor(null);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());

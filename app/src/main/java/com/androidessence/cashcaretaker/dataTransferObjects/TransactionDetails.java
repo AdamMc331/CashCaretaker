@@ -10,42 +10,42 @@ import com.androidessence.cashcaretaker.data.CCContract;
  *
  * Created by adam.mcneilly on 9/7/16.
  */
-public class TransactionDetailsR extends TransactionR {
-    private CategoryR category;
+public class TransactionDetails extends Transaction {
+    private Category category;
 
-    public TransactionDetailsR(Cursor cursor) {
+    public TransactionDetails(Cursor cursor) {
         super(cursor);
         // Get category name
         String categoryName = cursor.getString(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_DESCRIPTION));
-        setCategory(new CategoryR(getCategoryID(), categoryName));
+        setCategory(new Category(getCategoryID(), categoryName));
     }
 
-    public TransactionDetailsR(Parcel source) {
+    public TransactionDetails(Parcel source) {
         super(source);
-        setCategory((CategoryR) source.readParcelable(CategoryR.class.getClassLoader()));
+        setCategory((Category) source.readParcelable(Category.class.getClassLoader()));
     }
 
-    public static final Creator<TransactionDetailsR> CREATOR = new Creator<TransactionDetailsR>() {
+    public static final Creator<TransactionDetails> CREATOR = new Creator<TransactionDetails>() {
         @Override
-        public TransactionDetailsR createFromParcel(Parcel source) {
-            return new TransactionDetailsR(source);
+        public TransactionDetails createFromParcel(Parcel source) {
+            return new TransactionDetails(source);
         }
 
         @Override
-        public TransactionDetailsR[] newArray(int size) {
-            return new TransactionDetailsR[size];
+        public TransactionDetails[] newArray(int size) {
+            return new TransactionDetails[size];
         }
     };
 
-    public CategoryR getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(CategoryR category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
-    public static Creator<TransactionDetailsR> getCREATOR() {
+    public static Creator<TransactionDetails> getCREATOR() {
         return CREATOR;
     }
 

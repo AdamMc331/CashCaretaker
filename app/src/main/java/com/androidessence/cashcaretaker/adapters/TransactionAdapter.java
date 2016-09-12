@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetailsR;
+import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
 import com.androidessence.utility.Utility;
@@ -19,7 +19,7 @@ import com.androidessence.utility.Utility;
  *
  * Created by adam.mcneilly on 9/5/16.
  */
-public class TransactionAdapterR extends RecyclerViewCursorAdapter<TransactionAdapterR.TransactionViewHolder> {
+public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAdapter.TransactionViewHolder> {
 
     public static final String[] TRANSACTION_COLUMNS = new String[] {
             CCContract.TransactionEntry.TABLE_NAME + "." + CCContract.TransactionEntry._ID,
@@ -46,7 +46,7 @@ public class TransactionAdapterR extends RecyclerViewCursorAdapter<TransactionAd
     private final int green;
     private final int primaryTextColor;
 
-    public TransactionAdapterR(Context context){
+    public TransactionAdapter(Context context){
         super(context);
 
         red = ContextCompat.getColor(mContext, R.color.mds_red_500);
@@ -140,12 +140,12 @@ public class TransactionAdapterR extends RecyclerViewCursorAdapter<TransactionAd
         public boolean onLongClick(View view) {
             // Get current item and call back to activity
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
-            ((OnTransactionLongClickListener)mContext).onTransactionLongClick(new TransactionDetailsR(mCursorAdapter.getCursor()));
+            ((OnTransactionLongClickListener)mContext).onTransactionLongClick(new TransactionDetails(mCursorAdapter.getCursor()));
             return true;
         }
     }
 
     public interface OnTransactionLongClickListener {
-        void onTransactionLongClick(TransactionDetailsR transaction);
+        void onTransactionLongClick(TransactionDetails transaction);
     }
 }

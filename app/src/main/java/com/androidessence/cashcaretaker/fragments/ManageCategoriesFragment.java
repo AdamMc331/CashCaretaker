@@ -24,17 +24,17 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.CategoryAdapterR;
+import com.androidessence.cashcaretaker.adapters.CategoryAdapter;
 import com.androidessence.cashcaretaker.core.CoreFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.CategoryR;
+import com.androidessence.cashcaretaker.dataTransferObjects.Category;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class ManageCategoriesFragment extends CoreFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private ListView listView;
-    private CategoryAdapterR adapter;
+    private CategoryAdapter adapter;
     private FloatingActionButton addCategoryButton;
 
     private static final int CATEGORY_LOADER = 0;
@@ -64,7 +64,7 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
                 case R.id.action_delete_transaction:
                     // The transaction that was selected is passed as the tag
                     // for the action mode.
-                    showDeleteAlertDialog((CategoryR) actionMode.getTag());
+                    showDeleteAlertDialog((Category) actionMode.getTag());
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
@@ -90,13 +90,13 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
         getElements(root);
 
         // Setup listview
-        adapter = new CategoryAdapterR(getActivity());
+        adapter = new CategoryAdapter(getActivity());
         listView.setAdapter(adapter);
         //TODO: Add delete later when we have a way to delete categories without breaking any existing transactions.
 //        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 //            @Override
 //            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                CategoryR category = new CategoryR((Cursor) adapter.getItem(position));
+//                Category category = new Category((Cursor) adapter.getItem(position));
 //                startActionMode(category);
 //                return true;
 //            }
@@ -134,7 +134,7 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
                         if(TextUtils.isEmpty(categoryText)) {
                             editText.setError("Category must not be blank.");
                         } else {
-                            CategoryR category = new CategoryR(categoryText);
+                            Category category = new Category(categoryText);
                             getActivity().getContentResolver().insert(CCContract.CategoryEntry.CONTENT_URI, category.getContentValues());
                             dialog.dismiss();
                         }
@@ -153,7 +153,7 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
         alertDialog.show();
     }
 
-    private void showDeleteAlertDialog(final CategoryR category){
+    private void showDeleteAlertDialog(final Category category){
         new AlertDialog.Builder(getActivity())
                 .setTitle("Delete Category")
                 .setMessage("Are you sure you want to delete " + category.getDescription() + "?")
@@ -179,7 +179,7 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
                 .create().show();
     }
 
-    private void startActionMode(CategoryR category){
+    private void startActionMode(Category category){
         // Don't fire if action mode is already being used
         if(actionMode == null){
             // Start the CAB using the ActionMode.Callback already defined
@@ -205,7 +205,7 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
                 return new CursorLoader(
                         getActivity(),
                         CCContract.CategoryEntry.CONTENT_URI,
-                        CategoryAdapterR.CATEGORY_COLUMNS,
+                        CategoryAdapter.CATEGORY_COLUMNS,
                         CCContract.CategoryEntry.COLUMN_IS_DEFAULT + " = ?",
                         new String[] { "0" },
                         CCContract.CategoryEntry.COLUMN_DESCRIPTION

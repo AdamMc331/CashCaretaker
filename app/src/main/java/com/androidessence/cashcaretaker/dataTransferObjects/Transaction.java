@@ -16,7 +16,7 @@ import org.joda.time.LocalDate;
  *
  * Created by adam.mcneilly on 9/7/16.
  */
-public class TransactionR extends CoreDTO {
+public class Transaction extends CoreDTO {
     private long identifier;
     private long account;
     private String description;
@@ -26,19 +26,19 @@ public class TransactionR extends CoreDTO {
     private long categoryID;
     private boolean withdrawal;
 
-    public static final Parcelable.Creator<TransactionR> CREATOR = new Parcelable.Creator<TransactionR>() {
+    public static final Parcelable.Creator<Transaction> CREATOR = new Parcelable.Creator<Transaction>() {
         @Override
-        public TransactionR createFromParcel(Parcel source) {
-            return new TransactionR(source);
+        public Transaction createFromParcel(Parcel source) {
+            return new Transaction(source);
         }
 
         @Override
-        public TransactionR[] newArray(int size) {
-            return new TransactionR[size];
+        public Transaction[] newArray(int size) {
+            return new Transaction[size];
         }
     };
 
-    public TransactionR(Parcel source) {
+    public Transaction(Parcel source) {
         super(source);
         setAccount(source.readLong());
         setDescription(source.readString());
@@ -49,7 +49,7 @@ public class TransactionR extends CoreDTO {
         setWithdrawal(source.readInt() == 1);
     }
 
-    public TransactionR(Cursor cursor){
+    public Transaction(Cursor cursor){
         setIdentifier(cursor.getLong(cursor.getColumnIndex(CCContract.TransactionEntry._ID)));
         setAccount(cursor.getLong(cursor.getColumnIndex(CCContract.TransactionEntry.COLUMN_ACCOUNT)));
         setDescription(cursor.getString(cursor.getColumnIndex(CCContract.TransactionEntry.COLUMN_DESCRIPTION)));
@@ -62,7 +62,7 @@ public class TransactionR extends CoreDTO {
         setWithdrawal(withdrawalInt == 1);
     }
 
-    public TransactionR(long account, String description, double amount, String notes, LocalDate date, long categoryID, boolean withdrawal) {
+    public Transaction(long account, String description, double amount, String notes, LocalDate date, long categoryID, boolean withdrawal) {
         setAccount(account);
         setDescription(description);
         setAmount(amount);

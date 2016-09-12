@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/fragment_add_repeating_transaction"
-        android:name="com.androidessence.cashcaretaker.fragments.AddRepeatingTransactionFragmentR"
+        android:name="com.androidessence.cashcaretaker.fragments.AddRepeatingTransactionFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
