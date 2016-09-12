@@ -1,6 +1,5 @@
 package com.androidessence.cashcaretaker.core;
 
-import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -11,7 +10,6 @@ import com.androidessence.cashcaretaker.R;
  *
  * Created by adam.mcneilly on 9/5/16.
  */
-@SuppressLint("Registered")
 public class CoreActivity extends AppCompatActivity {
 
     protected void setupToolbar(boolean displayHome) {
