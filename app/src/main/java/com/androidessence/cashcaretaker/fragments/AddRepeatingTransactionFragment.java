@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +18,7 @@ import android.widget.RadioButton;
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.alarms.RepeatingTransactionService;
+import com.androidessence.cashcaretaker.core.CoreFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 import com.androidessence.cashcaretaker.dataTransferObjects.Category;
@@ -28,24 +29,24 @@ import com.androidessence.utility.Utility;
 import org.joda.time.LocalDate;
 
 /**
- * Fragment for adding a repeating transaction.
+ * Fragment that allows the user to add a repeating transaction.
  *
- * Created by adammcneilly on 11/16/15.
+ * Created by adam.mcneilly on 9/8/16.
  */
-public class AddRepeatingTransactionFragment extends Fragment implements RepeatingPeriodDialog.OnRepeatingPeriodSelectedListener, AccountDialog.OnAccountSelectedListener, CategoryDialog.OnCategorySelectedListener, DatePickerDialog.OnDateSetListener{
-    private EditText mRepeatingPeriodEditText;
-    private RepeatingPeriod mRepeatingPeriod;
-    private EditText mAccountEditText;
-    private Account mAccount;
-    private EditText mDescription;
-    private EditText mAmount;
-    private EditText mNotes;
-    private EditText mDateEditText;
-    private LocalDate mDate;
-    private EditText mCategoryEditText;
-    private Category mCategory;
-    private RadioButton mWithdrawal;
-    private Button mSubmit;
+public class AddRepeatingTransactionFragment extends CoreFragment implements RepeatingPeriodDialog.OnRepeatingPeriodSelectedListener, AccountDialog.OnAccountSelectedListener, CategoryDialog.OnCategorySelectedListener, DatePickerDialog.OnDateSetListener{
+    private EditText repeatingPeriodEditText;
+    private RepeatingPeriod repeatingPeriod;
+    private EditText accountEditText;
+    private Account account;
+    private EditText description;
+    private EditText amount;
+    private EditText notes;
+    private EditText dateEditText;
+    private LocalDate date;
+    private EditText categoryEditText;
+    private Category category;
+    private RadioButton withdrawal;
+    private Button submit;
 
     private static final String ARG_REPEATING_PERIOD = "argRepeatingPeriod";
     private static final String ARG_ACCOUNT = "argAccount";
@@ -55,9 +56,9 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_repeating_transaction, container, false);
+        root = (CoordinatorLayout) inflater.inflate(R.layout.fragment_add_repeating_transaction, container, false);
 
-        getUIElements(view);
+        getElements(root);
         setTextFilters();
         setClickListeners();
 
@@ -84,31 +85,29 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
             getDefaultCategory();
         }
 
-        return view;
+        return root;
     }
 
-    /**
-     * Retrieves all necessary UI elements for this fragment.
-     */
-    private void getUIElements(View view) {
-        mRepeatingPeriodEditText = (EditText) view.findViewById(R.id.transaction_repeating_period);
-        mAccountEditText = (EditText) view.findViewById(R.id.transaction_account);
-        mDescription = (EditText) view.findViewById(R.id.transaction_description);
-        mAmount = (EditText) view.findViewById(R.id.transaction_amount);
-        mNotes = (EditText) view.findViewById(R.id.transaction_notes);
-        mDateEditText = (EditText) view.findViewById(R.id.transaction_date);
-        mCategoryEditText = (EditText) view.findViewById(R.id.transaction_category);
-        mWithdrawal = (RadioButton) view.findViewById(R.id.transaction_withdrawal);
-        mSubmit = (Button) view.findViewById(R.id.submit);
+    @Override
+    protected void getElements(View view) {
+        repeatingPeriodEditText = (EditText) view.findViewById(R.id.transaction_repeating_period);
+        accountEditText = (EditText) view.findViewById(R.id.transaction_account);
+        description = (EditText) view.findViewById(R.id.transaction_description);
+        amount = (EditText) view.findViewById(R.id.transaction_amount);
+        notes = (EditText) view.findViewById(R.id.transaction_notes);
+        dateEditText = (EditText) view.findViewById(R.id.transaction_date);
+        categoryEditText = (EditText) view.findViewById(R.id.transaction_category);
+        withdrawal = (RadioButton) view.findViewById(R.id.transaction_withdrawal);
+        submit = (Button) view.findViewById(R.id.submit);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(ARG_REPEATING_PERIOD, mRepeatingPeriod);
-        outState.putParcelable(ARG_ACCOUNT, mAccount);
-        outState.putSerializable(ARG_DATE, mDate);
-        outState.putParcelable(ARG_CATEGORY, mCategory);
+        outState.putParcelable(ARG_REPEATING_PERIOD, repeatingPeriod);
+        outState.putParcelable(ARG_ACCOUNT, account);
+        outState.putSerializable(ARG_DATE, date);
+        outState.putParcelable(ARG_CATEGORY, category);
     }
 
     /**
@@ -116,38 +115,38 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
      */
     private void setTextFilters() {
         InputFilter[] inputFilters = new InputFilter[] {new DecimalDigitsInputFilter()};
-        mAmount.setFilters(inputFilters);
+        amount.setFilters(inputFilters);
     }
 
     /**
      * Sets the appropriate click listeners for this fragment.
      */
     private void setClickListeners() {
-        mRepeatingPeriodEditText.setOnClickListener(new View.OnClickListener() {
+        repeatingPeriodEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showRepeatingPeriodDialog();
             }
         });
-        mAccountEditText.setOnClickListener(new View.OnClickListener() {
+        accountEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAccountDialog();
             }
         });
-        mCategoryEditText.setOnClickListener(new View.OnClickListener() {
+        categoryEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showCategoryDialog();
             }
         });
-        mDateEditText.setOnClickListener(new View.OnClickListener() {
+        dateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePickerFragment();
             }
         });
-        mSubmit.setOnClickListener(new View.OnClickListener() {
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submitRepeatingTransaction();
@@ -182,14 +181,14 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
         }
 
         RepeatingTransaction repeatingTransaction = new RepeatingTransaction(
-                mRepeatingPeriod.getIdentifier(),
-                mAccount.getIdentifier(),
-                mDescription.getText().toString(),
-                Double.parseDouble(mAmount.getText().toString()),
-                mNotes.getText().toString(),
-                mDate,
-                mCategory.getIdentifier(),
-                mWithdrawal.isChecked()
+                repeatingPeriod.getIdentifier(),
+                account.getIdentifier(),
+                description.getText().toString(),
+                Double.parseDouble(amount.getText().toString()),
+                notes.getText().toString(),
+                date,
+                category.getIdentifier(),
+                withdrawal.isChecked()
         );
 
         // Submit row
@@ -210,18 +209,18 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
         boolean isValid = true;
 
         // Do not check RepeatingPeriod, Category they are both set by default.
-        if(mAccount == null) {
-            mAccountEditText.setError("Account must be selected.");
+        if(account == null) {
+            accountEditText.setError("Account must be selected.");
             isValid = false;
         }
 
-        if(mDescription.getText().toString().isEmpty()) {
-            mDescription.setError("Description cannot be blank.");
+        if(description.getText().toString().isEmpty()) {
+            description.setError("Description cannot be blank.");
             isValid = false;
         }
 
-        if(mAmount.getText().toString().isEmpty()) {
-            mAmount.setError("Amount cannot be blank.");
+        if(amount.getText().toString().isEmpty()) {
+            amount.setError("Amount cannot be blank.");
             isValid = false;
         }
 
@@ -232,14 +231,12 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
      * Retrieves the default category to be used.
      */
     private void getDefaultCategory(){
-        //TODO: Don't hard code this, put it in settings or something
-        String defaultCategory = "None";
 
         Cursor cursor = getActivity().getContentResolver().query(
                 CCContract.CategoryEntry.CONTENT_URI,
                 null,
-                CCContract.CategoryEntry.COLUMN_DESCRIPTION + " = ?",
-                new String[] {defaultCategory},
+                CCContract.CategoryEntry.COLUMN_IS_DEFAULT + " = ?",
+                new String[] {String.valueOf("1")},
                 null
         );
 
@@ -279,34 +276,34 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
     }
 
     private void setDate(LocalDate date) {
-        mDate = date;
-        mDateEditText.setText(Utility.getUIDateString(mDate));
+        this.date = date;
+        dateEditText.setText(Utility.getUIDateString(this.date));
     }
 
     /**
      * Sets the repeating period for the transaction.
      */
     private void setRepeatingPeriod(RepeatingPeriod repeatingPeriod) {
-        mRepeatingPeriod = repeatingPeriod;
-        mRepeatingPeriodEditText.setText(repeatingPeriod.getName());
+        this.repeatingPeriod = repeatingPeriod;
+        repeatingPeriodEditText.setText(repeatingPeriod.getName());
     }
 
     /**
      * Sets the transaction category.
      */
     private void setCategory(Category category){
-        this.mCategory = category;
-        this.mCategoryEditText.setText(mCategory.getDescription());
+        this.category = category;
+        this.categoryEditText.setText(this.category.getDescription());
     }
 
     /**
      * Sets the account for the transaction.
      */
     private void setAccount(Account account) {
-        mAccount = account;
-        mAccountEditText.setText(mAccount.getName());
+        this.account = account;
+        accountEditText.setText(this.account.getName());
         // Remove error if it was there
-        mAccountEditText.setError(null);
+        accountEditText.setError(null);
     }
 
     @Override
@@ -345,7 +342,7 @@ public class AddRepeatingTransactionFragment extends Fragment implements Repeati
      * Displays a date picker dialog.
      */
     private void showDatePickerFragment(){
-        DatePickerFragment datePickerFragment = DatePickerFragment.NewInstance(mDate);
+        DatePickerFragment datePickerFragment = DatePickerFragment.NewInstance(date);
         datePickerFragment.setTargetFragment(this, 0);
         datePickerFragment.show(getFragmentManager(), "transactionDate");
     }

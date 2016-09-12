@@ -3,7 +3,7 @@ package com.androidessence.cashcaretaker.fragments;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,39 +13,38 @@ import android.widget.EditText;
 
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter;
 import com.androidessence.cashcaretaker.R;
+import com.androidessence.cashcaretaker.core.CoreFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 
 /**
- * Fragment container for the UI of adding an account to the database.
+ * Fragment that allows the user to add an account.
  *
- * Created by adammcneilly on 11/1/15.
+ * Created by adam.mcneilly on 9/8/16.
  */
-public class AddAccountFragment extends Fragment{
+public class AddAccountFragment extends CoreFragment{
     // UI Elements
-    private EditText mAccountName;
-    private EditText mStartingBalance;
-    private Button mSubmit;
+    private EditText accountName;
+    private EditText startingBalance;
+    private Button submit;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_account, container, false);
+        root = (CoordinatorLayout) inflater.inflate(R.layout.fragment_add_account, container, false);
 
-        getUIElements(view);
+        getElements(root);
         setInputFilters();
         setClickListeners();
 
-        return view;
+        return root;
     }
 
-    /**
-     * Retrieves necessary UI elements from the fragment.
-     */
-    private void getUIElements(View view){
-        mAccountName = (EditText) view.findViewById(R.id.account_name);
-        mStartingBalance = (EditText) view.findViewById(R.id.starting_balance);
-        mSubmit = (Button) view.findViewById(R.id.submit);
+    @Override
+    protected void getElements(View view) {
+        accountName = (EditText) view.findViewById(R.id.account_name);
+        startingBalance = (EditText) view.findViewById(R.id.starting_balance);
+        submit = (Button) view.findViewById(R.id.submit);
     }
 
     /**
@@ -53,14 +52,14 @@ public class AddAccountFragment extends Fragment{
      */
     private void setInputFilters(){
         InputFilter[] inputFilters = new InputFilter[] {new DecimalDigitsInputFilter()};
-        mStartingBalance.setFilters(inputFilters);
+        startingBalance.setFilters(inputFilters);
     }
 
     /**
      * Sets click listeners to the appropriate UI elements.
      */
     private void setClickListeners(){
-        mSubmit.setOnClickListener(new View.OnClickListener() {
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submitAccount();
@@ -77,15 +76,15 @@ public class AddAccountFragment extends Fragment{
         }
 
         Account account = new Account(
-                mAccountName.getText().toString(),
-                Double.parseDouble(mStartingBalance.getText().toString())
+                accountName.getText().toString(),
+                Double.parseDouble(startingBalance.getText().toString())
         );
 
         try {
             getActivity().getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, account.getContentValues());
             getActivity().finish();
         } catch(SQLiteException se){
-            mAccountName.setError("Account name already exists.");
+            accountName.setError("Account name already exists.");
         }
     }
 
@@ -96,13 +95,13 @@ public class AddAccountFragment extends Fragment{
     private boolean validateInput(){
         boolean isValid = true;
 
-        if(mAccountName.getText().toString().isEmpty()){
-            mAccountName.setError("Account name cannot be blank.");
+        if(accountName.getText().toString().isEmpty()){
+            accountName.setError("Account name cannot be blank.");
             isValid = false;
         }
 
-        if(mStartingBalance.getText().toString().isEmpty()){
-            mStartingBalance.setError("Starting balance cannot be blank.");
+        if(startingBalance.getText().toString().isEmpty()){
+            startingBalance.setError("Starting balance cannot be blank.");
             isValid = false;
         }
 

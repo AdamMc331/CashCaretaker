@@ -2,7 +2,7 @@ package com.androidessence.cashcaretaker.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -15,14 +15,12 @@ import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder
 import com.androidessence.utility.Utility;
 
 /**
- * An apter for displaying a list of Transaction objects.
+ * Adapter for displaying a list of transactions.
  *
- * Created by adammcneilly on 11/1/15.
+ * Created by adam.mcneilly on 9/5/16.
  */
 public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAdapter.TransactionViewHolder> {
-    /**
-     * A list of data columns required for creating and displaying a Transaction object.
-     */
+
     public static final String[] TRANSACTION_COLUMNS = new String[] {
             CCContract.TransactionEntry.TABLE_NAME + "." + CCContract.TransactionEntry._ID,
             CCContract.TransactionEntry.COLUMN_DESCRIPTION,
@@ -44,22 +42,16 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
     private static final int CATEGORY_INDEX = 6;
 
     // Colors used inside the ViewHolder.
-    private final int mRed;
-    private final int mGreen;
-    private final int mPrimaryText;
+    private final int red;
+    private final int green;
+    private final int primaryTextColor;
 
     public TransactionAdapter(Context context){
         super(context);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mRed = mContext.getColor(R.color.mds_red_500);
-            mGreen = mContext.getColor(R.color.mds_green_500);
-            mPrimaryText = mContext.getColor(android.R.color.primary_text_light);
-        } else {
-            mRed = mContext.getResources().getColor(R.color.mds_red_500);
-            mGreen = mContext.getResources().getColor(R.color.mds_green_500);
-            mPrimaryText = mContext.getResources().getColor(android.R.color.primary_text_light);
-        }
+        red = ContextCompat.getColor(mContext, R.color.mds_red_500);
+        green = ContextCompat.getColor(mContext, R.color.mds_green_500);
+        primaryTextColor = ContextCompat.getColor(mContext, android.R.color.primary_text_light);
 
         setupCursorAdapter(null, 0, R.layout.list_item_transaction, false);
     }
@@ -112,12 +104,12 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
             int isWithdrawal = cursor.getInt(WITHDRAWAL_INDEX);
             if(isWithdrawal == 1) {
                 mAmountTextView.setText(String.format("-%s", Utility.getCurrencyString(amount)));
-                mAmountTextView.setTextColor(mRed);
-                mIndicatorView.setBackgroundColor(mRed);
+                mAmountTextView.setTextColor(red);
+                mIndicatorView.setBackgroundColor(red);
             } else{
                 mAmountTextView.setText(Utility.getCurrencyString(amount));
-                mAmountTextView.setTextColor(mPrimaryText);
-                mIndicatorView.setBackgroundColor(mGreen);
+                mAmountTextView.setTextColor(primaryTextColor);
+                mIndicatorView.setBackgroundColor(green);
             }
 
             // Set date
@@ -127,11 +119,9 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
             //TODO: Globals somewhere
             String defaultCategory = "None";
             String category = cursor.getString(CATEGORY_INDEX);
-            if(category.equals(defaultCategory)) {
-                mCategoryTextView.setText("");
-            } else{
-                mCategoryTextView.setText(category);
-            }
+            mCategoryTextView.setText(category.equals(defaultCategory)
+                    ? ""
+                    : category);
 
             // Set notes.
             //TODO: Use resource
@@ -141,11 +131,9 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
         @Override
         public void onClick(View v) {
             // Toggle notes
-            if(mNotesTextView.getVisibility() == View.VISIBLE) {
-                mNotesTextView.setVisibility(View.GONE);
-            } else if(mNotesTextView.getVisibility() == View.GONE) {
-                mNotesTextView.setVisibility(View.VISIBLE);
-            }
+            mNotesTextView.setVisibility((mNotesTextView.getVisibility() == View.VISIBLE)
+                    ? View.GONE
+                    : View.VISIBLE);
         }
 
         @Override

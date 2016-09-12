@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +16,7 @@ import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.activities.TransactionsActivity;
+import com.androidessence.cashcaretaker.core.CoreActivity;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
@@ -25,44 +24,32 @@ import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder
 import com.androidessence.utility.Utility;
 
 /**
- * RecyclerView.Adapter used to display the user's list of accounts.
+ * Adapter that displays all accounts.
  *
- * Created by adammcneilly on 11/1/15.
+ * Created by adam.mcneilly on 9/5/16.
  */
 public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.AccountViewHolder> {
 
-    /**
-     * The necessary data fields to display for each account.
-     */
     public static final String[] ACCOUNT_COLUMNS = new String[] {
             CCContract.AccountEntry.TABLE_NAME + "." + CCContract.AccountEntry._ID,
             CCContract.AccountEntry.COLUMN_NAME,
             CCContract.AccountEntry.COLUMN_BALANCE
     };
 
-    // Indexes for each of the columns of display data.
     private static final int NAME_INDEX = 1;
     private static final int BALANCE_INDEX = 2;
 
-    // Colors used inside the ViewHolder.
-    private final int mRed;
-    private final int mPrimaryText;
+    private final int red;
+    private final int primaryTextColor;
 
-    /**
-     * The ActionMode used to delete an Account.
-     */
-    private ActionMode mActionMode;
+    private ActionMode actionMode;
 
-    /**
-     * An Action mode callback used for the context menu.
-     */
-    private final ActionMode.Callback mAccountActionModeCallback = new ActionMode.Callback() {
+    private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         // Called when the action mode is created; startActionMode() was called
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.account_context_menu, menu);
+            mode.getMenuInflater().inflate(R.menu.account_context_menu, menu);
             return true;
         }
 
@@ -80,7 +67,7 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
                 case R.id.action_delete_account:
                     // The account that was selected is passed as the tag
                     // for the action mode.
-                    showAccountDeleteAlertDialog((Account) mActionMode.getTag());
+                    showAccountDeleteAlertDialog((Account) actionMode.getTag());
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
@@ -91,52 +78,41 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
+            actionMode = null;
         }
     };
 
-    /**
-     * Alerts the user that they are about to delete an account and ensures that they
-     * are okay with it.
-     */
     private void showAccountDeleteAlertDialog(final Account account){
-        final AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
-        alertDialog.setTitle("Delete Account");
-        alertDialog.setMessage("Are you sure you want to delete " + account.getName() + "?");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
-                new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(mContext)
+                .setTitle("Delete Account")
+                .setMessage("Are you sure you want to delete " + account.getName() + "?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO: Handle the update with the new activity.
-                        // Remove
+                        //TODO: Handle the update with the new activity
                         mContext.getContentResolver().delete(
                                 CCContract.AccountEntry.CONTENT_URI,
                                 CCContract.AccountEntry._ID + " = ?",
-                                new String[]{String.valueOf(account.getIdentifier())}
+                                new String[] { String.valueOf(account.getIdentifier()) }
                         );
                         ((OnAccountDeletedListener)mContext).onAccountDeleted(account.getIdentifier());
-                        alertDialog.dismiss();
+                        dialog.dismiss();
                     }
-                });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                alertDialog.dismiss();
-            }
-        });
-        alertDialog.show();
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create().show();
     }
 
     public AccountAdapter(Context context){
         super(context);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mRed = mContext.getColor(R.color.mds_red_500);
-            mPrimaryText = mContext.getColor(android.R.color.primary_text_light);
-        } else {
-            mRed = mContext.getResources().getColor(R.color.mds_red_500);
-            mPrimaryText = mContext.getResources().getColor(android.R.color.primary_text_light);
-        }
+        red = ContextCompat.getColor(mContext, R.color.mds_red_500);
+        primaryTextColor = ContextCompat.getColor(mContext, android.R.color.primary_text_light);
 
         setupCursorAdapter(null, 0, R.layout.list_item_account, false);
     }
@@ -158,10 +134,6 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
         mCursorAdapter.bindView(null, mContext, mCursorAdapter.getCursor());
     }
 
-    /**
-     * Starts the TransactionsActivity for an Account.
-     * @param account The account item from the list to view Transaction information for.
-     */
     private void startTransactionActivity(Account account){
         // Create intent
         Intent transactionsActivity = new Intent(mContext, TransactionsActivity.class);
@@ -199,22 +171,21 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
             balanceTextView.setText(Utility.getCurrencyString(balance));
 
             // If balance is negative set red
-            if(balance < 0.00) {
-                balanceTextView.setTextColor(mRed);
-            } else {
-                balanceTextView.setTextColor(mPrimaryText);
-            }
+            balanceTextView.setTextColor((balance < 0.00)
+                    ? red
+                    : primaryTextColor
+            );
         }
 
         void startActionMode(Account account){
             // Don't fire if the action mode is already active.
-            if (mActionMode == null) {
+            if (actionMode == null) {
                 // Start the CAB using the ActionMode.Callback already defined
-                mActionMode = ((AppCompatActivity) mContext).startSupportActionMode(mAccountActionModeCallback);
+                actionMode = ((CoreActivity) mContext).startSupportActionMode(actionModeCallback);
                 // Get name to set as title for action bar
-                mActionMode.setTitle(account.getName());
+                actionMode.setTitle(account.getName());
                 // Get account ID to pass as tag.
-                mActionMode.setTag(account);
+                actionMode.setTag(account);
             }
         }
 

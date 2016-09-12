@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -16,23 +16,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.androidessence.cashcaretaker.DividerItemDecoration;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.activities.AddAccountActivity;
 import com.androidessence.cashcaretaker.adapters.AccountAdapter;
+import com.androidessence.cashcaretaker.core.CoreRecyclerViewFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
- * Fragment used to display a list of Accounts.
+ * Fragment that displays a list of accounts to the user.
  *
- * Created by adammcneilly on 11/1/15.
+ * Created by adam.mcneilly on 9/8/16.
  */
-public class AccountsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class AccountsFragment extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     // UI Elements
-    private RecyclerView mAccountRecyclerView;
-    private AccountAdapter mAccountAdapter;
-    private FloatingActionButton mFloatingActionButton;
-    private TextView mAddFirstAccount;
+    private AccountAdapter accountAdapter;
+    private FloatingActionButton floatingActionButton;
+    private TextView addFirstAccount;
 
     // Loader identifier for the CursorLoader.
     private static final int ACCOUNT_LOADER = 0;
@@ -40,43 +39,35 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_accounts, container, false);
+        root = (CoordinatorLayout) inflater.inflate(R.layout.fragment_accounts, container, false);
 
-        getUIElements(view);
-        setupRecyclerView();
+        getElements(root);
+        setupRecyclerView(LinearLayoutManager.VERTICAL);
         setupFloatingActionButton();
 
-        return view;
+        return root;
     }
 
-    /**
-     * Retrieves all necessary elements for the Fragment.
-     */
-    private void getUIElements(View view){
-        mAccountRecyclerView = (RecyclerView) view.findViewById(R.id.account_recycler_view);
-        mFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.add_account_fab);
-        mAddFirstAccount = (TextView) view.findViewById(R.id.add_first_account_text_view);
+    @Override
+    protected void getElements(View view){
+        recyclerView = (RecyclerView) view.findViewById(R.id.account_recycler_view);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.add_account_fab);
+        addFirstAccount = (TextView) view.findViewById(R.id.add_first_account_text_view);
     }
 
-    /**
-     * Prepares the RecyclerView of the fragment by setting the LayoutManager, ItemDecorator, and Adapter.
-     */
-    private void setupRecyclerView(){
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mAccountRecyclerView.setLayoutManager(linearLayoutManager);
+    @Override
+    protected void setupRecyclerView(int orientation) {
+        super.setupRecyclerView(orientation);
 
-        mAccountRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-
-        mAccountAdapter = new AccountAdapter(getActivity());
-        mAccountRecyclerView.setAdapter(mAccountAdapter);
+        accountAdapter = new AccountAdapter(getActivity());
+        recyclerView.setAdapter(accountAdapter);
     }
 
     /**
      * Prepares the FloatingActionButton of the fragment by setting its click listener.
      */
     private void setupFloatingActionButton(){
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startAddAccountActivity();
@@ -122,10 +113,10 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch(loader.getId()){
             case ACCOUNT_LOADER:
-                mAccountAdapter.swapCursor(data);
+                accountAdapter.swapCursor(data);
                 // If we have no data, hide the recyclerview and show the text view
-                mAccountRecyclerView.setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
-                mAddFirstAccount.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
+                recyclerView.setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
+                addFirstAccount.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -136,7 +127,7 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoaderReset(Loader<Cursor> loader) {
         switch(loader.getId()){
             case ACCOUNT_LOADER:
-                mAccountAdapter.swapCursor(null);
+                accountAdapter.swapCursor(null);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());

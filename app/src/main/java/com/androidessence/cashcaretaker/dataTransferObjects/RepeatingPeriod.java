@@ -1,18 +1,18 @@
 package com.androidessence.cashcaretaker.dataTransferObjects;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
-import android.os.Parcelable;
 
+import com.androidessence.cashcaretaker.core.CoreDTO;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
- * Object representing a RepeatingPeriod entry in the database.
+ * Represents a repeating period for a transaction.
  *
- * Created by adammcneilly on 11/16/15.
+ * Created by adam.mcneilly on 9/7/16.
  */
-public class RepeatingPeriod implements Parcelable {
-    private long identifier;
+public class RepeatingPeriod extends CoreDTO {
     private String name;
 
     public static final Creator<RepeatingPeriod> CREATOR = new Creator<RepeatingPeriod>() {
@@ -33,7 +33,7 @@ public class RepeatingPeriod implements Parcelable {
     }
 
     public RepeatingPeriod(Parcel parcel) {
-        setIdentifier(parcel.readLong());
+        super(parcel);
         setName(parcel.readString());
     }
 
@@ -59,13 +59,21 @@ public class RepeatingPeriod implements Parcelable {
     }
 
     @Override
-    public int describeContents() {
-        return 0;
+    public ContentValues getContentValues() {
+        ContentValues values = new ContentValues();
+
+        if(identifier > 0) {
+            values.put(CCContract.RepeatingPeriodEntry._ID, identifier);
+        }
+
+        values.put(CCContract.RepeatingPeriodEntry.COLUMN_NAME, name);
+
+        return values;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(getIdentifier());
+        super.writeToParcel(dest, flags);
         dest.writeString(getName());
     }
 }

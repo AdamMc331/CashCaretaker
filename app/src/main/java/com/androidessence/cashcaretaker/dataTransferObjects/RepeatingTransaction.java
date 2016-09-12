@@ -2,19 +2,20 @@ package com.androidessence.cashcaretaker.dataTransferObjects;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Parcel;
 
+import com.androidessence.cashcaretaker.core.CoreDTO;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.utility.Utility;
 
 import org.joda.time.LocalDate;
 
 /**
- * Object for a repeatingtransaction that occurs monthly or yearly.
+ * Represents a transaction that repeats monthly or yearly.
  *
- * Created by adammcneilly on 11/17/15.
+ * Created by adam.mcneilly on 9/7/16.
  */
-public class RepeatingTransaction {
-    private long identifier;
+public class RepeatingTransaction extends CoreDTO {
     private long repeatingPeriod;
     private long account;
     private String description;
@@ -23,6 +24,30 @@ public class RepeatingTransaction {
     private LocalDate nextDate;
     private long category;
     private boolean withdrawal;
+
+    public static Creator<RepeatingTransaction> CREATOR = new Creator<RepeatingTransaction>() {
+        @Override
+        public RepeatingTransaction createFromParcel(Parcel source) {
+            return new RepeatingTransaction(source);
+        }
+
+        @Override
+        public RepeatingTransaction[] newArray(int size) {
+            return new RepeatingTransaction[size];
+        }
+    };
+
+    public RepeatingTransaction(Parcel parcel) {
+        super(parcel);
+        this.repeatingPeriod = parcel.readLong();
+        this.account = parcel.readLong();
+        this.description = parcel.readString();
+        this.amount = parcel.readDouble();
+        this.notes = parcel.readString();
+        this.nextDate = (LocalDate) parcel.readSerializable();
+        this.category = parcel.readLong();
+        this.withdrawal = parcel.readInt() == 1;
+    }
 
     public RepeatingTransaction(Cursor cursor) {
         setIdentifier(cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry._ID)));
@@ -121,6 +146,7 @@ public class RepeatingTransaction {
         this.withdrawal = withdrawal;
     }
 
+    @Override
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
 
@@ -152,5 +178,18 @@ public class RepeatingTransaction {
         values.put(CCContract.TransactionEntry.COLUMN_WITHDRAWAL, isWithdrawal() ? 1 : 0);
 
         return values;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeLong(repeatingPeriod);
+        dest.writeLong(account);
+        dest.writeString(description);
+        dest.writeDouble(amount);
+        dest.writeString(notes);
+        dest.writeSerializable(nextDate);
+        dest.writeLong(category);
+        dest.writeInt(withdrawal ? 1 : 0);
     }
 }

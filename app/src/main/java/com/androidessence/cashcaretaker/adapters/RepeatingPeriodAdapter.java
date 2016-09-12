@@ -12,9 +12,9 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
- * An adapter for displaying the list of Repeating Periods.
+ * Adapter for displaying repeating periods.
  *
- * Created by adammcneilly on 11/2/15.
+ * Created by adam.mcneilly on 9/5/16.
  */
 public class RepeatingPeriodAdapter extends CursorAdapter {
     public RepeatingPeriodAdapter(Context context){
@@ -41,11 +41,8 @@ public class RepeatingPeriodAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        // Get ViewHolder
-        RepeatingPeriodViewHolder viewHolder = (RepeatingPeriodViewHolder) view.getTag();
-
         // Bind values
-        viewHolder.bindCursor(cursor);
+        ((RepeatingPeriodViewHolder)view.getTag()).bindCursor(cursor);
     }
 
     public class RepeatingPeriodViewHolder {

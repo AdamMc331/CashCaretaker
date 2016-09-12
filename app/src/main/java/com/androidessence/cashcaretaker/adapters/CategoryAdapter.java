@@ -12,11 +12,21 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
- * An adapter for displaying the list of TransactionCategories.
+ * Adapter that displays a list of categories.
  *
- * Created by adammcneilly on 11/2/15.
+ * Created by adam.mcneilly on 9/5/16.
  */
 public class CategoryAdapter extends CursorAdapter {
+
+    public static final String[] CATEGORY_COLUMNS = new String[] {
+            CCContract.CategoryEntry.TABLE_NAME + "." + CCContract.CategoryEntry._ID,
+            CCContract.CategoryEntry.COLUMN_DESCRIPTION,
+            CCContract.CategoryEntry.COLUMN_IS_DEFAULT
+    };
+
+    private static final int DESCRIPTION_INDEX = 1;
+    private static final int DEFAULT_INDEX = 2;
+
     public CategoryAdapter(Context context){
         super(context, null, 0);
     }
@@ -34,11 +44,8 @@ public class CategoryAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        // Get ViewHolder
-        CategoryViewHolder viewHolder = (CategoryViewHolder) view.getTag();
-
         // Bind values
-        viewHolder.bindCursor(cursor);
+        ((CategoryViewHolder)view.getTag()).bindCursor(cursor);
     }
 
     public class CategoryViewHolder{
@@ -50,7 +57,7 @@ public class CategoryAdapter extends CursorAdapter {
 
         // Set values.
         public void bindCursor(Cursor cursor) {
-            categoryNameTextView.setText(cursor.getString(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_DESCRIPTION)));
+            categoryNameTextView.setText(cursor.getString(DESCRIPTION_INDEX));
         }
     }
 }

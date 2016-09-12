@@ -1,27 +1,22 @@
 package com.androidessence.cashcaretaker.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.annotation.Nullable;
 
 import com.androidessence.cashcaretaker.R;
+import com.androidessence.cashcaretaker.core.CoreActivity;
 
 /**
- * Context for allowing a user to add a new account.
+ * Activity that allows a user to add a new account.
+ *
+ * Created by adam.mcneilly on 9/5/16.
  */
-public class AddAccountActivity extends AppCompatActivity {
-
+public class AddAccountActivity extends CoreActivity{
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_account);
 
-        // Set toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Allow back.
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setupToolbar(true);
     }
 }

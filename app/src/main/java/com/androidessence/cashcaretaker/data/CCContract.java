@@ -61,6 +61,7 @@ public class CCContract {
 
         public static final String TABLE_NAME = "categoryTable";
         public static final String COLUMN_DESCRIPTION = "categoryDescription";
+        public static final String COLUMN_IS_DEFAULT = "categoryIsDefault";
 
         public static Uri buildCategoryUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
@@ -95,6 +96,15 @@ public class CCContract {
         public static Uri buildTransactionsForAccountUri(long account){
             Uri accountUri = CONTENT_URI.buildUpon().appendPath(PATH_ACCOUNT).build();
             return ContentUris.withAppendedId(accountUri, account);
+        }
+
+        public static Uri buildTransactionsForAccountWithDescriptionUri(long account, String description) {
+            Uri transactionUri = CONTENT_URI.buildUpon().appendPath(description).appendPath(PATH_ACCOUNT).build();
+            return ContentUris.withAppendedId(transactionUri, account);
+        }
+
+        public static String getDescriptionFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
         }
     }
 

@@ -6,8 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,9 +14,9 @@ import com.androidessence.cashcaretaker.DatabaseToJSON;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.adapters.AccountAdapter;
 import com.androidessence.cashcaretaker.alarms.RepeatingTransactionAlarm;
+import com.androidessence.cashcaretaker.core.CoreActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
@@ -26,22 +24,21 @@ import com.google.android.gms.wearable.Wearable;
 import org.json.JSONException;
 
 /**
- * Context for displaying the list of accounts to a user.
+ * Activity that displays a list of accounts to the user.
+ *
+ * Created by adam.mcneilly on 9/5/16.
  */
-public class AccountsActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AccountAdapter.OnAccountDeletedListener {
-    private GoogleApiClient mGoogleClient;
+public class AccountsActivity extends CoreActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AccountAdapter.OnAccountDeletedListener {
+    private static final String LOG_TAG = AccountsActivity.class.getSimpleName();
+    private GoogleApiClient googleApiClient;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accounts);
 
-        // Set toolbar.
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        setupToolbar(false);
         startAlarm();
-
         setupClient();
     }
 
@@ -57,22 +54,24 @@ public class AccountsActivity extends AppCompatActivity implements GoogleApiClie
             case R.id.action_manage_repeating_transactions:
                 startRepeatingTransactionsActivity();
                 return true;
+            case R.id.action_manage_categories:
+                startManageCategoriesActivity();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    /**
-     * Starts the activity for managing repeating transactions.
-     */
     private void startRepeatingTransactionsActivity() {
         Intent repeatingTransactionsIntent = new Intent(this, RepeatingTransactionsActivity.class);
         startActivity(repeatingTransactionsIntent);
     }
 
-    /**
-     * Starts an alarm that updates the Repeating Transactions table.
-     */
+    private void startManageCategoriesActivity() {
+        Intent manageCategories = new Intent(this, ManageCategoriesActivity.class);
+        startActivity(manageCategories);
+    }
+
     private void startAlarm(){
         ComponentName receiver = new ComponentName(this, RepeatingTransactionAlarm.class);
         PackageManager pm = getPackageManager();
@@ -83,7 +82,7 @@ public class AccountsActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     private void setupClient() {
-        mGoogleClient = new GoogleApiClient.Builder(this)
+        googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -95,7 +94,7 @@ public class AccountsActivity extends AppCompatActivity implements GoogleApiClie
         super.onStart();
 
         // Connect to data layer
-        mGoogleClient.connect();
+        googleApiClient.connect();
     }
 
     @Override
@@ -105,15 +104,15 @@ public class AccountsActivity extends AppCompatActivity implements GoogleApiClie
             String accountsJson = (new DatabaseToJSON(this)).getAccountJSON().toString();
             new SendToDataLayerThread(getString(R.string.add_account_path), accountsJson).start();
         } catch(JSONException joe) {
-            // TODO:
+            Log.e(LOG_TAG, joe.getMessage());
         }
     }
 
     @Override
     protected void onStop() {
         // Disconnect
-        if(mGoogleClient != null && mGoogleClient.isConnected()) {
-            mGoogleClient.disconnect();
+        if(googleApiClient != null && googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
         }
 
         super.onStop();
@@ -140,19 +139,9 @@ public class AccountsActivity extends AppCompatActivity implements GoogleApiClie
 
         @Override
         public void run() {
-            NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mGoogleClient).await();
+            NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(googleApiClient).await();
             for(Node node : nodes.getNodes()) {
-                MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(mGoogleClient, node.getId(), mPath, mMessage.getBytes()).await();
-
-                Log.v("ADAM", "Sending message: " + mMessage + " to: " + node.getDisplayName());
-
-                if(result.getStatus().isSuccess()) {
-                    // SUCCESS
-                    Log.v("ADAM", "MESSAGE SENT!");
-                } else {
-                    // FAILURE
-                    Log.v("ADAM", "MESSAGE FAILED TO SEND");
-                }
+                Wearable.MessageApi.sendMessage(googleApiClient, node.getId(), mPath, mMessage.getBytes()).await();
             }
         }
     }

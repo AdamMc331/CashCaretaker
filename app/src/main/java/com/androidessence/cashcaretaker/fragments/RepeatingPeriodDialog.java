@@ -24,7 +24,7 @@ import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
  * Created by adammcneilly on 11/17/15.
  */
 public class RepeatingPeriodDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private RepeatingPeriodAdapter mAdapter;
+    private RepeatingPeriodAdapter repeatingPeriodAdapter;
 
     private static final int REPEATING_PERIOD_LOADER = 0;
 
@@ -34,8 +34,8 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
         View view = inflater.inflate(R.layout.dialog_category, container, false);
 
         final ListView listView = (ListView) view.findViewById(R.id.category_list_view);
-        mAdapter = new RepeatingPeriodAdapter(getActivity());
-        listView.setAdapter(mAdapter);
+        repeatingPeriodAdapter = new RepeatingPeriodAdapter(getActivity());
+        listView.setAdapter(repeatingPeriodAdapter);
 
         getDialog().setTitle("Repeating Period");
 
@@ -78,7 +78,7 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch(loader.getId()){
             case REPEATING_PERIOD_LOADER:
-                mAdapter.swapCursor(data);
+                repeatingPeriodAdapter.swapCursor(data);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -89,7 +89,7 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
     public void onLoaderReset(Loader<Cursor> loader) {
         switch(loader.getId()){
             case REPEATING_PERIOD_LOADER:
-                mAdapter.swapCursor(null);
+                repeatingPeriodAdapter.swapCursor(null);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());

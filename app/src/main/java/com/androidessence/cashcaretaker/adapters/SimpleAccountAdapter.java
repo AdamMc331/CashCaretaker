@@ -12,9 +12,9 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
- * Adapter class for accounts that displays just the Account name.
+ * Adapter that displays basic account information.
  *
- * Created by adammcneilly on 11/17/15.
+ * Created by adam.mcneilly on 9/5/16.
  */
 public class SimpleAccountAdapter extends CursorAdapter {
 
@@ -39,8 +39,7 @@ public class SimpleAccountAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        SimpleAccountViewHolder viewHolder = (SimpleAccountViewHolder) view.getTag();
-        viewHolder.bindCursor(cursor);
+        ((SimpleAccountViewHolder)view.getTag()).bindCursor(cursor);
     }
 
     public class SimpleAccountViewHolder {

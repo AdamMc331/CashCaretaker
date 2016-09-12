@@ -3,36 +3,18 @@ package com.androidessence.cashcaretaker.dataTransferObjects;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
-import android.os.Parcelable;
 
+import com.androidessence.cashcaretaker.core.CoreDTO;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
- * Class representing an Account object.
+ * Represents a finance account for the user.
  *
- * Created by adammcneilly on 11/1/15.
+ * Created by adam.mcneilly on 9/5/16.
  */
-public class Account implements Parcelable{
-    private long identifier;
+public class Account extends CoreDTO {
     private String name;
     private double balance;
-
-    public Account(String name, double balance) {
-        this.name = name;
-        this.balance = balance;
-    }
-
-    public Account(Cursor cursor){
-        setIdentifier(cursor.getLong(cursor.getColumnIndex(CCContract.AccountEntry._ID)));
-        setName(cursor.getString(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_NAME)));
-        setBalance(cursor.getDouble(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE)));
-    }
-
-    private Account(Parcel parcel){
-        setIdentifier(parcel.readLong());
-        setName(parcel.readString());
-        setBalance(parcel.readDouble());
-    }
 
     public static Creator<Account> CREATOR = new Creator<Account>() {
         @Override
@@ -46,52 +28,49 @@ public class Account implements Parcelable{
         }
     };
 
-    public long getIdentifier() {
-        return identifier;
+    public Account(String name, double balance) {
+        this.name = name;
+        this.balance = balance;
     }
 
-    private void setIdentifier(long identifier) {
-        this.identifier = identifier;
+    public Account(Cursor cursor) {
+        this.identifier = cursor.getLong(cursor.getColumnIndex(CCContract.AccountEntry._ID));
+        this.name = cursor.getString(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_NAME));
+        this.balance = cursor.getDouble(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE));
+    }
+
+    public Account(Parcel parcel) {
+        super(parcel);
+        this.name = parcel.readString();
+        this.balance = parcel.readDouble();
     }
 
     public String getName() {
         return name;
     }
 
-    private void setName(String name) {
-        this.name = name;
-    }
-
     public double getBalance() {
         return balance;
     }
 
-    private void setBalance(double balance) {
-        this.balance = balance;
-    }
+    @Override
+    public ContentValues getContentValues() {
+        ContentValues values = new ContentValues();
 
-    public ContentValues getContentValues(){
-        ContentValues contentValues = new ContentValues();
-
-        if(identifier > 0){
-            contentValues.put(CCContract.AccountEntry._ID, getIdentifier());
+        if(identifier > 0) {
+            values.put(CCContract.AccountEntry._ID, identifier);
         }
 
-        contentValues.put(CCContract.AccountEntry.COLUMN_NAME, getName());
-        contentValues.put(CCContract.AccountEntry.COLUMN_BALANCE, getBalance());
+        values.put(CCContract.AccountEntry.COLUMN_NAME, name);
+        values.put(CCContract.AccountEntry.COLUMN_BALANCE, balance);
 
-        return contentValues;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        return values;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(getIdentifier());
-        dest.writeString(getName());
-        dest.writeDouble(getBalance());
+        super.writeToParcel(dest, flags);
+        dest.writeString(name);
+        dest.writeDouble(balance);
     }
 }

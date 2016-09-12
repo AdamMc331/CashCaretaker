@@ -3,8 +3,8 @@ package com.androidessence.cashcaretaker.fragments;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -15,31 +15,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.androidessence.cashcaretaker.DividerItemDecoration;
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.adapters.TransactionAdapter;
+import com.androidessence.cashcaretaker.core.CoreRecyclerViewFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 import java.text.MessageFormat;
 
 /**
- * Dialog that displays a list of Transactions for an account.
+ * Displays a list of transactions for an account.
  *
- * Created by adammcneilly on 11/1/15.
+ * Created by adam.mcneilly on 9/8/16.
  */
-public class AccountTransactionsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class AccountTransactionsFragment extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor>{
+    public static final String FRAGMENT_TAG = "AccountTransactionsFragment";
+
     // UI Elements
-    private RecyclerView mTransactionRecyclerView;
-    private FloatingActionButton mAddTransactionFAB;
-    private TransactionAdapter mTransactionAdapter;
-    private TextView mAddFirstTransaction;
-    private TextView mAccountBalanceTextView;
+    private FloatingActionButton addTransactionFAB;
+    private TransactionAdapter transactionAdapter;
+    private TextView addFirstTransaction;
+    private TextView accountBalanceTextView;
 
     // Format to display header
-    private MessageFormat mAccountBalanceFormat;
+    private MessageFormat accountBalanceFormat;
 
     // Account we are showing transactions for.
-    private long mAccount;
+    private long account;
     private static final String ARG_ACCOUNT = "accountArg";
     private static final int TRANSACTION_LOADER = 0;
     private static final int ACCOUNT_BALANCE_LOADER = 1;
@@ -50,7 +51,7 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
 
     private static final int ACCOUNT_BALANCE_INDEX = 0;
 
-    public static AccountTransactionsFragment NewInstance(long account){
+    public static AccountTransactionsFragment newInstance(long account){
         Bundle args = new Bundle();
         args.putLong(ARG_ACCOUNT, account);
 
@@ -63,52 +64,44 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAccount = getArguments().getLong(ARG_ACCOUNT, 0);
+        account = getArguments().getLong(ARG_ACCOUNT, 0);
 
-        mAccountBalanceFormat = new MessageFormat(getActivity().getString(R.string.account_balance));
+        accountBalanceFormat = new MessageFormat(getActivity().getString(R.string.account_balance));
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_transactions, container, false);
+        root = (CoordinatorLayout) inflater.inflate(R.layout.fragment_transactions, container, false);
 
-        getUIElements(view);
-        setupRecyclerView();
+        getElements(root);
+        setupRecyclerView(LinearLayoutManager.VERTICAL);
         setClickListeners();
 
-        return view;
+        return root;
     }
 
-    /**
-     * Sets up the RecyclerView used to display transactions by setting the LayoutManager, ItemDecorator, and Adapter.
-     */
-    private void setupRecyclerView(){
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mTransactionRecyclerView.setLayoutManager(linearLayoutManager);
+    @Override
+    protected void setupRecyclerView(int orientation) {
+        super.setupRecyclerView(orientation);
 
-        mTransactionRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-
-        mTransactionAdapter = new TransactionAdapter(getActivity());
-        mTransactionRecyclerView.setAdapter(mTransactionAdapter);
+        transactionAdapter = new TransactionAdapter(getActivity());
+        recyclerView.setAdapter(transactionAdapter);
     }
 
-    /**
-     * Retrieves necessary UI elements for the fragment.
-     */
-    private void getUIElements(View view){
-        mTransactionRecyclerView = (RecyclerView) view.findViewById(R.id.transaction_recycler_view);
-        mAddTransactionFAB = (FloatingActionButton) view.findViewById(R.id.add_transaction_fab);
-        mAddFirstTransaction = (TextView) view.findViewById(R.id.add_first_transaction_text_view);
-        mAccountBalanceTextView = (TextView) view.findViewById(R.id.account_balance_header);
+    @Override
+    protected void getElements(View view) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.transaction_recycler_view);
+        addTransactionFAB = (FloatingActionButton) view.findViewById(R.id.add_transaction_fab);
+        addFirstTransaction = (TextView) view.findViewById(R.id.add_first_transaction_text_view);
+        accountBalanceTextView = (TextView) view.findViewById(R.id.account_balance_header);
     }
 
     /**
      * Sets any necessary click listeners in the fragment.
      */
     private void setClickListeners(){
-        mAddTransactionFAB.setOnClickListener(new View.OnClickListener() {
+        addTransactionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((OnAddTransactionFABClickedListener)getActivity()).addTransactionFABClicked();
@@ -132,7 +125,7 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
             case TRANSACTION_LOADER:
                 return new CursorLoader(
                         getActivity(),
-                        CCContract.TransactionEntry.buildTransactionsForAccountUri(mAccount),
+                        CCContract.TransactionEntry.buildTransactionsForAccountUri(account),
                         TransactionAdapter.TRANSACTION_COLUMNS,
                         null,
                         null,
@@ -141,7 +134,7 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
             case ACCOUNT_BALANCE_LOADER:
                 return new CursorLoader(
                         getActivity(),
-                        CCContract.AccountEntry.buildAccountUri(mAccount),
+                        CCContract.AccountEntry.buildAccountUri(account),
                         ACCOUNT_BALANCE_COLUMNS,
                         null,
                         null,
@@ -152,15 +145,16 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
         }
     }
 
+    //TODO: Abstract out the adapter to the base class too, making this simpler.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch(loader.getId()){
             case TRANSACTION_LOADER:
-                mTransactionAdapter.swapCursor(data);
+                transactionAdapter.swapCursor(data);
                 // If the cursor is empty hide the recyclerview.
-                mTransactionRecyclerView.setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
+                recyclerView.setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
                 // If the cursor is empty show the textview.
-                mAddFirstTransaction.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
+                addFirstTransaction.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
                 break;
             case ACCOUNT_BALANCE_LOADER:
                 double accountBalance = 0;
@@ -169,7 +163,7 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
                     accountBalance = data.getDouble(ACCOUNT_BALANCE_INDEX);
                 }
 
-                mAccountBalanceTextView.setText(mAccountBalanceFormat.format(new Object[] {accountBalance}));
+                accountBalanceTextView.setText(accountBalanceFormat.format(new Object[] {accountBalance}));
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -180,7 +174,7 @@ public class AccountTransactionsFragment extends Fragment implements LoaderManag
     public void onLoaderReset(Loader<Cursor> loader) {
         switch(loader.getId()){
             case TRANSACTION_LOADER:
-                mTransactionAdapter.swapCursor(null);
+                transactionAdapter.swapCursor(null);
                 break;
             case ACCOUNT_BALANCE_LOADER:
                 break;

@@ -23,13 +23,14 @@ public class CCProvider extends ContentProvider {
     private static final int TRANSACTION = 20;
     private static final int TRANSACTION_ID = 21;
     private static final int TRANSACTION_FOR_ACCOUNT = 22;
+    private static final int TRANSACTION_FOR_ACCOUNT_DESCRIPTION = 23;
     private static final int REPEATING_PERIOD = 30;
     private static final int REPEATING_TRANSACTION = 40;
     private static final int REPEATING_TRANSACTION_ID = 41;
     private static final int REPEATING_TRANSACTION_DETAILS = 42;
 
-    private CCDatabaseHelper mOpenHelper;
-    private final UriMatcher sUriMatcher = buildUriMatcher();
+    private CCDatabaseHelper openHelper;
+    private final UriMatcher uriMatcher = buildUriMatcher();
 
     private static UriMatcher buildUriMatcher() {
         String content = CCContract.CONTENT_AUTHORITY;
@@ -41,6 +42,7 @@ public class CCProvider extends ContentProvider {
         matcher.addURI(content, CCContract.PATH_TRANSACTION, TRANSACTION);
         matcher.addURI(content, CCContract.PATH_TRANSACTION + "/#", TRANSACTION_ID);
         matcher.addURI(content, CCContract.PATH_TRANSACTION + "/" + CCContract.PATH_ACCOUNT + "/#", TRANSACTION_FOR_ACCOUNT);
+        matcher.addURI(content, CCContract.PATH_TRANSACTION + "/*/" + CCContract.PATH_ACCOUNT + "/#", TRANSACTION_FOR_ACCOUNT_DESCRIPTION);
         matcher.addURI(content, CCContract.PATH_REPEATING_PERIOD, REPEATING_PERIOD);
         matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION, REPEATING_TRANSACTION);
         matcher.addURI(content, CCContract.PATH_REPEATING_TRANSACTION + "/#", REPEATING_TRANSACTION_ID);
@@ -49,21 +51,21 @@ public class CCProvider extends ContentProvider {
         return matcher;
     }
 
-    private static final SQLiteQueryBuilder sTransactionWithCategoryBuilder;
+    private static final SQLiteQueryBuilder transactionWithCategoryBuilder;
 
     static {
-        sTransactionWithCategoryBuilder = new SQLiteQueryBuilder();
-        sTransactionWithCategoryBuilder.setTables(
+        transactionWithCategoryBuilder = new SQLiteQueryBuilder();
+        transactionWithCategoryBuilder.setTables(
                 CCContract.TransactionEntry.TABLE_NAME + " " +
                         "LEFT JOIN " + CCContract.CategoryEntry.TABLE_NAME + " ON " +
                         CCContract.CategoryEntry.TABLE_NAME + "." + CCContract.CategoryEntry._ID + " = " + CCContract.TransactionEntry.COLUMN_CATEGORY
         );
     }
 
-    private static final SQLiteQueryBuilder sRepeatingTransactionDetailsBuilder;
+    private static final SQLiteQueryBuilder repeatingTransactionDetailsBuilder;
     static {
-        sRepeatingTransactionDetailsBuilder = new SQLiteQueryBuilder();
-        sRepeatingTransactionDetailsBuilder.setTables(
+        repeatingTransactionDetailsBuilder = new SQLiteQueryBuilder();
+        repeatingTransactionDetailsBuilder.setTables(
                 CCContract.RepeatingTransactionEntry.TABLE_NAME + " " +
                         "LEFT JOIN " + CCContract.CategoryEntry.TABLE_NAME + " ON " +
                         CCContract.CategoryEntry.TABLE_NAME + "." + CCContract.CategoryEntry._ID + " = " + CCContract.RepeatingTransactionEntry.COLUMN_CATEGORY + " " +
@@ -76,18 +78,18 @@ public class CCProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mOpenHelper = new CCDatabaseHelper(getContext());
+        openHelper = new CCDatabaseHelper(getContext());
         return true;
     }
 
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        SQLiteDatabase db = openHelper.getReadableDatabase();
         long _id;
         Cursor retCursor;
 
-        switch (sUriMatcher.match(uri)) {
+        switch (uriMatcher.match(uri)) {
             case ACCOUNT:
                 retCursor = db.query(
                         CCContract.AccountEntry.TABLE_NAME,
@@ -147,12 +149,26 @@ public class CCProvider extends ContentProvider {
                 break;
             case TRANSACTION_FOR_ACCOUNT:
                 _id = ContentUris.parseId(uri);
-                retCursor = sTransactionWithCategoryBuilder.query(
+                retCursor = transactionWithCategoryBuilder.query(
                         db,
                         projection,
                         CCContract.TransactionEntry.COLUMN_ACCOUNT + " = ?",
                         new String[]{String.valueOf(_id)},
                         null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case TRANSACTION_FOR_ACCOUNT_DESCRIPTION:
+                // Decided not to query by account, but all transaction descriptions.
+                // _id = ContentUris.parseId(uri);
+                String description = CCContract.TransactionEntry.getDescriptionFromUri(uri);
+                retCursor = db.query(
+                        CCContract.TransactionEntry.TABLE_NAME,
+                        projection,
+                        CCContract.TransactionEntry.COLUMN_DESCRIPTION + " LIKE ?",
+                        new String[] {"%" + description + "%"},
+                        CCContract.TransactionEntry.COLUMN_DESCRIPTION, // Get unique descriptions by grouping by them
                         null,
                         sortOrder
                 );
@@ -192,7 +208,7 @@ public class CCProvider extends ContentProvider {
                 );
                 break;
             case REPEATING_TRANSACTION_DETAILS:
-                retCursor = sRepeatingTransactionDetailsBuilder.query(
+                retCursor = repeatingTransactionDetailsBuilder.query(
                         db,
                         projection,
                         selection,
@@ -215,7 +231,7 @@ public class CCProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        switch (sUriMatcher.match(uri)) {
+        switch (uriMatcher.match(uri)) {
             case ACCOUNT:
                 return CCContract.AccountEntry.CONTENT_TYPE;
             case ACCOUNT_ID:
@@ -244,9 +260,9 @@ public class CCProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         long _id;
         Uri returnUri;
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        SQLiteDatabase db = openHelper.getReadableDatabase();
 
-        switch (sUriMatcher.match(uri)) {
+        switch (uriMatcher.match(uri)) {
             case ACCOUNT:
                 _id = db.insertOrThrow(CCContract.AccountEntry.TABLE_NAME, null, values);
                 if (_id > 0) {
@@ -292,9 +308,9 @@ public class CCProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         int rows;
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        SQLiteDatabase db = openHelper.getReadableDatabase();
 
-        switch (sUriMatcher.match(uri)) {
+        switch (uriMatcher.match(uri)) {
             case ACCOUNT:
                 rows = db.delete(CCContract.AccountEntry.TABLE_NAME, selection, selectionArgs);
                 break;
@@ -321,9 +337,9 @@ public class CCProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int rows;
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        SQLiteDatabase db = openHelper.getReadableDatabase();
 
-        switch (sUriMatcher.match(uri)) {
+        switch (uriMatcher.match(uri)) {
             case ACCOUNT:
                 rows = db.update(CCContract.AccountEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;

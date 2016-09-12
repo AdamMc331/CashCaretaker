@@ -1,19 +1,20 @@
 package com.androidessence.cashcaretaker.dataTransferObjects;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
-import android.os.Parcelable;
 
+import com.androidessence.cashcaretaker.core.CoreDTO;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
- * Class pertaining information of a Category of transactions.
+ * Represents a category for a transaction.
  *
- * Created by adammcneilly on 11/2/15.
+ * Created by adam.mcneilly on 9/5/16.
  */
-public class Category implements Parcelable{
-    private long identifier;
+public class Category extends CoreDTO {
     private String description;
+    private boolean isDefault;
 
     public static Creator<Category> CREATOR = new Creator<Category>() {
 
@@ -29,49 +30,65 @@ public class Category implements Parcelable{
     };
 
     public Category(long identifier, String description) {
-        setIdentifier(identifier);
-        setDescription(description);
+        this.identifier = identifier;
+        this.description = description;
     }
 
     public Category(Cursor cursor){
-        setIdentifier(cursor.getLong(cursor.getColumnIndex(CCContract.CategoryEntry._ID)));
-        setDescription(cursor.getString(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_DESCRIPTION)));
+        this.identifier = cursor.getLong(cursor.getColumnIndex(CCContract.CategoryEntry._ID));
+        this.description = cursor.getString(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_DESCRIPTION));
+        int defaultInt = cursor.getInt(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_IS_DEFAULT));
+        this.isDefault = defaultInt == 1;
     }
 
     private Category(Parcel parcel){
-        setIdentifier(parcel.readLong());
-        setDescription(parcel.readString());
+        super(parcel);
+        this.description = parcel.readString();
+        this.isDefault = parcel.readInt() == 1;
     }
 
     public Category(){
-        setIdentifier(0);
-        setDescription("");
+        this.identifier = 0;
+        this.description = "";
+        this.isDefault = false;
+    }
+
+    public Category(String description) {
+        this.identifier = 0;
+        this.description = description;
+        this.isDefault = false;
     }
 
     public long getIdentifier() {
         return identifier;
     }
 
-    private void setIdentifier(long identifier) {
-        this.identifier = identifier;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    private void setDescription(String description) {
-        this.description = description;
+    public boolean isDefault() {
+        return isDefault;
     }
 
     @Override
-    public int describeContents() {
-        return 0;
+    public ContentValues getContentValues() {
+        ContentValues values = new ContentValues();
+
+        if(identifier > 0) {
+            values.put(CCContract.CategoryEntry._ID, identifier);
+        }
+
+        values.put(CCContract.CategoryEntry.COLUMN_DESCRIPTION, description);
+        values.put(CCContract.CategoryEntry.COLUMN_IS_DEFAULT, isDefault ? 1 : 0);
+
+        return values;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(getIdentifier());
+        super.writeToParcel(dest, flags);
         dest.writeString(getDescription());
+        dest.writeInt(isDefault ? 1 : 0);
     }
 }

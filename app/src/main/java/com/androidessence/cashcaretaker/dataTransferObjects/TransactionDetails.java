@@ -6,10 +6,9 @@ import android.os.Parcel;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
- * An object representing transaction details. Instead of just including foreign keys as longs,
- * this class holds reference to a Category object as well.
+ * Details about a transaction beyond the required info.
  *
- * Created by adammcneilly on 11/20/15.
+ * Created by adam.mcneilly on 9/7/16.
  */
 public class TransactionDetails extends Transaction {
     private Category category;
@@ -48,11 +47,6 @@ public class TransactionDetails extends Transaction {
 
     public static Creator<TransactionDetails> getCREATOR() {
         return CREATOR;
-    }
-
-    @Override
-    public int describeContents() {
-        return super.describeContents();
     }
 
     @Override

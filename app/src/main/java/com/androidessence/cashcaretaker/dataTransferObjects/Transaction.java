@@ -5,17 +5,18 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.androidessence.cashcaretaker.core.CoreDTO;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.utility.Utility;
 
 import org.joda.time.LocalDate;
 
 /**
- * Class representing a Transaction for an account.
+ * Represents a Transaction entry.
  *
- * Created by adammcneilly on 11/3/15.
+ * Created by adam.mcneilly on 9/7/16.
  */
-public class Transaction implements Parcelable{
+public class Transaction extends CoreDTO {
     private long identifier;
     private long account;
     private String description;
@@ -25,7 +26,7 @@ public class Transaction implements Parcelable{
     private long categoryID;
     private boolean withdrawal;
 
-    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
+    public static final Parcelable.Creator<Transaction> CREATOR = new Parcelable.Creator<Transaction>() {
         @Override
         public Transaction createFromParcel(Parcel source) {
             return new Transaction(source);
@@ -38,7 +39,7 @@ public class Transaction implements Parcelable{
     };
 
     public Transaction(Parcel source) {
-        setIdentifier(source.readLong());
+        super(source);
         setAccount(source.readLong());
         setDescription(source.readString());
         setAmount(source.readDouble());
@@ -135,6 +136,7 @@ public class Transaction implements Parcelable{
         this.withdrawal = withdrawal;
     }
 
+    @Override
     public ContentValues getContentValues(){
         ContentValues values = new ContentValues();
 
@@ -154,13 +156,8 @@ public class Transaction implements Parcelable{
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(getIdentifier());
+        super.writeToParcel(dest, flags);
         dest.writeLong(getAccount());
         dest.writeString(getDescription());
         dest.writeDouble(getAmount());
