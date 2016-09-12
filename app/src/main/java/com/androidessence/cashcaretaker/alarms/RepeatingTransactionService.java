@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransactionR;
+import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
 import com.androidessence.utility.Utility;
 
 import org.joda.time.LocalDate;
@@ -19,7 +19,7 @@ import org.joda.time.LocalDate;
  * Created by adammcneilly on 11/15/15.
  */
 public class RepeatingTransactionService extends IntentService {
-    private Context mContext;
+    private Context context;
 
     public RepeatingTransactionService() {
         super("RepeatingTransactionService");
@@ -50,7 +50,7 @@ public class RepeatingTransactionService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        mContext = getApplicationContext();
+        context = getApplicationContext();
 
         // Check for any alarms prior to today
         updateRepeatingTransactions();
@@ -70,7 +70,7 @@ public class RepeatingTransactionService extends IntentService {
         do {
             hasTrans = false;
 
-            Cursor cursor = mContext.getContentResolver().query(
+            Cursor cursor = context.getContentResolver().query(
                     CCContract.RepeatingTransactionEntry.CONTENT_URI,
                     REPEATING_TRANSACTION_COLUMNS,
                     CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE + " <= ?",
@@ -83,10 +83,10 @@ public class RepeatingTransactionService extends IntentService {
             while(cursor.moveToNext()) {
                 hasTrans = true;
                 // Get repeating transaction
-                RepeatingTransactionR repeatingTransaction = new RepeatingTransactionR(cursor);
+                RepeatingTransaction repeatingTransaction = new RepeatingTransaction(cursor);
 
                 // Insert transaction
-                mContext.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, repeatingTransaction.getTransactionContentValues());
+                context.getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, repeatingTransaction.getTransactionContentValues());
 
                 // Switch based on update
                 String transDateString = cursor.getString(DATE_INDEX);
@@ -116,7 +116,7 @@ public class RepeatingTransactionService extends IntentService {
                     contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE, Utility.getDBDateString(nextDate));
 
                     long id = cursor.getLong(ID_INDEX);
-                    mContext.getContentResolver().update(
+                    context.getContentResolver().update(
                             CCContract.RepeatingTransactionEntry.CONTENT_URI,
                             contentValues,
                             CCContract.RepeatingTransactionEntry._ID + " = ?",

@@ -14,9 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.CategoryAdapterR;
+import com.androidessence.cashcaretaker.adapters.CategoryAdapter;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.CategoryR;
+import com.androidessence.cashcaretaker.dataTransferObjects.Category;
 
 /**
  * Dialog that displays a list of transaction categories for the user to select.
@@ -24,7 +24,7 @@ import com.androidessence.cashcaretaker.dataTransferObjects.CategoryR;
  * Created by adammcneilly on 10/16/15.
  */
 public class CategoryDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private CategoryAdapterR mAdapter;
+    private CategoryAdapter categoryAdapter;
 
     private static final int CATEGORY_LOADER = 0;
 
@@ -34,8 +34,8 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
         View view = inflater.inflate(R.layout.dialog_category, container, false);
 
         final ListView listView = (ListView) view.findViewById(R.id.category_list_view);
-        mAdapter = new CategoryAdapterR(getActivity());
-        listView.setAdapter(mAdapter);
+        categoryAdapter = new CategoryAdapter(getActivity());
+        listView.setAdapter(categoryAdapter);
 
         getDialog().setTitle("Category");
 
@@ -43,7 +43,7 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor item = (Cursor) listView.getItemAtPosition(position);
-                ((OnCategorySelectedListener)getTargetFragment()).onCategorySelected(new CategoryR(item));
+                ((OnCategorySelectedListener)getTargetFragment()).onCategorySelected(new Category(item));
                 dismiss();
             }
         });
@@ -78,7 +78,7 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch(loader.getId()){
             case CATEGORY_LOADER:
-                mAdapter.swapCursor(data);
+                categoryAdapter.swapCursor(data);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -89,7 +89,7 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
     public void onLoaderReset(Loader<Cursor> loader) {
         switch(loader.getId()){
             case CATEGORY_LOADER:
-                mAdapter.swapCursor(null);
+                categoryAdapter.swapCursor(null);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -97,6 +97,6 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
     }
 
     public interface OnCategorySelectedListener{
-        void onCategorySelected(CategoryR category);
+        void onCategorySelected(Category category);
     }
 }

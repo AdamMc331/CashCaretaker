@@ -16,9 +16,9 @@ import com.androidessence.cashcaretaker.data.CCContract;
  *
  * Created by adam.mcneilly on 9/5/16.
  */
-public class SimpleAccountAdapterR extends CursorAdapter {
+public class SimpleAccountAdapter extends CursorAdapter {
 
-    public SimpleAccountAdapterR(Context context) {
+    public SimpleAccountAdapter(Context context) {
         super(context, null, 0);
     }
 

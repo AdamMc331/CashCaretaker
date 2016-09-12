@@ -9,11 +9,11 @@
 
     <fragment
         android:id="@+id/fragment_accounts"
-        android:name="com.androidessence.cashcaretaker.fragments.AccountsFragmentR"
+        android:name="com.androidessence.cashcaretaker.fragments.AccountsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".fragments.AccountsFragmentR"
+        tools:context=".fragments.AccountsFragment"
         tools:ignore="MergeRootFrame"
         tools:layout="@layout/fragment_accounts" />
 

@@ -12,24 +12,21 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.data.CCContract;
 
 /**
- * Adapter that displays a list of categories.
+ * Adapter for displaying repeating periods.
  *
  * Created by adam.mcneilly on 9/5/16.
  */
-public class CategoryAdapterR extends CursorAdapter {
-
-    public static final String[] CATEGORY_COLUMNS = new String[] {
-            CCContract.CategoryEntry.TABLE_NAME + "." + CCContract.CategoryEntry._ID,
-            CCContract.CategoryEntry.COLUMN_DESCRIPTION,
-            CCContract.CategoryEntry.COLUMN_IS_DEFAULT
-    };
-
-    private static final int DESCRIPTION_INDEX = 1;
-    private static final int DEFAULT_INDEX = 2;
-
-    public CategoryAdapterR(Context context){
+public class RepeatingPeriodAdapter extends CursorAdapter {
+    public RepeatingPeriodAdapter(Context context){
         super(context, null, 0);
     }
+
+    public static final String[] REPEATING_PERIOD_COLUMNS = new String[] {
+            CCContract.RepeatingPeriodEntry.TABLE_NAME + "." + CCContract.RepeatingPeriodEntry._ID,
+            CCContract.RepeatingPeriodEntry.COLUMN_NAME
+    };
+
+    public static final int NAME_INDEX = 1;
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -37,7 +34,7 @@ public class CategoryAdapterR extends CursorAdapter {
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_textview, parent, false);
 
         // Set ViewHolder
-        view.setTag(new CategoryViewHolder(view));
+        view.setTag(new RepeatingPeriodViewHolder(view));
 
         return view;
     }
@@ -45,19 +42,19 @@ public class CategoryAdapterR extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         // Bind values
-        ((CategoryViewHolder)view.getTag()).bindCursor(cursor);
+        ((RepeatingPeriodViewHolder)view.getTag()).bindCursor(cursor);
     }
 
-    public class CategoryViewHolder{
-        public final TextView categoryNameTextView;
+    public class RepeatingPeriodViewHolder {
+        public final TextView repeatingPeriodNameTextView;
 
-        public CategoryViewHolder(View view){
-            categoryNameTextView = (TextView) view.findViewById(R.id.list_item_text_view);
+        public RepeatingPeriodViewHolder(View view){
+            repeatingPeriodNameTextView = (TextView) view.findViewById(R.id.list_item_text_view);
         }
 
         // Set values.
         public void bindCursor(Cursor cursor) {
-            categoryNameTextView.setText(cursor.getString(DESCRIPTION_INDEX));
+            repeatingPeriodNameTextView.setText(cursor.getString(NAME_INDEX));
         }
     }
 }

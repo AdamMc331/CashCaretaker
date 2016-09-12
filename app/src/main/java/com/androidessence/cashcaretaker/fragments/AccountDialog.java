@@ -14,9 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.SimpleAccountAdapterR;
+import com.androidessence.cashcaretaker.adapters.SimpleAccountAdapter;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.AccountR;
+import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 
 /**
  * Dialog that displays a list of account names for the user to select.
@@ -24,7 +24,7 @@ import com.androidessence.cashcaretaker.dataTransferObjects.AccountR;
  * Created by adammcneilly on 11/17/15.
  */
 public class AccountDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private SimpleAccountAdapterR mAdapter;
+    private SimpleAccountAdapter simpleAccountAdapter;
 
     private static final int CATEGORY_LOADER = 0;
 
@@ -34,8 +34,8 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
         View view = inflater.inflate(R.layout.dialog_account, container, false);
 
         final ListView listView = (ListView) view.findViewById(R.id.account_list_view);
-        mAdapter = new SimpleAccountAdapterR(getActivity());
-        listView.setAdapter(mAdapter);
+        simpleAccountAdapter = new SimpleAccountAdapter(getActivity());
+        listView.setAdapter(simpleAccountAdapter);
 
         getDialog().setTitle("Account");
 
@@ -43,7 +43,7 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor item = (Cursor) listView.getItemAtPosition(position);
-                ((OnAccountSelectedListener)getTargetFragment()).onAccountSelected(new AccountR(item));
+                ((OnAccountSelectedListener)getTargetFragment()).onAccountSelected(new Account(item));
                 dismiss();
             }
         });
@@ -64,7 +64,7 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
                 return new CursorLoader(
                         getActivity(),
                         CCContract.AccountEntry.CONTENT_URI,
-                        SimpleAccountAdapterR.ACCOUNT_COLUMNS,
+                        SimpleAccountAdapter.ACCOUNT_COLUMNS,
                         null,
                         null,
                         CCContract.AccountEntry.COLUMN_NAME + " ASC"
@@ -78,7 +78,7 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch(loader.getId()){
             case CATEGORY_LOADER:
-                mAdapter.swapCursor(data);
+                simpleAccountAdapter.swapCursor(data);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -89,7 +89,7 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
     public void onLoaderReset(Loader<Cursor> loader) {
         switch(loader.getId()){
             case CATEGORY_LOADER:
-                mAdapter.swapCursor(null);
+                simpleAccountAdapter.swapCursor(null);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -97,6 +97,6 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
     }
 
     public interface OnAccountSelectedListener {
-        void onAccountSelected(AccountR account);
+        void onAccountSelected(Account account);
     }
 }

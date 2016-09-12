@@ -15,18 +15,18 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class AccountsActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor>{
-    private AccountCursorAdapter mAdapter;
+    private AccountCursorAdapter accountCursorAdapter;
     private static final int ACCOUNT_LOADER = 0;
 
-    private DismissOverlayView mDismissOverlay;
-    private GestureDetector mDetector;
+    private DismissOverlayView dismissOverlay;
+    private GestureDetector detector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accounts);
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-        mAdapter = new AccountCursorAdapter(this);
+        accountCursorAdapter = new AccountCursorAdapter(this);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
@@ -39,7 +39,7 @@ public class AccountsActivity extends Activity implements LoaderManager.LoaderCa
 
     private void setupListView() {
         ListView listView = (ListView) findViewById(R.id.account_list_view);
-        listView.setAdapter(mAdapter);
+        listView.setAdapter(accountCursorAdapter);
 
         // Inflate headerview
         View headerView = getLayoutInflater().inflate(R.layout.list_item_account_header, null, false);
@@ -55,7 +55,7 @@ public class AccountsActivity extends Activity implements LoaderManager.LoaderCa
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                mDismissOverlay.show();
+                dismissOverlay.show();
                 return true;
             }
         });
@@ -88,7 +88,7 @@ public class AccountsActivity extends Activity implements LoaderManager.LoaderCa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch(loader.getId()) {
             case ACCOUNT_LOADER:
-                mAdapter.swapCursor(data);
+                accountCursorAdapter.swapCursor(data);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -99,7 +99,7 @@ public class AccountsActivity extends Activity implements LoaderManager.LoaderCa
     public void onLoaderReset(Loader<Cursor> loader) {
         switch(loader.getId()) {
             case ACCOUNT_LOADER:
-                mAdapter.swapCursor(null);
+                accountCursorAdapter.swapCursor(null);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -107,20 +107,20 @@ public class AccountsActivity extends Activity implements LoaderManager.LoaderCa
     }
 
     private void setupDismissOverlay() {
-        mDismissOverlay = (DismissOverlayView) findViewById(R.id.dismiss_overlay);
-        // mDismissOverlay.setIntroText(android.R.string.long_press_intro);
-        // mDismissOverlay.showIntroIfNecessary();
+        dismissOverlay = (DismissOverlayView) findViewById(R.id.dismiss_overlay);
+        // dismissOverlay.setIntroText(android.R.string.long_press_intro);
+        // dismissOverlay.showIntroIfNecessary();
 
-        mDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener(){
+        detector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener(){
             @Override
             public void onLongPress(MotionEvent e) {
-                mDismissOverlay.show();
+                dismissOverlay.show();
             }
         });
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return mDetector.onTouchEvent(event) || super.onTouchEvent(event);
+        return detector.onTouchEvent(event) || super.onTouchEvent(event);
     }
 }

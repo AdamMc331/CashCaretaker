@@ -15,10 +15,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.activities.TransactionsActivityR;
+import com.androidessence.cashcaretaker.activities.TransactionsActivity;
 import com.androidessence.cashcaretaker.core.CoreActivity;
 import com.androidessence.cashcaretaker.data.CCContract;
-import com.androidessence.cashcaretaker.dataTransferObjects.AccountR;
+import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
 import com.androidessence.utility.Utility;
@@ -28,7 +28,7 @@ import com.androidessence.utility.Utility;
  *
  * Created by adam.mcneilly on 9/5/16.
  */
-public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.AccountViewHolder> {
+public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.AccountViewHolder> {
 
     public static final String[] ACCOUNT_COLUMNS = new String[] {
             CCContract.AccountEntry.TABLE_NAME + "." + CCContract.AccountEntry._ID,
@@ -67,7 +67,7 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
                 case R.id.action_delete_account:
                     // The account that was selected is passed as the tag
                     // for the action mode.
-                    showAccountDeleteAlertDialog((AccountR) actionMode.getTag());
+                    showAccountDeleteAlertDialog((Account) actionMode.getTag());
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
@@ -82,7 +82,7 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
         }
     };
 
-    private void showAccountDeleteAlertDialog(final AccountR account){
+    private void showAccountDeleteAlertDialog(final Account account){
         new AlertDialog.Builder(mContext)
                 .setTitle("Delete Account")
                 .setMessage("Are you sure you want to delete " + account.getName() + "?")
@@ -108,7 +108,7 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
                 .create().show();
     }
 
-    public AccountAdapterR(Context context){
+    public AccountAdapter(Context context){
         super(context);
 
         red = ContextCompat.getColor(mContext, R.color.mds_red_500);
@@ -134,13 +134,13 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
         mCursorAdapter.bindView(null, mContext, mCursorAdapter.getCursor());
     }
 
-    private void startTransactionActivity(AccountR account){
+    private void startTransactionActivity(Account account){
         // Create intent
-        Intent transactionsActivity = new Intent(mContext, TransactionsActivityR.class);
+        Intent transactionsActivity = new Intent(mContext, TransactionsActivity.class);
 
         // Build and set arguments.
         Bundle args = new Bundle();
-        args.putParcelable(TransactionsActivityR.ARG_ACCOUNT, account);
+        args.putParcelable(TransactionsActivity.ARG_ACCOUNT, account);
         transactionsActivity.putExtras(args);
 
         // Start activity
@@ -177,7 +177,7 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
             );
         }
 
-        void startActionMode(AccountR account){
+        void startActionMode(Account account){
             // Don't fire if the action mode is already active.
             if (actionMode == null) {
                 // Start the CAB using the ActionMode.Callback already defined
@@ -193,14 +193,14 @@ public class AccountAdapterR extends RecyclerViewCursorAdapter<AccountAdapterR.A
         public void onClick(View v) {
             // Get cursor for item clicked.
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
-            startTransactionActivity(new AccountR(mCursorAdapter.getCursor()));
+            startTransactionActivity(new Account(mCursorAdapter.getCursor()));
         }
 
         @Override
         public boolean onLongClick(View v) {
             // Get cursor for item clicked.
             mCursorAdapter.getCursor().moveToPosition(getAdapterPosition());
-            startActionMode(new AccountR(mCursorAdapter.getCursor()));
+            startActionMode(new Account(mCursorAdapter.getCursor()));
             return true;
         }
     }

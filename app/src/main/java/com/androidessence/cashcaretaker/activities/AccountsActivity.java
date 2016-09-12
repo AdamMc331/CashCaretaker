@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 import com.androidessence.cashcaretaker.DatabaseToJSON;
 import com.androidessence.cashcaretaker.R;
-import com.androidessence.cashcaretaker.adapters.AccountAdapterR;
+import com.androidessence.cashcaretaker.adapters.AccountAdapter;
 import com.androidessence.cashcaretaker.alarms.RepeatingTransactionAlarm;
 import com.androidessence.cashcaretaker.core.CoreActivity;
 import com.google.android.gms.common.ConnectionResult;
@@ -28,9 +28,9 @@ import org.json.JSONException;
  *
  * Created by adam.mcneilly on 9/5/16.
  */
-public class AccountsActivityR extends CoreActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AccountAdapterR.OnAccountDeletedListener {
-    private static final String LOG_TAG = AccountsActivityR.class.getSimpleName();
-    private GoogleApiClient mGoogleClient;
+public class AccountsActivity extends CoreActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AccountAdapter.OnAccountDeletedListener {
+    private static final String LOG_TAG = AccountsActivity.class.getSimpleName();
+    private GoogleApiClient googleApiClient;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class AccountsActivityR extends CoreActivity implements GoogleApiClient.C
     }
 
     private void startRepeatingTransactionsActivity() {
-        Intent repeatingTransactionsIntent = new Intent(this, RepeatingTransactionsActivityR.class);
+        Intent repeatingTransactionsIntent = new Intent(this, RepeatingTransactionsActivity.class);
         startActivity(repeatingTransactionsIntent);
     }
 
@@ -82,7 +82,7 @@ public class AccountsActivityR extends CoreActivity implements GoogleApiClient.C
     }
 
     private void setupClient() {
-        mGoogleClient = new GoogleApiClient.Builder(this)
+        googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -94,7 +94,7 @@ public class AccountsActivityR extends CoreActivity implements GoogleApiClient.C
         super.onStart();
 
         // Connect to data layer
-        mGoogleClient.connect();
+        googleApiClient.connect();
     }
 
     @Override
@@ -111,8 +111,8 @@ public class AccountsActivityR extends CoreActivity implements GoogleApiClient.C
     @Override
     protected void onStop() {
         // Disconnect
-        if(mGoogleClient != null && mGoogleClient.isConnected()) {
-            mGoogleClient.disconnect();
+        if(googleApiClient != null && googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
         }
 
         super.onStop();
@@ -139,9 +139,9 @@ public class AccountsActivityR extends CoreActivity implements GoogleApiClient.C
 
         @Override
         public void run() {
-            NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mGoogleClient).await();
+            NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(googleApiClient).await();
             for(Node node : nodes.getNodes()) {
-                Wearable.MessageApi.sendMessage(mGoogleClient, node.getId(), mPath, mMessage.getBytes()).await();
+                Wearable.MessageApi.sendMessage(googleApiClient, node.getId(), mPath, mMessage.getBytes()).await();
             }
         }
     }
