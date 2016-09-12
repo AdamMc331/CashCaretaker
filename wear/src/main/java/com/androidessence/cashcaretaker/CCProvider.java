@@ -6,7 +6,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
@@ -40,7 +39,7 @@ public class CCProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor retCursor;
         SQLiteDatabase db = openHelper.getReadableDatabase();
 
@@ -68,7 +67,7 @@ public class CCProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public String getType(@NonNull Uri uri) {
+    public String getType(Uri uri) {
         switch(uriMatcher.match(uri)) {
             case ACCOUNT:
                 return CCContract.AccountEntry.CONTENT_TYPE;
@@ -79,7 +78,7 @@ public class CCProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Uri insert(@NonNull Uri uri, ContentValues values) {
+    public Uri insert(Uri uri, ContentValues values) {
         long _id;
         Uri returnUri;
         SQLiteDatabase db = openHelper.getReadableDatabase();
@@ -104,7 +103,7 @@ public class CCProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
         int rows;
         SQLiteDatabase db = openHelper.getReadableDatabase();
 
@@ -125,12 +124,12 @@ public class CCProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         return 0;
     }
 
     @Override
-    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
+    public int bulkInsert(Uri uri, ContentValues[] values) {
         SQLiteDatabase db = openHelper.getReadableDatabase();
 
         switch(uriMatcher.match(uri)) {
