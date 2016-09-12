@@ -1,6 +1,5 @@
 package com.androidessence.cashcaretaker;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -43,12 +42,12 @@ public class AccountsActivity extends Activity implements LoaderManager.LoaderCa
         listView.setAdapter(accountCursorAdapter);
 
         // Inflate headerview
-        @SuppressLint("InflateParams") View headerView = getLayoutInflater().inflate(R.layout.list_item_account_header, null, false);
+        View headerView = getLayoutInflater().inflate(R.layout.list_item_account_header, null, false);
         listView.setHeaderDividersEnabled(true);
         listView.addHeaderView(headerView);
 
         // Footer
-        @SuppressLint("InflateParams") View footerView = getLayoutInflater().inflate(R.layout.list_item_account_footer, null, false);
+        View footerView = getLayoutInflater().inflate(R.layout.list_item_account_footer, null, false);
         listView.setFooterDividersEnabled(true);
         listView.addFooterView(footerView);
 
