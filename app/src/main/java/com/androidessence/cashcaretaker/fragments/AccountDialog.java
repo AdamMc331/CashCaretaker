@@ -24,7 +24,7 @@ import com.androidessence.cashcaretaker.dataTransferObjects.Account;
  * Created by adammcneilly on 11/17/15.
  */
 public class AccountDialog extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private SimpleAccountAdapter mAdapter;
+    private SimpleAccountAdapter simpleAccountAdapter;
 
     private static final int CATEGORY_LOADER = 0;
 
@@ -34,8 +34,8 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
         View view = inflater.inflate(R.layout.dialog_account, container, false);
 
         final ListView listView = (ListView) view.findViewById(R.id.account_list_view);
-        mAdapter = new SimpleAccountAdapter(getActivity());
-        listView.setAdapter(mAdapter);
+        simpleAccountAdapter = new SimpleAccountAdapter(getActivity());
+        listView.setAdapter(simpleAccountAdapter);
 
         getDialog().setTitle("Account");
 
@@ -78,7 +78,7 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch(loader.getId()){
             case CATEGORY_LOADER:
-                mAdapter.swapCursor(data);
+                simpleAccountAdapter.swapCursor(data);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
@@ -89,7 +89,7 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
     public void onLoaderReset(Loader<Cursor> loader) {
         switch(loader.getId()){
             case CATEGORY_LOADER:
-                mAdapter.swapCursor(null);
+                simpleAccountAdapter.swapCursor(null);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());

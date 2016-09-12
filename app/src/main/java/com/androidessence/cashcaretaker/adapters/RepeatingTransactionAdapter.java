@@ -3,12 +3,11 @@ package com.androidessence.cashcaretaker.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
-import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +21,9 @@ import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder
 import com.androidessence.utility.Utility;
 
 /**
- * Adapter for repeating transaction objects.
+ * Adapter for displaying repeating transactions.
  *
- * Created by adammcneilly on 11/16/15.
+ * Created by adam.mcneilly on 9/5/16.
  */
 public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<RepeatingTransactionAdapter.RepeatingTransactionViewHolder> {
 
@@ -52,25 +51,18 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
     public static final int CATEGORY_INDEX = 7;
 
     // Colors used inside the ViewHolder.
-    private final int mRed;
-    private final int mGreen;
-    private final int mPrimaryText;
+    private final int red;
+    private final int green;
+    private final int primaryTextColor;
 
-    /**
-     * The ActionMode to be displayed for deleting a Transaction.
-     */
-    private ActionMode mActionMode;
+    private ActionMode actionMode;
 
-    /**
-     * An Action mode callback used for the context menu.
-     */
-    private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+    private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         // Called when the action mode is created; startActionMode() was called
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.repeating_transaction_context_menu, menu);
+            mode.getMenuInflater().inflate(R.menu.repeating_transaction_context_menu, menu);
             return true;
         }
 
@@ -88,7 +80,7 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
                 case R.id.action_delete_transaction:
                     // The transaction that was selected is passed as the tag
                     // for the action mode.
-                    showDeleteAlertDialog((RepeatingTransaction) mActionMode.getTag());
+                    showDeleteAlertDialog((RepeatingTransaction) actionMode.getTag());
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
@@ -99,22 +91,15 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
+            actionMode = null;
         }
     };
 
-    /**
-     * Alerts the user that they are about to delete a transaction and ensures that they
-     * are okay with it.
-     *
-     * Returns true if the transaction was deleted, false otherwise.
-     */
     private void showDeleteAlertDialog(final RepeatingTransaction transaction){
-        final AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
-        alertDialog.setTitle("Delete Repeating Transaction");
-        alertDialog.setMessage("Are you sure you want to delete " + transaction.getDescription() + "?");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
-                new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(mContext)
+                .setTitle("Delete Repeating Transaction")
+                .setMessage("Are you sure you want to delete " + transaction.getDescription() + "?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //TODO: Handle update
@@ -124,30 +109,24 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
                                 CCContract.RepeatingTransactionEntry._ID + " = ?",
                                 new String[]{String.valueOf(transaction.getIdentifier())}
                         );
-                        alertDialog.dismiss();
+                        dialog.dismiss();
                     }
-                });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                alertDialog.dismiss();
-            }
-        });
-        alertDialog.show();
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create().show();
     }
 
     public RepeatingTransactionAdapter(Context context) {
         super(context);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mRed = mContext.getColor(R.color.mds_red_500);
-            mGreen = mContext.getColor(R.color.mds_green_500);
-            mPrimaryText = mContext.getColor(android.R.color.primary_text_light);
-        } else {
-            mRed = mContext.getResources().getColor(R.color.mds_red_500);
-            mGreen = mContext.getResources().getColor(R.color.mds_green_500);
-            mPrimaryText = mContext.getResources().getColor(android.R.color.primary_text_light);
-        }
+        red = ContextCompat.getColor(mContext, R.color.mds_red_500);
+        green = ContextCompat.getColor(mContext, R.color.mds_green_500);
+        primaryTextColor = ContextCompat.getColor(mContext, android.R.color.primary_text_light);
 
         setupCursorAdapter(null, 0, R.layout.list_item_repeating_transaction, false);
     }
@@ -202,12 +181,12 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
             int isWithdrawal = cursor.getInt(WITHDRAWAL_INDEX);
             if(isWithdrawal == 1) {
                 mAmountTextView.setText(String.format("-%s", Utility.getCurrencyString(amount)));
-                mAmountTextView.setTextColor(mRed);
-                mIndicatorView.setBackgroundColor(mRed);
+                mAmountTextView.setTextColor(red);
+                mIndicatorView.setBackgroundColor(red);
             } else{
                 mAmountTextView.setText(Utility.getCurrencyString(amount));
-                mAmountTextView.setTextColor(mPrimaryText);
-                mIndicatorView.setBackgroundColor(mGreen);
+                mAmountTextView.setTextColor(primaryTextColor);
+                mIndicatorView.setBackgroundColor(green);
             }
 
             // Set date
@@ -217,11 +196,9 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
             //TODO: Globals somewhere
             String defaultCategory = "None";
             String category = cursor.getString(CATEGORY_INDEX);
-            if(category.equals(defaultCategory)) {
-                mCategoryTextView.setText("");
-            } else{
-                mCategoryTextView.setText(category);
-            }
+            mCategoryTextView.setText(category.equals(defaultCategory)
+                    ? ""
+                    : category);
 
             mAccountTextView.setText(String.format("Account: %s", cursor.getString(ACCOUNT_INDEX)));
 
@@ -233,11 +210,10 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
         @Override
         public void onClick(View v) {
             // Toggle notes
-            if(mNotesTextView.getVisibility() == View.VISIBLE) {
-                mNotesTextView.setVisibility(View.GONE);
-            } else if(mNotesTextView.getVisibility() == View.GONE) {
-                mNotesTextView.setVisibility(View.VISIBLE);
-            }
+            mNotesTextView.setVisibility((mNextDateTextView.getVisibility() == View.VISIBLE)
+                    ? View.GONE
+                    : View.VISIBLE
+            );
         }
 
         @Override
@@ -250,14 +226,14 @@ public class RepeatingTransactionAdapter extends RecyclerViewCursorAdapter<Repea
 
         private void startActionMode(RepeatingTransaction transaction){
             // Don't fire if action mode is already being used
-            if(mActionMode == null){
+            if(actionMode == null){
                 // Start the CAB using the ActionMode.Callback already defined
-                mActionMode = ((AppCompatActivity)mContext).startSupportActionMode(mActionModeCallback);
+                actionMode = ((AppCompatActivity)mContext).startSupportActionMode(actionModeCallback);
                 // Get name to set as title for action bar
                 // Need to subtract one to account for Header position
-                mActionMode.setTitle(transaction.getDescription());
+                actionMode.setTitle(transaction.getDescription());
                 // Get account ID to pass as tag.
-                mActionMode.setTag(transaction);
+                actionMode.setTag(transaction);
             }
         }
     }

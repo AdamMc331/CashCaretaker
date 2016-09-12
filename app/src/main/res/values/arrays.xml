@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="default_categories">
+        <item name="atm">ATM</item>
+        <item name="automotive">Automotive</item>
+        <item name="bills">Bills</item>
+        <item name="food">Food</item>
+        <item name="gasoline">Gasoline</item>
+        <item name="home">Home</item>
+        <item name="paycheck">Paycheck</item>
+    </string-array>
+</resources>

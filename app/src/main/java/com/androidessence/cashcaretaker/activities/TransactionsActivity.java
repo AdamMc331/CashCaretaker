@@ -3,113 +3,56 @@ package com.androidessence.cashcaretaker.activities;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.adapters.TransactionAdapter;
+import com.androidessence.cashcaretaker.core.CoreActivity;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
-import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
 import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
+import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
 import com.androidessence.cashcaretaker.fragments.AccountTransactionsFragment;
 import com.androidessence.cashcaretaker.fragments.TransactionFragment;
 
 /**
- * Context for both displaying a list of Transactions for an Account and allowing the user to add a transaction for that account.
+ * Activity that allows the user to add, edit, and view transactions.
+ *
+ * Created by adam.mcneilly on 9/5/16.
  */
-public class TransactionsActivity extends AppCompatActivity implements AccountTransactionsFragment.OnAddTransactionFABClickedListener, TransactionFragment.OnTransactionSubmittedListener, TransactionAdapter.OnTransactionLongClickListener{
-    private AppBarLayout mAppBar;
+public class TransactionsActivity extends CoreActivity implements AccountTransactionsFragment.OnAddTransactionFABClickedListener, TransactionFragment.OnTransactionSubmittedListener, TransactionAdapter.OnTransactionLongClickListener{
+    private AppBarLayout appBar;
+    private ActionMode actionMode;
 
-    /**
-     * An argument representing the account to show transactions for, or to add a transaction to.
-     */
-    public static final String ARG_ACCOUNT = "accountArg";
-
-    /**
-     * The current view state of the Activity. Either showing a list of transactions, or the controls to add a transaction.
-     */
-    private int mState;
-
-    /**
-     * A flag representing the view state for a list of transactions.
-     */
-    private static final int STATE_TRANSACTIONS = 0;
-
-    /**
-     * A flag representing the view state for adding a transaction.
-     */
-    private static final int STATE_ADD_TRANSACTION = 1;
-
-    /**
-     * A flag representing the view state for editing a transaction.
-     */
-    private static final int STATE_EDIT_TRANSACTION = 2;
-
-    /**
-     * An argument used for saving the view state of the context.
-     */
-    private static final String ARG_STATE = "stateArg";
-
-    private static final String ADD_TRANSACTION_FRAGMENT_TAG = "addTransactionFragment";
-
-    private static final String TRANSACTIONS_FRAGMENT_TAG = "transactionsFragmentTag";
-
-    private static final String EDIT_TRANSACTION_FRAGMENT_TAG = "editTransactionFragment";
-
-    // Fragments
-    private TransactionFragment mTransactionFragment;
-    private AccountTransactionsFragment mAccountTransactionsFragment;
-
-    /**
-     * The account we are viewing/adding transactions for.
-     */
-    private Account mAccount;
-
-    /**
-     * The ActionMode to be displayed for deleting a Transaction.
-     */
-    private ActionMode mActionMode;
-
-    /**
-     * An Action mode callback used for the context menu.
-     */
-    private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        // Called when the action mode is created; startActionMode() was called
+    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.transaction_context_menu, menu);
+            mode.getMenuInflater().inflate(R.menu.transaction_context_menu, menu);
             return true;
         }
 
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
+            return false;
         }
 
-        // Called when the user selects a contextual menu item
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_delete_transaction:
                     // The transaction that was selected is passed as the tag
                     // for the action mode.
-                    showDeleteAlertDialog((Transaction) mActionMode.getTag());
+                    showDeleteAlertDialog((Transaction) actionMode.getTag());
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 case R.id.action_edit_transaction:
                     // Edit the transaction selected. Close CAB when done.
-                    showEditTransactionFragment((TransactionDetails) mActionMode.getTag());
+                    showEditTransactionFragment((TransactionDetails) actionMode.getTag());
                     mode.finish();
                     return true;
                 default:
@@ -117,110 +60,95 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
             }
         }
 
-        // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
+            actionMode = null;
         }
     };
 
-    /**
-     * Alerts the user that they are about to delete a transaction and ensures that they
-     * are okay with it.
-     *
-     * Returns true if the transaction was deleted, false otherwise.
-     */
-    private void showDeleteAlertDialog(final Transaction transaction){
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("Delete Transaction");
-        alertDialog.setMessage("Are you sure you want to delete " + transaction.getDescription() + "?");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
-                new DialogInterface.OnClickListener() {
+    public static final String ARG_ACCOUNT = "account";
+    private static final String ARG_VIEW_STATE = "viewState";
+
+    private Account account;
+    private ViewStates viewState;
+
+    private TransactionFragment transactionFragment;
+    private AccountTransactionsFragment accountTransactionsFragment;
+
+    private enum ViewStates {
+        VIEW,
+        ADD,
+        EDIT
+    }
+
+    private void showDeleteAlertDialog(final Transaction transaction) {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Transaction")
+                .setMessage("Are you sure you want to delete " + transaction.getDescription() + "?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO: Handle update
-                        // Remove
                         getContentResolver().delete(
                                 CCContract.TransactionEntry.CONTENT_URI,
                                 CCContract.TransactionEntry._ID + " = ?",
-                                new String[]{String.valueOf(transaction.getIdentifier())}
+                                new String[] { String.valueOf(transaction.getIdentifier()) }
                         );
-                        // Restart loader in fragment
-                        mAccountTransactionsFragment.restartAccountBalanceLoader();
-                        alertDialog.dismiss();
+
+                        accountTransactionsFragment.restartAccountBalanceLoader();
+                        dialog.dismiss();
                     }
-                });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                alertDialog.dismiss();
-            }
-        });
-        alertDialog.show();
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create().show();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions);
 
-        // Get appbar
-        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
+        appBar = (AppBarLayout) findViewById(R.id.appbar);
 
-        // Set toolbar, allow going back.
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setupToolbar(true);
 
-        // Read arguments.
-        mState = savedInstanceState != null ? savedInstanceState.getInt(ARG_STATE, STATE_TRANSACTIONS) : STATE_TRANSACTIONS;
-        mAccount = getIntent().getParcelableExtra(ARG_ACCOUNT);
+        // Read arguments
+        viewState = (savedInstanceState != null && savedInstanceState.containsKey(ARG_VIEW_STATE))
+                ? (ViewStates) savedInstanceState.getSerializable(ARG_VIEW_STATE)
+                : ViewStates.VIEW;
+        account = getIntent().getParcelableExtra(ARG_ACCOUNT); //TODO: Bad assumption?
 
-        /**
-         * Switch based on the view state. Show the fragment if it is null, otherwise display the same fragment.
-         */
-        switch (mState) {
-            case STATE_TRANSACTIONS:
+        // Setup fragment depending on view state
+        switch(viewState) {
+            case VIEW:
                 // When showing transactions we also show account balance, so remove elevation
-                // on appbar. Requires API 21
+                // on app bar. Requires API 21
                 setAppBarElevation(false);
-                /*
-                The current AccountTransactionsFragment being shown.
-                */
-                AccountTransactionsFragment accountTransactionsFragment = (AccountTransactionsFragment) getSupportFragmentManager().findFragmentByTag(TRANSACTIONS_FRAGMENT_TAG);
-                if(accountTransactionsFragment == null){
+                AccountTransactionsFragment accountTransactionsFragment = (AccountTransactionsFragment) getSupportFragmentManager().findFragmentByTag(AccountTransactionsFragment.FRAGMENT_TAG);
+                if(accountTransactionsFragment == null) {
                     showTransactionsFragment();
                 }
                 break;
-            case STATE_ADD_TRANSACTION:
-                // When showing transactions we also show account balance, so make sure elevation
-                // appears now. Requires API 21.
+            case ADD:
                 setAppBarElevation(true);
-                // If fragment exists already, don't recreate it
-                /*
-                The current TransactionFragment being shown.
-                */
-                TransactionFragment transactionFragment = (TransactionFragment) getSupportFragmentManager().findFragmentByTag(ADD_TRANSACTION_FRAGMENT_TAG);
-                if (transactionFragment == null) {
+                TransactionFragment transactionFragment = (TransactionFragment) getSupportFragmentManager().findFragmentByTag(TransactionFragment.FRAGMENT_TAG_ADD);
+                if(transactionFragment == null) {
                     showAddTransactionFragment();
                 }
                 break;
-            case STATE_EDIT_TRANSACTION:
-                // When showing transactions we also show account balance, so make sure elevation
-                // appears now. Requires API 21.
+            case EDIT:
                 setAppBarElevation(true);
-                // If fragment exists already, don't recreate it
-                /*
-                The current TransactionFragment being shown.
-                */
-                TransactionFragment editTransactionFragment = (TransactionFragment) getSupportFragmentManager().findFragmentByTag(EDIT_TRANSACTION_FRAGMENT_TAG);
-                if (editTransactionFragment == null) {
+                TransactionFragment editTransactionFragment = (TransactionFragment) getSupportFragmentManager().findFragmentByTag(TransactionFragment.FRAGMENT_TAG_EDIT);
+                if(editTransactionFragment == null) {
                     showAddTransactionFragment();
                 }
                 break;
             default:
-                throw new UnsupportedOperationException("Unknown transaction state: " + mState);
+                throw new UnsupportedOperationException("Unknown transaction state: " + viewState);
         }
     }
 
@@ -228,93 +156,60 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        // Store view state.
-        outState.putInt(ARG_STATE, mState);
+        outState.putSerializable(ARG_VIEW_STATE, viewState);
     }
 
-    /**
-     * Displays the fragment used for adding a transaction.
-     */
     private void showAddTransactionFragment() {
-        // Display fragment
-        mTransactionFragment = TransactionFragment.NewInstance(mAccount.getIdentifier(), TransactionFragment.MODE_ADD, null);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, mTransactionFragment, ADD_TRANSACTION_FRAGMENT_TAG).commit();
+        transactionFragment = TransactionFragment.newInstance(account.getIdentifier(), TransactionFragment.MODE_ADD, null);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, transactionFragment, TransactionFragment.FRAGMENT_TAG_ADD).commit();
 
-        // Set title
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle(getString(R.string.add_transaction));
+        setToolbarTitle(getString(R.string.add_transaction));
 
-        // Set state
-        mState = STATE_ADD_TRANSACTION;
+        viewState = ViewStates.ADD;
 
-        // When showing transactions we also show account balance, so show elevation
-        // on appbar.
         setAppBarElevation(true);
     }
 
-    /**
-     * Displays the fragment used for editing a transaction.
-     */
-    private void showEditTransactionFragment(TransactionDetails transaction) {
-        mTransactionFragment = TransactionFragment.NewInstance(mAccount.getIdentifier(), TransactionFragment.MODE_EDIT, transaction);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, mTransactionFragment, EDIT_TRANSACTION_FRAGMENT_TAG).commit();
+    private void showEditTransactionFragment(TransactionDetails transactionDetails) {
+        transactionFragment = TransactionFragment.newInstance(account.getIdentifier(), TransactionFragment.MODE_EDIT, transactionDetails);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, transactionFragment, TransactionFragment.FRAGMENT_TAG_EDIT).commit();
 
-        // Set title
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle(getString(R.string.edit_transaction));
+        setToolbarTitle(getString(R.string.edit_transaction));
 
-        // Set state
-        mState = STATE_EDIT_TRANSACTION;
+        viewState = ViewStates.EDIT;
 
-        // When showing transactions we also show account balance, so show elevation
-        // on appbar.
         setAppBarElevation(true);
     }
 
-    /**
-     * Displays a fragment with a list of transactions for the current account.
-     */
     private void showTransactionsFragment() {
-        // Display fragment.
-        mAccountTransactionsFragment = AccountTransactionsFragment.NewInstance(mAccount.getIdentifier());
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, mAccountTransactionsFragment).commit();
+        accountTransactionsFragment = AccountTransactionsFragment.newInstance(account.getIdentifier());
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_transactions, accountTransactionsFragment, AccountTransactionsFragment.FRAGMENT_TAG).commit();
 
-        // Set title
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle(mAccount.getName() + " Transactions");
+        setToolbarTitle(account.getName() + " Transactions");
 
-        // Set state
-        mState = STATE_TRANSACTIONS;
+        viewState = ViewStates.VIEW;
 
-        // When showing transactions we also show account balance, so remove elevation
-        // on appbar. Requires API 21
         setAppBarElevation(false);
     }
 
-    /**
-     * Interface implementation that handles when the FAB is clicked inside the AccountTransactionsFragment.
-     */
     @Override
     public void addTransactionFABClicked() {
         // Close action mode if necessary
-        if(mActionMode != null) {
-            mActionMode.finish();
+        if(actionMode != null) {
+            actionMode.finish();
         }
         showAddTransactionFragment();
     }
 
-    /**
-     * Override onOptionsItemSelected because we will take different actions depending on which fragment is being shown.
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // If we are in STATE_TRANSACTIONS, finish to go back to accounts
-                if (mState == STATE_TRANSACTIONS) {
+                // If we are in view state, finish to go back to accounts
+                if (viewState == ViewStates.VIEW) {
                     finish();
                 } else {
-                    // If we are in STATE_ADD_TRANSACTION, show the transactions fragment again
+                    // If we are in ADD or EDIT, show the transactions fragment again
                     showTransactionsFragment();
                 }
                 return true;
@@ -323,40 +218,30 @@ public class TransactionsActivity extends AppCompatActivity implements AccountTr
         }
     }
 
-    /**
-     * Interface implementation that handles when a transaction is submitted so the `AccountTransactionsFragment` is displayed again.
-     */
     @Override
     public void onTransactionSubmitted() {
-        // Show transactions again
         showTransactionsFragment();
     }
 
-    /**
-     * Displays the action menu when a transaction is long clicked in the adapter.
-     * @param transaction The transaction that was long clicked.
-     */
     @Override
     public void onTransactionLongClick(TransactionDetails transaction) {
         startActionMode(transaction);
     }
 
-    private void startActionMode(TransactionDetails transaction){
-        // Don't fire if action mode is already being used
-        if(mActionMode == null){
-            // Start the CAB using the ActionMode.Callback already defined
-            mActionMode = startSupportActionMode(mActionModeCallback);
-            // Get name to set as title for action bar
-            // Need to subtract one to account for Header position
-            mActionMode.setTitle(transaction.getDescription());
-            // Get account ID to pass as tag.
-            mActionMode.setTag(transaction);
+    private void startActionMode(TransactionDetails transactionDetails) {
+        // Don't fire if already being used
+        if(actionMode == null) {
+            actionMode = startSupportActionMode(actionModeCallback);
+            actionMode.setTitle(transactionDetails.getDescription());
+            actionMode.setTag(transactionDetails);
         }
     }
 
     private void setAppBarElevation(boolean showElevation) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mAppBar.setElevation(showElevation ? getResources().getDimension(R.dimen.appbar_elevation) : 0);
+            appBar.setElevation(showElevation
+                    ? getResources().getDimension(R.dimen.appbar_elevation)
+                    : 0);
         }
     }
 }
