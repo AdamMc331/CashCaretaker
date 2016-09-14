@@ -15,12 +15,14 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.adapters.AccountAdapter;
 import com.androidessence.cashcaretaker.alarms.RepeatingTransactionAlarm;
 import com.androidessence.cashcaretaker.core.CoreActivity;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
+import io.fabric.sdk.android.Fabric;
 import org.json.JSONException;
 
 /**
@@ -35,6 +37,7 @@ public class AccountsActivity extends CoreActivity implements GoogleApiClient.Co
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_accounts);
 
         setupToolbar(false);
