@@ -8,7 +8,7 @@ import com.androidessence.cashcaretaker.core.CoreDTO;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.utility.Utility;
 
-import org.joda.time.LocalDate;
+import java.util.Date;
 
 /**
  * Represents a transaction that repeats monthly or yearly.
@@ -21,7 +21,7 @@ public class RepeatingTransaction extends CoreDTO {
     private String description;
     private double amount;
     private String notes;
-    private LocalDate nextDate;
+    private Date nextDate;
     private long category;
     private boolean withdrawal;
 
@@ -44,7 +44,7 @@ public class RepeatingTransaction extends CoreDTO {
         this.description = parcel.readString();
         this.amount = parcel.readDouble();
         this.notes = parcel.readString();
-        this.nextDate = (LocalDate) parcel.readSerializable();
+        this.nextDate = (Date) parcel.readSerializable();
         this.category = parcel.readLong();
         this.withdrawal = parcel.readInt() == 1;
     }
@@ -63,7 +63,7 @@ public class RepeatingTransaction extends CoreDTO {
         setWithdrawal(withdrawalInt == 1);
     }
 
-    public RepeatingTransaction(long repeatingPeriod, long account, String description, double amount, String notes, LocalDate nextDate, long category, boolean withdrawal) {
+    public RepeatingTransaction(long repeatingPeriod, long account, String description, double amount, String notes, Date nextDate, long category, boolean withdrawal) {
         setRepeatingPeriod(repeatingPeriod);
         setAccount(account);
         setDescription(description);
@@ -122,11 +122,11 @@ public class RepeatingTransaction extends CoreDTO {
         this.notes = notes;
     }
 
-    public LocalDate getNextDate() {
+    public Date getNextDate() {
         return nextDate;
     }
 
-    public void setNextDate(LocalDate nextDate) {
+    public void setNextDate(Date nextDate) {
         this.nextDate = nextDate;
     }
 

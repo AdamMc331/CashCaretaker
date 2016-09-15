@@ -22,11 +22,12 @@ import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.core.CoreFragment;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Category;
-import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
 import com.androidessence.cashcaretaker.dataTransferObjects.Transaction;
+import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
 import com.androidessence.utility.Utility;
 
-import org.joda.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Fragment that allows the user to add and edit a transaction.
@@ -42,7 +43,7 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
     private EditText amount;
     private EditText notes;
     private EditText dateEditText;
-    private LocalDate date;
+    private Date date;
     private EditText categoryEditText;
     private Category category;
     private RadioButton withdrawal;
@@ -121,9 +122,9 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
         // Should be there, do checks anyways
         if(savedInstanceState != null) {
             if(savedInstanceState.containsKey(ARG_DATE)) {
-                setDate((LocalDate) savedInstanceState.getSerializable(ARG_DATE));
+                setDate((Date) savedInstanceState.getSerializable(ARG_DATE));
             } else{
-                setDate(LocalDate.now());
+                setDate(new Date());
             }
 
             if(savedInstanceState.containsKey(ARG_CATEGORY)) {
@@ -137,7 +138,7 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
             if(areEditing()) {
                 populateFieldsForTransaction();
             } else {
-                setDate(LocalDate.now());
+                setDate(new Date());
                 getDefaultCategory();
             }
         }
@@ -218,7 +219,7 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
      * Displays a date picker dialog.
      */
     private void showDatePickerFragment(){
-        DatePickerFragment datePickerFragment = DatePickerFragment.NewInstance(date);
+        DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(date);
         datePickerFragment.setTargetFragment(this, 0);
         datePickerFragment.show(getFragmentManager(), "transactionDate");
     }
@@ -243,7 +244,7 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
     /**
      * Sets the transaction date.
      */
-    private void setDate(LocalDate date) {
+    private void setDate(Date date) {
         this.date = date;
         this.dateEditText.setText(Utility.getUIDateString(date));
     }
@@ -253,7 +254,9 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
      */
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        setDate(new LocalDate(year, monthOfYear + 1, dayOfMonth));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, monthOfYear, dayOfMonth);
+        setDate(calendar.getTime());
     }
 
     /**

@@ -26,7 +26,8 @@ import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingPeriod;
 import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
 import com.androidessence.utility.Utility;
 
-import org.joda.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Fragment that allows the user to add a repeating transaction.
@@ -42,7 +43,7 @@ public class AddRepeatingTransactionFragment extends CoreFragment implements Rep
     private EditText amount;
     private EditText notes;
     private EditText dateEditText;
-    private LocalDate date;
+    private Date date;
     private EditText categoryEditText;
     private Category category;
     private RadioButton withdrawal;
@@ -74,9 +75,9 @@ public class AddRepeatingTransactionFragment extends CoreFragment implements Rep
         }
 
         if(savedInstanceState != null && savedInstanceState.containsKey(ARG_DATE)) {
-            setDate((LocalDate) savedInstanceState.getSerializable(ARG_DATE));
+            setDate((Date) savedInstanceState.getSerializable(ARG_DATE));
         } else {
-            setDate(LocalDate.now());
+            setDate(new Date());
         }
 
         if(savedInstanceState != null && savedInstanceState.containsKey(ARG_CATEGORY)) {
@@ -275,7 +276,7 @@ public class AddRepeatingTransactionFragment extends CoreFragment implements Rep
         cursor.close();
     }
 
-    private void setDate(LocalDate date) {
+    private void setDate(Date date) {
         this.date = date;
         dateEditText.setText(Utility.getUIDateString(this.date));
     }
@@ -335,14 +336,16 @@ public class AddRepeatingTransactionFragment extends CoreFragment implements Rep
      */
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        setDate(new LocalDate(year, monthOfYear + 1, dayOfMonth));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, monthOfYear, dayOfMonth);
+        setDate(calendar.getTime());
     }
 
     /**
      * Displays a date picker dialog.
      */
     private void showDatePickerFragment(){
-        DatePickerFragment datePickerFragment = DatePickerFragment.NewInstance(date);
+        DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(date);
         datePickerFragment.setTargetFragment(this, 0);
         datePickerFragment.show(getFragmentManager(), "transactionDate");
     }

@@ -9,7 +9,7 @@ import com.androidessence.cashcaretaker.core.CoreDTO;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.utility.Utility;
 
-import org.joda.time.LocalDate;
+import java.util.Date;
 
 /**
  * Represents a Transaction entry.
@@ -22,7 +22,7 @@ public class Transaction extends CoreDTO {
     private String description;
     private double amount;
     private String notes;
-    private LocalDate date;
+    private Date date;
     private long categoryID;
     private boolean withdrawal;
 
@@ -44,7 +44,7 @@ public class Transaction extends CoreDTO {
         setDescription(source.readString());
         setAmount(source.readDouble());
         setNotes(source.readString());
-        setDate((LocalDate) source.readSerializable());
+        setDate((Date) source.readSerializable());
         setCategoryID(source.readLong());
         setWithdrawal(source.readInt() == 1);
     }
@@ -62,7 +62,7 @@ public class Transaction extends CoreDTO {
         setWithdrawal(withdrawalInt == 1);
     }
 
-    public Transaction(long account, String description, double amount, String notes, LocalDate date, long categoryID, boolean withdrawal) {
+    public Transaction(long account, String description, double amount, String notes, Date date, long categoryID, boolean withdrawal) {
         setAccount(account);
         setDescription(description);
         setAmount(amount);
@@ -112,11 +112,11 @@ public class Transaction extends CoreDTO {
         this.notes = notes;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    private void setDate(LocalDate date) {
+    private void setDate(Date date) {
         this.date = date;
     }
 
