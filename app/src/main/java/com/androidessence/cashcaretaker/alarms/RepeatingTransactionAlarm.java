@@ -6,7 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import org.joda.time.DateTime;
+import java.util.Date;
 
 /**
  * Broadcast receiver that runs whenever the device boots and restarts service.
@@ -35,6 +35,6 @@ public class RepeatingTransactionAlarm extends BroadcastReceiver {
         Intent intent = new Intent(context, RepeatingTransactionAlarm.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         // Called every day at midnight.
-        alarmManager.setRepeating(AlarmManager.RTC, DateTime.now().withTimeAtStartOfDay().getMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC, new Date().getTime(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 }

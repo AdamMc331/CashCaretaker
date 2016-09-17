@@ -1,11 +1,12 @@
 package com.androidessence.utility;
 
 
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Utility functions used for formatting dates and currencies.
@@ -15,31 +16,38 @@ import java.text.NumberFormat;
 public class Utility {
     // Formats
     private static final String DB_DATE_FORMAT = "yyyy-MM-dd";
+    private static final SimpleDateFormat dbDateFormatter = new SimpleDateFormat(DB_DATE_FORMAT, Locale.getDefault());
     private static final String UI_DATE_FORMAT = "MMMM dd, yyyy";
+    private static final SimpleDateFormat uiDateFormatter = new SimpleDateFormat(UI_DATE_FORMAT, Locale.getDefault());
     private static final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+
+    private static final Calendar calendar = Calendar.getInstance();
 
     /**
      * Converts a LocalDate to a string to be saved in the database.
      */
-    public static String getDBDateString(LocalDate d){
+    public static String getDBDateString(Date d){
+        calendar.setTime(d);
+
         // Do not allow dates with negative years
-        if(d.getYear() < 0){
+        if(calendar.get(Calendar.YEAR) < 0){
             throw new UnsupportedOperationException("LocalDate has negative year value.");
         } else {
-            return DateTimeFormat.forPattern(DB_DATE_FORMAT).print(d);
+            return dbDateFormatter.format(d);
         }
     }
 
     /**
      * Returns a string representation of a date for storage in the database.
      */
-    public static String getUIDateString(LocalDate d){
+    public static String getUIDateString(Date d){
+        calendar.setTime(d);
+
         // Do not allow dates with negative years
-        if(d.getYear() < 0){
+        if(calendar.get(Calendar.YEAR) < 0){
             throw new UnsupportedOperationException("LocalDate has negative year value.");
         } else {
-            DateTimeFormatter dtf = DateTimeFormat.forPattern(UI_DATE_FORMAT);
-            return dtf.print(d);
+            return uiDateFormatter.format(d);
         }
     }
 
@@ -47,19 +55,25 @@ public class Utility {
      * Converts a string from the database to a date string to be displayed on the UI.
      */
     public static String getUIDateStringFromDB(String dbString){
-        return DateTimeFormat.forPattern(UI_DATE_FORMAT).print(getDateFromDb(dbString));
+        return uiDateFormatter.format(getDateFromDb(dbString));
     }
 
     /**
      * Converts a string from the database to a LocalDate object.
      */
-    public static LocalDate getDateFromDb(String dbString){
-        // Do not allow dates with negative years
-        LocalDate retDate = DateTimeFormat.forPattern(DB_DATE_FORMAT).parseLocalDate(dbString);
-        if(retDate.getYear() < 0){
-            throw new UnsupportedOperationException("LocalDate has negative year value.");
-        } else{
-            return retDate;
+    public static Date getDateFromDb(String dbString){
+        try {
+            Date retDate = dbDateFormatter.parse(dbString);
+            calendar.setTime(retDate);
+
+            if(calendar.get(Calendar.YEAR) < 0) {
+                throw new UnsupportedOperationException("Date has negative year value.");
+            } else {
+                return retDate;
+            }
+        } catch(ParseException pe) {
+            pe.printStackTrace();
+            return new Date();
         }
     }
 

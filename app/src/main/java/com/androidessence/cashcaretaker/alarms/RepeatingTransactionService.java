@@ -11,7 +11,8 @@ import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction;
 import com.androidessence.utility.Utility;
 
-import org.joda.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Service that checks for repeating transactions and runs them if necessary.
@@ -60,7 +61,7 @@ public class RepeatingTransactionService extends IntentService {
      * Updates any current or previous RepeatingTransaction entries that need to be run.
      */
     private void updateRepeatingTransactions() {
-        String currentDate = Utility.getDBDateString(LocalDate.now());
+        String currentDate = Utility.getDBDateString(new Date());
 
         // We need an outer loop so we continue to check until we are caught up.
         // If we process *any* transaction, set `hasTrans` to yes, and continue until we don't.
@@ -90,16 +91,20 @@ public class RepeatingTransactionService extends IntentService {
 
                 // Switch based on update
                 String transDateString = cursor.getString(DATE_INDEX);
-                LocalDate transDate = Utility.getDateFromDb(transDateString);
-                LocalDate nextDate = null;
+                Date transDate = Utility.getDateFromDb(transDateString);
+                Date nextDate = null;
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(transDate);
                 switch(cursor.getInt(REPEATING_PERIOD_INDEX)) {
                     case MONTHLY:
                         // Update monthly
-                        nextDate = transDate.plusMonths(1);
+                        calendar.add(Calendar.MONTH, 1);
+                        nextDate = calendar.getTime();
                         break;
                     case YEARLY:
                         // Update yearly
-                        nextDate = transDate.plusYears(1);
+                        calendar.add(Calendar.YEAR, 1);
+                        nextDate = calendar.getTime();
                         break;
                     default:
                         break;
