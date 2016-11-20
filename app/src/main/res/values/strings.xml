@@ -29,4 +29,7 @@
     <string name="title_activity_manage_categories">Manage Categories</string>
     <string name="manage_categories">Manage Categories</string>
     <string name="delete_category">Delete Category</string>
+    <string name="err_account_exists">Account name already exists.</string>
+    <string name="err_account_blank">Account name cannot be blank.</string>
+    <string name="err_starting_balance_blank">Starting balance cannot be blank.</string>
 </resources>
