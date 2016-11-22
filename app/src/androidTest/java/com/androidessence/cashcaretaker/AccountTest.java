@@ -75,6 +75,7 @@ public class AccountTest {
         // Match checking
         onView(withId(R.id.account_name)).check(matches(withText(VALID_ACCOUNT_NAME)));
         onView(withId(R.id.account_balance)).check(matches(withText(VALID_ACCOUNT_DISPLAY_BALANCE)));
+        takeScreenshot("account_displayed");
     }
 
     @Test

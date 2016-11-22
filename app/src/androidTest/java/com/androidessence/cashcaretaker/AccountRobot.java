@@ -57,22 +57,18 @@ public class AccountRobot {
     }
 
     public AccountRobot assertAccountNameEmptyError() {
-        // Click and close keyboard to view error
-        onView(ACCOUNT_NAME).perform(click(), closeSoftKeyboard());
         onView(ACCOUNT_NAME).check(matches(hasErrorText(R.string.err_account_blank)));
         takeScreenshot("account_name_error_matched");
         return this;
     }
 
     public AccountRobot assertBalanceEmptyError() {
-        onView(STARTING_BALANCE).perform(click(), closeSoftKeyboard());
         onView(STARTING_BALANCE).check(matches(hasErrorText(R.string.err_starting_balance_blank)));
         takeScreenshot("starting_balance_error_matched");
         return this;
     }
 
     public AccountRobot assertAccountNameExistsError() {
-        onView(ACCOUNT_NAME).perform(click(), closeSoftKeyboard());
         onView(ACCOUNT_NAME).check(matches(hasErrorText(R.string.err_account_exists)));
         takeScreenshot("account_name_error_matched");
         return this;
