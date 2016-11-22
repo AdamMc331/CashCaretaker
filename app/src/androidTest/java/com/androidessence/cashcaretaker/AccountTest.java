@@ -1,12 +1,17 @@
 package com.androidessence.cashcaretaker;
 
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.FailureHandler;
+import android.support.test.espresso.base.DefaultFailureHandler;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
 import com.androidessence.cashcaretaker.activities.AccountsActivity;
 import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.Account;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +22,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.androidessence.cashcaretaker.TestUtils.takeScreenshot;
 
 /**
  * Tests creating an account
@@ -39,6 +45,14 @@ public class AccountTest {
                 null,
                 null
         );
+
+        Espresso.setFailureHandler(new FailureHandler() {
+            @Override
+            public void handle(Throwable error, Matcher<View> viewMatcher) {
+                takeScreenshot("test_failed");
+                new DefaultFailureHandler(activityTestRule.getActivity()).handle(error, viewMatcher);
+            }
+        });
     }
 
     @After

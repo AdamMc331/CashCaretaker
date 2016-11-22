@@ -1,7 +1,5 @@
 package com.androidessence.cashcaretaker;
 
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
 import android.view.View;
 import android.widget.EditText;
 
@@ -15,7 +13,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.androidessence.cashcaretaker.TestUtils.takeScreenshot;
 
@@ -25,6 +22,7 @@ import static com.androidessence.cashcaretaker.TestUtils.takeScreenshot;
  * Created by adam.mcneilly on 11/18/16.
  */
 public class AccountRobot {
+    // Several ViewMatchers that are made private static fields for readability in method below
     private static final Matcher<View> ADD_ACCOUNT_FAB = withId(R.id.add_account_fab);
     private static final Matcher<View> ACCOUNT_NAME = withId(R.id.account_name);
     private static final Matcher<View> STARTING_BALANCE = withId(R.id.starting_balance);
