@@ -35,13 +35,7 @@
         <activity
             android:name=".activities.AccountsActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.AddAccountActivity"
             android:label="@string/add_account"
@@ -102,6 +96,17 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="d55f43c51b4938f3e039b22a08ad4a4ce58add62" />
+
+        <activity
+            android:name=".refresh.AccountsActivity"
+            android:label="@string/title_activity_accounts"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
