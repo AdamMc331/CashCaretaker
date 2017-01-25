@@ -10,6 +10,7 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
 apply plugin: 'spoon'
 
@@ -37,6 +38,9 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 repositories {
@@ -44,6 +48,7 @@ repositories {
         url  "http://dl.bintray.com/androidessence/maven"
     }
     maven { url 'https://maven.fabric.io/public' }
+    mavenCentral()
 }
 
 dependencies {
@@ -70,6 +75,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:answers:1.3.10@aar') {
         transitive = true;
     }
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 spoon {
