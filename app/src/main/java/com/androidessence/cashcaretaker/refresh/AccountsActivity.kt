@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import com.androidessence.cashcaretaker.DividerItemDecoration
 import com.androidessence.cashcaretaker.R
 import java.util.*
 
@@ -42,6 +43,7 @@ class AccountsActivity : AppCompatActivity() {
         val recyclerView = findViewById(R.id.account_list) as RecyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
+        recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
     }
 
 }

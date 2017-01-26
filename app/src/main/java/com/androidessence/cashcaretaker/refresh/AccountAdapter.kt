@@ -27,7 +27,7 @@ open class AccountAdapter(): RecyclerView.Adapter<AccountAdapter.AccountViewHold
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AccountViewHolder {
         val context = parent?.context
-        val view = LayoutInflater.from(context).inflate(R.layout.list_item_account, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.list_item_account_refresh, parent, false)
         return AccountViewHolder(view)
     }
 
