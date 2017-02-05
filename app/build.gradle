@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId "com.androidessence.cashcaretaker"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 9
         versionName "1.4.1"
@@ -59,14 +59,15 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.5'
     // Set this dependency to build and run Espresso tests
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
-    androidTestCompile 'com.android.support:support-annotations:25.0.1'
+    androidTestCompile 'com.android.support:support-annotations:25.1.1'
     androidTestCompile 'com.jraska:falcon-spoon-compat:1.0.3'
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:support-v4:25.0.1'
-    compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:support-v4:25.1.1'
+    compile 'com.android.support:design:25.1.1'
     compile 'com.androidessence:recyclerviewcursoradapter:1.0.0'
     compile 'com.androidessence:materialdesignspecs:1.0.4'
-    compile 'com.google.android.gms:play-services:9.8.0'
+    compile 'com.google.android.gms:play-services:10.0.1'
+    compile 'com.adammcneilly:recyclerviewutils:1.0.2'
     compile project(':utility')
     wearApp project(':wear')
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {

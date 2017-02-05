@@ -1,28 +1,23 @@
 package com.androidessence.cashcaretaker.refresh
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.adammcneilly.CoreRecyclerViewAdapter
+import com.adammcneilly.CoreViewHolder
 import com.androidessence.cashcaretaker.R
 import com.androidessence.utility.Utility
-import java.util.*
 
 /**
  * Displays a list of accounts.
  *
  * Created by adam.mcneilly on 1/25/17.
  */
-open class AccountAdapter(): RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
-    private var items: List<Account> = ArrayList()
+open class AccountAdapter(): CoreRecyclerViewAdapter<Account, AccountAdapter.AccountViewHolder>() {
 
     constructor(items: List<Account>): this() {
-        this.items = items
-    }
-
-    override fun onBindViewHolder(holder: AccountViewHolder?, position: Int) {
-        holder?.bindAccount(items[position])
+        swapItems(items)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AccountViewHolder {
@@ -31,11 +26,7 @@ open class AccountAdapter(): RecyclerView.Adapter<AccountAdapter.AccountViewHold
         return AccountViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
-    open class AccountViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    open class AccountViewHolder(view: View): CoreViewHolder<Account>(view) {
         private var name: TextView? = null
         private var balance: TextView? = null
 
@@ -44,9 +35,10 @@ open class AccountAdapter(): RecyclerView.Adapter<AccountAdapter.AccountViewHold
             balance = view.findViewById(R.id.account_balance) as? TextView
         }
 
-        fun bindAccount(account: Account) {
-            name?.text = account.name
-            balance?.text = Utility.getCurrencyString(account.balance)
+        override fun bindItem(item: Account?) {
+            name?.text = item?.name
+            //TODO: Update utility
+            balance?.text = Utility.getCurrencyString(item?.balance ?: 0.00)
         }
     }
 }
