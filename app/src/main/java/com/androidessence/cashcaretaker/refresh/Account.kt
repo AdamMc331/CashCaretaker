@@ -1,7 +1,9 @@
 package com.androidessence.cashcaretaker.refresh
 
+import android.content.ContentValues
 import android.os.Parcel
 import com.androidessence.cashcaretaker.creator
+import com.androidessence.cashcaretaker.data.CCContract
 
 /**
  * Represents a bank account.
@@ -24,6 +26,15 @@ open class Account: BaseModel {
 
         dest?.writeString(name)
         dest?.writeDouble(balance)
+    }
+
+    override fun getContentValues(): ContentValues {
+        val values = super.getContentValues()
+
+        values.put(CCContract.AccountEntry.COLUMN_NAME, name)
+        values.put(CCContract.AccountEntry.COLUMN_BALANCE, balance)
+
+        return values
     }
 
     companion object {

@@ -1,7 +1,9 @@
 package com.androidessence.cashcaretaker.refresh
 
+import android.content.ContentValues
 import android.os.Parcel
 import android.os.Parcelable
+import android.provider.BaseColumns
 import com.androidessence.cashcaretaker.creator
 
 /**
@@ -11,12 +13,34 @@ import com.androidessence.cashcaretaker.creator
  */
 open class BaseModel(): Parcelable {
 
-    constructor(source: Parcel): this()
+    var id = -1
+        private set
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) { }
+    constructor(source: Parcel): this() {
+        id = source.readInt()
+    }
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(id)
+    }
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    /**
+     * Returns the ContentValues for this base model to be saved.
+     *
+     * Did not make an abstract method, because then we wouldn't be able to use the CREATOR extension.
+     */
+    open fun getContentValues(): ContentValues {
+        val values = ContentValues()
+
+        if (id > 0) {
+            values.put(BaseColumns._ID, id)
+        }
+
+        return values
     }
 
     companion object {
