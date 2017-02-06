@@ -67,7 +67,7 @@ dependencies {
     compile 'com.androidessence:recyclerviewcursoradapter:1.0.0'
     compile 'com.androidessence:materialdesignspecs:1.0.4'
     compile 'com.google.android.gms:play-services:10.0.1'
-    compile 'com.adammcneilly:recyclerviewutils:1.0.2'
+    compile 'com.adammcneilly:recyclerviewutils:1.0.3'
     compile project(':utility')
     wearApp project(':wear')
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {

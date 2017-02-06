@@ -17,7 +17,7 @@ import com.androidessence.utility.Utility
 open class AccountAdapter(): CoreRecyclerViewAdapter<Account, AccountAdapter.AccountViewHolder>() {
 
     constructor(items: List<Account>): this() {
-        swapItems(items)
+        this.items = items
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AccountViewHolder {
