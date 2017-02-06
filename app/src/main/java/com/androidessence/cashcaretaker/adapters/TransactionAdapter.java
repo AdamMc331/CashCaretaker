@@ -98,23 +98,23 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
 
             // Set amount
             double amount = cursor.getDouble(AMOUNT_INDEX);
-            mAmountTextView.setText(Utility.getCurrencyString(amount));
+            mAmountTextView.setText(Utility.INSTANCE.getCurrencyString(amount));
 
             // Set withdrawal. Depending on withdrawal, we need to color certain views.
             int isWithdrawal = cursor.getInt(WITHDRAWAL_INDEX);
             if(isWithdrawal == 1) {
-                mAmountTextView.setText(String.format("-%s", Utility.getCurrencyString(amount)));
+                mAmountTextView.setText(String.format("-%s", Utility.INSTANCE.getCurrencyString(amount)));
                 mAmountTextView.setTextColor(red);
                 mIndicatorView.setBackgroundColor(red);
             } else{
-                mAmountTextView.setText(Utility.getCurrencyString(amount));
+                mAmountTextView.setText(Utility.INSTANCE.getCurrencyString(amount));
                 mAmountTextView.setTextColor(primaryTextColor);
                 mIndicatorView.setBackgroundColor(green);
             }
 
             // Set date
             String dateString = cursor.getString(DATE_INDEX);
-            mDateTextView.setText(Utility.getUIDateStringFromDB(dateString));
+            mDateTextView.setText(Utility.INSTANCE.getUIDateStringFromDB(dateString));
 
             //TODO: Globals somewhere
             String defaultCategory = "None";

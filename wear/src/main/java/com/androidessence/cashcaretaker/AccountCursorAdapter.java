@@ -53,7 +53,7 @@ public class AccountCursorAdapter extends CursorAdapter {
 
         public void bindCursor(Cursor cursor) {
             mAccountName.setText(cursor.getString(NAME_INDEX));
-            mAccountBalance.setText(Utility.getCurrencyString(cursor.getDouble(BALANCE_INDEX)));
+            mAccountBalance.setText(Utility.INSTANCE.getCurrencyString(cursor.getDouble(BALANCE_INDEX)));
         }
     }
 }

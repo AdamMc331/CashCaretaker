@@ -278,7 +278,7 @@ public class AddRepeatingTransactionFragment extends CoreFragment implements Rep
 
     private void setDate(Date date) {
         this.date = date;
-        dateEditText.setText(Utility.getUIDateString(this.date));
+        dateEditText.setText(Utility.INSTANCE.getUIDateString(this.date));
     }
 
     /**

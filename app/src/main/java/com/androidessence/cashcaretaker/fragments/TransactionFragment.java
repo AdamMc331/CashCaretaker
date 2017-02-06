@@ -246,7 +246,7 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
      */
     private void setDate(Date date) {
         this.date = date;
-        this.dateEditText.setText(Utility.getUIDateString(date));
+        this.dateEditText.setText(Utility.INSTANCE.getUIDateString(date));
     }
 
     /**

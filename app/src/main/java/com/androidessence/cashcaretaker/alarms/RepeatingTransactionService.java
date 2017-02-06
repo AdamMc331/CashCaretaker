@@ -61,7 +61,7 @@ public class RepeatingTransactionService extends IntentService {
      * Updates any current or previous RepeatingTransaction entries that need to be run.
      */
     private void updateRepeatingTransactions() {
-        String currentDate = Utility.getDBDateString(new Date());
+        String currentDate = Utility.INSTANCE.getDBDateString(new Date());
 
         // We need an outer loop so we continue to check until we are caught up.
         // If we process *any* transaction, set `hasTrans` to yes, and continue until we don't.
@@ -91,7 +91,7 @@ public class RepeatingTransactionService extends IntentService {
 
                 // Switch based on update
                 String transDateString = cursor.getString(DATE_INDEX);
-                Date transDate = Utility.getDateFromDb(transDateString);
+                Date transDate = Utility.INSTANCE.getDateFromDb(transDateString);
                 Date nextDate = null;
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(transDate);
@@ -114,11 +114,11 @@ public class RepeatingTransactionService extends IntentService {
                     String description = cursor.getString(DESCRIPTION_INDEX);
                     Log.v("ADAM", description);
                     Log.v("ADAM", "Current date: " + transDateString);
-                    Log.v("ADAM", "Future date: " + Utility.getDBDateString(nextDate));
+                    Log.v("ADAM", "Future date: " + Utility.INSTANCE.getDBDateString(nextDate));
 
                     // Update to next date.
                     ContentValues contentValues = new ContentValues();
-                    contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE, Utility.getDBDateString(nextDate));
+                    contentValues.put(CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE, Utility.INSTANCE.getDBDateString(nextDate));
 
                     long id = cursor.getLong(ID_INDEX);
                     context.getContentResolver().update(

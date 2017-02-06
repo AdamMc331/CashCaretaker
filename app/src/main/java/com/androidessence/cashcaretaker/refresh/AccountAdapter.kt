@@ -8,6 +8,7 @@ import com.adammcneilly.CoreRecyclerViewAdapter
 import com.adammcneilly.CoreViewHolder
 import com.androidessence.cashcaretaker.R
 import com.androidessence.utility.Utility
+import com.androidessence.utility.asCurrency
 
 /**
  * Displays a list of accounts.
@@ -37,8 +38,7 @@ open class AccountAdapter(): CoreRecyclerViewAdapter<Account, AccountAdapter.Acc
 
         override fun bindItem(item: Account?) {
             name?.text = item?.name
-            //TODO: Update utility
-            balance?.text = Utility.getCurrencyString(item?.balance ?: 0.00)
+            balance?.text = item?.balance?.asCurrency()
         }
     }
 }

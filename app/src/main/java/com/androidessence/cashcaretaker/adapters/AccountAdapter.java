@@ -168,7 +168,7 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
 
             // Set balance
             double balance = cursor.getDouble(BALANCE_INDEX);
-            balanceTextView.setText(Utility.getCurrencyString(balance));
+            balanceTextView.setText(Utility.INSTANCE.getCurrencyString(balance));
 
             // If balance is negative set red
             balanceTextView.setTextColor((balance < 0.00)
