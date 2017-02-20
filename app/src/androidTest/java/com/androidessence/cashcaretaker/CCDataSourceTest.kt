@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker
 
+import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteException
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
@@ -12,7 +13,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import timber.log.Timber
 
 /**
  * Tests methods inside the data source.
@@ -53,16 +53,9 @@ class CCDataSourceTest {
         account.name = "Checking"
         account.balance = 100.00
 
-        var id: Long? = null
+        val id = dataSource?.addAccount(account)
 
-        try {
-            id = dataSource?.addAccount(account)
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
-
-        assertTrue("Id is not null.", id != null)
-        assertTrue("Id is not zero.", id != null && id > 0)
+        assertTrue(id != null && id > 0)
     }
 
     @Test
@@ -74,5 +67,21 @@ class CCDataSourceTest {
 
         dataSource?.deleteAccounts()
         assertEquals(0, dataSource?.getAccounts()?.size)
+    }
+
+    @Test
+    fun testDuplicateAccountName() {
+        val account = Account()
+        account.name = "Checking"
+        account.balance = 100.00
+
+        dataSource?.addAccount(account)
+
+        try {
+            dataSource?.addAccount(account)
+            fail("Duplicate account name added successfully.")
+        } catch(e: SQLiteException) {
+            assertTrue(e is SQLiteConstraintException)
+        }
     }
 }

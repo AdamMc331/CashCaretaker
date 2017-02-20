@@ -2,7 +2,6 @@ package com.androidessence.cashcaretaker.refresh
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteException
 import com.androidessence.cashcaretaker.data.CCContract
 import com.androidessence.cashcaretaker.data.CCDatabaseHelper
 import java.util.*
