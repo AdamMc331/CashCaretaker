@@ -12,6 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import timber.log.Timber
 
 /**
  * Tests methods inside the data source.
@@ -57,8 +58,7 @@ class CCDataSourceTest {
         try {
             id = dataSource?.addAccount(account)
         } catch (e: Exception) {
-            fail(e.message)
-            e.printStackTrace()
+            Timber.e(e)
         }
 
         assertTrue("Id is not null.", id != null)

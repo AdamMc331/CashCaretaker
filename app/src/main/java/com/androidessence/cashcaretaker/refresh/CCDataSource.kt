@@ -52,12 +52,7 @@ class CCDataSource(context: Context) {
     }
 
     fun addAccount(account: Account): Long? {
-//        try {
-            return database?.insert(CCContract.AccountEntry.TABLE_NAME, null, account.getContentValues())
-//        } catch (e: SQLiteException) {
-//            e.printStackTrace()
-//            return 0
-//        }
+        return database?.insertOrThrow(CCContract.AccountEntry.TABLE_NAME, null, account.getContentValues())
     }
 
     fun deleteAccounts(): Int? {
