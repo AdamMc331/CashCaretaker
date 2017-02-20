@@ -12,7 +12,7 @@ import com.androidessence.cashcaretaker.R;
  *
  * Created by adammcneilly on 10/30/15.
  */
-class CCDatabaseHelper extends SQLiteOpenHelper {
+public class CCDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "cashcaretaker.db";
     private static final int DATABASE_VERSION = 4;
 

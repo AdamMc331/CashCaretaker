@@ -1,6 +1,7 @@
 package com.androidessence.cashcaretaker.refresh
 
 import android.content.ContentValues
+import android.database.Cursor
 import android.os.Parcel
 import com.androidessence.cashcaretaker.creator
 import com.androidessence.cashcaretaker.data.CCContract
@@ -15,6 +16,11 @@ open class Account: BaseModel {
     var balance: Double = 0.toDouble()
 
     constructor(): super()
+
+    constructor(cursor: Cursor) {
+        name = cursor.getString(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_NAME))
+        balance = cursor.getDouble(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE))
+    }
 
     constructor(source: Parcel): super(source) {
         name = source.readString()

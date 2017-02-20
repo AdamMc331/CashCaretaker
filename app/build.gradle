@@ -66,7 +66,7 @@ dependencies {
     compile 'com.android.support:design:25.1.1'
     compile 'com.androidessence:recyclerviewcursoradapter:1.0.0'
     compile 'com.androidessence:materialdesignspecs:1.0.4'
-    compile 'com.google.android.gms:play-services:10.0.1'
+    compile 'com.google.android.gms:play-services:10.2.0'
     compile 'com.adammcneilly:recyclerviewutils:1.0.3'
     compile project(':utility')
     wearApp project(':wear')
