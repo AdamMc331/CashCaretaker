@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker.refresh
 
+import android.database.sqlite.SQLiteException
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.v4.app.Fragment
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
+import timber.log.Timber
 
 /**
  * Allows the user to add an account.
@@ -57,6 +59,14 @@ class AddAccountFragment: Fragment(), View.OnClickListener {
                     val account = Account()
                     account.name = accountName?.text?.toString()!!
                     account.balance = startingBalance?.text?.toString()!!.toDouble()
+
+                    try {
+                        (activity as? CoreActivity)?.dataSource?.addAccount(account)
+                        activity?.finish()
+                    } catch (e: SQLiteException) {
+                        Timber.e(e)
+                        accountName?.error = "Account name already exists."
+                    }
                 }
             }
         }

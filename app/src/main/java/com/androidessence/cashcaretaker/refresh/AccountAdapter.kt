@@ -7,7 +7,6 @@ import android.widget.TextView
 import com.adammcneilly.CoreRecyclerViewAdapter
 import com.adammcneilly.CoreViewHolder
 import com.androidessence.cashcaretaker.R
-import com.androidessence.utility.Utility
 import com.androidessence.utility.asCurrency
 
 /**
