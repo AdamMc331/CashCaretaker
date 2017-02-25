@@ -11,7 +11,7 @@ import com.androidessence.cashcaretaker.R
 /**
  * A placeholder fragment containing a simple view.
  */
-class AccountsActivityFragment : Fragment() {
+class AccountsActivityFragment : CoreFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

@@ -18,7 +18,7 @@ import timber.log.Timber
  *
  * Created by adam.mcneilly on 2/6/17.
  */
-class AddAccountFragment: Fragment(), View.OnClickListener {
+class AddAccountFragment: CoreFragment(), View.OnClickListener {
 
     var accountName: TextInputEditText? = null
     var startingBalance: TextInputEditText? = null
@@ -61,7 +61,7 @@ class AddAccountFragment: Fragment(), View.OnClickListener {
                     account.balance = startingBalance?.text?.toString()!!.toDouble()
 
                     try {
-                        (activity as? CoreActivity)?.dataSource?.addAccount(account)
+                        dataSource?.addAccount(account)
                         activity?.finish()
                     } catch (e: SQLiteException) {
                         Timber.e(e)
