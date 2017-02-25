@@ -13,15 +13,14 @@ import com.androidessence.cashcaretaker.creator
  */
 open class BaseModel(): Parcelable {
 
-    var id = -1
-        private set
+    var id: Long = 0
 
     constructor(source: Parcel): this() {
-        id = source.readInt()
+        id = source.readLong()
     }
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(id)
+        dest?.writeLong(id)
     }
 
     override fun describeContents(): Int {

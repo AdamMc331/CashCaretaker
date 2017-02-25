@@ -8,20 +8,9 @@
     tools:context="com.androidessence.cashcaretaker.refresh.AccountsActivityFragment"
     tools:showIn="@layout/activity_accounts_refresh">
 
-    <TextView
-        android:padding="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textSize="40sp"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:text="Total: $0.00"/>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/account_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
 
 </LinearLayout>

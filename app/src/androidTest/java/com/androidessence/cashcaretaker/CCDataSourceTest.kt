@@ -53,9 +53,9 @@ class CCDataSourceTest {
         account.name = "Checking"
         account.balance = 100.00
 
-        val id = dataSource?.addAccount(account)
+        val newAccount = dataSource?.addAccount(account)
 
-        assertTrue(id != null && id > 0)
+        assertTrue(newAccount != null && newAccount.id > 0)
     }
 
     @Test

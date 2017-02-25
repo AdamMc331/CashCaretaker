@@ -50,11 +50,48 @@ class CCDataSource(context: Context) {
         return accounts
     }
 
-    fun addAccount(account: Account): Long? {
-        return database?.insertOrThrow(CCContract.AccountEntry.TABLE_NAME, null, account.getContentValues())
+    fun addAccount(account: Account): Account? {
+        val id = database?.insertOrThrow(CCContract.AccountEntry.TABLE_NAME, null, account.getContentValues())
+
+        account.id = id!!
+        return account
     }
 
     fun deleteAccounts(): Int? {
         return database?.delete(CCContract.AccountEntry.TABLE_NAME, null, null)
+    }
+
+    fun getTransactions(account: Account): List<Transaction> {
+        val transactions = ArrayList<Transaction>()
+
+        var cursor = database?.query(
+                CCContract.TransactionEntry.TABLE_NAME,
+                null,
+                CCContract.TransactionEntry.COLUMN_ACCOUNT + " = ?",
+                arrayOf(account.id.toString()),
+                null,
+                null,
+                null
+        )
+
+        while (cursor?.moveToNext().orFalse()) {
+            transactions.add(Transaction(cursor!!))
+        }
+
+        cursor?.close()
+
+        return transactions
+    }
+
+    fun addTransaction(transaction: Transaction): Long? {
+        return database?.insert(CCContract.TransactionEntry.TABLE_NAME, null, transaction.getContentValues())
+    }
+
+    fun deleteTransaction(transaction: Transaction): Int? {
+        return database?.delete(
+                CCContract.TransactionEntry.TABLE_NAME,
+                CCContract.TransactionEntry._ID + " = ?",
+                arrayOf(transaction.id.toString())
+        )
     }
 }

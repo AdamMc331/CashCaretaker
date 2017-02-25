@@ -18,6 +18,7 @@ open class Account: BaseModel {
     constructor(): super()
 
     constructor(cursor: Cursor) {
+        id = cursor.getLong(cursor.getColumnIndex(CCContract.AccountEntry._ID))
         name = cursor.getString(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_NAME))
         balance = cursor.getDouble(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE))
     }
