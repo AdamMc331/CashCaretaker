@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Cash Caretaker</string>
+    <string name="title_activity_accounts">Accounts</string>
+    <string name="account_name">Account Name</string>
+    <string name="starting_balance">Starting Balance</string>
+    <string name="submit">Submit</string>
+</resources>

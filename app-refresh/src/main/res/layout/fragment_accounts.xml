@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.androidessence.cashcaretaker.AccountsActivityFragment"
-    tools:showIn="@layout/activity_accounts_refresh">
+    tools:showIn="@layout/activity_accounts">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/account_list"
