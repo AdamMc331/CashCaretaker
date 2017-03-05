@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.refresh
 
 import android.database.sqlite.SQLiteException
 import android.os.Bundle
@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
-import com.androidessence.cashcaretaker.R
+import com.androidessence.refresh.DecimalDigitsInputFilter
+import com.androidessence.refresh.R
 import timber.log.Timber
 
 /**

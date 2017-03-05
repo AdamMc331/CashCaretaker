@@ -1,8 +1,8 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.refresh
 
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import com.androidessence.cashcaretaker.R
+import com.androidessence.refresh.R
 
 class AddAccountActivity : CoreActivity() {
 

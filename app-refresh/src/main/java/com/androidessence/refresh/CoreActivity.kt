@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.refresh
 
 import android.support.v7.app.AppCompatActivity
 

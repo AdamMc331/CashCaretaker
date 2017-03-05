@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.refresh
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.adammcneilly.CoreRecyclerViewAdapter
 import com.adammcneilly.CoreViewHolder
-import com.androidessence.cashcaretaker.R
+import com.androidessence.refresh.R
 import com.androidessence.utility.asCurrency
 
 /**

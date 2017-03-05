@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.refresh
 
 /**
  * Extension methods for optional classes.

@@ -1,7 +1,7 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.refresh
 
 import android.os.Parcel
-import com.androidessence.cashcaretaker.creator
+import com.androidessence.refresh.creator
 
 /**
  * Represents a bank account.

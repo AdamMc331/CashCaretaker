@@ -1,10 +1,10 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.refresh
 
 import android.content.ContentValues
 import android.os.Parcel
 import android.os.Parcelable
 import android.provider.BaseColumns
-import com.androidessence.cashcaretaker.creator
+import com.androidessence.refresh.creator
 
 /**
  * Base model for all of our classes.

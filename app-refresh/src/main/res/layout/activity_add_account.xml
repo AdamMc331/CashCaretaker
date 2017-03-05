@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/fragment_add_account"
-        android:name="com.androidessence.cashcaretaker.AddAccountFragment"
+        android:name="com.androidessence.refresh.AddAccountFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

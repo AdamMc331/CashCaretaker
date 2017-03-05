@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.refresh
 
 import android.support.v4.app.Fragment
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import com.androidessence.cashcaretaker.R
+import com.androidessence.refresh.R
 
 /**
  * A placeholder fragment containing a simple view.

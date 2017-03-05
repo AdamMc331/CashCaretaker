@@ -1,1 +1,1 @@
-include ':app', ':wear', ':utility', ':app-refresh'
+include ':app', ':wear', ':utility', ':app-refresh', ':app-v2'

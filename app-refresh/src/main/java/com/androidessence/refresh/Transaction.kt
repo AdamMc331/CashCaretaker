@@ -1,9 +1,9 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.refresh
 
 import android.os.Parcel
-import com.androidessence.cashcaretaker.asBoolean
-import com.androidessence.cashcaretaker.asInt
-import com.androidessence.cashcaretaker.creator
+import com.androidessence.refresh.asBoolean
+import com.androidessence.refresh.asInt
+import com.androidessence.refresh.creator
 import java.util.*
 
 /**
