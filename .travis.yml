@@ -1,5 +1,6 @@
 language: android
 
+env:
   global:
     - ANDROID_API_LEVEL=25
     - EMULATOR_API_LEVEL=21
