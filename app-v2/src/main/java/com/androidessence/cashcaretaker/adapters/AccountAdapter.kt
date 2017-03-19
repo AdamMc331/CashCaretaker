@@ -15,7 +15,11 @@ import com.androidessence.utility.asCurrency
  *
  * Created by adam.mcneilly on 3/19/17.
  */
-open class AccountAdapter : CoreRecyclerViewAdapter<Account, AccountAdapter.AccountViewHolder>() {
+open class AccountAdapter() : CoreRecyclerViewAdapter<Account, AccountAdapter.AccountViewHolder>() {
+
+    constructor(items: List<Account>): this() {
+        this.items = items
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AccountViewHolder {
         val context = parent?.context
