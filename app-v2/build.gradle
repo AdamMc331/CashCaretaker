@@ -34,8 +34,13 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    // Android/Kotlin
+    compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // Personal
+    compile 'com.adammcneilly:recyclerviewutils:1.0.4'
+
     compile project(':utility')
 }
