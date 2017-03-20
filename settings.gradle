@@ -1,1 +1,1 @@
-include ':utility', ':app-v2'
+include ':utility'

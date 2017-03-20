@@ -19,7 +19,7 @@ before_install:
 
 script:
   - chmod +x gradlew
-  - ./gradlew :app-v2:clean :app-v2:build --stacktrace --info
+  - ./gradlew clean build --stacktrace --info
 
 
 notifications:
