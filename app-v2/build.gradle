@@ -43,5 +43,4 @@ dependencies {
     compile 'com.adammcneilly:recyclerviewutils:1.0.4'
 
     compile project(':utility')
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
