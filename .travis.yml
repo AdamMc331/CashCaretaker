@@ -48,7 +48,7 @@ before_install:
 script:
   - chmod +x gradlew
   - ./gradlew :app-v2:clean :app-v2:build --stacktrace --info
-  - ./gradlew :app-v2:cAt
+#  - ./gradlew :app-v2:cAt
 
 
 notifications:
