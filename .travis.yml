@@ -13,7 +13,7 @@ jdk:
   - oraclejdk8
 script:
   - chmod +x gradlew
-  - ./gradlew clean build --stacktrace --info
+  - ./gradlew clean build --stacktrace --info --debug
 
 licenses:
   - android-sdk-license-.+
