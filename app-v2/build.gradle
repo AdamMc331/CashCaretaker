@@ -40,7 +40,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     // Personal
-    compile 'com.adammcneilly:recyclerviewutils:1.0.4'
+    compile 'com.adammcneilly:recyclerviewutils:1.0.5'
 
     compile project(':utility')
 }
