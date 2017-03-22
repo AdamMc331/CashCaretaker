@@ -1,28 +1,24 @@
 language: android
-
 android:
   components:
     - tools
-    - platform-tools
     - build-tools-25.0.2
-    - extra-android-m2repository
-    - extra-android-support
     - android-25
+    - platform-tools
+    - extra-android-support
+    - extra-google-google_play_services
+    - extra-android-m2repository
+    - extra-google-m2repository
+  licenses:
+    - '.+'
+
+sudo: required
 
 jdk:
   - oraclejdk8
-script:
+
+before_script:
   - chmod +x gradlew
-  - ./gradlew clean build --stacktrace --info --debug
 
-licenses:
-  - android-sdk-license-.+
-
-notifications:
-  email: false
-
-sudo: false
-
-cache:
-  directories:
-    - $HOME/.gradle
+script:
+  - ./gradlew clean build --stacktrace --info
