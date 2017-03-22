@@ -20,6 +20,6 @@ before_script:
   - chmod +x gradlew
 
 script:
-  - ./gradlew clean build --stacktrace --info
+  - ./gradlew clean build
 
 after_failure: "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
