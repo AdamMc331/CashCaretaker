@@ -25,9 +25,10 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-    dexOptions {
-        javaMaxHeapSize "2g"
-    }
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
