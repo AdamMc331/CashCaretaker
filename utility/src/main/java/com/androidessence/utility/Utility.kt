@@ -19,7 +19,6 @@ object Utility {
     private val dbDateFormatter = SimpleDateFormat(DB_DATE_FORMAT, Locale.getDefault())
     private val UI_DATE_FORMAT = "MMMM dd, yyyy"
     private val uiDateFormatter = SimpleDateFormat(UI_DATE_FORMAT, Locale.getDefault())
-    private val currencyFormat = NumberFormat.getCurrencyInstance()
 
     private val calendar = Calendar.getInstance()
 
@@ -74,12 +73,5 @@ object Utility {
             return Date()
         }
 
-    }
-
-    /**DoaTons
-     * Formats a double value as a currency string to be displayed to the user.
-     */
-    fun getCurrencyString(currency: Double?): String {
-        return currencyFormat.format(currency)
     }
 }
