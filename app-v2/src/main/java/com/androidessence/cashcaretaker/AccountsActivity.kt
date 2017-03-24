@@ -30,6 +30,9 @@ class AccountsActivity : AppCompatActivity() {
         account_recycler_view.adapter = accountAdapter
     }
 
+    /**
+     * Builds a list of sample accounts that are used for display purposes.
+     */
     private fun getSampleAccounts(): List<Account> {
         val checking = Account()
         checking.name = "Checking"
