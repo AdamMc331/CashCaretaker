@@ -51,11 +51,7 @@ class Category : CoreDTO {
     }
 
     override fun getContentValues(): ContentValues {
-        val values = ContentValues()
-
-        if (identifier > 0) {
-            values.put(CCContract.CategoryEntry._ID, identifier)
-        }
+        val values = super.getContentValues()
 
         values.put(CCContract.CategoryEntry.COLUMN_DESCRIPTION, description)
         values.put(CCContract.CategoryEntry.COLUMN_IS_DEFAULT, isDefault.asInt())

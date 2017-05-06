@@ -72,26 +72,26 @@ public class AccountTransactionsFragment extends CoreRecyclerViewFragment implem
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = (CoordinatorLayout) inflater.inflate(R.layout.fragment_transactions, container, false);
+        setRoot((CoordinatorLayout) inflater.inflate(R.layout.fragment_transactions, container, false));
 
-        getElements(root);
-        setupRecyclerView(LinearLayoutManager.VERTICAL);
+        getElements(getRoot());
+        setupRecyclerView(LinearLayoutManager.VERTICAL, false);
         setClickListeners();
 
-        return root;
+        return getRoot();
     }
 
     @Override
-    protected void setupRecyclerView(int orientation) {
-        super.setupRecyclerView(orientation);
+    protected void setupRecyclerView(int orientation, boolean reverseLayout) {
+        super.setupRecyclerView(orientation, reverseLayout);
 
         transactionAdapter = new TransactionAdapter(getActivity());
-        recyclerView.setAdapter(transactionAdapter);
+        getRecyclerView().setAdapter(transactionAdapter);
     }
 
     @Override
     protected void getElements(View view) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.transaction_recycler_view);
+        setRecyclerView((RecyclerView) view.findViewById(R.id.transaction_recycler_view));
         addTransactionFAB = (FloatingActionButton) view.findViewById(R.id.add_transaction_fab);
         addFirstTransaction = (TextView) view.findViewById(R.id.add_first_transaction_text_view);
         accountBalanceTextView = (TextView) view.findViewById(R.id.account_balance_header);
@@ -152,7 +152,7 @@ public class AccountTransactionsFragment extends CoreRecyclerViewFragment implem
             case TRANSACTION_LOADER:
                 transactionAdapter.swapCursor(data);
                 // If the cursor is empty hide the recyclerview.
-                recyclerView.setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
+                getRecyclerView().setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
                 // If the cursor is empty show the textview.
                 addFirstTransaction.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
                 break;

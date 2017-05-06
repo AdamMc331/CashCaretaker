@@ -111,9 +111,9 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        root = (CoordinatorLayout) inflater.inflate(R.layout.fragment_add_transaction, container, false);
+        setRoot((CoordinatorLayout) inflater.inflate(R.layout.fragment_add_transaction, container, false));
 
-        getElements(root);
+        getElements(getRoot());
         setClickListeners();
         setInputFilters();
         setupDescriptionTextView();
@@ -143,7 +143,7 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
             }
         }
 
-        return root;
+        return getRoot();
     }
 
     @Override

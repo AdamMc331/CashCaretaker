@@ -57,9 +57,9 @@ public class AddRepeatingTransactionFragment extends CoreFragment implements Rep
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = (CoordinatorLayout) inflater.inflate(R.layout.fragment_add_repeating_transaction, container, false);
+        setRoot((CoordinatorLayout) inflater.inflate(R.layout.fragment_add_repeating_transaction, container, false));
 
-        getElements(root);
+        getElements(getRoot());
         setTextFilters();
         setClickListeners();
 
@@ -86,7 +86,7 @@ public class AddRepeatingTransactionFragment extends CoreFragment implements Rep
             getDefaultCategory();
         }
 
-        return root;
+        return getRoot();
     }
 
     @Override

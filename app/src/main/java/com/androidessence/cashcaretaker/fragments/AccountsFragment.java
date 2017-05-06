@@ -39,28 +39,28 @@ public class AccountsFragment extends CoreRecyclerViewFragment implements Loader
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = (CoordinatorLayout) inflater.inflate(R.layout.fragment_accounts, container, false);
+        setRoot((CoordinatorLayout) inflater.inflate(R.layout.fragment_accounts, container, false));
 
-        getElements(root);
-        setupRecyclerView(LinearLayoutManager.VERTICAL);
+        getElements(getRoot());
+        setupRecyclerView(LinearLayoutManager.VERTICAL, false);
         setupFloatingActionButton();
 
-        return root;
+        return getRoot();
     }
 
     @Override
     protected void getElements(View view){
-        recyclerView = (RecyclerView) view.findViewById(R.id.account_recycler_view);
+        setRecyclerView((RecyclerView) view.findViewById(R.id.account_recycler_view));
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.add_account_fab);
         addFirstAccount = (TextView) view.findViewById(R.id.add_first_account_text_view);
     }
 
     @Override
-    protected void setupRecyclerView(int orientation) {
-        super.setupRecyclerView(orientation);
+    protected void setupRecyclerView(int orientation, boolean reverseLayout) {
+        super.setupRecyclerView(orientation, reverseLayout);
 
         accountAdapter = new AccountAdapter(getActivity());
-        recyclerView.setAdapter(accountAdapter);
+        getRecyclerView().setAdapter(accountAdapter);
     }
 
     /**
@@ -115,7 +115,7 @@ public class AccountsFragment extends CoreRecyclerViewFragment implements Loader
             case ACCOUNT_LOADER:
                 accountAdapter.swapCursor(data);
                 // If we have no data, hide the recyclerview and show the text view
-                recyclerView.setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
+                getRecyclerView().setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
                 addFirstAccount.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
                 break;
             default:

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.androidessence.utility.DoubleUtilsKt;
 import com.androidessence.utility.Utility;
 
 /**
@@ -53,7 +54,7 @@ public class AccountCursorAdapter extends CursorAdapter {
 
         public void bindCursor(Cursor cursor) {
             mAccountName.setText(cursor.getString(NAME_INDEX));
-            mAccountBalance.setText(Utility.INSTANCE.getCurrencyString(cursor.getDouble(BALANCE_INDEX)));
+            mAccountBalance.setText(DoubleUtilsKt.asCurrency(cursor.getDouble(BALANCE_INDEX)));
         }
     }
 }

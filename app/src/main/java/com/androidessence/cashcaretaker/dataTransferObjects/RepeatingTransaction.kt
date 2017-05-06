@@ -73,11 +73,7 @@ class RepeatingTransaction : CoreDTO {
     }
 
     override fun getContentValues(): ContentValues {
-        val values = ContentValues()
-
-        if (identifier > 0) {
-            values.put(CCContract.RepeatingTransactionEntry._ID, getIdentifier())
-        }
+        val values = super.getContentValues()
 
         values.put(CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD, repeatingPeriod)
         values.put(CCContract.RepeatingTransactionEntry.COLUMN_ACCOUNT, account)

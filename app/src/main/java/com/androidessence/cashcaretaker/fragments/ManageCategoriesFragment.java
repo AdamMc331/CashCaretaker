@@ -85,9 +85,9 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        root = (CoordinatorLayout) inflater.inflate(R.layout.fragment_manage_categories, container, false);
+        setRoot((CoordinatorLayout) inflater.inflate(R.layout.fragment_manage_categories, container, false));
 
-        getElements(root);
+        getElements(getRoot());
 
         // Setup listview
         adapter = new CategoryAdapter(getActivity());
@@ -110,7 +110,7 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
             }
         });
 
-        return root;
+        return getRoot();
     }
 
     @Override

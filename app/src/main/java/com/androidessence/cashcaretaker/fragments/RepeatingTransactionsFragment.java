@@ -39,28 +39,28 @@ public class RepeatingTransactionsFragment extends CoreRecyclerViewFragment impl
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = (CoordinatorLayout) inflater.inflate(R.layout.fragment_repeating_transactions, container, false);
+        setRoot((CoordinatorLayout) inflater.inflate(R.layout.fragment_repeating_transactions, container, false));
 
-        getElements(root);
-        setupRecyclerView(LinearLayoutManager.VERTICAL);
+        getElements(getRoot());
+        setupRecyclerView(LinearLayoutManager.VERTICAL, false);
         setupFloatingActionButton();
 
-        return root;
+        return getRoot();
     }
 
     @Override
     protected void getElements(View view) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.repeating_transaction_recycler_view);
+        setRecyclerView((RecyclerView) view.findViewById(R.id.repeating_transaction_recycler_view));
         addRepeatingTransactionFAB = (FloatingActionButton) view.findViewById(R.id.add_repeating_transaction_fab);
         addFirstRepeatingTransaction = (TextView) view.findViewById(R.id.add_first_repeating_transaction_text_view);
     }
 
     @Override
-    protected void setupRecyclerView(int orientation) {
-        super.setupRecyclerView(orientation);
+    protected void setupRecyclerView(int orientation, boolean reverseLayout) {
+        super.setupRecyclerView(orientation, reverseLayout);
 
         repeatingTransactionAdapter = new RepeatingTransactionAdapter(getActivity());
-        recyclerView.setAdapter(repeatingTransactionAdapter);
+        getRecyclerView().setAdapter(repeatingTransactionAdapter);
     }
 
     /**
@@ -116,7 +116,7 @@ public class RepeatingTransactionsFragment extends CoreRecyclerViewFragment impl
                 repeatingTransactionAdapter.swapCursor(data);
 
                 // If data was empty show text view. Otherwise, show recyclerview.
-                recyclerView.setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
+                getRecyclerView().setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
                 addFirstRepeatingTransaction.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
                 break;
             default:

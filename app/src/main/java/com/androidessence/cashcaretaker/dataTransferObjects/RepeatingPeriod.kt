@@ -32,11 +32,7 @@ class RepeatingPeriod : CoreDTO {
     }
 
     override fun getContentValues(): ContentValues {
-        val values = ContentValues()
-
-        if (identifier > 0) {
-            values.put(CCContract.RepeatingPeriodEntry._ID, identifier)
-        }
+        val values = super.getContentValues()
 
         values.put(CCContract.RepeatingPeriodEntry.COLUMN_NAME, name)
 

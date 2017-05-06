@@ -31,13 +31,13 @@ public class AddAccountFragment extends CoreFragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        root = (CoordinatorLayout) inflater.inflate(R.layout.fragment_add_account, container, false);
+        setRoot((CoordinatorLayout) inflater.inflate(R.layout.fragment_add_account, container, false));
 
-        getElements(root);
+        getElements(getRoot());
         setInputFilters();
         setClickListeners();
 
-        return root;
+        return getRoot();
     }
 
     @Override

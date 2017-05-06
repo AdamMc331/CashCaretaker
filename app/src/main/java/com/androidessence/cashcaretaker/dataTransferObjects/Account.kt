@@ -14,6 +14,7 @@ import com.androidessence.cashcaretaker.data.CCContract
  * Created by adam.mcneilly on 9/5/16.
  */
 class Account : CoreDTO {
+
     var name: String? = null
         private set
     var balance: Double = 0.toDouble()
@@ -33,19 +34,6 @@ class Account : CoreDTO {
     constructor(parcel: Parcel) : super(parcel) {
         this.name = parcel.readString()
         this.balance = parcel.readDouble()
-    }
-
-    override fun getContentValues(): ContentValues {
-        val values = ContentValues()
-
-        if (identifier > 0) {
-            values.put(CCContract.AccountEntry._ID, identifier)
-        }
-
-        values.put(CCContract.AccountEntry.COLUMN_NAME, name)
-        values.put(CCContract.AccountEntry.COLUMN_BALANCE, balance)
-
-        return values
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {

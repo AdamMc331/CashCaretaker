@@ -12,6 +12,7 @@ import com.androidessence.cashcaretaker.data.CCContract;
 import com.androidessence.cashcaretaker.dataTransferObjects.TransactionDetails;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorAdapter;
 import com.androidessence.recyclerviewcursoradapter.RecyclerViewCursorViewHolder;
+import com.androidessence.utility.DoubleUtilsKt;
 import com.androidessence.utility.Utility;
 
 /**
@@ -98,16 +99,16 @@ public class TransactionAdapter extends RecyclerViewCursorAdapter<TransactionAda
 
             // Set amount
             double amount = cursor.getDouble(AMOUNT_INDEX);
-            mAmountTextView.setText(Utility.INSTANCE.getCurrencyString(amount));
+            mAmountTextView.setText(DoubleUtilsKt.asCurrency(amount));
 
             // Set withdrawal. Depending on withdrawal, we need to color certain views.
             int isWithdrawal = cursor.getInt(WITHDRAWAL_INDEX);
             if(isWithdrawal == 1) {
-                mAmountTextView.setText(String.format("-%s", Utility.INSTANCE.getCurrencyString(amount)));
+                mAmountTextView.setText(String.format("-%s", DoubleUtilsKt.asCurrency(amount)));
                 mAmountTextView.setTextColor(red);
                 mIndicatorView.setBackgroundColor(red);
             } else{
-                mAmountTextView.setText(Utility.INSTANCE.getCurrencyString(amount));
+                mAmountTextView.setText(DoubleUtilsKt.asCurrency(amount));
                 mAmountTextView.setTextColor(primaryTextColor);
                 mIndicatorView.setBackgroundColor(green);
             }

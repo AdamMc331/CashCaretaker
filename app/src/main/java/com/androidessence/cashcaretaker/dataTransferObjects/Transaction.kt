@@ -70,11 +70,7 @@ open class Transaction : CoreDTO {
     }
 
     override fun getContentValues(): ContentValues {
-        val values = ContentValues()
-
-        if (identifier > 0) {
-            values.put(CCContract.TransactionEntry._ID, getIdentifier())
-        }
+        val values = super.getContentValues()
 
         values.put(CCContract.TransactionEntry.COLUMN_ACCOUNT, account)
         values.put(CCContract.TransactionEntry.COLUMN_DESCRIPTION, description)
