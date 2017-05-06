@@ -64,7 +64,7 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
                 return new CursorLoader(
                         getActivity(),
                         CCContract.AccountEntry.CONTENT_URI,
-                        SimpleAccountAdapter.ACCOUNT_COLUMNS,
+                        SimpleAccountAdapter.Companion.getACCOUNT_COLUMNS(),
                         null,
                         null,
                         CCContract.AccountEntry.COLUMN_NAME + " ASC"

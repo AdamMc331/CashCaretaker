@@ -205,7 +205,7 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
                 return new CursorLoader(
                         getActivity(),
                         CCContract.CategoryEntry.CONTENT_URI,
-                        CategoryAdapter.CATEGORY_COLUMNS,
+                        CategoryAdapter.Companion.getCATEGORY_COLUMNS(),
                         CCContract.CategoryEntry.COLUMN_IS_DEFAULT + " = ?",
                         new String[] { "0" },
                         CCContract.CategoryEntry.COLUMN_DESCRIPTION

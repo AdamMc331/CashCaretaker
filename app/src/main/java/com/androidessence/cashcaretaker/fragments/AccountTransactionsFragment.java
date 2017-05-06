@@ -126,7 +126,7 @@ public class AccountTransactionsFragment extends CoreRecyclerViewFragment implem
                 return new CursorLoader(
                         getActivity(),
                         CCContract.TransactionEntry.buildTransactionsForAccountUri(account),
-                        TransactionAdapter.TRANSACTION_COLUMNS,
+                        TransactionAdapter.Companion.getTRANSACTION_COLUMNS(),
                         null,
                         null,
                         CCContract.TransactionEntry.COLUMN_DATE + " DESC"

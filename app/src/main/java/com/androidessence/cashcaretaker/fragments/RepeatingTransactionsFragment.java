@@ -99,7 +99,7 @@ public class RepeatingTransactionsFragment extends CoreRecyclerViewFragment impl
                 return new CursorLoader(
                         getActivity(),
                         CCContract.RepeatingTransactionEntry.CONTENT_DETAILS_URI,
-                        RepeatingTransactionAdapter.REPEATING_TRANSACTION_COLUMNS,
+                        RepeatingTransactionAdapter.Companion.getREPEATING_TRANSACTION_COLUMNS(),
                         null,
                         null,
                         CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE + " ASC"

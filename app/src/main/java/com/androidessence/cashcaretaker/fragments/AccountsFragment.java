@@ -99,7 +99,7 @@ public class AccountsFragment extends CoreRecyclerViewFragment implements Loader
                 return new CursorLoader(
                         getActivity(),
                         CCContract.AccountEntry.CONTENT_URI,
-                        AccountAdapter.ACCOUNT_COLUMNS,
+                        AccountAdapter.Companion.getACCOUNT_COLUMNS(),
                         null,
                         null,
                         CCContract.AccountEntry.COLUMN_NAME

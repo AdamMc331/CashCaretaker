@@ -64,7 +64,7 @@ public class RepeatingPeriodDialog extends DialogFragment implements LoaderManag
                 return new CursorLoader(
                         getActivity(),
                         CCContract.RepeatingPeriodEntry.CONTENT_URI,
-                        RepeatingPeriodAdapter.REPEATING_PERIOD_COLUMNS,
+                        RepeatingPeriodAdapter.Companion.getREPEATING_PERIOD_COLUMNS(),
                         null,
                         null,
                         null
