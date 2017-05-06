@@ -36,11 +36,14 @@ dependencies {
     })
 
     // Android/Kotlin
-    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     // Personal
-    compile 'com.adammcneilly:recyclerviewutils:1.0.5'
+    compile ('com.adammcneilly:recyclerviewutils:1.0.5') {
+        exclude module: 'appcompat-v7'
+        exclude module: 'recyclerview'
+    }
 
     compile project(':utility')
 }
