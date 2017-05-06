@@ -33,6 +33,7 @@ allprojects {
         materialDesignSpecsVersion = "1.0.4"
         recyclerViewUtilsVersion = "1.0.5"
         timberVersion = "4.5.1"
+        wearableVersion = "2.0.1"
     }
 }
 
