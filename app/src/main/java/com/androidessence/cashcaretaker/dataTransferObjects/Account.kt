@@ -42,6 +42,15 @@ class Account : CoreDTO {
         dest.writeDouble(balance)
     }
 
+    override fun getContentValues(): ContentValues {
+        val values = super.getContentValues()
+
+        values.put(CCContract.AccountEntry.COLUMN_NAME, name)
+        values.put(CCContract.AccountEntry.COLUMN_BALANCE, balance)
+
+        return values
+    }
+
     companion object {
         @JvmField val CREATOR = creator(::Account)
     }
