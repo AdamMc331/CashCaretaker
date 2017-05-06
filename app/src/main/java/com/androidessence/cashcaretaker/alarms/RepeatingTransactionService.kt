@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.provider.BaseColumns
 import android.util.Log
 import com.androidessence.cashcaretaker.data.CCContract
 import com.androidessence.cashcaretaker.dataTransferObjects.RepeatingTransaction
@@ -90,7 +91,7 @@ class RepeatingTransactionService : IntentService("RepeatingTransactionService")
                     context?.contentResolver?.update(
                             CCContract.RepeatingTransactionEntry.CONTENT_URI,
                             contentValues,
-                            CCContract.RepeatingTransactionEntry._ID + " = ?",
+                            BaseColumns._ID + " = ?",
                             arrayOf(id.toString())
                     )
                 }
@@ -109,7 +110,7 @@ class RepeatingTransactionService : IntentService("RepeatingTransactionService")
         private val YEARLY = 2
 
         // Necessary repeating transaction columns
-        private val REPEATING_TRANSACTION_COLUMNS = arrayOf(CCContract.RepeatingTransactionEntry.TABLE_NAME + "." + CCContract.RepeatingTransactionEntry._ID, CCContract.RepeatingTransactionEntry.COLUMN_DESCRIPTION, CCContract.RepeatingTransactionEntry.COLUMN_AMOUNT, CCContract.RepeatingTransactionEntry.COLUMN_WITHDRAWAL, CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE, CCContract.RepeatingTransactionEntry.COLUMN_NOTES, CCContract.RepeatingTransactionEntry.COLUMN_ACCOUNT, CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD, CCContract.RepeatingTransactionEntry.COLUMN_CATEGORY)
+        private val REPEATING_TRANSACTION_COLUMNS = arrayOf(CCContract.RepeatingTransactionEntry.TABLE_NAME + "." + BaseColumns._ID, CCContract.RepeatingTransactionEntry.COLUMN_DESCRIPTION, CCContract.RepeatingTransactionEntry.COLUMN_AMOUNT, CCContract.RepeatingTransactionEntry.COLUMN_WITHDRAWAL, CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE, CCContract.RepeatingTransactionEntry.COLUMN_NOTES, CCContract.RepeatingTransactionEntry.COLUMN_ACCOUNT, CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD, CCContract.RepeatingTransactionEntry.COLUMN_CATEGORY)
 
         private val ID_INDEX = 0
         private val DESCRIPTION_INDEX = 1

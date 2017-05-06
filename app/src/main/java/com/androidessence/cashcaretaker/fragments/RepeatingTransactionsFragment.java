@@ -98,11 +98,11 @@ public class RepeatingTransactionsFragment extends CoreRecyclerViewFragment impl
             case REPEATING_TRANSACTION_LOADER:
                 return new CursorLoader(
                         getActivity(),
-                        CCContract.RepeatingTransactionEntry.CONTENT_DETAILS_URI,
+                        CCContract.RepeatingTransactionEntry.Companion.getCONTENT_DETAILS_URI(),
                         RepeatingTransactionAdapter.Companion.getREPEATING_TRANSACTION_COLUMNS(),
                         null,
                         null,
-                        CCContract.RepeatingTransactionEntry.COLUMN_NEXT_DATE + " ASC"
+                        CCContract.RepeatingTransactionEntry.Companion.getCOLUMN_NEXT_DATE() + " ASC"
                 );
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + id);

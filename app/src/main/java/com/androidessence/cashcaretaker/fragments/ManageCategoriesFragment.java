@@ -135,7 +135,7 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
                             editText.setError("Category must not be blank.");
                         } else {
                             Category category = new Category(categoryText);
-                            getActivity().getContentResolver().insert(CCContract.CategoryEntry.CONTENT_URI, category.getContentValues());
+                            getActivity().getContentResolver().insert(CCContract.CategoryEntry.Companion.getCONTENT_URI(), category.getContentValues());
                             dialog.dismiss();
                         }
                     }
@@ -163,7 +163,7 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
                         //TODO: Handle update
                         // Remove
                         getActivity().getContentResolver().delete(
-                                CCContract.CategoryEntry.CONTENT_URI,
+                                CCContract.CategoryEntry.Companion.getCONTENT_URI(),
                                 CCContract.CategoryEntry._ID + " = ?",
                                 new String[]{String.valueOf(category.getIdentifier())}
                         );
@@ -204,11 +204,11 @@ public class ManageCategoriesFragment extends CoreFragment implements LoaderMana
             case CATEGORY_LOADER:
                 return new CursorLoader(
                         getActivity(),
-                        CCContract.CategoryEntry.CONTENT_URI,
+                        CCContract.CategoryEntry.Companion.getCONTENT_URI(),
                         CategoryAdapter.Companion.getCATEGORY_COLUMNS(),
-                        CCContract.CategoryEntry.COLUMN_IS_DEFAULT + " = ?",
+                        CCContract.CategoryEntry.Companion.getCOLUMN_IS_DEFAULT() + " = ?",
                         new String[] { "0" },
-                        CCContract.CategoryEntry.COLUMN_DESCRIPTION
+                        CCContract.CategoryEntry.Companion.getCOLUMN_DESCRIPTION()
                 );
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + id);

@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.dataTransferObjects
 import android.content.ContentValues
 import android.database.Cursor
 import android.os.Parcel
+import android.provider.BaseColumns
 
 import com.androidessence.cashcaretaker.core.CoreDTO
 import com.androidessence.cashcaretaker.creator
@@ -26,7 +27,7 @@ class Account : CoreDTO {
     }
 
     constructor(cursor: Cursor) {
-        this.identifier = cursor.getLong(cursor.getColumnIndex(CCContract.AccountEntry._ID))
+        this.identifier = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID))
         this.name = cursor.getString(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_NAME))
         this.balance = cursor.getDouble(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE))
     }

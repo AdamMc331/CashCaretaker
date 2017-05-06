@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.adapters
 
 import android.content.Context
 import android.database.Cursor
+import android.provider.BaseColumns
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
@@ -117,7 +118,7 @@ class TransactionAdapter(context: Context) : RecyclerViewCursorAdapter<Transacti
 
     companion object {
 
-        val TRANSACTION_COLUMNS = arrayOf(CCContract.TransactionEntry.TABLE_NAME + "." + CCContract.TransactionEntry._ID, CCContract.TransactionEntry.COLUMN_DESCRIPTION, CCContract.TransactionEntry.COLUMN_AMOUNT, CCContract.TransactionEntry.COLUMN_WITHDRAWAL, CCContract.TransactionEntry.COLUMN_NOTES, CCContract.TransactionEntry.COLUMN_DATE, CCContract.CategoryEntry.COLUMN_DESCRIPTION, CCContract.TransactionEntry.COLUMN_CATEGORY, CCContract.TransactionEntry.COLUMN_ACCOUNT)
+        val TRANSACTION_COLUMNS = arrayOf(CCContract.TransactionEntry.TABLE_NAME + "." + BaseColumns._ID, CCContract.TransactionEntry.COLUMN_DESCRIPTION, CCContract.TransactionEntry.COLUMN_AMOUNT, CCContract.TransactionEntry.COLUMN_WITHDRAWAL, CCContract.TransactionEntry.COLUMN_NOTES, CCContract.TransactionEntry.COLUMN_DATE, CCContract.CategoryEntry.COLUMN_DESCRIPTION, CCContract.TransactionEntry.COLUMN_CATEGORY, CCContract.TransactionEntry.COLUMN_ACCOUNT)
 
         // Indexes for each of the columns of display data.
         private val DESCRIPTION_INDEX = 1

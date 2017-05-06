@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.adapters
 
 import android.content.Context
 import android.database.Cursor
+import android.provider.BaseColumns
 import android.support.v4.widget.CursorAdapter
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +38,7 @@ class SimpleAccountAdapter(context: Context) : CursorAdapter(context, null, 0) {
     }
 
     companion object {
-        val ACCOUNT_COLUMNS = arrayOf(CCContract.AccountEntry.TABLE_NAME + "." + CCContract.AccountEntry._ID, CCContract.AccountEntry.COLUMN_NAME, CCContract.AccountEntry.COLUMN_BALANCE)
+        val ACCOUNT_COLUMNS = arrayOf(CCContract.AccountEntry.TABLE_NAME + "." + BaseColumns._ID, CCContract.AccountEntry.COLUMN_NAME, CCContract.AccountEntry.COLUMN_BALANCE)
 
         val NAME_INDEX = 1
     }

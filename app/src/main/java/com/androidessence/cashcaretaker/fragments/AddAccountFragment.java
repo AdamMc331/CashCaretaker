@@ -81,7 +81,7 @@ public class AddAccountFragment extends CoreFragment{
         );
 
         try {
-            getActivity().getContentResolver().insert(CCContract.AccountEntry.CONTENT_URI, account.getContentValues());
+            getActivity().getContentResolver().insert(CCContract.AccountEntry.Companion.getCONTENT_URI(), account.getContentValues());
             getActivity().finish();
         } catch(SQLiteException se){
             accountName.setError(getString(R.string.err_account_exists));

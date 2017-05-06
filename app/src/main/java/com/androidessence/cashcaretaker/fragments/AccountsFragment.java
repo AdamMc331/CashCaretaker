@@ -98,11 +98,11 @@ public class AccountsFragment extends CoreRecyclerViewFragment implements Loader
             case ACCOUNT_LOADER:
                 return new CursorLoader(
                         getActivity(),
-                        CCContract.AccountEntry.CONTENT_URI,
+                        CCContract.AccountEntry.Companion.getCONTENT_URI(),
                         AccountAdapter.Companion.getACCOUNT_COLUMNS(),
                         null,
                         null,
-                        CCContract.AccountEntry.COLUMN_NAME
+                        CCContract.AccountEntry.Companion.getCOLUMN_NAME()
                 );
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + id);

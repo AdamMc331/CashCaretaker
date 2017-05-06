@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.adapters
 
 import android.content.Context
 import android.database.Cursor
+import android.provider.BaseColumns
 import android.support.v4.widget.CursorAdapter
 import android.view.LayoutInflater
 import android.view.View
@@ -44,7 +45,7 @@ class CategoryAdapter(context: Context) : CursorAdapter(context, null, 0) {
 
     companion object {
 
-        val CATEGORY_COLUMNS = arrayOf(CCContract.CategoryEntry.TABLE_NAME + "." + CCContract.CategoryEntry._ID, CCContract.CategoryEntry.COLUMN_DESCRIPTION, CCContract.CategoryEntry.COLUMN_IS_DEFAULT)
+        val CATEGORY_COLUMNS = arrayOf(CCContract.CategoryEntry.TABLE_NAME + "." + BaseColumns._ID, CCContract.CategoryEntry.COLUMN_DESCRIPTION, CCContract.CategoryEntry.COLUMN_IS_DEFAULT)
 
         private val DESCRIPTION_INDEX = 1
     }

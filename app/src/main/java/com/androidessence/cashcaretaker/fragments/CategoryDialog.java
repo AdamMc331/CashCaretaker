@@ -63,11 +63,11 @@ public class CategoryDialog extends DialogFragment implements LoaderManager.Load
             case CATEGORY_LOADER:
                 return new CursorLoader(
                         getActivity(),
-                        CCContract.CategoryEntry.CONTENT_URI,
+                        CCContract.CategoryEntry.Companion.getCONTENT_URI(),
                         null,
                         null,
                         null,
-                        CCContract.CategoryEntry.COLUMN_DESCRIPTION + " ASC"
+                        CCContract.CategoryEntry.Companion.getCOLUMN_DESCRIPTION() + " ASC"
                 );
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + id);

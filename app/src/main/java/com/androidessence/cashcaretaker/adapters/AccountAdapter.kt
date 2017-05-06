@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.view.ActionMode
@@ -76,7 +77,7 @@ class AccountAdapter(context: Context) : RecyclerViewCursorAdapter<AccountAdapte
                     //TODO: Handle the update with the new activity
                     mContext.contentResolver.delete(
                             CCContract.AccountEntry.CONTENT_URI,
-                            CCContract.AccountEntry._ID + " = ?",
+                            BaseColumns._ID + " = ?",
                             arrayOf(account?.identifier.toString())
                     )
                     (mContext as OnAccountDeletedListener).onAccountDeleted(account?.identifier.default(0))
@@ -171,7 +172,7 @@ class AccountAdapter(context: Context) : RecyclerViewCursorAdapter<AccountAdapte
     }
 
     companion object {
-        val ACCOUNT_COLUMNS = arrayOf(CCContract.AccountEntry.TABLE_NAME + "." + CCContract.AccountEntry._ID, CCContract.AccountEntry.COLUMN_NAME, CCContract.AccountEntry.COLUMN_BALANCE)
+        val ACCOUNT_COLUMNS = arrayOf(CCContract.AccountEntry.TABLE_NAME + "." + BaseColumns._ID, CCContract.AccountEntry.COLUMN_NAME, CCContract.AccountEntry.COLUMN_BALANCE)
 
         private val NAME_INDEX = 1
         private val BALANCE_INDEX = 2

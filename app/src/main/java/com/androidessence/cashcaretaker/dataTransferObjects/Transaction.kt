@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import android.provider.BaseColumns
 import com.androidessence.cashcaretaker.asBoolean
 import com.androidessence.cashcaretaker.asInt
 
@@ -47,7 +48,7 @@ open class Transaction : CoreDTO {
     }
 
     constructor(cursor: Cursor) {
-        identifier = cursor.getLong(cursor.getColumnIndex(CCContract.TransactionEntry._ID))
+        identifier = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID))
         account = cursor.getLong(cursor.getColumnIndex(CCContract.TransactionEntry.COLUMN_ACCOUNT))
         description = cursor.getString(cursor.getColumnIndex(CCContract.TransactionEntry.COLUMN_DESCRIPTION))
         amount = cursor.getDouble(cursor.getColumnIndex(CCContract.TransactionEntry.COLUMN_AMOUNT))

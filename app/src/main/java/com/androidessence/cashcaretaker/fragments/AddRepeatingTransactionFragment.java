@@ -193,7 +193,7 @@ public class AddRepeatingTransactionFragment extends CoreFragment implements Rep
         );
 
         // Submit row
-        getActivity().getContentResolver().insert(CCContract.RepeatingTransactionEntry.CONTENT_URI, repeatingTransaction.getContentValues());
+        getActivity().getContentResolver().insert(CCContract.RepeatingTransactionEntry.Companion.getCONTENT_URI(), repeatingTransaction.getContentValues());
 
         // Start service
         getActivity().startService(new Intent(getActivity(), RepeatingTransactionService.class));
@@ -234,9 +234,9 @@ public class AddRepeatingTransactionFragment extends CoreFragment implements Rep
     private void getDefaultCategory(){
 
         Cursor cursor = getActivity().getContentResolver().query(
-                CCContract.CategoryEntry.CONTENT_URI,
+                CCContract.CategoryEntry.Companion.getCONTENT_URI(),
                 null,
-                CCContract.CategoryEntry.COLUMN_IS_DEFAULT + " = ?",
+                CCContract.CategoryEntry.Companion.getCOLUMN_IS_DEFAULT() + " = ?",
                 new String[] {String.valueOf("1")},
                 null
         );
@@ -257,7 +257,7 @@ public class AddRepeatingTransactionFragment extends CoreFragment implements Rep
      */
     private void getDefaultRepeatingPeriod() {
         Cursor cursor = getActivity().getContentResolver().query(
-                CCContract.RepeatingPeriodEntry.CONTENT_URI,
+                CCContract.RepeatingPeriodEntry.Companion.getCONTENT_URI(),
                 null,
                 null,
                 null,

@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.adapters
 
 import android.content.Context
 import android.database.Cursor
+import android.provider.BaseColumns
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -76,7 +77,7 @@ class RepeatingTransactionAdapter(context: Context) : RecyclerViewCursorAdapter<
                     // Remove
                     mContext.contentResolver.delete(
                             CCContract.RepeatingTransactionEntry.CONTENT_URI,
-                            CCContract.RepeatingTransactionEntry._ID + " = ?",
+                            BaseColumns._ID + " = ?",
                             arrayOf(transaction?.identifier.toString())
                     )
                     dialog.dismiss()
@@ -187,7 +188,7 @@ class RepeatingTransactionAdapter(context: Context) : RecyclerViewCursorAdapter<
     companion object {
 
         val REPEATING_TRANSACTION_COLUMNS = arrayOf(
-                CCContract.RepeatingTransactionEntry.TABLE_NAME + "." + CCContract.RepeatingTransactionEntry._ID,
+                CCContract.RepeatingTransactionEntry.TABLE_NAME + "." + BaseColumns._ID,
                 CCContract.RepeatingTransactionEntry.COLUMN_DESCRIPTION,
                 CCContract.RepeatingTransactionEntry.COLUMN_AMOUNT,
                 CCContract.RepeatingTransactionEntry.COLUMN_WITHDRAWAL,

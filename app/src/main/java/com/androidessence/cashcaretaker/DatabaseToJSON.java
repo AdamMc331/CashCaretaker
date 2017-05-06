@@ -35,8 +35,8 @@ public class DatabaseToJSON {
             JSONObject object = new JSONObject();
 
             object.put(CCContract.AccountEntry._ID, account.getIdentifier());
-            object.put(CCContract.AccountEntry.COLUMN_NAME, account.getName());
-            object.put(CCContract.AccountEntry.COLUMN_BALANCE, account.getBalance());
+            object.put(CCContract.AccountEntry.Companion.getCOLUMN_NAME(), account.getName());
+            object.put(CCContract.AccountEntry.Companion.getCOLUMN_BALANCE(), account.getBalance());
 
             root.put(object);
         }
@@ -48,7 +48,7 @@ public class DatabaseToJSON {
         List<Account> accounts = new ArrayList<>();
 
         Cursor cursor = context.getContentResolver().query(
-                CCContract.AccountEntry.CONTENT_URI,
+                CCContract.AccountEntry.Companion.getCONTENT_URI(),
                 null,
                 null,
                 null,

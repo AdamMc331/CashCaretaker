@@ -46,7 +46,7 @@ public class AccountTransactionsFragment extends CoreRecyclerViewFragment implem
     private static final int ACCOUNT_BALANCE_LOADER = 1;
 
     private static final String[] ACCOUNT_BALANCE_COLUMNS = new String[] {
-            CCContract.AccountEntry.COLUMN_BALANCE
+            CCContract.AccountEntry.Companion.getCOLUMN_BALANCE()
     };
 
     private static final int ACCOUNT_BALANCE_INDEX = 0;
@@ -125,16 +125,16 @@ public class AccountTransactionsFragment extends CoreRecyclerViewFragment implem
             case TRANSACTION_LOADER:
                 return new CursorLoader(
                         getActivity(),
-                        CCContract.TransactionEntry.buildTransactionsForAccountUri(account),
+                        CCContract.TransactionEntry.Companion.buildTransactionsForAccountUri(account),
                         TransactionAdapter.Companion.getTRANSACTION_COLUMNS(),
                         null,
                         null,
-                        CCContract.TransactionEntry.COLUMN_DATE + " DESC"
+                        CCContract.TransactionEntry.Companion.getCOLUMN_DATE() + " DESC"
                 );
             case ACCOUNT_BALANCE_LOADER:
                 return new CursorLoader(
                         getActivity(),
-                        CCContract.AccountEntry.buildAccountUri(account),
+                        CCContract.AccountEntry.Companion.buildAccountUri(account),
                         ACCOUNT_BALANCE_COLUMNS,
                         null,
                         null,

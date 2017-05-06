@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.dataTransferObjects
 import android.content.ContentValues
 import android.database.Cursor
 import android.os.Parcel
+import android.provider.BaseColumns
 import com.androidessence.cashcaretaker.asBoolean
 import com.androidessence.cashcaretaker.asInt
 
@@ -27,7 +28,7 @@ class Category : CoreDTO {
     }
 
     constructor(cursor: Cursor) {
-        this.identifier = cursor.getLong(cursor.getColumnIndex(CCContract.CategoryEntry._ID))
+        this.identifier = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID))
         this.description = cursor.getString(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_DESCRIPTION))
         val defaultInt = cursor.getInt(cursor.getColumnIndex(CCContract.CategoryEntry.COLUMN_IS_DEFAULT))
         this.isDefault = defaultInt.asBoolean()

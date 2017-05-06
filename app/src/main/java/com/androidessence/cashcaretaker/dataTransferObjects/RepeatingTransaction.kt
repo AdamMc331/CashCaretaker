@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.dataTransferObjects
 import android.content.ContentValues
 import android.database.Cursor
 import android.os.Parcel
+import android.provider.BaseColumns
 import com.androidessence.cashcaretaker.asBoolean
 import com.androidessence.cashcaretaker.asInt
 
@@ -48,7 +49,7 @@ class RepeatingTransaction : CoreDTO {
     }
 
     constructor(cursor: Cursor) {
-        identifier = cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry._ID))
+        identifier = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID))
         repeatingPeriod = cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_REPEATING_PERIOD))
         account = cursor.getLong(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_ACCOUNT))
         description = cursor.getString(cursor.getColumnIndex(CCContract.RepeatingTransactionEntry.COLUMN_DESCRIPTION))

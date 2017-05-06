@@ -69,8 +69,8 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
     public static final int MODE_EDIT = 2;
 
     public static final String[] TRANSACTION_COLUMNS = new String[] {
-            CCContract.TransactionEntry.TABLE_NAME + "." + CCContract.TransactionEntry._ID,
-            CCContract.TransactionEntry.COLUMN_DESCRIPTION
+            CCContract.TransactionEntry.Companion.getTABLE_NAME() + "." + CCContract.TransactionEntry._ID,
+            CCContract.TransactionEntry.Companion.getCOLUMN_DESCRIPTION()
     };
 
     private static final int DESCRIPTION_INDEX = 1;
@@ -264,9 +264,9 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
      */
     private void getDefaultCategory(){
         Cursor cursor = getActivity().getContentResolver().query(
-                CCContract.CategoryEntry.CONTENT_URI,
+                CCContract.CategoryEntry.Companion.getCONTENT_URI(),
                 null,
-                CCContract.CategoryEntry.COLUMN_IS_DEFAULT + " = ?",
+                CCContract.CategoryEntry.Companion.getCOLUMN_IS_DEFAULT() + " = ?",
                 new String[] {"1"},
                 null
         );
@@ -340,14 +340,14 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
         if(areEditing()) {
             // update for this transaction
             getActivity().getContentResolver().update(
-                    CCContract.TransactionEntry.CONTENT_URI,
+                    CCContract.TransactionEntry.Companion.getCONTENT_URI(),
                     transaction.getContentValues(),
                     CCContract.TransactionEntry._ID + " = ?",
                     new String[]{String.valueOf(this.transaction.getIdentifier())}
             );
         } else{
             // Insert
-            getActivity().getContentResolver().insert(CCContract.TransactionEntry.CONTENT_URI, transaction.getContentValues());
+            getActivity().getContentResolver().insert(CCContract.TransactionEntry.Companion.getCONTENT_URI(), transaction.getContentValues());
         }
 
         ((OnTransactionSubmittedListener)getActivity()).onTransactionSubmitted();
@@ -358,7 +358,7 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
                 getActivity(),
                 R.layout.list_textview,
                 null,
-                new String[] {CCContract.TransactionEntry.COLUMN_DESCRIPTION},
+                new String[] {CCContract.TransactionEntry.Companion.getCOLUMN_DESCRIPTION()},
                 new int[] {R.id.list_item_text_view},
                 0
         );
@@ -382,11 +382,11 @@ public class TransactionFragment extends CoreFragment implements DatePickerDialo
 
     private Cursor getCursor(String description) {
         return getActivity().getContentResolver().query(
-                CCContract.TransactionEntry.buildTransactionsForAccountWithDescriptionUri(account, description),
+                CCContract.TransactionEntry.Companion.buildTransactionsForAccountWithDescriptionUri(account, description),
                 TRANSACTION_COLUMNS,
                 null,
                 null,
-                CCContract.TransactionEntry.COLUMN_DESCRIPTION
+                CCContract.TransactionEntry.Companion.getCOLUMN_DESCRIPTION()
         );
     }
 

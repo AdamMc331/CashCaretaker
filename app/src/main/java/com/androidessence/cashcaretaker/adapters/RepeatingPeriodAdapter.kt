@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.adapters
 
 import android.content.Context
 import android.database.Cursor
+import android.provider.BaseColumns
 import android.support.v4.widget.CursorAdapter
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +44,7 @@ class RepeatingPeriodAdapter(context: Context) : CursorAdapter(context, null, 0)
     }
 
     companion object {
-        val REPEATING_PERIOD_COLUMNS = arrayOf(CCContract.RepeatingPeriodEntry.TABLE_NAME + "." + CCContract.RepeatingPeriodEntry._ID, CCContract.RepeatingPeriodEntry.COLUMN_NAME)
+        val REPEATING_PERIOD_COLUMNS = arrayOf(CCContract.RepeatingPeriodEntry.TABLE_NAME + "." + BaseColumns._ID, CCContract.RepeatingPeriodEntry.COLUMN_NAME)
 
         val NAME_INDEX = 1
     }

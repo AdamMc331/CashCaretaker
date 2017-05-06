@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.activities
 
 import android.os.Build
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.support.design.widget.AppBarLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.view.ActionMode
@@ -84,7 +85,7 @@ class TransactionsActivity : CoreActivity(),
                 .setPositiveButton("Yes") { dialog, _ ->
                     contentResolver.delete(
                             CCContract.TransactionEntry.CONTENT_URI,
-                            CCContract.TransactionEntry._ID + " = ?",
+                            BaseColumns._ID + " = ?",
                             arrayOf(transaction?.identifier.toString())
                     )
 

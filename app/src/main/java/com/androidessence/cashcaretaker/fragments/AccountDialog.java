@@ -63,11 +63,11 @@ public class AccountDialog extends DialogFragment implements LoaderManager.Loade
             case CATEGORY_LOADER:
                 return new CursorLoader(
                         getActivity(),
-                        CCContract.AccountEntry.CONTENT_URI,
+                        CCContract.AccountEntry.Companion.getCONTENT_URI(),
                         SimpleAccountAdapter.Companion.getACCOUNT_COLUMNS(),
                         null,
                         null,
-                        CCContract.AccountEntry.COLUMN_NAME + " ASC"
+                        CCContract.AccountEntry.Companion.getCOLUMN_NAME() + " ASC"
                 );
             default:
                 throw new UnsupportedOperationException("Unknown loader id: " + id);
