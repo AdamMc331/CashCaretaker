@@ -141,7 +141,7 @@ public class AccountAdapter extends RecyclerViewCursorAdapter<AccountAdapter.Acc
 
         // Build and set arguments.
         Bundle args = new Bundle();
-        args.putParcelable(TransactionsActivity.ARG_ACCOUNT, account);
+        args.putParcelable(TransactionsActivity.Companion.getARG_ACCOUNT(), account);
         transactionsActivity.putExtras(args);
 
         // Start activity
