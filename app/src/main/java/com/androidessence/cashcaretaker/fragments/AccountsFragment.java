@@ -36,6 +36,15 @@ public class AccountsFragment extends CoreRecyclerViewFragment implements Loader
     // Loader identifier for the CursorLoader.
     private static final int ACCOUNT_LOADER = 0;
 
+    public static AccountsFragment newInstance() {
+        Bundle args = new Bundle();
+
+        AccountsFragment fragment = new AccountsFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

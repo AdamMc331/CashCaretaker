@@ -11,6 +11,7 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.adapters.AccountAdapter
 import com.androidessence.cashcaretaker.alarms.RepeatingTransactionAlarm
 import com.androidessence.cashcaretaker.core.CoreActivity
+import com.androidessence.cashcaretaker.fragments.AccountsFragment
 import com.androidessence.utility.default
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.common.ConnectionResult
@@ -40,6 +41,9 @@ class AccountsActivity : CoreActivity(),
         setupToolbar(false)
         startAlarm()
         setupClient()
+
+        val accountsFragment = AccountsFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_accounts, accountsFragment, "TODO:").commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

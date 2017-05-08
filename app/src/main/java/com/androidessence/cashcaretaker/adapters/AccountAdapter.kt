@@ -172,7 +172,10 @@ class AccountAdapter(context: Context) : RecyclerViewCursorAdapter<AccountAdapte
     }
 
     companion object {
-        val ACCOUNT_COLUMNS = arrayOf(CCContract.AccountEntry.TABLE_NAME + "." + BaseColumns._ID, CCContract.AccountEntry.COLUMN_NAME, CCContract.AccountEntry.COLUMN_BALANCE)
+        val ACCOUNT_COLUMNS = arrayOf(
+                CCContract.AccountEntry.TABLE_NAME + "." + BaseColumns._ID,
+                CCContract.AccountEntry.COLUMN_NAME,
+                CCContract.AccountEntry.COLUMN_BALANCE)
 
         private val NAME_INDEX = 1
         private val BALANCE_INDEX = 2
