@@ -33,4 +33,5 @@
     <string name="err_account_blank">Account name cannot be blank.</string>
     <string name="err_starting_balance_blank">Starting balance cannot be blank.</string>
     <string name="title_activity_accounts">Cash Caretaker</string>
+    <string name="title_activity_accounts_k">AccountsActivityK</string>
 </resources>

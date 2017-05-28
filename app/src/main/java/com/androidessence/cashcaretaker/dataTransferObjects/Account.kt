@@ -18,7 +18,7 @@ class Account : CoreDTO {
 
     var name: String? = null
         private set
-    var balance: Double = 0.toDouble()
+    var balance: Double? = 0.0
         private set
 
     constructor(name: String, balance: Double) {
@@ -26,10 +26,10 @@ class Account : CoreDTO {
         this.balance = balance
     }
 
-    constructor(cursor: Cursor) {
-        this.identifier = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID))
-        this.name = cursor.getString(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_NAME))
-        this.balance = cursor.getDouble(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE))
+    constructor(cursor: Cursor?) {
+        this.identifier = cursor?.getLong(cursor.getColumnIndex(BaseColumns._ID))
+        this.name = cursor?.getString(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_NAME))
+        this.balance = cursor?.getDouble(cursor.getColumnIndex(CCContract.AccountEntry.COLUMN_BALANCE))
     }
 
     constructor(parcel: Parcel) : super(parcel) {
@@ -39,8 +39,9 @@ class Account : CoreDTO {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         super.writeToParcel(dest, flags)
+
         dest.writeString(name)
-        dest.writeDouble(balance)
+        dest.writeDouble(balance ?: 0.0)
     }
 
     override fun getContentValues(): ContentValues {

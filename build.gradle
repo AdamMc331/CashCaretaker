@@ -31,7 +31,7 @@ allprojects {
         playServicesVersion = "10.2.1"
         recyclerViewCursorAdapterVersion = "1.0.0"
         materialDesignSpecsVersion = "1.0.4"
-        recyclerViewUtilsVersion = "1.0.5"
+        recyclerViewUtilsVersion = "2.0.1"
         timberVersion = "4.5.1"
         wearableVersion = "2.0.1"
     }

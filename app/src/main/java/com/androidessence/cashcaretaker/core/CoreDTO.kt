@@ -11,7 +11,7 @@ import android.provider.BaseColumns
  * Created by adam.mcneilly on 9/5/16.
  */
 abstract class CoreDTO : Parcelable {
-    var identifier: Long = 0
+    var identifier: Long? = 0
         protected set
 
     protected constructor()
@@ -25,13 +25,13 @@ abstract class CoreDTO : Parcelable {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeLong(identifier)
+        dest.writeLong(identifier ?: 0)
     }
 
     open fun getContentValues(): ContentValues {
         val values = ContentValues()
 
-        if (identifier > 0) {
+        if ((identifier ?: 0) > 0) {
             values.put(BaseColumns._ID, identifier)
         }
 
