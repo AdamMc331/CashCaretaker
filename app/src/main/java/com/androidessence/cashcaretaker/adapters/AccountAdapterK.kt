@@ -23,7 +23,7 @@ class AccountAdapterK(items: MutableList<Account>) : CoreRecyclerViewAdapter<Acc
         return AccountViewHolder(view)
     }
 
-    inner class AccountViewHolder(view: View?) : CoreViewHolder<Account>(view) {
+    class AccountViewHolder(view: View?) : CoreViewHolder<Account>(view) {
         val nameTextView = view?.findViewById(R.id.account_name) as? TextView
         val balanceTextView = view?.findViewById(R.id.account_balance) as? TextView
 
