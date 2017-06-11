@@ -68,7 +68,6 @@ dependencies {
     compile "com.adammcneilly:recyclerviewutils:${recyclerViewUtilsVersion}"
     compile "com.jakewharton.timber:timber:${timberVersion}"
     compile project(':utility')
-    wearApp project(':wear')
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }
