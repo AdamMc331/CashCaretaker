@@ -12,15 +12,14 @@ android:
     - extra-android-m2repository
     - extra-google-m2repository
     - sys-img-armeabi-v7a-android-22
+  licenses:
+    - android-sdk-license-.+
+    - '.+'
 
 sudo: required
 
 jdk:
   - oraclejdk8
-
-licenses:
-  - android-sdk-license-.+
-  - '.+'
 
 before_install:
   - mkdir "$ANDROID_HOME/licenses" || true
