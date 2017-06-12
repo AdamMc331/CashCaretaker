@@ -64,7 +64,6 @@ dependencies {
     compile "com.android.support:design:${supportLibraryVersion}"
     compile "com.androidessence:recyclerviewcursoradapter:${recyclerViewCursorAdapterVersion}"
     compile "com.androidessence:materialdesignspecs:${materialDesignSpecsVersion}"
-    compile "com.google.android.gms:play-services:${playServicesVersion}"
     compile "com.adammcneilly:recyclerviewutils:${recyclerViewUtilsVersion}"
     compile "com.jakewharton.timber:timber:${timberVersion}"
     compile project(':utility')
