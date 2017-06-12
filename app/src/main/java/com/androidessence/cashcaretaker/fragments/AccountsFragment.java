@@ -1,14 +1,10 @@
 package com.androidessence.cashcaretaker.fragments;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,18 +14,24 @@ import android.widget.TextView;
 
 import com.androidessence.cashcaretaker.R;
 import com.androidessence.cashcaretaker.activities.AddAccountActivity;
-import com.androidessence.cashcaretaker.adapters.AccountAdapter;
+import com.androidessence.cashcaretaker.adapters.AccountAdapter_R;
 import com.androidessence.cashcaretaker.core.CoreRecyclerViewFragment;
-import com.androidessence.cashcaretaker.data.CCContract;
+import com.androidessence.cashcaretaker.data.CCDataSource;
+import com.androidessence.cashcaretaker.dataTransferObjects.Account;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Fragment that displays a list of accounts to the user.
  *
  * Created by adam.mcneilly on 9/8/16.
  */
-public class AccountsFragment extends CoreRecyclerViewFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class AccountsFragment extends CoreRecyclerViewFragment {
     // UI Elements
-    private AccountAdapter accountAdapter;
+    private AccountAdapter_R accountAdapter;
     private FloatingActionButton floatingActionButton;
     private TextView addFirstAccount;
 
@@ -68,8 +70,16 @@ public class AccountsFragment extends CoreRecyclerViewFragment implements Loader
     protected void setupRecyclerView(int orientation, boolean reverseLayout) {
         super.setupRecyclerView(orientation, reverseLayout);
 
-        accountAdapter = new AccountAdapter(getActivity());
-        getRecyclerView().setAdapter(accountAdapter);
+        CCDataSource dataSource = new CCDataSource(getContext());
+        try {
+            dataSource.open();
+            List<Account> accounts = dataSource.getAccounts(null, null, null, null, null, null);
+            dataSource.close();
+            accountAdapter = new AccountAdapter_R(accounts);
+            getRecyclerView().setAdapter(accountAdapter);
+        } catch (SQLException se) {
+            Timber.e(se);
+        }
     }
 
     /**
@@ -90,56 +100,5 @@ public class AccountsFragment extends CoreRecyclerViewFragment implements Loader
     private void startAddAccountActivity(){
         Intent addAccount = new Intent(getActivity(), AddAccountActivity.class);
         startActivity(addAccount);
-    }
-
-    /**
-     * Restart the CursorLoader when the fragment resumes.
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        getLoaderManager().restartLoader(ACCOUNT_LOADER, null, this);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch(id){
-            case ACCOUNT_LOADER:
-                return new CursorLoader(
-                        getActivity(),
-                        CCContract.AccountEntry.Companion.getCONTENT_URI(),
-                        AccountAdapter.Companion.getACCOUNT_COLUMNS(),
-                        null,
-                        null,
-                        CCContract.AccountEntry.Companion.getCOLUMN_NAME()
-                );
-            default:
-                throw new UnsupportedOperationException("Unknown loader id: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        switch(loader.getId()){
-            case ACCOUNT_LOADER:
-                accountAdapter.swapCursor(data);
-                // If we have no data, hide the recyclerview and show the text view
-                getRecyclerView().setVisibility(data.getCount() == 0 ? View.GONE : View.VISIBLE);
-                addFirstAccount.setVisibility(data.getCount() == 0 ? View.VISIBLE : View.GONE);
-                break;
-            default:
-                throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        switch(loader.getId()){
-            case ACCOUNT_LOADER:
-                accountAdapter.swapCursor(null);
-                break;
-            default:
-                throw new UnsupportedOperationException("Unknown loader id: " + loader.getId());
-        }
     }
 }
