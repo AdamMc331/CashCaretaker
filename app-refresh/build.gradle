@@ -16,12 +16,21 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation":
+                             "$projectDir/schemas".toString()]
+            }
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 }
 
@@ -30,11 +39,29 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    // Kotlin/Android
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
     compile "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
     compile "com.android.support:design:${supportLibraryVersion}"
+
+    // Third party
+    compile "com.jakewharton.timber:timber:${timberVersion}"
+    compile "com.adammcneilly:recyclerviewutils:${recyclerViewUtilsVersion}"
+    compile project(":utility")
+
+    // Room/RxJava
+    compile "android.arch.persistence.room:runtime:$roomLibraryVersion"
+    compile "android.arch.persistence.room:rxjava2:$roomLibraryVersion"
+    compile "android.arch.persistence.room:testing:$roomLibraryVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    compile "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$roomLibraryVersion"
+    kapt "android.arch.persistence.room:compiler:$roomLibraryVersion"
+
+    // Testing
     testCompile 'junit:junit:4.12'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 repositories {
     mavenCentral()

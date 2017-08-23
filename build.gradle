@@ -18,6 +18,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven { url 'https://maven.google.com' }
     }
 
     ext {
@@ -28,7 +29,7 @@ allprojects {
         androidCompileSdkVersion = 26
 
         //Libraries
-        supportLibraryVersion = "26.0.0-alpha1"
+        supportLibraryVersion = "26.0.1"
         playServicesVersion = "10.2.1"
         constraintLayoutVersion = "1.0.2"
         recyclerViewCursorAdapterVersion = "1.0.0"
@@ -36,6 +37,9 @@ allprojects {
         recyclerViewUtilsVersion = "2.0.1"
         timberVersion = "4.5.1"
         wearableVersion = "2.0.1"
+        roomLibraryVersion = "1.0.0-alpha9"
+        rxJavaVersion = "2.0.6"
+        rxAndroidVersion = "2.0.1"
     }
 }
 
