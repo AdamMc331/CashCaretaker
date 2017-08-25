@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.adammcneilly.cashcaretaker.R
 import com.adammcneilly.cashcaretaker.entities.Account
+import com.androidessence.utility.asCurrency
 
 /**
  * Adapter for displaying Accounts in a RecyclerView.
@@ -33,9 +34,11 @@ class AccountAdapter(items: List<Account> = ArrayList()): RecyclerView.Adapter<A
 
     class AccountViewHolder(view: View?): RecyclerView.ViewHolder(view) {
         private val name = view?.findViewById<TextView>(R.id.account_name)
+        private val balance = view?.findViewById<TextView>(R.id.account_balance)
 
         fun bindItem(item: Account?) {
             name?.text = item?.name
+            balance?.text = item?.balance?.asCurrency()
         }
     }
 }

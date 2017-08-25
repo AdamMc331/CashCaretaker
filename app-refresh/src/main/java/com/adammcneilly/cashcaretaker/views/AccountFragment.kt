@@ -3,11 +3,14 @@ package com.adammcneilly.cashcaretaker.views
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
+import com.adammcneilly.cashcaretaker.DividerItemDecoration
 import com.adammcneilly.cashcaretaker.R
 import com.adammcneilly.cashcaretaker.adapters.AccountAdapter
 import com.adammcneilly.cashcaretaker.entities.Account
@@ -17,27 +20,32 @@ import com.adammcneilly.cashcaretaker.presenters.AccountPresenterImpl
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
 
-class AccountsActivity : AppCompatActivity(), AccountView {
+/**
+ * Displays a list of accounts to the user.
+ */
+class AccountFragment: Fragment(), AccountView {
     private val adapter = AccountAdapter()
-    private val progressBar: ProgressBar by lazy { findViewById<ProgressBar>(R.id.progress) }
-    private val recyclerView: RecyclerView by lazy { findViewById<RecyclerView>(R.id.accounts) }
+    private lateinit var progressBar: ProgressBar
+    private lateinit var recyclerView: RecyclerView
     private val presenter: AccountPresenter by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_accounts)
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater?.inflate(R.layout.fragment_account, container, false)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        progressBar = view?.findViewById<ProgressBar>(R.id.progress) as ProgressBar
+        recyclerView = view.findViewById<RecyclerView>(R.id.accounts) as RecyclerView
 
-        val layoutManager = LinearLayoutManager(this)
+        val layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
+        recyclerView.addItemDecoration(DividerItemDecoration(context))
 
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
             presenter.onAddClicked()
         }
+
+        return view
     }
 
     override fun onResume() {
@@ -65,7 +73,18 @@ class AccountsActivity : AppCompatActivity(), AccountView {
     }
 
     override fun navigateToAddAccount() {
-        val intent = Intent(this, AddAccountActivity::class.java)
+        val intent = Intent(context, AddAccountActivity::class.java)
         startActivity(intent)
+    }
+
+    companion object {
+        fun newInstance(): AccountFragment {
+            val fragment = AccountFragment()
+
+            val args = Bundle()
+            fragment.arguments = args
+
+            return fragment
+        }
     }
 }
