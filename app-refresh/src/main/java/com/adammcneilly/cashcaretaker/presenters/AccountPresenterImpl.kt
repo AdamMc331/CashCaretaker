@@ -9,7 +9,7 @@ import com.adammcneilly.cashcaretaker.views.AccountView
  */
 class AccountPresenterImpl(accountView: AccountView, private val accountInteractor: AccountInteractor) : AccountPresenter, AccountInteractor.OnFinishedListener {
 
-    var accountView: AccountView? = accountView
+    private var accountView: AccountView? = accountView
         private set
 
     override fun onResume() {
@@ -21,8 +21,12 @@ class AccountPresenterImpl(accountView: AccountView, private val accountInteract
         accountView = null
     }
 
-    override fun onFinished(accounts: List<Account>) {
+    override fun onFetched(accounts: List<Account>) {
         accountView?.setAccounts(accounts)
         accountView?.hideProgress()
+    }
+
+    override fun onAddClicked() {
+        accountView?.navigateToAddAccount()
     }
 }

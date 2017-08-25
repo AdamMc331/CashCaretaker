@@ -16,7 +16,7 @@ interface AccountDAO {
     fun getAll(): Flowable<List<Account>>
 
     @Insert
-    fun insert(vararg accounts: Account): List<Long>
+    fun insert(accounts: List<Account>): List<Long>
 
     @Delete
     fun delete(account: Account): Int

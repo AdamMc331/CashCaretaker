@@ -7,7 +7,7 @@ import com.adammcneilly.cashcaretaker.entities.Account
  */
 interface AccountInteractor {
     interface OnFinishedListener {
-        fun onFinished(accounts: List<Account>)
+        fun onFetched(accounts: List<Account>)
     }
 
     fun getAll(listener: OnFinishedListener)

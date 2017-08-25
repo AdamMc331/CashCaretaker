@@ -3,8 +3,7 @@ package com.adammcneilly.cashcaretaker.presenters
 /**
  * Presenter that handles account business logic.
  */
-interface AccountPresenter {
+interface AccountPresenter: BasePresenter {
     fun onResume()
-
-    fun onDestroy()
+    fun onAddClicked()
 }

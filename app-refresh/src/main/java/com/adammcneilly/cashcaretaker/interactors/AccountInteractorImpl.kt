@@ -15,6 +15,6 @@ class AccountInteractorImpl : AccountInteractor {
                 .getAll()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ listener.onFinished(it) })
+                .subscribe({ listener.onFetched(it) })
     }
 }
