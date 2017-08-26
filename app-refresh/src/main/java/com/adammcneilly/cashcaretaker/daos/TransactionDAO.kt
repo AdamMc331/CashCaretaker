@@ -4,7 +4,6 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
-import com.adammcneilly.cashcaretaker.entities.Account
 import com.adammcneilly.cashcaretaker.entities.Transaction
 import io.reactivex.Flowable
 
@@ -13,11 +12,11 @@ import io.reactivex.Flowable
  */
 @Dao
 interface TransactionDAO {
-    @Query("SELECT * FROM transaction")
+    @Query("SELECT * FROM transactionTable")
     fun getAll(): Flowable<List<Transaction>>
 
-    @Query("SELECT * FROM transaction WHERE accountName = :p0")
-    fun getAllForAccount(accountName: String): Flowable<List<Account>>
+    @Query("SELECT * FROM transactionTable WHERE accountName = :arg0")
+    fun getAllForAccount(accountName: String): Flowable<List<Transaction>>
 
     @Insert
     fun insert(transactions: List<Transaction>): List<Long>

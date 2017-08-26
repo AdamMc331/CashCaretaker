@@ -20,4 +20,7 @@ interface AccountDAO {
 
     @Delete
     fun delete(account: Account): Int
+
+    @Query("DELETE FROM account")
+    fun deleteAll(): Int
 }

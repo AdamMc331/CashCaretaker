@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 /**
  * Transaction entity for an account
  */
-@Entity(foreignKeys = arrayOf(ForeignKey(entity = Account::class, parentColumns = arrayOf("name"), childColumns = arrayOf("accountName"), onDelete = ForeignKey.CASCADE)))
+@Entity(tableName = "transactionTable", foreignKeys = arrayOf(ForeignKey(entity = Account::class, parentColumns = arrayOf("name"), childColumns = arrayOf("accountName"), onDelete = ForeignKey.CASCADE)))
 data class Transaction(
         var accountName: String = "",
         var amount: Double = 0.0,
