@@ -1,4 +1,4 @@
-package com.adammcneilly.cashcaretaker.interactors
+package com.adammcneilly.cashcaretaker.account
 
 import com.adammcneilly.cashcaretaker.App
 import com.adammcneilly.cashcaretaker.data.CCDatabase

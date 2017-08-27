@@ -1,6 +1,6 @@
-package com.adammcneilly.cashcaretaker.views
+package com.adammcneilly.cashcaretaker.addaccount
 
-import com.adammcneilly.cashcaretaker.entities.Account
+import com.adammcneilly.cashcaretaker.core.DataView
 
 /**
  * View to add an account.

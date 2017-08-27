@@ -1,4 +1,6 @@
-package com.adammcneilly.cashcaretaker.presenters
+package com.adammcneilly.cashcaretaker.addaccount
+
+import com.adammcneilly.cashcaretaker.core.BasePresenter
 
 /**
  * Presenter for adding an account.

@@ -1,9 +1,9 @@
-package com.adammcneilly.cashcaretaker.interactors
+package com.adammcneilly.cashcaretaker.addaccount
 
 import android.database.sqlite.SQLiteConstraintException
 import com.adammcneilly.cashcaretaker.App
 import com.adammcneilly.cashcaretaker.data.CCDatabase
-import com.adammcneilly.cashcaretaker.entities.Account
+import com.adammcneilly.cashcaretaker.account.Account
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

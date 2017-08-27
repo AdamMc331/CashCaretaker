@@ -1,4 +1,4 @@
-package com.adammcneilly.cashcaretaker.presenters
+package com.adammcneilly.cashcaretaker.core
 
 /**
  * Base presenter that knows we need to handle onDestroy.

@@ -1,8 +1,9 @@
-package com.adammcneilly.cashcaretaker.entities
+package com.adammcneilly.cashcaretaker.transaction
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.PrimaryKey
+import com.adammcneilly.cashcaretaker.account.Account
 
 /**
  * Transaction entity for an account

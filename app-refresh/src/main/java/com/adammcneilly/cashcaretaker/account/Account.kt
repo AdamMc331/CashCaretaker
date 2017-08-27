@@ -1,4 +1,4 @@
-package com.adammcneilly.cashcaretaker.entities
+package com.adammcneilly.cashcaretaker.account
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey

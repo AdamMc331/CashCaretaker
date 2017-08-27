@@ -4,10 +4,8 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.adammcneilly.cashcaretaker.daos.AccountDAO
-import com.adammcneilly.cashcaretaker.daos.TransactionDAO
-import com.adammcneilly.cashcaretaker.entities.Account
-import com.adammcneilly.cashcaretaker.entities.Transaction
+import com.adammcneilly.cashcaretaker.account.Account
+import com.adammcneilly.cashcaretaker.transaction.Transaction
 
 /**
  * Database class for the CC application.

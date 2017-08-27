@@ -3,10 +3,8 @@ package com.adammcneilly.cashcaretaker.data
 import android.arch.persistence.room.Room
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import com.adammcneilly.cashcaretaker.MainActivity
-import com.adammcneilly.cashcaretaker.daos.AccountDAO
-import com.adammcneilly.cashcaretaker.daos.TransactionDAO
-import com.adammcneilly.cashcaretaker.entities.Account
+import com.adammcneilly.cashcaretaker.account.AccountActivity
+import com.adammcneilly.cashcaretaker.account.Account
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -14,8 +12,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 /**
  * Tests the database code.
@@ -26,7 +22,7 @@ class CCDatabaseTest {
     private lateinit var accountDao: AccountDAO
     private lateinit var transactionDao: TransactionDAO
 
-    @JvmField @Rule val mainActivity = ActivityTestRule<MainActivity>(MainActivity::class.java)
+    @JvmField @Rule val mainActivity = ActivityTestRule<AccountActivity>(AccountActivity::class.java)
 
     @Before
     fun setUp() {

@@ -1,10 +1,10 @@
-package com.adammcneilly.cashcaretaker.daos
+package com.adammcneilly.cashcaretaker.data
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
-import com.adammcneilly.cashcaretaker.entities.Transaction
+import com.adammcneilly.cashcaretaker.transaction.Transaction
 import io.reactivex.Flowable
 
 /**

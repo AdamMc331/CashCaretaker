@@ -1,6 +1,4 @@
-package com.adammcneilly.cashcaretaker.interactors
-
-import com.adammcneilly.cashcaretaker.entities.Account
+package com.adammcneilly.cashcaretaker.account
 
 /**
  * Interface for handling account loading.

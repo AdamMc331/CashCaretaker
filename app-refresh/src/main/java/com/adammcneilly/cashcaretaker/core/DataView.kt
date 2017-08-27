@@ -1,4 +1,4 @@
-package com.adammcneilly.cashcaretaker.views
+package com.adammcneilly.cashcaretaker.core
 
 /**
  * Base interface for any view that displays data.

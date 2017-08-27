@@ -1,4 +1,4 @@
-package com.adammcneilly.cashcaretaker.views
+package com.adammcneilly.cashcaretaker.addaccount
 
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
@@ -8,9 +8,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.R
-import com.adammcneilly.cashcaretaker.interactors.AddAccountInteractorImpl
-import com.adammcneilly.cashcaretaker.presenters.AddAccountPresenter
-import com.adammcneilly.cashcaretaker.presenters.AddAccountPresenterImpl
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
 

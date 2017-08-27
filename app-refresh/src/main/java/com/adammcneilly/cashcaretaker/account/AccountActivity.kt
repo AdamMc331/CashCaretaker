@@ -1,11 +1,11 @@
-package com.adammcneilly.cashcaretaker
+package com.adammcneilly.cashcaretaker.account
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import com.adammcneilly.cashcaretaker.views.AccountFragment
+import com.adammcneilly.cashcaretaker.R
 
-class MainActivity : AppCompatActivity() {
+class AccountActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

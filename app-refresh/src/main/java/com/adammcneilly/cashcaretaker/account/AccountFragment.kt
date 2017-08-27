@@ -1,4 +1,4 @@
-package com.adammcneilly.cashcaretaker.views
+package com.adammcneilly.cashcaretaker.account
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,11 +12,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.DividerItemDecoration
 import com.adammcneilly.cashcaretaker.R
-import com.adammcneilly.cashcaretaker.adapters.AccountAdapter
-import com.adammcneilly.cashcaretaker.entities.Account
-import com.adammcneilly.cashcaretaker.interactors.AccountInteractorImpl
-import com.adammcneilly.cashcaretaker.presenters.AccountPresenter
-import com.adammcneilly.cashcaretaker.presenters.AccountPresenterImpl
+import com.adammcneilly.cashcaretaker.addaccount.AddAccountActivity
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
 

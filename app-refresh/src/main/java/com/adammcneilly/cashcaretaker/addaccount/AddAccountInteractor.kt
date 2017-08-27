@@ -1,4 +1,4 @@
-package com.adammcneilly.cashcaretaker.interactors
+package com.adammcneilly.cashcaretaker.addaccount
 
 /**
  * Interface for adding an account in the database.

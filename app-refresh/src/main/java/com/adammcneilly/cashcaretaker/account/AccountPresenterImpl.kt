@@ -1,8 +1,4 @@
-package com.adammcneilly.cashcaretaker.presenters
-
-import com.adammcneilly.cashcaretaker.entities.Account
-import com.adammcneilly.cashcaretaker.interactors.AccountInteractor
-import com.adammcneilly.cashcaretaker.views.AccountView
+package com.adammcneilly.cashcaretaker.account
 
 /**
  * Implementation of the presenter for accounts.

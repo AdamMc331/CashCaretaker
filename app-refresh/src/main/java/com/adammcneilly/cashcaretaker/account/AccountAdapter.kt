@@ -1,4 +1,4 @@
-package com.adammcneilly.cashcaretaker.adapters
+package com.adammcneilly.cashcaretaker.account
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.adammcneilly.cashcaretaker.R
-import com.adammcneilly.cashcaretaker.entities.Account
 import com.androidessence.utility.asCurrency
 
 /**
