@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/text_padding"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.adammcneilly.cashcaretaker.addaccount.AddAccountActivity"
-    tools:showIn="@layout/activity_add_account">
+    android:background="@android:color/white"
+    tools:context="com.adammcneilly.cashcaretaker.addaccount.AddAccountFragment"
+    tools:showIn="@layout/fragment_add_account">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/account_name_layout"

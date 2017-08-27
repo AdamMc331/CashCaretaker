@@ -3,7 +3,7 @@ package com.adammcneilly.cashcaretaker.data
 import android.arch.persistence.room.Room
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import com.adammcneilly.cashcaretaker.account.AccountActivity
+import com.adammcneilly.cashcaretaker.main.MainActivity
 import com.adammcneilly.cashcaretaker.account.Account
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
@@ -22,7 +22,7 @@ class CCDatabaseTest {
     private lateinit var accountDao: AccountDAO
     private lateinit var transactionDao: TransactionDAO
 
-    @JvmField @Rule val mainActivity = ActivityTestRule<AccountActivity>(AccountActivity::class.java)
+    @JvmField @Rule val mainActivity = ActivityTestRule<MainActivity>(MainActivity::class.java)
 
     @Before
     fun setUp() {
@@ -47,7 +47,7 @@ class CCDatabaseTest {
 
         val accountsFlowable = accountDao.getAll()
         val testSubscriber = TestSubscriber<List<Account>>()
-        accountsFlowable.subscribe(testSubscriber)
+        accountsFlowable.blockingSubscribe(testSubscriber)
 
         testSubscriber.awaitTerminalEvent()
         testSubscriber.assertNoErrors()

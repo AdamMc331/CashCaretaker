@@ -7,5 +7,4 @@ import com.adammcneilly.cashcaretaker.core.DataView
  */
 interface AccountView: DataView {
     fun setAccounts(accounts: List<Account>)
-    fun navigateToAddAccount()
 }

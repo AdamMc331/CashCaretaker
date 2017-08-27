@@ -17,21 +17,22 @@ class AddAccountPresenterImpl(addAccountView: AddAccountView, private val intera
     }
 
     override fun onInserted(ids: List<Long>) {
+        addAccountView?.onInserted(ids)
         addAccountView?.hideProgress()
     }
 
     override fun onInsertConflict() {
-        addAccountView?.hideProgress()
         addAccountView?.onInsertConflict()
+        addAccountView?.hideProgress()
     }
 
     override fun onAccountNameError() {
-        addAccountView?.hideProgress()
         addAccountView?.showAccountNameError()
+        addAccountView?.hideProgress()
     }
 
     override fun onAccountBalanceError() {
-        addAccountView?.hideProgress()
         addAccountView?.showAccountBalanceError()
+        addAccountView?.hideProgress()
     }
 }

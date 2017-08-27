@@ -5,7 +5,7 @@ import android.content.Context;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.adammcneilly.cashcaretaker.account.AccountActivity;
+import com.adammcneilly.cashcaretaker.main.MainActivity;
 import com.adammcneilly.cashcaretaker.account.Account;
 
 import org.junit.After;
@@ -33,7 +33,7 @@ public class CCDatabaseTestJava {
     private AccountDAO accountDAO;
 
     @Rule
-    public ActivityTestRule<AccountActivity> mainActivity = new ActivityTestRule<>(AccountActivity.class);
+    public ActivityTestRule<MainActivity> mainActivity = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void setup() {

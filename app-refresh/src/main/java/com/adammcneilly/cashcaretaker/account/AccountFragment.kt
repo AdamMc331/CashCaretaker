@@ -1,6 +1,5 @@
 package com.adammcneilly.cashcaretaker.account
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
@@ -12,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.DividerItemDecoration
 import com.adammcneilly.cashcaretaker.R
-import com.adammcneilly.cashcaretaker.addaccount.AddAccountActivity
+import com.adammcneilly.cashcaretaker.main.MainView
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
 
@@ -36,10 +35,9 @@ class AccountFragment: Fragment(), AccountView {
         recyclerView.layoutManager = layoutManager
         recyclerView.addItemDecoration(DividerItemDecoration(context))
 
-        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener {
-            presenter.onAddClicked()
-        }
+        view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
+            (activity as MainView).navigateToAddAccount()
+        })
 
         return view
     }
@@ -68,12 +66,9 @@ class AccountFragment: Fragment(), AccountView {
         adapter.items = accounts
     }
 
-    override fun navigateToAddAccount() {
-        val intent = Intent(context, AddAccountActivity::class.java)
-        startActivity(intent)
-    }
-
     companion object {
+        val FRAGMENT_NAME: String = AccountFragment::class.java.simpleName
+
         fun newInstance(): AccountFragment {
             val fragment = AccountFragment()
 

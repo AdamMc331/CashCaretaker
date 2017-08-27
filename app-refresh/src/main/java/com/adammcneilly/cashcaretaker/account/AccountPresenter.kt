@@ -7,5 +7,4 @@ import com.adammcneilly.cashcaretaker.core.BasePresenter
  */
 interface AccountPresenter: BasePresenter {
     fun onResume()
-    fun onAddClicked()
 }

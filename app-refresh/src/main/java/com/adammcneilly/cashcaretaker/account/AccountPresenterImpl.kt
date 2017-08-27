@@ -21,8 +21,4 @@ class AccountPresenterImpl(accountView: AccountView, private val accountInteract
         accountView?.setAccounts(accounts)
         accountView?.hideProgress()
     }
-
-    override fun onAddClicked() {
-        accountView?.navigateToAddAccount()
-    }
 }
