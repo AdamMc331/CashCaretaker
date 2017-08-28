@@ -1,16 +1,22 @@
 package com.adammcneilly.cashcaretaker.account
 
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+
 /**
  * Implementation of the presenter for accounts.
  */
-class AccountPresenterImpl(accountView: AccountView, private val accountInteractor: AccountInteractor) : AccountPresenter, AccountInteractor.OnFinishedListener {
+class AccountPresenterImpl(accountView: AccountView, private val accountInteractor: AccountInteractor) : AccountPresenter {
 
     private var accountView: AccountView? = accountView
         private set
 
     override fun onResume() {
         accountView?.showProgress()
-        accountInteractor.getAll(this)
+        accountInteractor.getAll()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ onFetched(it) })
     }
 
     override fun onDestroy() {

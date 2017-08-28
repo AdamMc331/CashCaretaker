@@ -1,15 +1,10 @@
 package com.adammcneilly.cashcaretaker.addaccount
 
+import com.adammcneilly.cashcaretaker.account.Account
+
 /**
  * Interface for adding an account in the database.
  */
 interface AddAccountInteractor {
-    interface OnInsertedListener {
-        fun onInserted(ids: List<Long>)
-        fun onInsertConflict()
-        fun onAccountNameError()
-        fun onAccountBalanceError()
-    }
-
-    fun insert(accountName: String, accountBalance: String, listener: OnInsertedListener)
+    fun insert(accounts: List<Account>): List<Long>
 }
