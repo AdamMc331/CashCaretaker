@@ -1,11 +1,11 @@
 package com.adammcneilly.cashcaretaker.data
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.persistence.room.Room
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import com.adammcneilly.cashcaretaker.main.MainActivity
 import com.adammcneilly.cashcaretaker.account.Account
-import io.reactivex.subscribers.TestSubscriber
+import com.adammcneilly.cashcaretaker.main.MainActivity
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -22,6 +22,7 @@ class CCDatabaseTest {
     private lateinit var accountDao: AccountDAO
     private lateinit var transactionDao: TransactionDAO
 
+    @JvmField @Rule val instantTaskExecutorRule = InstantTaskExecutorRule()
     @JvmField @Rule val mainActivity = ActivityTestRule<MainActivity>(MainActivity::class.java)
 
     @Before
@@ -45,15 +46,9 @@ class CCDatabaseTest {
         val ids = accountDao.insert(listOf(testAccount))
         assertEquals(1, ids.size)
 
-        val accountsFlowable = accountDao.getAll()
-        val testSubscriber = TestSubscriber<List<Account>>()
-        accountsFlowable.blockingSubscribe(testSubscriber)
-
-        testSubscriber.awaitTerminalEvent()
-        testSubscriber.assertNoErrors()
-        testSubscriber.assertValueCount(1)
-        // Fails: testSubscriber.assertValue(listOf(testAccount))
-        // Fails: testSubscriber.assertResult(listOf(testAccount))
+        accountDao.getAll()
+                .test()
+                .assertValue(listOf(testAccount))
     }
 
     companion object {

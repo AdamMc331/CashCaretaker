@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import com.adammcneilly.cashcaretaker.R
 import com.adammcneilly.cashcaretaker.account.AccountFragment
+import com.adammcneilly.cashcaretaker.addaccount.AddAccountDialog
 import com.adammcneilly.cashcaretaker.addaccount.AddAccountFragment
 import timber.log.Timber
 
@@ -31,18 +32,19 @@ class MainActivity : AppCompatActivity(), MainView, FragmentManager.OnBackStackC
     }
 
     override fun navigateToAddAccount() {
-        supportFragmentManager.beginTransaction()
-                .add(R.id.container, AddAccountFragment.newInstance(), AddAccountFragment.FRAGMENT_NAME)
-                .addToBackStack(AddAccountFragment.FRAGMENT_NAME)
-                .commit()
+        val dialog = AddAccountDialog()
+        dialog.show(supportFragmentManager, AddAccountDialog.FRAGMENT_NAME)
+//        supportFragmentManager.beginTransaction()
+//                .add(R.id.container, AddAccountFragment.newInstance(), AddAccountFragment.FRAGMENT_NAME)
+//                .addToBackStack(AddAccountFragment.FRAGMENT_NAME)
+//                .commit()
     }
 
     override fun onAccountInserted() {
         Timber.d("onAccountInserted")
 
         hideKeyboard()
-        val fragment = supportFragmentManager.findFragmentByTag(AddAccountFragment.FRAGMENT_NAME)
-        supportFragmentManager.beginTransaction().remove(fragment).commit()
+        supportFragmentManager.popBackStackImmediate(AccountFragment.FRAGMENT_NAME, 0)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
@@ -66,9 +68,20 @@ class MainActivity : AppCompatActivity(), MainView, FragmentManager.OnBackStackC
     override fun onBackStackChanged() {
         val shouldShowUp = supportFragmentManager.backStackEntryCount > 1
         supportActionBar?.setDisplayHomeAsUpEnabled(shouldShowUp)
+
+        val titleResource = when (supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name) {
+            AddAccountFragment.FRAGMENT_NAME -> R.string.add_account
+            else -> R.string.app_name
+        }
+        supportActionBar?.setTitle(titleResource)
     }
 
-    private fun hideKeyboard() {
+    fun showKeyboard() {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+    }
+
+    fun hideKeyboard() {
         val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         // check if no view has focus:

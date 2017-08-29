@@ -1,6 +1,8 @@
 package com.adammcneilly.cashcaretaker
 
 import android.app.Application
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import timber.log.Timber
 
 /**

@@ -19,6 +19,7 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'https://maven.google.com' }
+        maven { url  "http://dl.bintray.com/androidessence/maven" }
     }
 
     ext {
@@ -33,7 +34,7 @@ allprojects {
         playServicesVersion = "10.2.1"
         constraintLayoutVersion = "1.0.2"
         recyclerViewCursorAdapterVersion = "1.0.0"
-        materialDesignSpecsVersion = "1.0.4"
+        materialDesignSpecsVersion = "2.0.0"
         recyclerViewUtilsVersion = "2.0.1"
         timberVersion = "4.5.1"
         wearableVersion = "2.0.1"

@@ -8,4 +8,5 @@
     <string name="error_account_name_exists">An account with this name already exists.</string>
     <string name="err_account_name_invalid">Please enter a valid account name.</string>
     <string name="err_account_balance_invalid">Please enter a valid account balance.</string>
+    <string name="add_account">Add Account</string>
 </resources>

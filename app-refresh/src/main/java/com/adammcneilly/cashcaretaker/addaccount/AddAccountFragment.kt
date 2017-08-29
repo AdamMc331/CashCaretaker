@@ -1,11 +1,13 @@
 package com.adammcneilly.cashcaretaker.addaccount
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.R
@@ -30,7 +32,17 @@ class AddAccountFragment : Fragment(), AddAccountView {
             addAccount(accountName.text.toString(), accountBalance.text.toString())
         })
 
+        accountName.requestFocus()
+        val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        hideKeyboard()
     }
 
     override fun showProgress() {
@@ -60,6 +72,14 @@ class AddAccountFragment : Fragment(), AddAccountView {
     override fun onInserted(ids: List<Long>) {
         //TODO: There has to be a better way than forcing this to be coupled to the activity.
         (activity as MainView).onAccountInserted()
+    }
+
+    private fun hideKeyboard() {
+        val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        // check if no view has focus:
+        val v = activity.currentFocus ?: return
+        inputManager.hideSoftInputFromWindow(v.windowToken, 0)
     }
 
     companion object {
