@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import com.adammcneilly.cashcaretaker.R
-import com.adammcneilly.cashcaretaker.account.AccountFragment
+import com.adammcneilly.cashcaretaker.account.AccountCardFragment
 import com.adammcneilly.cashcaretaker.addaccount.AddAccountDialog
 import com.adammcneilly.cashcaretaker.addaccount.AddAccountFragment
 import timber.log.Timber
@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity(), MainView, FragmentManager.OnBackStackC
         supportFragmentManager.addOnBackStackChangedListener(this)
 
         supportFragmentManager.beginTransaction()
-                .add(R.id.container, AccountFragment.newInstance(), AccountFragment.FRAGMENT_NAME)
-                .addToBackStack(AccountFragment.FRAGMENT_NAME)
+                .add(R.id.container, AccountCardFragment.newInstance(), AccountCardFragment.FRAGMENT_NAME)
+                .addToBackStack(AccountCardFragment.FRAGMENT_NAME)
                 .commit()
     }
 
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), MainView, FragmentManager.OnBackStackC
         Timber.d("onAccountInserted")
 
         hideKeyboard()
-        supportFragmentManager.popBackStackImmediate(AccountFragment.FRAGMENT_NAME, 0)
+        supportFragmentManager.popBackStackImmediate(AccountCardFragment.FRAGMENT_NAME, 0)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {

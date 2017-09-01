@@ -4,12 +4,13 @@ import android.content.Context
 import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.AttributeSet
 import com.adammcneilly.cashcaretaker.R
 
 /**
  * CardView for displaying a list of accounts.
  */
-class AccountCardView(context: Context): CardView(context) {
+class AccountCardView(context: Context, attrs: AttributeSet? = null): CardView(context, attrs) {
     private val adapter = AccountAdapter()
 
     init {
