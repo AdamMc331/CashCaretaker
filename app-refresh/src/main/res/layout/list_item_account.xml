@@ -9,26 +9,29 @@
 
     <TextView
         android:id="@+id/account_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/account_balance"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Testing" />
+        tools:text="Testinsadfasdfag" />
 
     <TextView
         android:id="@+id/account_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/double_margin"
+        android:layout_marginRight="@dimen/double_margin"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintLeft_toRightOf="@id/account_name"
-        app:layout_constraintRight_toLeftOf="@+id/deposit_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="$100.00" />
+        tools:text="$1,000,000.00" />
 
     <ImageView
         android:id="@+id/deposit_button"
@@ -38,6 +41,7 @@
         android:layout_marginRight="@dimen/double_margin"
         android:contentDescription="@string/create_deposit"
         android:src="@drawable/ic_add_green_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/withdrawal"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,6 +53,7 @@
         android:layout_marginRight="@dimen/double_margin"
         android:contentDescription="@string/create_withdrawal"
         android:src="@drawable/ic_remove_red_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -1,7 +1,6 @@
 package com.adammcneilly.cashcaretaker.addaccount
 
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
@@ -9,8 +8,6 @@ import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import com.adammcneilly.cashcaretaker.R
 import com.adammcneilly.cashcaretaker.main.MainActivity
@@ -42,7 +39,7 @@ class AddAccountDialog: DialogFragment(), AddAccountView {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.window.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.setTitle(R.string.add_account)
         return dialog
     }
 
