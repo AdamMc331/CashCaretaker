@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.adammcneilly.cashcaretaker.R
-import com.adammcneilly.cashcaretaker.main.MainActivity
 
 /**
  * Dialog to insert an account.
@@ -31,8 +30,6 @@ class AddAccountDialog: DialogFragment(), AddAccountView {
         }
 
         accountName.requestFocus()
-        //TODO: ??
-        (activity as MainActivity).showKeyboard()
 
         return view
     }
@@ -50,9 +47,6 @@ class AddAccountDialog: DialogFragment(), AddAccountView {
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
-        //TODO: ??
-        (activity as MainActivity).hideKeyboard()
-
         super.onDismiss(dialog)
     }
 

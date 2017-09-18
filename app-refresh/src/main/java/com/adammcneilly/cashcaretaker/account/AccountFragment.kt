@@ -36,6 +36,7 @@ class AccountFragment: Fragment(), AccountView {
         recyclerView.addItemDecoration(DividerItemDecoration(context))
 
         view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
+            //TODO: Is there a better way?
             (activity as MainView).navigateToAddAccount()
         })
 
