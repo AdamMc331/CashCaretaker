@@ -8,13 +8,12 @@ android:
     - android-22
     - platform-tools
     - extra-android-support
-    - extra-google-google_play_services
-    - extra-android-m2repository
-    - extra-google-m2repository
-    - sys-img-armeabi-v7a-android-22
+    - extra-android-m2repositor
+#    - extra-google-google_play_servicesy
+#    - extra-google-m2repository
+#    - sys-img-armeabi-v7a-android-22
   licenses:
     - android-sdk-license-.+
-    - '.+'
 
 sudo: required
 
@@ -30,6 +29,6 @@ before_script:
 
 script:
 #  - ./gradlew clean build connectedCheck --info
-  - ./gradlew clean build --info
+  - ./gradlew clean build --stacktrace --info
 
 after_failure: "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
