@@ -29,6 +29,6 @@ before_script:
 
 script:
 #  - ./gradlew clean build connectedCheck --info
-  - ./gradlew clean build --stacktrace --info
+  - ./gradlew clean build --stacktrace
 
 after_failure: "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
