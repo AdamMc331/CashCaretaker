@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.DividerItemDecoration
 import com.adammcneilly.cashcaretaker.R
+import com.adammcneilly.cashcaretaker.entity.EntityController
+import com.adammcneilly.cashcaretaker.entity.EntityPresenter
 import com.adammcneilly.cashcaretaker.main.MainView
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
@@ -18,17 +20,17 @@ import com.androidessence.utility.show
 /**
  * Displays a list of accounts to the user.
  */
-class AccountFragment: Fragment(), AccountView {
+class AccountFragment: Fragment(), EntityController<Account> {
     private val adapter = AccountAdapter()
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
-    private val presenter: AccountPresenter by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
+    private val presenter: EntityPresenter<Account> by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.fragment_account, container, false)
 
         progressBar = view?.findViewById<ProgressBar>(R.id.progress) as ProgressBar
-        recyclerView = view.findViewById<RecyclerView>(R.id.accounts) as RecyclerView
+        recyclerView = view.findViewById<RecyclerView>(R.id.accounts)
 
         val layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
@@ -45,7 +47,7 @@ class AccountFragment: Fragment(), AccountView {
 
     override fun onResume() {
         super.onResume()
-        presenter.onResume()
+        presenter.onAttach()
     }
 
     override fun onDestroy() {
@@ -63,8 +65,8 @@ class AccountFragment: Fragment(), AccountView {
         recyclerView.show()
     }
 
-    override fun setAccounts(accounts: List<Account>) {
-        adapter.items = accounts
+    override fun showEntities(entities: List<Account>) {
+        adapter.items = entities
     }
 
     companion object {
