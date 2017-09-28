@@ -32,6 +32,9 @@ android {
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -65,7 +68,7 @@ dependencies {
     // Testing
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    androidTestCompile ("android.arch.core:core-testing:$roomLibraryVersion") {
+    androidTestCompile("android.arch.core:core-testing:$roomLibraryVersion") {
         exclude module: 'support-compat'
         exclude module: 'support-annotations'
         exclude module: 'support-core-utils'
