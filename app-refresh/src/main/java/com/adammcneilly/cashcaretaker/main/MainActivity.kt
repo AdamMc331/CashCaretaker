@@ -8,12 +8,11 @@ import android.view.MenuItem
 import com.adammcneilly.cashcaretaker.R
 import com.adammcneilly.cashcaretaker.account.AccountFragment
 import com.adammcneilly.cashcaretaker.addaccount.AddAccountDialog
-import com.adammcneilly.cashcaretaker.addaccount.AddAccountFragment
 import com.adammcneilly.cashcaretaker.transaction.TransactionFragment
 import timber.log.Timber
 
 
-class MainActivity : AppCompatActivity(), MainView, FragmentManager.OnBackStackChangedListener {
+class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBackStackChangedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,11 +67,5 @@ class MainActivity : AppCompatActivity(), MainView, FragmentManager.OnBackStackC
     override fun onBackStackChanged() {
         val shouldShowUp = supportFragmentManager.backStackEntryCount > 1
         supportActionBar?.setDisplayHomeAsUpEnabled(shouldShowUp)
-
-        val titleResource = when (supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name) {
-            AddAccountFragment.FRAGMENT_NAME -> R.string.add_account
-            else -> R.string.app_name
-        }
-        supportActionBar?.setTitle(titleResource)
     }
 }

@@ -12,7 +12,7 @@ import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.DividerItemDecoration
 import com.adammcneilly.cashcaretaker.R
 import com.adammcneilly.cashcaretaker.entity.EntityPresenter
-import com.adammcneilly.cashcaretaker.main.MainView
+import com.adammcneilly.cashcaretaker.main.MainController
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
 import timber.log.Timber
@@ -25,6 +25,7 @@ class AccountFragment: Fragment(), AccountController {
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
     private val presenter: EntityPresenter<Account> by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
+    private val mainController: MainController by lazy { (activity as MainController) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_account, container, false)
@@ -40,7 +41,7 @@ class AccountFragment: Fragment(), AccountController {
 
         view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
             //TODO: Is there a better way?
-            (activity as MainView).navigateToAddAccount()
+            (activity as MainController).navigateToAddAccount()
         })
 
         return view
@@ -78,6 +79,10 @@ class AccountFragment: Fragment(), AccountController {
     override fun onDepositButtonClicked(account: Account) {
         //TODO: Create AddTransactionDialog
         Timber.d("Deposit button clicked.")
+    }
+
+    override fun onAccountSelected(account: Account) {
+        mainController.showTransactions(account.name)
     }
 
     companion object {

@@ -9,4 +9,5 @@ interface AccountController : DataController {
     fun setAccounts(accounts: List<Account>)
     fun onWithdrawalButtonClicked(account: Account)
     fun onDepositButtonClicked(account: Account)
+    fun onAccountSelected(account: Account)
 }

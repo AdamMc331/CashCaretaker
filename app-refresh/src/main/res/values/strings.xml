@@ -11,4 +11,5 @@
     <string name="add_account">Add Account</string>
     <string name="create_withdrawal">Create Withdrawal</string>
     <string name="create_deposit">Create Deposit</string>
+    <string name="account_transactions">%1$s Transactions</string>
 </resources>

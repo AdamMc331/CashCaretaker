@@ -2,11 +2,14 @@ package com.adammcneilly.cashcaretaker.transaction
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import com.adammcneilly.cashcaretaker.DividerItemDecoration
 import com.adammcneilly.cashcaretaker.R
 import com.adammcneilly.cashcaretaker.entity.EntityPresenter
 import com.androidessence.utility.hide
@@ -24,8 +27,11 @@ class TransactionFragment: Fragment(), TransactionController {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val accountName = savedInstanceState?.getString(ARG_ACCOUNT).orEmpty()
+        val accountName = arguments?.getString(ARG_ACCOUNT).orEmpty()
         presenter = TransactionPresenterImpl(this, TransactionInteractorImpl(), accountName)
+
+        val title = if (accountName.isEmpty()) getString(R.string.app_name) else getString(R.string.account_transactions, accountName)
+        (activity as AppCompatActivity).supportActionBar?.title = title
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -33,6 +39,12 @@ class TransactionFragment: Fragment(), TransactionController {
 
         progressBar = view.findViewById<ProgressBar>(R.id.progress) as ProgressBar
         recyclerView = view.findViewById<RecyclerView>(R.id.transactions) as RecyclerView
+
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = layoutManager
+        //TODO: If context were null?
+        recyclerView.addItemDecoration(DividerItemDecoration(context!!))
 
         return view
     }
