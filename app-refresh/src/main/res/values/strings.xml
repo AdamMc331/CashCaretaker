@@ -12,4 +12,11 @@
     <string name="create_withdrawal">Create Withdrawal</string>
     <string name="create_deposit">Create Deposit</string>
     <string name="account_transactions">%1$s Transactions</string>
+    <string name="description">Description</string>
+    <string name="amount">Amount</string>
+    <string name="add_transaction">Add Transaction</string>
+    <string name="error_invalid_description">Please enter a valid description.</string>
+    <string name="error_invalid_amount">Please enter a valid amount.</string>
+    <string name="add_withdrawal">Add Withdrawal</string>
+    <string name="add_deposit">Add Deposit</string>
 </resources>

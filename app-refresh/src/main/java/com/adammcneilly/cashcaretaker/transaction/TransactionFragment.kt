@@ -49,6 +49,16 @@ class TransactionFragment: Fragment(), TransactionController {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.onAttach()
+    }
+
+    override fun onDestroyView() {
+        presenter.onDestroy()
+        super.onDestroyView()
+    }
+
     override fun showProgress() {
         progressBar.show()
     }

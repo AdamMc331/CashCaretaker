@@ -46,10 +46,6 @@ class AddAccountDialog: DialogFragment(), AddAccountView {
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-    }
-
     override fun showProgress() {
         //TODO:
     }

@@ -17,6 +17,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/account_balance"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Testinsadfasdfag" />
 
     <TextView
@@ -49,8 +50,7 @@
         android:id="@+id/withdrawal_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/double_margin"
-        android:layout_marginRight="@dimen/double_margin"
+        android:padding="@dimen/double_margin"
         android:contentDescription="@string/create_withdrawal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

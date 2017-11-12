@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.DividerItemDecoration
 import com.adammcneilly.cashcaretaker.R
+import com.adammcneilly.cashcaretaker.addtransaction.AddTransactionDialog
 import com.adammcneilly.cashcaretaker.entity.EntityPresenter
 import com.adammcneilly.cashcaretaker.main.MainController
 import com.androidessence.utility.hide
@@ -72,13 +73,13 @@ class AccountFragment: Fragment(), AccountController {
     }
 
     override fun onWithdrawalButtonClicked(account: Account) {
-        //TODO: Create AddTransactionDialog
-        Timber.d("Withdrawal button clicked.")
+        val dialog = AddTransactionDialog.newInstance(account.name, true)
+        dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
     }
 
     override fun onDepositButtonClicked(account: Account) {
-        //TODO: Create AddTransactionDialog
-        Timber.d("Deposit button clicked.")
+        val dialog = AddTransactionDialog.newInstance(account.name, false)
+        dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
     }
 
     override fun onAccountSelected(account: Account) {
