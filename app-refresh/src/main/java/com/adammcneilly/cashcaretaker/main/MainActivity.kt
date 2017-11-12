@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.adammcneilly.cashcaretaker.R
-import com.adammcneilly.cashcaretaker.account.AccountCardFragment
 import com.adammcneilly.cashcaretaker.account.AccountFragment
 import com.adammcneilly.cashcaretaker.addaccount.AddAccountDialog
 import com.adammcneilly.cashcaretaker.addaccount.AddAccountFragment
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity(), MainView, FragmentManager.OnBackStackC
 
     override fun onAccountInserted() {
         Timber.d("onAccountInserted")
-        supportFragmentManager.popBackStackImmediate(AccountCardFragment.FRAGMENT_NAME, 0)
+        supportFragmentManager.popBackStackImmediate(AccountFragment.FRAGMENT_NAME, 0)
     }
 
     override fun showTransactions(accountName: String) {

@@ -1,11 +1,11 @@
 package com.adammcneilly.cashcaretaker.addaccount
 
-import com.adammcneilly.cashcaretaker.core.DataView
+import com.adammcneilly.cashcaretaker.core.DataController
 
 /**
  * View to add an account.
  */
-interface AddAccountView: DataView {
+interface AddAccountView: DataController {
     fun addAccount(accountName: String, accountBalance: String)
 
     fun onInsertConflict()
