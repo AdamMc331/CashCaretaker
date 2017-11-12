@@ -1,17 +1,15 @@
 package com.adammcneilly.cashcaretaker.account
 
+import com.adammcneilly.cashcaretaker.entity.EntityPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 /**
  * Implementation of the presenter for accounts.
  */
-class AccountPresenterImpl(accountView: AccountController, private val accountInteractor: AccountInteractor) : AccountPresenter {
+class AccountPresenterImpl(private var accountView: AccountController?, private val accountInteractor: AccountInteractor) : EntityPresenter<Account> {
 
-    private var accountView: AccountController? = accountView
-        private set
-
-    override fun onResume() {
+    override fun onAttach() {
         accountView?.showProgress()
         accountInteractor.getAll()
                 .subscribeOn(Schedulers.newThread())
@@ -23,8 +21,8 @@ class AccountPresenterImpl(accountView: AccountController, private val accountIn
         accountView = null
     }
 
-    override fun onFetched(accounts: List<Account>) {
-        accountView?.setAccounts(accounts)
+    override fun onFetched(entities: List<Account>) {
+        accountView?.setAccounts(entities)
         accountView?.hideProgress()
     }
 }

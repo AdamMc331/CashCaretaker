@@ -35,10 +35,12 @@ class AccountAdapter(private val controller: AccountController?, items: List<Acc
     inner class AccountViewHolder(view: View?): RecyclerView.ViewHolder(view) {
         private val name = view?.findViewById<TextView>(R.id.account_name)
         private val balance = view?.findViewById<TextView>(R.id.account_balance)
-        private val addButton = view?.findViewById<ImageView>(R.id.withdrawal)
+        private val withdrawalButton = view?.findViewById<ImageView>(R.id.withdrawal_button)
+        private val depositButton = view?.findViewById<ImageView>(R.id.deposit_button)
 
         init {
-            addButton?.setOnClickListener { controller?.onWithdrawalButtonClicked(items[adapterPosition]) }
+            withdrawalButton?.setOnClickListener { controller?.onWithdrawalButtonClicked(items[adapterPosition]) }
+            depositButton?.setOnClickListener { controller?.onDepositButtonClicked(items[adapterPosition]) }
         }
 
         fun bindItem(item: Account?) {

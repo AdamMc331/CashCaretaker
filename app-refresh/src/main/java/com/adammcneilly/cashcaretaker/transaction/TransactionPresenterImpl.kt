@@ -1,29 +1,28 @@
 package com.adammcneilly.cashcaretaker.transaction
 
+import com.adammcneilly.cashcaretaker.entity.EntityPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 /**
  * Implementation of the presenter for transactions.
  */
-class TransactionPresenterImpl(transactionView: TransactionView, private val transactionInteractor: TransactionInteractor, private val accountName: String) : TransactionPresenter {
-    private var transactionView: TransactionView? = transactionView
-        private set
+class TransactionPresenterImpl(private var transactionController: TransactionController?, private val transactionInteractor: TransactionInteractor, private val accountName: String) : EntityPresenter<Transaction> {
 
     override fun onDestroy() {
-        transactionView = null
+        transactionController = null
     }
 
-    override fun onResume() {
-        transactionView?.showProgress()
+    override fun onAttach() {
+        transactionController?.showProgress()
         transactionInteractor.getForAccount(accountName)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { onFetched(it) }
     }
 
-    override fun onFetched(transactions: List<Transaction>) {
-        transactionView?.hideProgress()
-        transactionView?.setTransactions(transactions)
+    override fun onFetched(entities: List<Transaction>) {
+        transactionController?.hideProgress()
+        transactionController?.setTransactions(entities)
     }
 }

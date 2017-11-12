@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.DividerItemDecoration
 import com.adammcneilly.cashcaretaker.R
+import com.adammcneilly.cashcaretaker.entity.EntityPresenter
 import com.adammcneilly.cashcaretaker.main.MainView
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
@@ -23,7 +24,7 @@ class AccountFragment: Fragment(), AccountController {
     private val adapter = AccountAdapter(this)
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
-    private val presenter: AccountPresenter by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
+    private val presenter: EntityPresenter<Account> by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_account, container, false)
@@ -47,7 +48,7 @@ class AccountFragment: Fragment(), AccountController {
 
     override fun onResume() {
         super.onResume()
-        presenter.onResume()
+        presenter.onAttach()
     }
 
     override fun onDestroy() {
@@ -72,6 +73,11 @@ class AccountFragment: Fragment(), AccountController {
     override fun onWithdrawalButtonClicked(account: Account) {
         //TODO: Create AddTransactionDialog
         Timber.d("Withdrawal button clicked.")
+    }
+
+    override fun onDepositButtonClicked(account: Account) {
+        //TODO: Create AddTransactionDialog
+        Timber.d("Deposit button clicked.")
     }
 
     companion object {

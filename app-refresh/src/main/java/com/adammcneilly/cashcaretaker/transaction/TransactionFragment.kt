@@ -8,17 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.R
+import com.adammcneilly.cashcaretaker.entity.EntityPresenter
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
 
 /**
  * Fragment that displays a list of Transactions.
  */
-class TransactionFragment: Fragment(), TransactionView {
+class TransactionFragment: Fragment(), TransactionController {
     private val adapter = TransactionAdapter()
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
-    private lateinit var presenter: TransactionPresenter
+    private lateinit var presenter: EntityPresenter<Transaction>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +50,7 @@ class TransactionFragment: Fragment(), TransactionView {
     }
 
     companion object {
-        val FRAGMENT_NAME = TransactionFragment::class.java.simpleName
+        val FRAGMENT_NAME: String = TransactionFragment::class.java.simpleName
         private val ARG_ACCOUNT = "accountName"
 
         fun newInstance(accountName: String): TransactionFragment {
