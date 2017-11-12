@@ -6,4 +6,5 @@ package com.adammcneilly.cashcaretaker.main
 interface MainView {
     fun navigateToAddAccount()
     fun onAccountInserted()
+    fun showTransactions(accountName: String)
 }

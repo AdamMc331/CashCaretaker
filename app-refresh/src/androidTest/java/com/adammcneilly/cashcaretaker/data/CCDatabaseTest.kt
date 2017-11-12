@@ -59,7 +59,7 @@ class CCDatabaseTest {
         val ids = accountDao.insert(listOf(testAccount))
         assertEquals(1, ids.size)
 
-        val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_AMOUNT)
+        val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT)
         val transactionIds = transactionDao.insert(listOf(testWithdrawal))
         assertEquals(1, transactionIds.size)
         testWithdrawal.id = transactionIds.first()
@@ -76,7 +76,7 @@ class CCDatabaseTest {
         val ids = accountDao.insert(listOf(testAccount))
         assertEquals(1, ids.size)
 
-        val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_AMOUNT)
+        val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT)
         val transactionIds = transactionDao.insert(listOf(testWithdrawal))
         assertEquals(1, transactionIds.size)
         testWithdrawal.id = transactionIds.first()
@@ -93,7 +93,7 @@ class CCDatabaseTest {
         val ids = accountDao.insert(listOf(testAccount))
         assertEquals(1, ids.size)
 
-        val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_AMOUNT)
+        val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT)
         val transactionIds = transactionDao.insert(listOf(testWithdrawal))
         assertEquals(1, transactionIds.size)
 
@@ -108,7 +108,7 @@ class CCDatabaseTest {
         val ids = accountDao.insert(listOf(testAccount))
         assertEquals(1, ids.size)
 
-        val testDeposit = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_AMOUNT, false)
+        val testDeposit = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
         val transactionIds = transactionDao.insert(listOf(testDeposit))
         assertEquals(1, transactionIds.size)
 
@@ -123,7 +123,7 @@ class CCDatabaseTest {
         val ids = accountDao.insert(listOf(testAccount))
         assertEquals(1, ids.size)
 
-        val testDeposit = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_AMOUNT, false)
+        val testDeposit = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
         val transactionIds = transactionDao.insert(listOf(testDeposit))
         assertEquals(1, transactionIds.size)
 
@@ -133,6 +133,7 @@ class CCDatabaseTest {
 
     companion object {
         val TEST_ACCOUNT_NAME = "Checking"
+        val TEST_TRANSACTION_NAME = "Speedway"
         val TEST_ACCOUNT_BALANCE = 100.00
         val TEST_TRANSACTION_AMOUNT = 5.00
     }

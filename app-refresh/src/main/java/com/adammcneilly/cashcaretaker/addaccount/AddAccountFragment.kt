@@ -21,10 +21,10 @@ class AddAccountFragment : Fragment(), AddAccountView {
     private lateinit var progressBar: ProgressBar
     private val presenter: AddAccountPresenter by lazy { AddAccountPresenterImpl(this, AddAccountInteractorImpl()) }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.fragment_add_account, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_add_account, container, false)
 
-        accountName = view?.findViewById<TextInputEditText>(R.id.account_name) as TextInputEditText
+        accountName = view.findViewById<TextInputEditText>(R.id.account_name) as TextInputEditText
         accountBalance = view.findViewById<TextInputEditText>(R.id.account_balance) as TextInputEditText
         progressBar = view.findViewById<ProgressBar>(R.id.progress) as ProgressBar
 
@@ -33,7 +33,7 @@ class AddAccountFragment : Fragment(), AddAccountView {
         })
 
         accountName.requestFocus()
-        val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
 
         return view
@@ -75,10 +75,10 @@ class AddAccountFragment : Fragment(), AddAccountView {
     }
 
     private fun hideKeyboard() {
-        val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         // check if no view has focus:
-        val v = activity.currentFocus ?: return
+        val v = activity?.currentFocus ?: return
         inputManager.hideSoftInputFromWindow(v.windowToken, 0)
     }
 

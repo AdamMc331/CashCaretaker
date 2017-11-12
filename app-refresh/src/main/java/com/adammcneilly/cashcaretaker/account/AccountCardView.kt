@@ -11,7 +11,7 @@ import com.adammcneilly.cashcaretaker.R
  * CardView for displaying a list of accounts.
  */
 class AccountCardView(context: Context, attrs: AttributeSet? = null): CardView(context, attrs) {
-    private val adapter = AccountAdapter()
+    private val adapter = AccountAdapter(null)
 
     init {
         inflate(context, R.layout.card_account, this)

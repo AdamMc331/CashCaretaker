@@ -19,10 +19,10 @@ class AddAccountDialog: DialogFragment(), AddAccountView {
     private lateinit var accountBalance: TextInputEditText
     private val presenter: AddAccountPresenter by lazy { AddAccountPresenterImpl(this, AddAccountInteractorImpl()) }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.dialog_add_account, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.dialog_add_account, container, false)
 
-        accountName = view?.findViewById<TextInputEditText>(R.id.account_name) as TextInputEditText
+        accountName = view.findViewById<TextInputEditText>(R.id.account_name) as TextInputEditText
         accountBalance = view.findViewById<TextInputEditText>(R.id.account_balance) as TextInputEditText
 
         view.findViewById<Button>(R.id.submit)?.setOnClickListener {

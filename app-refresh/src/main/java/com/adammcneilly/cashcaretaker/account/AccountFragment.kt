@@ -14,18 +14,19 @@ import com.adammcneilly.cashcaretaker.R
 import com.adammcneilly.cashcaretaker.main.MainView
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
+import timber.log.Timber
 
 /**
  * Displays a list of accounts to the user.
  */
-class AccountFragment: Fragment(), AccountView {
-    private val adapter = AccountAdapter()
+class AccountFragment: Fragment(), AccountController {
+    private val adapter = AccountAdapter(this)
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
     private val presenter: AccountPresenter by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.fragment_account, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_account, container, false)
 
         progressBar = view?.findViewById<ProgressBar>(R.id.progress) as ProgressBar
         recyclerView = view.findViewById<RecyclerView>(R.id.accounts) as RecyclerView
@@ -33,7 +34,8 @@ class AccountFragment: Fragment(), AccountView {
         val layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
-        recyclerView.addItemDecoration(DividerItemDecoration(context))
+        //TODO: If context were null?
+        recyclerView.addItemDecoration(DividerItemDecoration(context!!))
 
         view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
             //TODO: Is there a better way?
@@ -65,6 +67,11 @@ class AccountFragment: Fragment(), AccountView {
 
     override fun setAccounts(accounts: List<Account>) {
         adapter.items = accounts
+    }
+
+    override fun onWithdrawalButtonClicked(account: Account) {
+        //TODO: Create AddTransactionDialog
+        Timber.d("Withdrawal button clicked.")
     }
 
     companion object {

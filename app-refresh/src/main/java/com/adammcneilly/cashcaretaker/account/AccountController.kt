@@ -5,6 +5,7 @@ import com.adammcneilly.cashcaretaker.core.DataView
 /**
  * View for displaying a list of accounts.
  */
-interface AccountView: DataView {
+interface AccountController : DataView {
     fun setAccounts(accounts: List<Account>)
+    fun onWithdrawalButtonClicked(account: Account)
 }

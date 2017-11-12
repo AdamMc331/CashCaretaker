@@ -10,6 +10,7 @@ import com.adammcneilly.cashcaretaker.account.AccountCardFragment
 import com.adammcneilly.cashcaretaker.account.AccountFragment
 import com.adammcneilly.cashcaretaker.addaccount.AddAccountDialog
 import com.adammcneilly.cashcaretaker.addaccount.AddAccountFragment
+import com.adammcneilly.cashcaretaker.transaction.TransactionFragment
 import timber.log.Timber
 
 
@@ -38,6 +39,13 @@ class MainActivity : AppCompatActivity(), MainView, FragmentManager.OnBackStackC
     override fun onAccountInserted() {
         Timber.d("onAccountInserted")
         supportFragmentManager.popBackStackImmediate(AccountCardFragment.FRAGMENT_NAME, 0)
+    }
+
+    override fun showTransactions(accountName: String) {
+        supportFragmentManager.beginTransaction()
+                .add(R.id.container, TransactionFragment.newInstance(accountName), TransactionFragment.FRAGMENT_NAME)
+                .addToBackStack(TransactionFragment.FRAGMENT_NAME)
+                .commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {

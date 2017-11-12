@@ -6,9 +6,9 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Implementation of the presenter for accounts.
  */
-class AccountPresenterImpl(accountView: AccountView, private val accountInteractor: AccountInteractor) : AccountPresenter {
+class AccountPresenterImpl(accountView: AccountController, private val accountInteractor: AccountInteractor) : AccountPresenter {
 
-    private var accountView: AccountView? = accountView
+    private var accountView: AccountController? = accountView
         private set
 
     override fun onResume() {

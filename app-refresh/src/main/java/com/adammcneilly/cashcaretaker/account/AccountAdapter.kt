@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.adammcneilly.cashcaretaker.R
 import com.androidessence.utility.asCurrency
@@ -11,7 +12,7 @@ import com.androidessence.utility.asCurrency
 /**
  * Adapter for displaying Accounts in a RecyclerView.
  */
-class AccountAdapter(items: List<Account> = ArrayList()): RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
+class AccountAdapter(private val controller: AccountController?, items: List<Account> = ArrayList()): RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
 
     var items: List<Account> = items
         set(value) {
@@ -31,9 +32,14 @@ class AccountAdapter(items: List<Account> = ArrayList()): RecyclerView.Adapter<A
 
     override fun getItemCount(): Int = items.size
 
-    class AccountViewHolder(view: View?): RecyclerView.ViewHolder(view) {
+    inner class AccountViewHolder(view: View?): RecyclerView.ViewHolder(view) {
         private val name = view?.findViewById<TextView>(R.id.account_name)
         private val balance = view?.findViewById<TextView>(R.id.account_balance)
+        private val addButton = view?.findViewById<ImageView>(R.id.withdrawal)
+
+        init {
+            addButton?.setOnClickListener { controller?.onWithdrawalButtonClicked(items[adapterPosition]) }
+        }
 
         fun bindItem(item: Account?) {
             name?.text = item?.name
