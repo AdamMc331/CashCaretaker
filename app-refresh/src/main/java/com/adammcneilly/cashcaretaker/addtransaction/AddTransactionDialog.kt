@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Switch
 import com.adammcneilly.cashcaretaker.R
 
 /**
@@ -15,9 +16,12 @@ import com.adammcneilly.cashcaretaker.R
  */
 class AddTransactionDialog : DialogFragment(), AddTransactionView {
     private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT_NAME).orEmpty() }
-    private val isWithdrawal: Boolean by lazy { arguments?.getBoolean(ARG_IS_WITHDRAWAL) ?: true }
+    private val withdrawalArgument: Boolean by lazy { arguments?.getBoolean(ARG_IS_WITHDRAWAL) ?: true }
+    private val isWithdrawal: Boolean
+        get() = withdrawalSwitch.isChecked
     private lateinit var transactionDescription: TextInputEditText
     private lateinit var transactionAmount: TextInputEditText
+    private lateinit var withdrawalSwitch: Switch
     private val presenter: AddTransactionPresenter by lazy { AddTransactionPresenterImpl(this, AddTransactionInteractorImpl()) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -25,6 +29,9 @@ class AddTransactionDialog : DialogFragment(), AddTransactionView {
 
         transactionDescription = view.findViewById<TextInputEditText>(R.id.transaction_description) as TextInputEditText
         transactionAmount = view.findViewById<TextInputEditText>(R.id.transaction_amount) as TextInputEditText
+        withdrawalSwitch = view.findViewById(R.id.withdrawal_switch)
+
+        withdrawalSwitch.isChecked = withdrawalArgument
 
         view.findViewById<Button>(R.id.submit)?.setOnClickListener {
             presenter.insert(accountName, transactionDescription.text.toString(), transactionAmount.text.toString(), isWithdrawal)
@@ -38,8 +45,7 @@ class AddTransactionDialog : DialogFragment(), AddTransactionView {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
-        val title = if (isWithdrawal) getString(R.string.add_withdrawal) else getString(R.string.add_deposit)
-        dialog.setTitle(title)
+        dialog.setTitle(getString(R.string.add_transaction))
         return dialog
     }
 

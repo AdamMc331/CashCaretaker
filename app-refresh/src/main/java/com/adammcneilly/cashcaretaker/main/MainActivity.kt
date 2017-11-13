@@ -67,5 +67,9 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
     override fun onBackStackChanged() {
         val shouldShowUp = supportFragmentManager.backStackEntryCount > 1
         supportActionBar?.setDisplayHomeAsUpEnabled(shouldShowUp)
+
+        when (supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name) {
+            AccountFragment.FRAGMENT_NAME -> supportActionBar?.setTitle(R.string.app_name)
+        }
     }
 }

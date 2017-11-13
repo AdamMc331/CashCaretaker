@@ -16,7 +16,6 @@ import com.adammcneilly.cashcaretaker.entity.EntityPresenter
 import com.adammcneilly.cashcaretaker.main.MainController
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
-import timber.log.Timber
 
 /**
  * Displays a list of accounts to the user.

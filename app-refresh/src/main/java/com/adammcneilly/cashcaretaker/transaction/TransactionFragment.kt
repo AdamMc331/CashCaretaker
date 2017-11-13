@@ -1,6 +1,7 @@
 package com.adammcneilly.cashcaretaker.transaction
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.DividerItemDecoration
 import com.adammcneilly.cashcaretaker.R
+import com.adammcneilly.cashcaretaker.addtransaction.AddTransactionDialog
 import com.adammcneilly.cashcaretaker.entity.EntityPresenter
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
@@ -23,11 +25,11 @@ class TransactionFragment: Fragment(), TransactionController {
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
     private lateinit var presenter: EntityPresenter<Transaction>
+    private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT).orEmpty() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val accountName = arguments?.getString(ARG_ACCOUNT).orEmpty()
         presenter = TransactionPresenterImpl(this, TransactionInteractorImpl(), accountName)
 
         val title = if (accountName.isEmpty()) getString(R.string.app_name) else getString(R.string.account_transactions, accountName)
@@ -45,6 +47,11 @@ class TransactionFragment: Fragment(), TransactionController {
         recyclerView.layoutManager = layoutManager
         //TODO: If context were null?
         recyclerView.addItemDecoration(DividerItemDecoration(context!!))
+
+        view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
+            //TODO: Is there a better way?
+            showAddTransactionDialog()
+        })
 
         return view
     }
@@ -69,6 +76,11 @@ class TransactionFragment: Fragment(), TransactionController {
 
     override fun setTransactions(transactions: List<Transaction>) {
         adapter.items = transactions
+    }
+
+    private fun showAddTransactionDialog() {
+        val dialog = AddTransactionDialog.newInstance(accountName, true)
+        dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
     }
 
     companion object {

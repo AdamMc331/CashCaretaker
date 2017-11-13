@@ -1,5 +1,6 @@
 package com.adammcneilly.cashcaretaker.transaction
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -34,10 +35,16 @@ class TransactionAdapter(items: List<Transaction> = ArrayList()): RecyclerView.A
     class TransactionViewHolder(view: View?): RecyclerView.ViewHolder(view) {
         private val description = view?.findViewById<TextView>(R.id.transaction_description) as TextView
         private val amount = view?.findViewById<TextView>(R.id.transaction_amount) as TextView
+        private val withdrawalIndicator = view?.findViewById<View>(R.id.withdrawal_indicator) as View
+        private val green = ContextCompat.getColor(view?.context!!, R.color.mds_green_500) //TODO:
+        private val red = ContextCompat.getColor(view?.context!!, R.color.mds_red_500) //TODO:
 
         fun bindItem(item: Transaction?) {
             description.text = item?.description
             amount.text = item?.amount?.asCurrency()
+            val isWithdrawal = item?.withdrawal ?: false
+            val color = if (isWithdrawal) green else red
+            withdrawalIndicator.setBackgroundColor(color)
         }
     }
 }

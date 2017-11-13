@@ -19,4 +19,5 @@
     <string name="error_invalid_amount">Please enter a valid amount.</string>
     <string name="add_withdrawal">Add Withdrawal</string>
     <string name="add_deposit">Add Deposit</string>
+    <string name="withdrawal">Withdrawal</string>
 </resources>
