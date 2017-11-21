@@ -1,7 +1,8 @@
 package com.androidessence.utility
 
-import junit.framework.Assert.assertEquals
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
+import java.util.*
 
 /**
  * Tests methods in DoubleUtils.kt
@@ -10,11 +11,19 @@ import org.junit.Test
  */
 class DoubleUtilsTest {
     @Test
-    fun testAsCurrency() {
+    fun testAsPositiveCurrency() {
         val doubleValue = 100.00
         val currencyString = doubleValue.asCurrency()
 
         // We're expecting with dollar sign
         assertEquals("$100.00", currencyString)
+    }
+
+    @Test
+    fun testAsNegativeCurrency() {
+        val doubleValue = -10.00
+        val currencyString = doubleValue.asCurrency()
+
+        assertEquals("($10.00)", currencyString)
     }
 }

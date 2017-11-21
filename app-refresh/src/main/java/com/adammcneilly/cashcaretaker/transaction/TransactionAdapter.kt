@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.adammcneilly.cashcaretaker.R
-import com.androidessence.utility.Utility
 import com.androidessence.utility.asCurrency
+import com.androidessence.utility.asUIString
 
 /**
  * Adapter for displaying Transactions in a RecyclerView.
@@ -44,7 +44,7 @@ class TransactionAdapter(items: List<Transaction> = ArrayList()): RecyclerView.A
         fun bindItem(item: Transaction?) {
             description.text = item?.description
             amount.text = item?.amount?.asCurrency()
-            date.text = Utility.getUIDateString(item?.date)
+            date.text = item?.date.asUIString()
 
             val isWithdrawal = item?.withdrawal ?: false
             val color = if (isWithdrawal) red else green

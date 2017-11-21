@@ -12,7 +12,7 @@ import android.widget.DatePicker
 import android.widget.Switch
 import com.adammcneilly.cashcaretaker.DatePickerFragment
 import com.adammcneilly.cashcaretaker.R
-import com.androidessence.utility.Utility
+import com.androidessence.utility.asUIString
 import java.util.*
 
 /**
@@ -31,7 +31,7 @@ class AddTransactionDialog : DialogFragment(), AddTransactionView {
 
     private var selectedDate: Date = Date()
         set(value) {
-            transactionDate.setText(Utility.getUIDateString(value))
+            transactionDate.setText(value.asUIString())
             field = value
         }
 
