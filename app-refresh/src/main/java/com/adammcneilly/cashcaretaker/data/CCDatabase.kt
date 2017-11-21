@@ -4,6 +4,7 @@ import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import com.adammcneilly.cashcaretaker.account.Account
 import com.adammcneilly.cashcaretaker.transaction.Transaction
@@ -13,13 +14,13 @@ import com.adammcneilly.cashcaretaker.transaction.Transaction
  * Database class for the CC application.
  */
 @Database(entities = arrayOf(Account::class, Transaction::class), version = 1)
+@TypeConverters(Converters::class)
 abstract class CCDatabase : RoomDatabase() {
     abstract fun accountDao(): AccountDAO
     abstract fun transactionDao(): TransactionDAO
 
     companion object {
         private var INSTANCE: CCDatabase? = null
-            private set
 
         fun getInMemoryDatabase(context: Context): CCDatabase {
             if (INSTANCE == null) {

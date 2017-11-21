@@ -5,6 +5,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import java.util.*
 
 /**
  * Implementation for the AddTransactionPresenter.
@@ -33,7 +34,7 @@ class AddTransactionPresenterImpl(private var controller: AddTransactionView?, p
         controller?.showTransactionAmountError()
     }
 
-    override fun insert(accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean) {
+    override fun insert(accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
         if (transactionDescription.isEmpty()) {
             onTransactionDescriptionError()
             return
@@ -47,7 +48,7 @@ class AddTransactionPresenterImpl(private var controller: AddTransactionView?, p
 
         controller?.showProgress()
 
-        val transaction = Transaction(accountName, transactionDescription, amount, withdrawal)
+        val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date)
         Single.fromCallable { interactor.insert(listOf(transaction)) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -1,17 +1,12 @@
 package com.androidessence.utility
 
 
-import java.text.NumberFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 /**
  * Utility functions used for formatting dates and currencies.
-
- * Created by adammcneilly on 10/30/15.
  */
 object Utility {
     // Formats
@@ -51,26 +46,25 @@ object Utility {
     /**
      * Converts a string from the database to a date string to be displayed on the UI.
      */
-    fun getUIDateStringFromDB(dbString: String?): String {
-        return uiDateFormatter.format(getDateFromDb(dbString))
-    }
+    fun getUIDateStringFromDB(dbString: String?): String =
+            uiDateFormatter.format(getDateFromDb(dbString))
 
     /**
      * Converts a string from the database to a LocalDate object.
      */
     fun getDateFromDb(dbString: String?): Date {
-        try {
+        return try {
             val retDate = dbDateFormatter.parse(dbString)
             calendar.time = retDate
 
             if (calendar.get(Calendar.YEAR) < 0) {
                 throw UnsupportedOperationException("Date has negative year value.")
             } else {
-                return retDate
+                retDate
             }
         } catch (pe: ParseException) {
             pe.printStackTrace()
-            return Date()
+            Date()
         }
 
     }
