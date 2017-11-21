@@ -12,10 +12,10 @@ import io.reactivex.Flowable
  */
 @Dao
 interface TransactionDAO {
-    @Query("SELECT * FROM transactionTable")
+    @Query("SELECT * FROM transactionTable ORDER BY date DESC")
     fun getAll(): Flowable<List<Transaction>>
 
-    @Query("SELECT * FROM transactionTable WHERE accountName = :arg0")
+    @Query("SELECT * FROM transactionTable WHERE accountName = :arg0 ORDER BY date DESC")
     fun getAllForAccount(accountName: String): Flowable<List<Transaction>>
 
     @Insert

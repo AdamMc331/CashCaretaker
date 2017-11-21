@@ -8,8 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.DatePicker
 import android.widget.Switch
+import com.adammcneilly.cashcaretaker.DatePickerFragment
 import com.adammcneilly.cashcaretaker.R
+import com.androidessence.utility.Utility
+import java.util.*
 
 /**
  * Dialog for adding a new transaction.
@@ -21,21 +25,32 @@ class AddTransactionDialog : DialogFragment(), AddTransactionView {
         get() = withdrawalSwitch.isChecked
     private lateinit var transactionDescription: TextInputEditText
     private lateinit var transactionAmount: TextInputEditText
+    private lateinit var transactionDate: TextInputEditText
     private lateinit var withdrawalSwitch: Switch
     private val presenter: AddTransactionPresenter by lazy { AddTransactionPresenterImpl(this, AddTransactionInteractorImpl()) }
+
+    private var selectedDate: Date = Date()
+        set(value) {
+            transactionDate.setText(Utility.getUIDateString(value))
+            field = value
+        }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.dialog_add_transaction, container, false)
 
         transactionDescription = view.findViewById<TextInputEditText>(R.id.transaction_description) as TextInputEditText
         transactionAmount = view.findViewById<TextInputEditText>(R.id.transaction_amount) as TextInputEditText
-        withdrawalSwitch = view.findViewById(R.id.withdrawal_switch)
 
+        withdrawalSwitch = view.findViewById(R.id.withdrawal_switch)
         withdrawalSwitch.isChecked = withdrawalArgument
 
         view.findViewById<Button>(R.id.submit)?.setOnClickListener {
-            presenter.insert(accountName, transactionDescription.text.toString(), transactionAmount.text.toString(), isWithdrawal)
+            presenter.insert(accountName, transactionDescription.text.toString(), transactionAmount.text.toString(), isWithdrawal, selectedDate)
         }
+
+        transactionDate = view.findViewById(R.id.transaction_date)
+        transactionDate.setOnClickListener { showDatePicker() }
+        selectedDate = Date()
 
         transactionDescription.requestFocus()
 
@@ -75,9 +90,22 @@ class AddTransactionDialog : DialogFragment(), AddTransactionView {
         dismiss()
     }
 
+    override fun showDatePicker() {
+        val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
+        datePickerFragment.setTargetFragment(this, REQUEST_DATE)
+        datePickerFragment.show(fragmentManager, AddTransactionDialog::class.java.simpleName)
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, dayOfMonth)
+        selectedDate = calendar.time
+    }
+
     companion object {
         private val ARG_ACCOUNT_NAME: String = "AccountName"
         private val ARG_IS_WITHDRAWAL: String = "IsWithdrawal"
+        private val REQUEST_DATE = 0
         val FRAGMENT_NAME: String = AddTransactionDialog::class.java.simpleName
 
         fun newInstance(accountName: String, isWithdrawal: Boolean): AddTransactionDialog {

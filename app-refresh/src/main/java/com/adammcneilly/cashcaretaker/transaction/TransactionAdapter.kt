@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.adammcneilly.cashcaretaker.R
+import com.androidessence.utility.Utility
 import com.androidessence.utility.asCurrency
 
 /**
@@ -35,6 +36,7 @@ class TransactionAdapter(items: List<Transaction> = ArrayList()): RecyclerView.A
     class TransactionViewHolder(view: View?): RecyclerView.ViewHolder(view) {
         private val description = view?.findViewById<TextView>(R.id.transaction_description) as TextView
         private val amount = view?.findViewById<TextView>(R.id.transaction_amount) as TextView
+        private val date = view?.findViewById<TextView>(R.id.transaction_date) as TextView
         private val withdrawalIndicator = view?.findViewById<View>(R.id.withdrawal_indicator) as View
         private val green = ContextCompat.getColor(view?.context!!, R.color.mds_green_500) //TODO:
         private val red = ContextCompat.getColor(view?.context!!, R.color.mds_red_500) //TODO:
@@ -42,8 +44,10 @@ class TransactionAdapter(items: List<Transaction> = ArrayList()): RecyclerView.A
         fun bindItem(item: Transaction?) {
             description.text = item?.description
             amount.text = item?.amount?.asCurrency()
+            date.text = Utility.getUIDateString(item?.date)
+
             val isWithdrawal = item?.withdrawal ?: false
-            val color = if (isWithdrawal) green else red
+            val color = if (isWithdrawal) red else green
             withdrawalIndicator.setBackgroundColor(color)
         }
     }

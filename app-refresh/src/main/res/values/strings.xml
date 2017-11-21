@@ -20,4 +20,5 @@
     <string name="add_withdrawal">Add Withdrawal</string>
     <string name="add_deposit">Add Deposit</string>
     <string name="withdrawal">Withdrawal</string>
+    <string name="date">Date</string>
 </resources>
