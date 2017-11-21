@@ -12,7 +12,7 @@ import io.reactivex.Flowable
  */
 @Dao
 interface AccountDAO {
-    @Query("SELECT * FROM account")
+    @Query("SELECT * FROM account ORDER BY name")
     fun getAll(): Flowable<List<Account>>
 
     @Insert
