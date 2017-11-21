@@ -1,0 +1,182 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 6,
+    "identityHash": "1fcc75d06fb888c3b6c8430f0d25c9b3",
+    "entities": [
+      {
+        "tableName": "accountTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT, `accountName` TEXT, `accountBalance` REAL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "accountName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "balance",
+            "columnName": "accountBalance",
+            "affinity": "REAL"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "categoryTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT, `categoryDescription` TEXT, `categoryIsDefault` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "categoryDescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "isDefault",
+            "columnName": "categoryIsDefault",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "repeatingPeriodTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`repeatingPeriodName` TEXT, PRIMARY KEY(`repeatingPeriodName`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "repeatingPeriodName",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "repeatingPeriodName"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "transactionTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`transactionAccount` INTEGER, `transactionDescription` TEXT, `transactionAmount` REAL, `transactionNotes` TEXT, `transactionDate` TEXT, `transactionCategory` INTEGER, `transactionWithdrawal` INTEGER, `_id` INTEGER PRIMARY KEY AUTOINCREMENT, `category_id` INTEGER, `categorycategoryDescription` TEXT, `categorycategoryIsDefault` INTEGER, FOREIGN KEY(`transactionAccount`) REFERENCES `accountTable`(`_id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`transactionCategory`) REFERENCES `categoryTable`(`_id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "account",
+            "columnName": "transactionAccount",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "transactionDescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "transactionAmount",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "transactionNotes",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "transactionDate",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "transactionCategory",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "isWithdrawal",
+            "columnName": "transactionWithdrawal",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "embeddedCategory.id",
+            "columnName": "category_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "embeddedCategory.description",
+            "columnName": "categorycategoryDescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "embeddedCategory.isDefault",
+            "columnName": "categorycategoryIsDefault",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "accountTable",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "transactionAccount"
+            ],
+            "referencedColumns": [
+              "_id"
+            ]
+          },
+          {
+            "table": "categoryTable",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "transactionCategory"
+            ],
+            "referencedColumns": [
+              "_id"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1fcc75d06fb888c3b6c8430f0d25c9b3\")"
+    ]
+  }
+}
