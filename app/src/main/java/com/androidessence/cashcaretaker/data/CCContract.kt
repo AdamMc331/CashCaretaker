@@ -42,9 +42,7 @@ object CCContract {
             val COLUMN_NAME = "accountName"
             val COLUMN_BALANCE = "accountBalance"
 
-            fun buildAccountUri(id: Long): Uri {
-                return ContentUris.withAppendedId(CONTENT_URI, id)
-            }
+            fun buildAccountUri(id: Long): Uri = ContentUris.withAppendedId(CONTENT_URI, id)
         }
     }
 
@@ -64,9 +62,7 @@ object CCContract {
             val COLUMN_DESCRIPTION = "categoryDescription"
             val COLUMN_IS_DEFAULT = "categoryIsDefault"
 
-            fun buildCategoryUri(id: Long): Uri {
-                return ContentUris.withAppendedId(CONTENT_URI, id)
-            }
+            fun buildCategoryUri(id: Long): Uri = ContentUris.withAppendedId(CONTENT_URI, id)
         }
     }
 
@@ -91,9 +87,8 @@ object CCContract {
             val COLUMN_WITHDRAWAL = "transactionWithdrawal"
             val COLUMN_ACCOUNT = "transactionAccount"
 
-            fun buildTransactionUri(id: Long): Uri {
-                return ContentUris.withAppendedId(CONTENT_URI, id)
-            }
+            fun buildTransactionUri(id: Long): Uri = ContentUris.withAppendedId(CONTENT_URI, id)
+            
 
             fun buildTransactionsForAccountUri(account: Long): Uri {
                 val accountUri = CONTENT_URI.buildUpon().appendPath(PATH_ACCOUNT).build()
@@ -105,9 +100,7 @@ object CCContract {
                 return ContentUris.withAppendedId(transactionUri, account)
             }
 
-            fun getDescriptionFromUri(uri: Uri): String {
-                return uri.pathSegments[1]
-            }
+            fun getDescriptionFromUri(uri: Uri): String = uri.pathSegments[1]
         }
     }
 
@@ -126,9 +119,7 @@ object CCContract {
             val TABLE_NAME = "repeatingPeriodTable"
             val COLUMN_NAME = "repeatingPeriodName"
 
-            fun buildRepeatingPeriodUri(id: Long): Uri {
-                return ContentUris.withAppendedId(CONTENT_URI, id)
-            }
+            fun buildRepeatingPeriodUri(id: Long): Uri = ContentUris.withAppendedId(CONTENT_URI, id)
         }
     }
 
@@ -156,9 +147,7 @@ object CCContract {
             val COLUMN_NEXT_DATE = "repTransNextDate"
             val COLUMN_WITHDRAWAL = "repTransWithdrawal"
 
-            fun buildRepeatingTransactionUri(id: Long): Uri {
-                return ContentUris.withAppendedId(CONTENT_URI, id)
-            }
+            fun buildRepeatingTransactionUri(id: Long): Uri = ContentUris.withAppendedId(CONTENT_URI, id)
         }
     }
 }
