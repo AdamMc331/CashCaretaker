@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/transaction_description"
+        android:id="@+id/transactionDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/single_margin"
@@ -23,12 +23,12 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/transaction_amount"
+        app:layout_constraintRight_toLeftOf="@id/transactionAmount"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Speedway" />
 
     <TextView
-        android:id="@+id/transaction_amount"
+        android:id="@+id/transactionAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/single_margin"
@@ -41,7 +41,7 @@
         tools:text="$1,000.56" />
 
     <TextView
-        android:id="@+id/transaction_date"
+        android:id="@+id/transactionDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/single_margin"
@@ -49,7 +49,7 @@
         android:layout_marginTop="@dimen/single_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/transaction_description"
+        app:layout_constraintTop_toBottomOf="@id/transactionDescription"
         tools:text="January 1, 2018" />
 
 </android.support.constraint.ConstraintLayout>

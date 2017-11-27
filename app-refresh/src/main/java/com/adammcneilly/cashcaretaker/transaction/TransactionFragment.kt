@@ -4,26 +4,22 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.R
 import com.adammcneilly.cashcaretaker.addtransaction.AddTransactionDialog
 import com.adammcneilly.cashcaretaker.entity.EntityPresenter
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
+import kotlinx.android.synthetic.main.fragment_transaction.*
 
 /**
  * Fragment that displays a list of Transactions.
  */
 class TransactionFragment: Fragment(), TransactionController {
     private val adapter = TransactionAdapter()
-    private lateinit var progressBar: ProgressBar
-    private lateinit var recyclerView: RecyclerView
     private lateinit var presenter: EntityPresenter<Transaction>
     private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT).orEmpty() }
 
@@ -39,13 +35,9 @@ class TransactionFragment: Fragment(), TransactionController {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_transaction, container, false)
 
-        progressBar = view.findViewById<ProgressBar>(R.id.progress) as ProgressBar
-        recyclerView = view.findViewById<RecyclerView>(R.id.transactions) as RecyclerView
-
         val layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = layoutManager
-        recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        transactions.adapter = adapter
+        transactions.layoutManager = layoutManager
 
         view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
             //TODO: Is there a better way?

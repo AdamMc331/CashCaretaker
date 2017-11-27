@@ -8,20 +8,20 @@
     android:padding="@dimen/text_padding">
 
     <TextView
-        android:id="@+id/account_name"
+        android:id="@+id/accountName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/account_balance"
+        app:layout_constraintRight_toLeftOf="@id/accountBalance"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Testinsadfasdfag" />
 
     <TextView
-        android:id="@+id/account_balance"
+        android:id="@+id/accountBalance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/double_margin"
