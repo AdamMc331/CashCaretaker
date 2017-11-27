@@ -33,7 +33,7 @@ allprojects {
         //Libraries
         supportLibraryVersion = "27.0.1"
         playServicesVersion = "10.2.1"
-        constraintLayoutVersion = "1.0.2"
+        constraintLayoutVersion = "1.1.0-beta3"
         recyclerViewCursorAdapterVersion = "1.0.0"
         materialDesignSpecsVersion = "2.0.1"
         recyclerViewUtilsVersion = "2.0.2"
