@@ -12,6 +12,9 @@ import com.adammcneilly.cashcaretaker.R
 import com.androidessence.utility.asUIString
 import kotlinx.android.synthetic.main.dialog_add_transaction.*
 import java.util.*
+import android.text.InputFilter
+import com.adammcneilly.cashcaretaker.DecimalDigitsInputFilter
+
 
 /**
  * Dialog for adding a new transaction.
@@ -40,6 +43,9 @@ class AddTransactionDialog : DialogFragment(), AddTransactionView {
         submitButton.setOnClickListener {
             presenter.insert(accountName, transactionDescription.text.toString(), transactionAmount.text.toString(), isWithdrawal, selectedDate)
         }
+
+        val inputFilters = arrayOf(DecimalDigitsInputFilter())
+        transactionAmount.filters = inputFilters
 
         transactionDate.setOnClickListener { showDatePicker() }
         selectedDate = Date()

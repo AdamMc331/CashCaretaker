@@ -6,6 +6,7 @@ import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.adammcneilly.cashcaretaker.DecimalDigitsInputFilter
 import com.adammcneilly.cashcaretaker.R
 import kotlinx.android.synthetic.main.dialog_add_account.*
 
@@ -20,6 +21,9 @@ class AddAccountDialog: DialogFragment(), AddAccountView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val inputFilters = arrayOf(DecimalDigitsInputFilter())
+        accountBalance.filters = inputFilters
 
         submitButton.setOnClickListener {
             addAccount(accountName.text.toString(), accountBalance.text.toString())
