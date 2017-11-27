@@ -3,13 +3,13 @@ package com.adammcneilly.cashcaretaker.account
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import com.adammcneilly.cashcaretaker.DividerItemDecoration
 import com.adammcneilly.cashcaretaker.R
 import com.adammcneilly.cashcaretaker.addtransaction.AddTransactionDialog
 import com.adammcneilly.cashcaretaker.entity.EntityPresenter
@@ -36,8 +36,7 @@ class AccountFragment: Fragment(), AccountController {
         val layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
-        //TODO: If context were null?
-        recyclerView.addItemDecoration(DividerItemDecoration(context!!))
+        recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
             //TODO: Is there a better way?
