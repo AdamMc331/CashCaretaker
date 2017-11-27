@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,7 @@ class TransactionFragment: Fragment(), TransactionController {
         val layoutManager = LinearLayoutManager(context)
         transactions.adapter = adapter
         transactions.layoutManager = layoutManager
+        transactions.addItemDecoration(DividerItemDecoration(context!!))
 
         view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
             //TODO: Is there a better way?
