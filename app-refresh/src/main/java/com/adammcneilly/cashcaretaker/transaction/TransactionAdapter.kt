@@ -34,9 +34,9 @@ class TransactionAdapter(items: List<Transaction> = ArrayList()): RecyclerView.A
     override fun getItemCount(): Int = items.size
 
     class TransactionViewHolder(view: View?): RecyclerView.ViewHolder(view) {
-        private val description = view?.findViewById<TextView>(R.id.transaction_description) as TextView
-        private val amount = view?.findViewById<TextView>(R.id.transaction_amount) as TextView
-        private val date = view?.findViewById<TextView>(R.id.transaction_date) as TextView
+        private val description = view?.findViewById<TextView>(R.id.transactionDescription) as TextView
+        private val amount = view?.findViewById<TextView>(R.id.transactionAmount) as TextView
+        private val date = view?.findViewById<TextView>(R.id.transactionDate) as TextView
         private val withdrawalIndicator = view?.findViewById<View>(R.id.withdrawal_indicator) as View
         private val green = ContextCompat.getColor(view?.context!!, R.color.mds_green_500) //TODO:
         private val red = ContextCompat.getColor(view?.context!!, R.color.mds_red_500) //TODO:
