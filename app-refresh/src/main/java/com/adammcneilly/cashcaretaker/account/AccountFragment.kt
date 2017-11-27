@@ -1,7 +1,6 @@
 package com.adammcneilly.cashcaretaker.account
 
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -24,20 +23,21 @@ class AccountFragment: Fragment(), AccountController {
     private val presenter: EntityPresenter<Account> by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
     private val mainController: MainController by lazy { (activity as MainController) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_account, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_account, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val layoutManager = LinearLayoutManager(context)
         accountsRecyclerView.adapter = adapter
         accountsRecyclerView.layoutManager = layoutManager
         accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
+        fab.setOnClickListener({
             //TODO: Is there a better way?
             (activity as MainController).navigateToAddAccount()
         })
-
-        return view
     }
 
     override fun onResume() {

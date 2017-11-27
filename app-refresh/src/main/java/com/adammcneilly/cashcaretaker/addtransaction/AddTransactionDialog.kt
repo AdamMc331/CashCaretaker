@@ -29,8 +29,11 @@ class AddTransactionDialog : DialogFragment(), AddTransactionView {
             field = value
         }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.dialog_add_transaction, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.dialog_add_transaction, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         withdrawalSwitch.isChecked = withdrawalArgument
 
@@ -42,8 +45,6 @@ class AddTransactionDialog : DialogFragment(), AddTransactionView {
         selectedDate = Date()
 
         transactionDescription.requestFocus()
-
-        return view
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

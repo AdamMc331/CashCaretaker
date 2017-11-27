@@ -15,16 +15,17 @@ import kotlinx.android.synthetic.main.dialog_add_account.*
 class AddAccountDialog: DialogFragment(), AddAccountView {
     private val presenter: AddAccountPresenter by lazy { AddAccountPresenterImpl(this, AddAccountInteractorImpl()) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.dialog_add_account, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.dialog_add_account, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         submitButton.setOnClickListener {
             addAccount(accountName.text.toString(), accountBalance.text.toString())
         }
 
         accountName.requestFocus()
-
-        return view
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

@@ -33,20 +33,21 @@ class TransactionFragment: Fragment(), TransactionController {
         (activity as AppCompatActivity).supportActionBar?.title = title
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_transaction, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_transaction, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val layoutManager = LinearLayoutManager(context)
         transactions.adapter = adapter
         transactions.layoutManager = layoutManager
-        transactions.addItemDecoration(DividerItemDecoration(context!!))
+        transactions.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
             //TODO: Is there a better way?
             showAddTransactionDialog()
         })
-
-        return view
     }
 
     override fun onResume() {
