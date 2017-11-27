@@ -8,12 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import com.adammcneilly.cashcaretaker.DatePickerFragment
+import com.adammcneilly.cashcaretaker.DecimalDigitsInputFilter
 import com.adammcneilly.cashcaretaker.R
 import com.androidessence.utility.asUIString
 import kotlinx.android.synthetic.main.dialog_add_transaction.*
 import java.util.*
-import android.text.InputFilter
-import com.adammcneilly.cashcaretaker.DecimalDigitsInputFilter
 
 
 /**
@@ -44,8 +43,7 @@ class AddTransactionDialog : DialogFragment(), AddTransactionView {
             presenter.insert(accountName, transactionDescription.text.toString(), transactionAmount.text.toString(), isWithdrawal, selectedDate)
         }
 
-        val inputFilters = arrayOf(DecimalDigitsInputFilter())
-        transactionAmount.filters = inputFilters
+        transactionAmount.filters = arrayOf(DecimalDigitsInputFilter())
 
         transactionDate.setOnClickListener { showDatePicker() }
         selectedDate = Date()

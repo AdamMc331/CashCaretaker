@@ -22,8 +22,7 @@ class AddAccountDialog: DialogFragment(), AddAccountView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val inputFilters = arrayOf(DecimalDigitsInputFilter())
-        accountBalance.filters = inputFilters
+        accountBalance.filters = arrayOf(DecimalDigitsInputFilter())
 
         submitButton.setOnClickListener {
             addAccount(accountName.text.toString(), accountBalance.text.toString())
