@@ -1,37 +1,31 @@
 package com.adammcneilly.cashcaretaker.addaccount
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import com.adammcneilly.cashcaretaker.R
+import kotlinx.android.synthetic.main.dialog_add_account.*
 
 /**
  * Dialog to insert an account.
  */
 class AddAccountDialog: DialogFragment(), AddAccountView {
-    private lateinit var accountName: TextInputEditText
-    private lateinit var accountBalance: TextInputEditText
     private val presenter: AddAccountPresenter by lazy { AddAccountPresenterImpl(this, AddAccountInteractorImpl()) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.dialog_add_account, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.dialog_add_account, container, false)
 
-        accountName = view.findViewById<TextInputEditText>(R.id.account_name) as TextInputEditText
-        accountBalance = view.findViewById<TextInputEditText>(R.id.account_balance) as TextInputEditText
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<Button>(R.id.submit)?.setOnClickListener {
+        submitButton.setOnClickListener {
             addAccount(accountName.text.toString(), accountBalance.text.toString())
         }
 
         accountName.requestFocus()
-
-        return view
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

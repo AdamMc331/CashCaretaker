@@ -35,8 +35,8 @@ class AccountAdapter(private val controller: AccountController?, items: List<Acc
     override fun getItemCount(): Int = items.size
 
     inner class AccountViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        private val name = view.findViewById<TextView>(R.id.account_name)
-        private val balance = view.findViewById<TextView>(R.id.account_balance)
+        private val name = view.findViewById<TextView>(R.id.accountName)
+        private val balance = view.findViewById<TextView>(R.id.accountBalance)
         private val withdrawalButton = view.findViewById<ImageView>(R.id.withdrawal_button)
         private val depositButton = view.findViewById<ImageView>(R.id.deposit_button)
         private val black = ContextCompat.getColor(view.context, R.color.mds_black)

@@ -1,49 +1,43 @@
 package com.adammcneilly.cashcaretaker.account
 
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import com.adammcneilly.cashcaretaker.R
 import com.adammcneilly.cashcaretaker.addtransaction.AddTransactionDialog
 import com.adammcneilly.cashcaretaker.entity.EntityPresenter
 import com.adammcneilly.cashcaretaker.main.MainController
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
+import kotlinx.android.synthetic.main.fragment_account.*
 
 /**
  * Displays a list of accounts to the user.
  */
 class AccountFragment: Fragment(), AccountController {
     private val adapter = AccountAdapter(this)
-    private lateinit var progressBar: ProgressBar
-    private lateinit var recyclerView: RecyclerView
     private val presenter: EntityPresenter<Account> by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
     private val mainController: MainController by lazy { (activity as MainController) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_account, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_account, container, false)
 
-        progressBar = view?.findViewById<ProgressBar>(R.id.progress) as ProgressBar
-        recyclerView = view.findViewById<RecyclerView>(R.id.accounts) as RecyclerView
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = layoutManager
-        recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        accountsRecyclerView.adapter = adapter
+        accountsRecyclerView.layoutManager = layoutManager
+        accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
+        fab.setOnClickListener({
             //TODO: Is there a better way?
             (activity as MainController).navigateToAddAccount()
         })
-
-        return view
     }
 
     override fun onResume() {
@@ -57,13 +51,13 @@ class AccountFragment: Fragment(), AccountController {
     }
 
     override fun showProgress() {
-        recyclerView.hide()
+        accountsRecyclerView.hide()
         progressBar.show()
     }
 
     override fun hideProgress() {
         progressBar.hide()
-        recyclerView.show()
+        accountsRecyclerView.show()
     }
 
     override fun setAccounts(accounts: List<Account>) {

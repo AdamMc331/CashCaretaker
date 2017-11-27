@@ -2,17 +2,15 @@ package com.adammcneilly.cashcaretaker.addtransaction
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.DatePicker
-import android.widget.Switch
 import com.adammcneilly.cashcaretaker.DatePickerFragment
 import com.adammcneilly.cashcaretaker.R
 import com.androidessence.utility.asUIString
+import kotlinx.android.synthetic.main.dialog_add_transaction.*
 import java.util.*
 
 /**
@@ -23,10 +21,6 @@ class AddTransactionDialog : DialogFragment(), AddTransactionView {
     private val withdrawalArgument: Boolean by lazy { arguments?.getBoolean(ARG_IS_WITHDRAWAL) ?: true }
     private val isWithdrawal: Boolean
         get() = withdrawalSwitch.isChecked
-    private lateinit var transactionDescription: TextInputEditText
-    private lateinit var transactionAmount: TextInputEditText
-    private lateinit var transactionDate: TextInputEditText
-    private lateinit var withdrawalSwitch: Switch
     private val presenter: AddTransactionPresenter by lazy { AddTransactionPresenterImpl(this, AddTransactionInteractorImpl()) }
 
     private var selectedDate: Date = Date()
@@ -35,26 +29,22 @@ class AddTransactionDialog : DialogFragment(), AddTransactionView {
             field = value
         }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.dialog_add_transaction, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.dialog_add_transaction, container, false)
 
-        transactionDescription = view.findViewById<TextInputEditText>(R.id.transaction_description) as TextInputEditText
-        transactionAmount = view.findViewById<TextInputEditText>(R.id.transaction_amount) as TextInputEditText
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        withdrawalSwitch = view.findViewById(R.id.withdrawal_switch)
         withdrawalSwitch.isChecked = withdrawalArgument
 
-        view.findViewById<Button>(R.id.submit)?.setOnClickListener {
+        submitButton.setOnClickListener {
             presenter.insert(accountName, transactionDescription.text.toString(), transactionAmount.text.toString(), isWithdrawal, selectedDate)
         }
 
-        transactionDate = view.findViewById(R.id.transaction_date)
         transactionDate.setOnClickListener { showDatePicker() }
         selectedDate = Date()
 
         transactionDescription.requestFocus()
-
-        return view
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
