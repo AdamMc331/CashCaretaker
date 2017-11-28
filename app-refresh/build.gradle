@@ -9,7 +9,7 @@ android {
     buildToolsVersion globalConfiguration["androidBuildToolsVersion"]
 
     defaultConfig {
-        applicationId "com.adammcneilly.cashcaretaker"
+        applicationId "com.androidessence.cashcaretaker"
         minSdkVersion globalConfiguration["androidMinSdkVersion"]
         targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
         versionCode 1
