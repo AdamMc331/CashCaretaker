@@ -8,20 +8,20 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Implementation of the presenter for transactions.
  */
-class TransactionPresenterImpl(private var transactionController: TransactionController?, private val transactionInteractor: TransactionInteractor, private val accountName: String) : BasePresenter {
+class TransactionPresenterImpl(private var controller: TransactionController?, private val transactionInteractor: TransactionInteractor, private val accountName: String) : BasePresenter {
 
     override fun onDestroy() {
-        transactionController = null
+        controller = null
     }
 
     override fun onAttach() {
-        transactionController?.showProgress()
+        controller?.showProgress()
         transactionInteractor.getForAccount(accountName)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { transactionController?.viewState = DataViewState.ListSuccess(it) },
-                        { transactionController?.viewState = DataViewState.Error(it) }
+                        { controller?.viewState = DataViewState.ListSuccess(it) },
+                        { controller?.viewState = DataViewState.Error(it) }
                 )
     }
 }

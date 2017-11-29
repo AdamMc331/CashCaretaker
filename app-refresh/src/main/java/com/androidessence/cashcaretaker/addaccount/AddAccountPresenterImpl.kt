@@ -9,14 +9,14 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Implementation of [AddAccountPresenter]
  */
-class AddAccountPresenterImpl(private var addAccountView: AddAccountView?, private val interactor: AddAccountInteractor) : AddAccountPresenter {
+class AddAccountPresenterImpl(private var controller: AddAccountController?, private val interactor: AddAccountInteractor) : AddAccountPresenter {
 
     override fun onAttach() {
         //TODO: Not implemented here, refactor later?
     }
 
     override fun onDestroy() {
-        addAccountView = null
+        controller = null
     }
 
     override fun insert(accountName: String, accountBalance: String) {
@@ -31,7 +31,7 @@ class AddAccountPresenterImpl(private var addAccountView: AddAccountView?, priva
             return
         }
 
-        addAccountView?.showProgress()
+        controller?.showProgress()
 
         val account = Account(accountName, balance)
         Single.fromCallable { interactor.insert(listOf(account)) }
@@ -44,22 +44,22 @@ class AddAccountPresenterImpl(private var addAccountView: AddAccountView?, priva
     }
 
     override fun onInserted(ids: List<Long>) {
-        addAccountView?.onInserted(ids)
-        addAccountView?.hideProgress()
+        controller?.onInserted(ids)
+        controller?.hideProgress()
     }
 
     override fun onInsertConflict() {
-        addAccountView?.onInsertConflict()
-        addAccountView?.hideProgress()
+        controller?.onInsertConflict()
+        controller?.hideProgress()
     }
 
     override fun onAccountNameError() {
-        addAccountView?.showAccountNameError()
-        addAccountView?.hideProgress()
+        controller?.showAccountNameError()
+        controller?.hideProgress()
     }
 
     override fun onAccountBalanceError() {
-        addAccountView?.showAccountBalanceError()
-        addAccountView?.hideProgress()
+        controller?.showAccountBalanceError()
+        controller?.hideProgress()
     }
 }

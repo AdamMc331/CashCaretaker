@@ -5,7 +5,7 @@ import com.androidessence.cashcaretaker.core.DataController
 /**
  * View to add an account.
  */
-interface AddAccountView: DataController {
+interface AddAccountController : DataController {
     fun addAccount(accountName: String, accountBalance: String)
 
     fun onInsertConflict()

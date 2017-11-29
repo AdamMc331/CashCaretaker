@@ -8,20 +8,20 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Implementation of the presenter for accounts.
  */
-class AccountPresenterImpl(private var accountView: AccountController?, private val accountInteractor: AccountInteractor) : BasePresenter {
+class AccountPresenterImpl(private var controller: AccountController?, private val accountInteractor: AccountInteractor) : BasePresenter {
 
     override fun onAttach() {
-        accountView?.showProgress()
+        controller?.showProgress()
         accountInteractor.getAll()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { accountView?.viewState = DataViewState.ListSuccess(it) },
-                        { accountView?.viewState = DataViewState.Error(it) }
+                        { controller?.viewState = DataViewState.ListSuccess(it) },
+                        { controller?.viewState = DataViewState.Error(it) }
                 )
     }
 
     override fun onDestroy() {
-        accountView = null
+        controller = null
     }
 }

@@ -10,7 +10,7 @@ import java.util.*
 /**
  * Implementation for the AddTransactionPresenter.
  */
-class AddTransactionPresenterImpl(private var controller: AddTransactionView?, private val interactor: AddTransactionInteractor) : AddTransactionPresenter {
+class AddTransactionPresenterImpl(private var controller: AddTransactionController?, private val interactor: AddTransactionInteractor) : AddTransactionPresenter {
     override fun onAttach() {
         //TODO: Not used, refactor later?
     }

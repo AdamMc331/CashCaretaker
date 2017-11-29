@@ -7,7 +7,7 @@ import com.androidessence.cashcaretaker.core.DataController
 /**
  * View to add a transaction.
  */
-interface AddTransactionView: DataController, DatePickerDialog.OnDateSetListener {
+interface AddTransactionController : DataController, DatePickerDialog.OnDateSetListener {
     fun showTransactionDescriptionError()
     fun showTransactionAmountError()
     fun onInserted(ids: List<Long>)
