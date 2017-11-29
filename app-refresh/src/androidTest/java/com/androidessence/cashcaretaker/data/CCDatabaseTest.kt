@@ -29,7 +29,7 @@ class CCDatabaseTest {
     @Before
     fun setUp() {
         val context = mainActivity.activity
-        database = Room.inMemoryDatabaseBuilder(context, CCDatabase::class.java).allowMainThreadQueries().build()
+        database = Room.inMemoryDatabaseBuilder(context, CCDatabase::class.java).addCallback(CCDatabase.CALLBACK).allowMainThreadQueries().build()
         accountDao = database.accountDao()
         transactionDao = database.transactionDao()
     }
@@ -129,6 +129,21 @@ class CCDatabaseTest {
 
         val account = accountDao.getAll().test().values().first().first()
         assertEquals(TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
+    }
+
+    @Test
+    fun testWithdrawalRemovalBalanceChangeTrigger() {
+        val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
+
+        val ids = accountDao.insert(listOf(testAccount))
+        assertEquals(1, ids.size)
+
+        val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
+        val transactionIds = transactionDao.insert(listOf(testWithdrawal))
+        assertEquals(1, transactionIds.size)
+
+        val account = accountDao.getAll().test().values().first().first()
+        assertEquals(TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
     }
 
     companion object {
