@@ -1,13 +1,14 @@
 package com.androidessence.cashcaretaker.transaction
 
-import com.androidessence.cashcaretaker.entity.EntityPresenter
+import com.androidessence.cashcaretaker.core.BasePresenter
+import com.androidessence.cashcaretaker.data.DataViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 /**
  * Implementation of the presenter for transactions.
  */
-class TransactionPresenterImpl(private var transactionController: TransactionController?, private val transactionInteractor: TransactionInteractor, private val accountName: String) : EntityPresenter<Transaction> {
+class TransactionPresenterImpl(private var transactionController: TransactionController?, private val transactionInteractor: TransactionInteractor, private val accountName: String) : BasePresenter {
 
     override fun onDestroy() {
         transactionController = null
@@ -18,11 +19,9 @@ class TransactionPresenterImpl(private var transactionController: TransactionCon
         transactionInteractor.getForAccount(accountName)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onFetched(it) }
-    }
-
-    override fun onFetched(entities: List<Transaction>) {
-        transactionController?.hideProgress()
-        transactionController?.setTransactions(entities)
+                .subscribe(
+                        { transactionController?.viewState = DataViewState.ListSuccess(it) },
+                        { transactionController?.viewState = DataViewState.Error(it) }
+                )
     }
 }

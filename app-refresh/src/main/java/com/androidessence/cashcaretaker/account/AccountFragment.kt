@@ -9,18 +9,38 @@ import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.entity.EntityPresenter
+import com.androidessence.cashcaretaker.core.BasePresenter
+import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.main.MainController
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
 import kotlinx.android.synthetic.main.fragment_account.*
+import timber.log.Timber
 
 /**
  * Displays a list of accounts to the user.
  */
 class AccountFragment: Fragment(), AccountController {
+    override var viewState: DataViewState = DataViewState.Initialized()
+        set(value) {
+            when (value) {
+                is DataViewState.Loading -> showProgress()
+                is DataViewState.ListSuccess<*> -> {
+                    hideProgress()
+
+                    adapter.items = value.items.filterIsInstance<Account>()
+                }
+                is DataViewState.Error -> {
+                    hideProgress()
+
+                    //TODO:
+                    Timber.e(value.error)
+                }
+            }
+        }
+
     private val adapter = AccountAdapter(this)
-    private val presenter: EntityPresenter<Account> by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
+    private val presenter: BasePresenter by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
     private val mainController: MainController by lazy { (activity as MainController) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -60,17 +80,8 @@ class AccountFragment: Fragment(), AccountController {
         accountsRecyclerView.show()
     }
 
-    override fun setAccounts(accounts: List<Account>) {
-        adapter.items = accounts
-    }
-
-    override fun onWithdrawalButtonClicked(account: Account) {
-        val dialog = AddTransactionDialog.newInstance(account.name, true)
-        dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
-    }
-
-    override fun onDepositButtonClicked(account: Account) {
-        val dialog = AddTransactionDialog.newInstance(account.name, false)
+    override fun onTransactionButtonClicked(account: Account, withdrawal: Boolean) {
+        val dialog = AddTransactionDialog.newInstance(account.name, withdrawal)
         dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
     }
 
