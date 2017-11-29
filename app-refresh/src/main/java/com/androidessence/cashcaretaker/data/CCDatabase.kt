@@ -33,7 +33,8 @@ abstract class CCDatabase : RoomDatabase() {
             return INSTANCE!!
         }
 
-        private val CALLBACK = object : RoomDatabase.Callback() {
+        //TODO: Find a way to reference this in the test class too without making it public.
+        val CALLBACK = object : RoomDatabase.Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
 
