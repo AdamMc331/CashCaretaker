@@ -7,12 +7,15 @@ import io.reactivex.schedulers.Schedulers
 
 /**
  * Implementation of the presenter for accounts.
+ *
+ * @property[controller] The controller that should be modified as data is fetched.
+ * @property[interactor] The interactor responsible for fetching account data.
  */
-class AccountPresenterImpl(private var controller: AccountController?, private val accountInteractor: AccountInteractor) : BasePresenter {
+class AccountPresenterImpl(private var controller: AccountController?, private val interactor: AccountInteractor) : BasePresenter {
 
     override fun onAttach() {
         controller?.showProgress()
-        accountInteractor.getAll()
+        interactor.getAll()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

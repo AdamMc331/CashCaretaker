@@ -17,6 +17,12 @@ import java.util.*
 
 /**
  * Dialog for adding a new transaction.
+ *
+ * @property[accountName] The name of the account that we're creating a transaction for.
+ * @property[withdrawalArgument] The initial argument for whether this transaction is a withdrawal.
+ * @property[isWithdrawal] Flag determining if this transaction is a withdrawal based on the switch.
+ * @property[presenter] The presenter that connects to the data layer.
+ * @property[selectedDate] The date that will be applied to the transaction.
  */
 class AddTransactionDialog : DialogFragment(), AddTransactionController {
     private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT_NAME).orEmpty() }
@@ -97,11 +103,32 @@ class AddTransactionDialog : DialogFragment(), AddTransactionController {
     }
 
     companion object {
+        /**
+         * Key for the account name argument.
+         */
         private val ARG_ACCOUNT_NAME: String = "AccountName"
+
+        /**
+         * Key for the withdrawal flag argument.
+         */
         private val ARG_IS_WITHDRAWAL: String = "IsWithdrawal"
+
+        /**
+         * Request code for the date picker.
+         */
         private val REQUEST_DATE = 0
+
+        /**
+         * The tag used when displaying this dialog.
+         */
         val FRAGMENT_NAME: String = AddTransactionDialog::class.java.simpleName
 
+        /**
+         * Creates a new dialog fragment to add a transaction.
+         *
+         * @param[accountName] The name of the account to create a transaction for.
+         * @param[isWithdrawal] Flag for the initial status of the withdrawal switch.
+         */
         fun newInstance(accountName: String, isWithdrawal: Boolean): AddTransactionDialog {
             val args = Bundle()
             args.putString(ARG_ACCOUNT_NAME, accountName)

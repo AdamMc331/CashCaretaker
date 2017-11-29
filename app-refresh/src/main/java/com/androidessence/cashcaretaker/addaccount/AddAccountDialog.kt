@@ -12,6 +12,8 @@ import kotlinx.android.synthetic.main.dialog_add_account.*
 
 /**
  * Dialog to insert an account.
+ *
+ * @property[presenter] Presenter used to connect to the data layer.
  */
 class AddAccountDialog: DialogFragment(), AddAccountController {
     private val presenter: AddAccountPresenter by lazy { AddAccountPresenterImpl(this, AddAccountInteractorImpl()) }
@@ -72,6 +74,9 @@ class AddAccountDialog: DialogFragment(), AddAccountController {
     }
 
     companion object {
+        /**
+         * The tag that is used when this account is inserted.
+         */
         val FRAGMENT_NAME: String = AddAccountDialog::class.java.simpleName
     }
 }
