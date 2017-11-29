@@ -11,17 +11,37 @@ import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.entity.EntityPresenter
+import com.androidessence.cashcaretaker.core.BasePresenter
+import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
 import kotlinx.android.synthetic.main.fragment_transaction.*
+import timber.log.Timber
 
 /**
  * Fragment that displays a list of Transactions.
  */
 class TransactionFragment: Fragment(), TransactionController {
+    override var viewState: DataViewState = DataViewState.Initialized()
+        set(value) {
+            when (value) {
+                is DataViewState.Loading -> showProgress()
+                is DataViewState.ListSuccess<*> -> {
+                    hideProgress()
+
+                    adapter.items = value.items.filterIsInstance<Transaction>()
+                }
+                is DataViewState.Error -> {
+                    hideProgress()
+
+                    //TODO:
+                    Timber.e(value.error)
+                }
+            }
+        }
+
     private val adapter = TransactionAdapter()
-    private lateinit var presenter: EntityPresenter<Transaction>
+    private lateinit var presenter: BasePresenter
     private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT).orEmpty() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,10 +86,6 @@ class TransactionFragment: Fragment(), TransactionController {
 
     override fun hideProgress() {
         progressBar.hide()
-    }
-
-    override fun setTransactions(transactions: List<Transaction>) {
-        adapter.items = transactions
     }
 
     private fun showAddTransactionDialog() {

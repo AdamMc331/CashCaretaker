@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.dialog_add_account.*
 /**
  * Dialog to insert an account.
  */
-class AddAccountDialog: DialogFragment(), AddAccountView {
+class AddAccountDialog: DialogFragment(), AddAccountController {
     private val presenter: AddAccountPresenter by lazy { AddAccountPresenterImpl(this, AddAccountInteractorImpl()) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =

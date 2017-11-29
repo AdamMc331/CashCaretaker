@@ -43,8 +43,8 @@ class AccountAdapter(private val controller: AccountController?, items: List<Acc
         private val red = ContextCompat.getColor(view.context, R.color.mds_red_500)
 
         init {
-            withdrawalButton?.setOnClickListener { controller?.onWithdrawalButtonClicked(items[adapterPosition]) }
-            depositButton?.setOnClickListener { controller?.onDepositButtonClicked(items[adapterPosition]) }
+            withdrawalButton?.setOnClickListener { controller?.onTransactionButtonClicked(items[adapterPosition], true) }
+            depositButton?.setOnClickListener { controller?.onTransactionButtonClicked(items[adapterPosition], false) }
             view.setOnClickListener { controller?.onAccountSelected(items[adapterPosition]) }
         }
 

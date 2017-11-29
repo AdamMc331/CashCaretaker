@@ -18,7 +18,7 @@ import java.util.*
 /**
  * Dialog for adding a new transaction.
  */
-class AddTransactionDialog : DialogFragment(), AddTransactionView {
+class AddTransactionDialog : DialogFragment(), AddTransactionController {
     private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT_NAME).orEmpty() }
     private val withdrawalArgument: Boolean by lazy { arguments?.getBoolean(ARG_IS_WITHDRAWAL) ?: true }
     private val isWithdrawal: Boolean
