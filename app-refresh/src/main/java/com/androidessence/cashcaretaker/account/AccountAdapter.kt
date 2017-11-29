@@ -13,6 +13,9 @@ import com.androidessence.utility.isNegative
 
 /**
  * Adapter for displaying Accounts in a RecyclerView.
+ *
+ * @property[controller] A controller supplied to handle callbacks for item selection.
+ * @property[items] The list of accounts to display.
  */
 class AccountAdapter(private val controller: AccountController?, items: List<Account> = ArrayList()): RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
 
@@ -48,6 +51,9 @@ class AccountAdapter(private val controller: AccountController?, items: List<Acc
             view.setOnClickListener { controller?.onAccountSelected(items[adapterPosition]) }
         }
 
+        /**
+         * Binds an Account object to the row view for display.
+         */
         fun bindItem(item: Account?) {
             name?.text = item?.name
             balance?.text = item?.balance?.asCurrency()

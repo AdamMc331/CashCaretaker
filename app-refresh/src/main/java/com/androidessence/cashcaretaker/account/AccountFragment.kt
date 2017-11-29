@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.core.BasePresenter
 import com.androidessence.cashcaretaker.data.DataViewState
@@ -19,6 +20,10 @@ import timber.log.Timber
 
 /**
  * Displays a list of accounts to the user.
+ *
+ * @property[adapter] An adapter responsible for the list of accounts in this fragment.
+ * @property[presenter] The presenter that will connect with the data layer for a list of accounts.
+ * @property[mainController] A controller that connects to the activity of this fragment when necessary.
  */
 class AccountFragment: Fragment(), AccountController {
     override var viewState: DataViewState = DataViewState.Initialized()
@@ -54,10 +59,7 @@ class AccountFragment: Fragment(), AccountController {
         accountsRecyclerView.layoutManager = layoutManager
         accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        fab.setOnClickListener({
-            //TODO: Is there a better way?
-            (activity as MainController).navigateToAddAccount()
-        })
+        fab.setOnClickListener {showAddAccountView() }
     }
 
     override fun onResume() {
@@ -89,9 +91,20 @@ class AccountFragment: Fragment(), AccountController {
         mainController.showTransactions(account.name)
     }
 
+    override fun showAddAccountView() {
+        val dialog = AddAccountDialog()
+        dialog.show(fragmentManager, AddAccountDialog.FRAGMENT_NAME)
+    }
+
     companion object {
+        /**
+         * Tag used when we want to display this fragment.
+         */
         val FRAGMENT_NAME: String = AccountFragment::class.java.simpleName
 
+        /**
+         * Creates a new fragment to display all accounts.
+         */
         fun newInstance(): AccountFragment {
             val fragment = AccountFragment()
 
