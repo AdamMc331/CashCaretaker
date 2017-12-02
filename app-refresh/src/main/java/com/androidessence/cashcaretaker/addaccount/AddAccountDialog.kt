@@ -58,7 +58,7 @@ class AddAccountDialog: DialogFragment(), AddAccountController {
     }
 
     override fun onInsertConflict() {
-        accountName.error = getString(R.string.error_account_name_exists)
+        accountName.error = getString(R.string.err_account_name_exists)
     }
 
     override fun showAccountNameError() {
