@@ -59,7 +59,7 @@ class AccountFragment: Fragment(), AccountController {
         accountsRecyclerView.layoutManager = layoutManager
         accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        fab.setOnClickListener {showAddAccountView() }
+        add_account.setOnClickListener {showAddAccountView() }
     }
 
     override fun onResume() {
