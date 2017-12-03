@@ -1,7 +1,6 @@
 package com.androidessence.cashcaretaker.transaction
 
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -64,8 +63,7 @@ class TransactionFragment: Fragment(), TransactionController {
         transactions.layoutManager = layoutManager
         transactions.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener({
-            //TODO: Is there a better way?
+        add_transaction.setOnClickListener({
             showAddTransactionDialog()
         })
     }

@@ -20,20 +20,25 @@ class AddAccountPresenterImpl(private var controller: AddAccountController?, pri
     }
 
     override fun insert(accountName: String, accountBalance: String) {
+        var hasError = false
+
         if (accountName.isEmpty()) {
             onAccountNameError()
-            return
+            hasError = true
         }
 
         val balance = accountBalance.toDoubleOrNull()
         if (balance == null) {
             onAccountBalanceError()
-            return
+            hasError = true
         }
+
+        if (hasError) return
 
         controller?.showProgress()
 
-        val account = Account(accountName, balance)
+        // We can unwrap balance here because we return if it's null.
+        val account = Account(accountName, balance!!)
         Single.fromCallable { interactor.insert(listOf(account)) }
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
