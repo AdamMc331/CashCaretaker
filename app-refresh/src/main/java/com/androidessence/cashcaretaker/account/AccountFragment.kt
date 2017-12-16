@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.account
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -10,7 +11,6 @@ import android.view.ViewGroup
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.core.BasePresenter
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.main.MainController
 import com.androidessence.utility.hide
@@ -35,17 +35,20 @@ class AccountFragment: Fragment(), AccountController {
 
                     adapter.items = value.items.filterIsInstance<Account>()
                 }
+                is DataViewState.ItemsRemoved -> {
+                    hideProgress()
+                }
                 is DataViewState.Error -> {
                     hideProgress()
 
-                    //TODO:
+                    //TODO: Show Snackbar
                     Timber.e(value.error)
                 }
             }
         }
 
     private val adapter = AccountAdapter(this)
-    private val presenter: BasePresenter by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
+    private val presenter: AccountPresenter by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
     private val mainController: MainController by lazy { (activity as MainController) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -60,6 +63,8 @@ class AccountFragment: Fragment(), AccountController {
         accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         add_account.setOnClickListener {showAddAccountView() }
+
+        fragmentManager?.addOnBackStackChangedListener { presenter.actionMode?.finish() }
     }
 
     override fun onResume() {
@@ -89,6 +94,11 @@ class AccountFragment: Fragment(), AccountController {
 
     override fun onAccountSelected(account: Account) {
         mainController.showTransactions(account.name)
+    }
+
+    override fun onAccountLongClicked(account: Account) {
+        presenter.selectedAccount = account
+        presenter.actionMode = (activity as AppCompatActivity).startSupportActionMode(presenter.actionModeCallback)
     }
 
     override fun showAddAccountView() {

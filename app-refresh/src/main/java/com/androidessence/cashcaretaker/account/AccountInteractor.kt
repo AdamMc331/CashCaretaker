@@ -13,4 +13,12 @@ interface AccountInteractor {
      * @return An RxJava Flowable stream of the account list that was found.
      */
     fun getAll(): Flowable<List<Account>>
+
+    /**
+     * Deletes an account from the database.
+     *
+     * @param[account] The account that is being deleted.
+     * @return The number of rows that were removed.
+     */
+    fun delete(account: Account): Int
 }

@@ -28,6 +28,13 @@ interface AccountController : DataController {
     fun onAccountSelected(account: Account)
 
     /**
+     * A callback method when the user long presses on an account.
+     *
+     * @param[account] The account that the user long pressed on.
+     */
+    fun onAccountLongClicked(account: Account)
+
+    /**
      * The controller that is displaying a list of accounts must also support navigating to the view
      * to add new ones.
      */

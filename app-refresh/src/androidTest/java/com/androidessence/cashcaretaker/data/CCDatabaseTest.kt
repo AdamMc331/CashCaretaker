@@ -53,6 +53,23 @@ class CCDatabaseTest {
     }
 
     @Test
+    fun testWriteDeleteAccount() {
+        // Insert
+        val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
+
+        val ids = accountDao.insert(listOf(testAccount))
+        assertEquals(1, ids.size)
+
+        // Delete
+        val removedCount = accountDao.delete(testAccount)
+        assertEquals(1, removedCount)
+
+        accountDao.getAll()
+                .test()
+                .assertValue(emptyList())
+    }
+
+    @Test
     fun testWriteReadTransactionWithGetAll() {
         val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
 

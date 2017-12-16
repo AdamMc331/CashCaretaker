@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.account
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers.hasErrorText
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import com.androidessence.cashcaretaker.R
@@ -69,6 +70,16 @@ class AccountRobot {
         return this
     }
 
+    fun longClick(position: Int): AccountRobot {
+        onView(RECYCLER_VIEW_MATCHER).perform(RecyclerViewActions.actionOnItemAtPosition<AccountAdapter.AccountViewHolder>(position, longClick()))
+        return this
+    }
+
+    fun delete(): AccountRobot {
+        onView(DELETE_BUTTON_MATCH).perform(click())
+        return this
+    }
+
     companion object {
         private val RECYCLER_VIEW_ID = R.id.accountsRecyclerView
         private val ACCOUNT_NAME_ID = R.id.accountName
@@ -81,5 +92,6 @@ class AccountRobot {
         private val ACCOUNT_NAME_MATCHER = withId(ACCOUNT_NAME_ID)
         private val ACCOUNT_BALANCE_MATCHER = withId(ACCOUNT_BALANCE_ID)
         private val SUBMIT_BUTTON_MATCHER = withId(R.id.submitButton)
+        private val DELETE_BUTTON_MATCH = withId(R.id.action_delete)
     }
 }
