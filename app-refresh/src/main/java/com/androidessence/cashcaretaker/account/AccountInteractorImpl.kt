@@ -14,4 +14,10 @@ class AccountInteractorImpl : AccountInteractor {
                 .accountDao()
                 .getAll()
     }
+
+    override fun delete(account: Account): Int {
+        return CCDatabase.getInMemoryDatabase(App.instance)
+                .accountDao()
+                .delete(account)
+    }
 }

@@ -49,6 +49,10 @@ class AccountAdapter(private val controller: AccountController?, items: List<Acc
             withdrawalButton?.setOnClickListener { controller?.onTransactionButtonClicked(items[adapterPosition], true) }
             depositButton?.setOnClickListener { controller?.onTransactionButtonClicked(items[adapterPosition], false) }
             view.setOnClickListener { controller?.onAccountSelected(items[adapterPosition]) }
+            view.setOnLongClickListener {
+                controller?.onAccountLongClicked(items[adapterPosition])
+                true
+            }
         }
 
         /**

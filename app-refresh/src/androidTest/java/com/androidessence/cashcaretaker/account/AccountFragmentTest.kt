@@ -132,6 +132,17 @@ class AccountFragmentTest {
         AccountRobot().assertAccountBalanceInList(TEST_BALANCE_AFTER_DEPOSIT_STRING, 0)
     }
 
+    @Test
+    fun deleteAccount() {
+        // Insert account
+        accountDao.insert(listOf(TEST_ACCOUNT))
+
+        AccountRobot()
+                .longClick(0)
+                .delete()
+                .assertListCount(0)
+    }
+
     companion object {
         private val TEST_ACCOUNT_NAME = "Checking"
         private val TEST_ACCOUNT_BALANCE = "100"
