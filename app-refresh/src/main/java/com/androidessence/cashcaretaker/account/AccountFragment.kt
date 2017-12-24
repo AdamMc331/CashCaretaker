@@ -37,6 +37,7 @@ class AccountFragment: Fragment(), AccountController {
                 }
                 is DataViewState.ItemsRemoved -> {
                     hideProgress()
+                    presenter.actionMode?.finish()
                 }
                 is DataViewState.Error -> {
                     hideProgress()
@@ -62,7 +63,7 @@ class AccountFragment: Fragment(), AccountController {
         accountsRecyclerView.layoutManager = layoutManager
         accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        add_account.setOnClickListener {showAddAccountView() }
+        add_account.setOnClickListener { showAddAccountView() }
 
         fragmentManager?.addOnBackStackChangedListener { presenter.actionMode?.finish() }
     }

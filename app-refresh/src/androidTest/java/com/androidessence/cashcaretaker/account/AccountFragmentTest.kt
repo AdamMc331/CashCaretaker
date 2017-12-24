@@ -138,6 +138,7 @@ class AccountFragmentTest {
         accountDao.insert(listOf(TEST_ACCOUNT))
 
         AccountRobot()
+                .assertListCount(1)
                 .longClick(0)
                 .delete()
                 .assertListCount(0)

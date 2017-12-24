@@ -13,7 +13,7 @@ import com.androidessence.utility.asUIString
 /**
  * Adapter for displaying Transactions in a RecyclerView.
  */
-class TransactionAdapter(items: List<Transaction> = ArrayList()): RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+class TransactionAdapter(private val controller: TransactionController?, items: List<Transaction> = ArrayList()): RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     var items: List<Transaction> = items
         set(value) {
@@ -33,13 +33,20 @@ class TransactionAdapter(items: List<Transaction> = ArrayList()): RecyclerView.A
 
     override fun getItemCount(): Int = items.size
 
-    class TransactionViewHolder(view: View?): RecyclerView.ViewHolder(view) {
+    inner class TransactionViewHolder(view: View?): RecyclerView.ViewHolder(view) {
         private val description = view?.findViewById<TextView>(R.id.transactionDescription) as TextView
         private val amount = view?.findViewById<TextView>(R.id.transactionAmount) as TextView
         private val date = view?.findViewById<TextView>(R.id.transactionDate) as TextView
         private val withdrawalIndicator = view?.findViewById<View>(R.id.withdrawal_indicator) as View
         private val green = ContextCompat.getColor(view?.context!!, R.color.mds_green_500) //TODO:
         private val red = ContextCompat.getColor(view?.context!!, R.color.mds_red_500) //TODO:
+
+        init {
+            view?.setOnLongClickListener {
+                controller?.onTransactionLongClicked(items[adapterPosition])
+                true
+            }
+        }
 
         fun bindItem(item: Transaction?) {
             description.text = item?.description

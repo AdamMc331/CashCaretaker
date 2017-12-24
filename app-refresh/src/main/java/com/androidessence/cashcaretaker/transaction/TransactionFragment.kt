@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.core.BasePresenter
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
@@ -30,6 +29,10 @@ class TransactionFragment: Fragment(), TransactionController {
 
                     adapter.items = value.items.filterIsInstance<Transaction>()
                 }
+                is DataViewState.ItemsRemoved -> {
+                    hideProgress()
+                    presenter.actionMode?.finish()
+                }
                 is DataViewState.Error -> {
                     hideProgress()
 
@@ -39,8 +42,8 @@ class TransactionFragment: Fragment(), TransactionController {
             }
         }
 
-    private val adapter = TransactionAdapter()
-    private lateinit var presenter: BasePresenter
+    private val adapter = TransactionAdapter(this)
+    private lateinit var presenter: TransactionPresenter
     private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT).orEmpty() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,16 +82,23 @@ class TransactionFragment: Fragment(), TransactionController {
     }
 
     override fun showProgress() {
+        transactions.hide()
         progressBar.show()
     }
 
     override fun hideProgress() {
         progressBar.hide()
+        transactions.show()
     }
 
     private fun showAddTransactionDialog() {
         val dialog = AddTransactionDialog.newInstance(accountName, true)
         dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
+    }
+
+    override fun onTransactionLongClicked(transaction: Transaction) {
+        presenter.selectedTransaction = transaction
+        presenter.actionMode = (activity as AppCompatActivity).startSupportActionMode(presenter.actionModeCallback)
     }
 
     companion object {

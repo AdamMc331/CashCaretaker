@@ -146,6 +146,13 @@ class CCDatabaseTest {
 
         val account = accountDao.getAll().test().values().first().first()
         assertEquals(TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
+
+        testDeposit.id = transactionIds.first()
+        val removalCount = transactionDao.delete(testDeposit)
+        assertEquals(1, removalCount)
+
+        val account2 = accountDao.getAll().test().values().first().first()
+        assertEquals(TEST_ACCOUNT_BALANCE, account2.balance, 0.0)
     }
 
     @Test
@@ -161,6 +168,13 @@ class CCDatabaseTest {
 
         val account = accountDao.getAll().test().values().first().first()
         assertEquals(TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
+
+        testWithdrawal.id = transactionIds.first()
+        val removalCount = transactionDao.delete(testWithdrawal)
+        assertEquals(1, removalCount)
+
+        val account2 = accountDao.getAll().test().values().first().first()
+        assertEquals(TEST_ACCOUNT_BALANCE, account2.balance, 0.0)
     }
 
     companion object {
