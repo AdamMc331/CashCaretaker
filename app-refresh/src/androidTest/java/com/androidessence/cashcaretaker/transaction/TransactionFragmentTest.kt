@@ -5,7 +5,6 @@ import android.support.test.runner.AndroidJUnit4
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.data.AccountDAO
 import com.androidessence.cashcaretaker.data.CCDatabase
-import com.androidessence.cashcaretaker.data.TransactionDAO
 import com.androidessence.cashcaretaker.main.MainActivity
 import com.androidessence.cashcaretaker.main.MainController
 import org.junit.After
@@ -23,9 +22,6 @@ class TransactionFragmentTest {
 
     private val accountDao: AccountDAO
         get() = CCDatabase.getInMemoryDatabase(activityTestRule.activity).accountDao()
-
-    private val transactionDao: TransactionDAO
-        get() = CCDatabase.getInMemoryDatabase(activityTestRule.activity).transactionDao()
 
     @Before
     fun setUp() {
@@ -65,10 +61,12 @@ class TransactionFragmentTest {
 
     @Test
     fun deleteTransaction() {
-        // Insert transaction
-        transactionDao.insert(listOf(TEST_TRANSACTION))
-
         TransactionRobot()
+                .clickNew()
+                .assertWithdrawalSwitchState(true)
+                .transactionDescription(TEST_TRANSACTION_DESCRIPTION)
+                .transactionAmount(TEST_TRANSACTION_AMOUNT)
+                .submit()
                 .assertListCount(1)
                 .longClick(0)
                 .delete()
