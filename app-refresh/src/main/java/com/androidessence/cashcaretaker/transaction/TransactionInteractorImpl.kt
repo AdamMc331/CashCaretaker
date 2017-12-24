@@ -13,4 +13,10 @@ class TransactionInteractorImpl: TransactionInteractor {
                 .transactionDao()
                 .getAllForAccount(accountName)
     }
+
+    override fun delete(transaction: Transaction): Int {
+        return CCDatabase.getInMemoryDatabase(App.instance)
+                .transactionDao()
+                .delete(transaction)
+    }
 }

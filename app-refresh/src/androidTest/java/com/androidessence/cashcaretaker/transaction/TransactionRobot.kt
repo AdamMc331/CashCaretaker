@@ -4,6 +4,7 @@ import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers.*
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.RecyclerViewItemCountAssertion
@@ -49,6 +50,16 @@ class TransactionRobot {
         return this
     }
 
+    fun longClick(position: Int): TransactionRobot {
+        onView(RECYCLER_VIEW_MATCHER).perform(RecyclerViewActions.actionOnItemAtPosition<TransactionAdapter.TransactionViewHolder>(position, longClick()))
+        return this
+    }
+
+    fun delete(): TransactionRobot {
+        onView(DELETE_BUTTON_MATCHER).perform(click())
+        return this
+    }
+
     companion object {
         private val RECYCLER_VIEW_ID = R.id.transactions
         private val WITHDRAWAL_SWITCH_ID = R.id.withdrawalSwitch
@@ -61,5 +72,6 @@ class TransactionRobot {
         private val TRANSACTION_DESCRIPTION_MATCHER = withId(TRANSACTION_DESCRIPTION_ID)
         private val TRANSACTION_AMOUNT_MATCHER = withId(TRANSACTION_AMOUNT_ID)
         private val SUBMIT_BUTTON_MATCHER = withId(R.id.submitButton)
+        private val DELETE_BUTTON_MATCHER = withId(R.id.action_delete)
     }
 }
