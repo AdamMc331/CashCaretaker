@@ -24,6 +24,18 @@ interface AddTransactionController : DataController, DatePickerDialog.OnDateSetL
     fun onInserted(ids: List<Long>)
 
     /**
+     * Callback with the number of rows updated.
+     */
+    fun onUpdated(count: Int)
+
+    /**
+     * Callback when an error occurs while processing data.
+     *
+     * @param[error] The error that occurred.
+     */
+    fun onError(error: Throwable)
+
+    /**
      * Displays a date picker that allows the user to pick the date of their transaction.
      */
     fun showDatePicker()

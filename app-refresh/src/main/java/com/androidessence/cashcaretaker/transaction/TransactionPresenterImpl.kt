@@ -4,7 +4,6 @@ import android.support.v7.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.core.BasePresenter
 import com.androidessence.cashcaretaker.data.DataViewState
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,6 +22,7 @@ class TransactionPresenterImpl(private var controller: TransactionController?, p
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
             when (item?.itemId) {
                 R.id.action_delete -> deleteSelectedTransaction()
+                R.id.action_edit -> editSelectedTransaction()
             }
 
             return true
@@ -58,6 +58,12 @@ class TransactionPresenterImpl(private var controller: TransactionController?, p
                         { controller?.viewState = DataViewState.ListSuccess(it) },
                         { controller?.viewState = DataViewState.Error(it) }
                 )
+    }
+
+    override fun editSelectedTransaction() {
+        selectedTransaction?.let {
+            controller?.showEditTransaction(it)
+        }
     }
 
     override fun deleteSelectedTransaction() {

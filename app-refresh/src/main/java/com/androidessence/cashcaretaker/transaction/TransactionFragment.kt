@@ -33,6 +33,10 @@ class TransactionFragment: Fragment(), TransactionController {
                     hideProgress()
                     presenter.actionMode?.finish()
                 }
+                is DataViewState.ItemsUpdated -> {
+                    hideProgress()
+                    presenter.actionMode?.finish()
+                }
                 is DataViewState.Error -> {
                     hideProgress()
 
@@ -67,7 +71,7 @@ class TransactionFragment: Fragment(), TransactionController {
         transactions.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         add_transaction.setOnClickListener({
-            showAddTransactionDialog()
+            showAddTransaction()
         })
     }
 
@@ -91,9 +95,18 @@ class TransactionFragment: Fragment(), TransactionController {
         transactions.show()
     }
 
-    private fun showAddTransactionDialog() {
+    override fun showAddTransaction() {
         val dialog = AddTransactionDialog.newInstance(accountName, true)
         dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
+    }
+
+    override fun showEditTransaction(transaction: Transaction) {
+        val dialog = AddTransactionDialog.newInstance(transaction)
+        dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
+
+        // Hide the action mode because once the dialog is shown the controller is out of our hands.
+        //TODO: This feels like a code smell, but idk how to fix yet.
+        presenter.actionMode?.finish()
     }
 
     override fun onTransactionLongClicked(transaction: Transaction) {

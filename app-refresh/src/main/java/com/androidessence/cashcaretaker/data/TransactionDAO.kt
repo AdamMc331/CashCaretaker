@@ -1,9 +1,6 @@
 package com.androidessence.cashcaretaker.data
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.androidessence.cashcaretaker.transaction.Transaction
 import io.reactivex.Flowable
 
@@ -20,6 +17,9 @@ interface TransactionDAO {
 
     @Insert
     fun insert(transactions: List<Transaction>): List<Long>
+
+    @Update
+    fun update(transaction: Transaction): Int
 
     @Delete
     fun delete(transaction: Transaction): Int

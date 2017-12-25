@@ -14,4 +14,12 @@ interface AddTransactionInteractor {
      * @return The identifiers of all the transactions that were inserted.
      */
     fun insert(transactions: List<Transaction>): List<Long>
+
+    /**
+     * Updates a transaction in the database.
+     *
+     * @param[transaction] The transaction that needs to be updated.
+     * @return The number of rows in the database that were updated.
+     */
+    fun update(transaction: Transaction): Int
 }

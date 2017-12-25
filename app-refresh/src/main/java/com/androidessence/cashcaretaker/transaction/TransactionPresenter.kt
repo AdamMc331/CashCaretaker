@@ -1,7 +1,6 @@
 package com.androidessence.cashcaretaker.transaction
 
 import android.support.v7.view.ActionMode
-import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.core.BasePresenter
 
 /**
@@ -27,4 +26,9 @@ interface TransactionPresenter : BasePresenter {
      * Deletes a transaction from the database.
      */
     fun deleteSelectedTransaction()
+
+    /**
+     * Allows the user to edit the selected transaction.
+     */
+    fun editSelectedTransaction()
 }

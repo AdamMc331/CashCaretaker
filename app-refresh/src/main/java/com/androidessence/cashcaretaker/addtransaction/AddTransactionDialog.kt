@@ -10,8 +10,10 @@ import android.widget.DatePicker
 import com.androidessence.cashcaretaker.DatePickerFragment
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.transaction.Transaction
 import com.androidessence.utility.asUIString
 import kotlinx.android.synthetic.main.dialog_add_transaction.*
+import timber.log.Timber
 import java.util.*
 
 
@@ -25,6 +27,8 @@ import java.util.*
  * @property[selectedDate] The date that will be applied to the transaction.
  */
 class AddTransactionDialog : DialogFragment(), AddTransactionController {
+    private val isEditing: Boolean by lazy { arguments?.containsKey(ARG_TRANSACTION) ?: false }
+    private val initialTransaction: Transaction? by lazy { arguments?.getParcelable<Transaction>(ARG_TRANSACTION) }
     private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT_NAME).orEmpty() }
     private val withdrawalArgument: Boolean by lazy { arguments?.getBoolean(ARG_IS_WITHDRAWAL) ?: true }
     private val isWithdrawal: Boolean
@@ -43,24 +47,49 @@ class AddTransactionDialog : DialogFragment(), AddTransactionController {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        withdrawalSwitch.isChecked = withdrawalArgument
+        if (isEditing) {
+            initialTransaction?.let { transaction ->
+                withdrawalSwitch.isChecked = transaction.withdrawal
+                transactionDescription.setText(transaction.description)
+                transactionAmount.setText(transaction.amount.toString())
+                selectedDate = transaction.date
 
-        submitButton.setOnClickListener {
-            presenter.insert(accountName, transactionDescription.text.toString(), transactionAmount.text.toString(), isWithdrawal, selectedDate)
+                submitButton.setOnClickListener {
+                    presenter.update(
+                            transaction.id,
+                            transaction.accountName,
+                            transactionDescription.text.toString(),
+                            transactionAmount.text.toString(),
+                            isWithdrawal,
+                            selectedDate
+                    )
+                }
+            }
+        } else {
+            withdrawalSwitch.isChecked = withdrawalArgument
+            selectedDate = Date()
+
+            submitButton.setOnClickListener {
+                presenter.insert(
+                        accountName,
+                        transactionDescription.text.toString(),
+                        transactionAmount.text.toString(),
+                        isWithdrawal,
+                        selectedDate
+                )
+            }
         }
 
-        transactionAmount.filters = arrayOf(DecimalDigitsInputFilter())
-
         transactionDate.setOnClickListener { showDatePicker() }
-        selectedDate = Date()
-
+        transactionAmount.filters = arrayOf(DecimalDigitsInputFilter())
         transactionDescription.requestFocus()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
-        dialog.setTitle(getString(R.string.add_transaction))
+        val titleResource = if (isEditing) R.string.edit_transaction else R.string.add_transaction
+        dialog.setTitle(getString(titleResource))
         return dialog
     }
 
@@ -90,6 +119,15 @@ class AddTransactionDialog : DialogFragment(), AddTransactionController {
         dismiss()
     }
 
+    override fun onUpdated(count: Int) {
+        dismiss()
+    }
+
+    override fun onError(error: Throwable) {
+        //TODO:
+        Timber.e(error)
+    }
+
     override fun showDatePicker() {
         val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
         datePickerFragment.setTargetFragment(this, REQUEST_DATE)
@@ -106,12 +144,17 @@ class AddTransactionDialog : DialogFragment(), AddTransactionController {
         /**
          * Key for the account name argument.
          */
-        private val ARG_ACCOUNT_NAME: String = "AccountName"
+        private val ARG_ACCOUNT_NAME = "AccountName"
 
         /**
          * Key for the withdrawal flag argument.
          */
-        private val ARG_IS_WITHDRAWAL: String = "IsWithdrawal"
+        private val ARG_IS_WITHDRAWAL = "IsWithdrawal"
+
+        /**
+         * Key used when we're editing an existing transaction instead of starting a new one.
+         */
+        private val ARG_TRANSACTION = "Transaction"
 
         /**
          * Request code for the date picker.
@@ -133,6 +176,21 @@ class AddTransactionDialog : DialogFragment(), AddTransactionController {
             val args = Bundle()
             args.putString(ARG_ACCOUNT_NAME, accountName)
             args.putBoolean(ARG_IS_WITHDRAWAL, isWithdrawal)
+
+            val fragment = AddTransactionDialog()
+            fragment.arguments = args
+
+            return fragment
+        }
+
+        /**
+         * Creates a new dialog fragment to edit a transaction.
+         *
+         * @param[transaction] The transaction that we'll be editing.
+         */
+        fun newInstance(transaction: Transaction): AddTransactionDialog {
+            val args = Bundle()
+            args.putParcelable(ARG_TRANSACTION, transaction)
 
             val fragment = AddTransactionDialog()
             fragment.arguments = args

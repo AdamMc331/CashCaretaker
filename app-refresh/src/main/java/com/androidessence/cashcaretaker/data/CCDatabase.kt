@@ -13,7 +13,7 @@ import com.androidessence.cashcaretaker.transaction.Transaction
 /**
  * Database class for the CC application.
  */
-@Database(entities = arrayOf(Account::class, Transaction::class), version = 1)
+@Database(entities = [(Account::class), (Transaction::class)], version = 1)
 @TypeConverters(Converters::class)
 abstract class CCDatabase : RoomDatabase() {
     abstract fun accountDao(): AccountDAO
@@ -74,6 +74,46 @@ abstract class CCDatabase : RoomDatabase() {
                                 "BEGIN " +
                                 "UPDATE account " +
                                 "SET balance = balance - old.amount " +
+                                "WHERE name = old.accountName; END;"
+                )
+
+                db.execSQL(
+                        "CREATE TRIGGER update_balance_for_withdrawal_update " +
+                                "AFTER UPDATE ON transactionTable " +
+                                "WHEN old.withdrawal AND new.withdrawal " +
+                                "BEGIN " +
+                                "UPDATE account " +
+                                "SET balance = (balance + old.amount) - new.amount " +
+                                "WHERE name = old.accountName; END;"
+                )
+
+                db.execSQL(
+                        "CREATE TRIGGER update_balance_for_deposit_update " +
+                                "AFTER UPDATE ON transactionTable " +
+                                "WHEN NOT old.withdrawal AND NOT new.withdrawal " +
+                                "BEGIN " +
+                                "UPDATE account " +
+                                "SET balance = (balance - old.amount) + new.amount " +
+                                "WHERE name = old.accountName; END;"
+                )
+
+                db.execSQL(
+                        "CREATE TRIGGER update_balance_for_deposit_to_withdrawal_change " +
+                                "AFTER UPDATE ON transactionTable " +
+                                "WHEN NOT old.withdrawal AND new.withdrawal " +
+                                "BEGIN " +
+                                "UPDATE account " +
+                                "SET BALANCE = (balance - old.amount) - new.amount " +
+                                "WHERE name = old.accountName; END;"
+                )
+
+                db.execSQL(
+                        "CREATE TRIGGER update_balance_for_withdrawal_to_deposit_change " +
+                                "AFTER UPDATE ON transactionTable " +
+                                "WHEN old.withdrawal AND NOT new.withdrawal " +
+                                "BEGIN " +
+                                "UPDATE account " +
+                                "SET BALANCE = (balance + old.amount) + new.amount " +
                                 "WHERE name = old.accountName; END;"
                 )
             }
