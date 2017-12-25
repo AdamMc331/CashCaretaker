@@ -124,7 +124,7 @@ class AddTransactionDialog : DialogFragment(), AddTransactionController {
     }
 
     override fun onError(error: Throwable) {
-        //TODO:
+        //TODO: Figure out how we want to handle this in the dialog.
         Timber.e(error)
     }
 

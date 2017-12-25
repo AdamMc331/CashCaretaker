@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
+import com.androidessence.cashcaretaker.core.showError
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.main.MainController
 import com.androidessence.utility.hide
@@ -42,8 +43,7 @@ class AccountFragment: Fragment(), AccountController {
                 is DataViewState.Error -> {
                     hideProgress()
 
-                    //TODO: Show Snackbar
-                    Timber.e(value.error)
+                    showError(value.error)
                 }
             }
         }

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
+import com.androidessence.cashcaretaker.core.showError
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
@@ -40,8 +41,7 @@ class TransactionFragment: Fragment(), TransactionController {
                 is DataViewState.Error -> {
                     hideProgress()
 
-                    //TODO:
-                    Timber.e(value.error)
+                    showError(value.error)
                 }
             }
         }
