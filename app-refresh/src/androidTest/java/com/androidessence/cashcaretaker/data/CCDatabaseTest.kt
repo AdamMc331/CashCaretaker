@@ -23,8 +23,12 @@ class CCDatabaseTest {
     private lateinit var accountDao: AccountDAO
     private lateinit var transactionDao: TransactionDAO
 
-    @JvmField @Rule val instantTaskExecutorRule = InstantTaskExecutorRule()
-    @JvmField @Rule val mainActivity = ActivityTestRule<MainActivity>(MainActivity::class.java)
+    @JvmField
+    @Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+    @JvmField
+    @Rule
+    val mainActivity = ActivityTestRule<MainActivity>(MainActivity::class.java)
 
     @Before
     fun setUp() {
@@ -175,6 +179,100 @@ class CCDatabaseTest {
 
         val account2 = accountDao.getAll().test().values().first().first()
         assertEquals(TEST_ACCOUNT_BALANCE, account2.balance, 0.0)
+    }
+
+    @Test
+    fun testUpdateWithdrawal() {
+        val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
+
+        val ids = accountDao.insert(listOf(testAccount))
+        assertEquals(1, ids.size)
+
+        val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
+        val transactionIds = transactionDao.insert(listOf(testWithdrawal))
+        assertEquals(1, transactionIds.size)
+
+        // Update transaction to be 2 times the amount to test balance change
+        testWithdrawal.id = transactionIds.first()
+        testWithdrawal.amount *= 2
+
+        val updateCount = transactionDao.update(testWithdrawal)
+        assertEquals(1, updateCount)
+
+        val expectedBalance = TEST_ACCOUNT_BALANCE - testWithdrawal.amount
+        val account = accountDao.getAll().test().values().first().first()
+        assertEquals(expectedBalance, account.balance, 0.0)
+    }
+
+    @Test
+    fun testUpdateDeposit() {
+        val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
+
+        val ids = accountDao.insert(listOf(testAccount))
+        assertEquals(1, ids.size)
+
+        val testDeposit = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
+        val transactionIds = transactionDao.insert(listOf(testDeposit))
+        assertEquals(1, transactionIds.size)
+
+        // Update transaction to be 2 times the amount to test balance change
+        testDeposit.id = transactionIds.first()
+        testDeposit.amount *= 2
+
+        val updateCount = transactionDao.update(testDeposit)
+        assertEquals(1, updateCount)
+
+        val expectedBalance = TEST_ACCOUNT_BALANCE + testDeposit.amount
+        val account = accountDao.getAll().test().values().first().first()
+        assertEquals(expectedBalance, account.balance, 0.0)
+    }
+
+    @Test
+    fun testWithdrawalToDepositChange() {
+        val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
+
+        val ids = accountDao.insert(listOf(testAccount))
+        assertEquals(1, ids.size)
+
+        val testTransaction = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
+        val transactionIds = transactionDao.insert(listOf(testTransaction))
+        assertEquals(1, transactionIds.size)
+
+        // Update transaction to be 2 times the amount to test balance change
+        testTransaction.id = transactionIds.first()
+        testTransaction.amount *= 2
+        testTransaction.withdrawal = false
+
+        val updateCount = transactionDao.update(testTransaction)
+        assertEquals(1, updateCount)
+
+        val expectedBalance = TEST_ACCOUNT_BALANCE + testTransaction.amount
+        val account = accountDao.getAll().test().values().first().first()
+        assertEquals(expectedBalance, account.balance, 0.0)
+    }
+
+    @Test
+    fun testDepositToWithdrawalChange() {
+        val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
+
+        val ids = accountDao.insert(listOf(testAccount))
+        assertEquals(1, ids.size)
+
+        val testTransaction = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
+        val transactionIds = transactionDao.insert(listOf(testTransaction))
+        assertEquals(1, transactionIds.size)
+
+        // Update transaction to be 2 times the amount to test balance change
+        testTransaction.id = transactionIds.first()
+        testTransaction.amount *= 2
+        testTransaction.withdrawal = true
+
+        val updateCount = transactionDao.update(testTransaction)
+        assertEquals(1, updateCount)
+
+        val expectedBalance = TEST_ACCOUNT_BALANCE - testTransaction.amount
+        val account = accountDao.getAll().test().values().first().first()
+        assertEquals(expectedBalance, account.balance, 0.0)
     }
 
     companion object {

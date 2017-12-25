@@ -24,6 +24,16 @@ class AddTransactionPresenterImpl(private var controller: AddTransactionControll
         controller?.onInserted(ids)
     }
 
+    override fun onUpdated(count: Int) {
+        controller?.hideProgress()
+        controller?.onUpdated(count)
+    }
+
+    override fun onError(error: Throwable) {
+        controller?.hideProgress()
+        controller?.onError(error)
+    }
+
     override fun onTransactionDescriptionError() {
         controller?.hideProgress()
         controller?.showTransactionDescriptionError()
@@ -55,6 +65,30 @@ class AddTransactionPresenterImpl(private var controller: AddTransactionControll
                 .subscribe(
                         { items -> onInserted(items) },
                         { error -> Timber.e(error) }
+                )
+    }
+
+    override fun update(id: Long, accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
+        if (transactionDescription.isEmpty()) {
+            onTransactionDescriptionError()
+            return
+        }
+
+        val amount = transactionAmount.toDoubleOrNull()
+        if (amount == null) {
+            onTransactionAmountError()
+            return
+        }
+
+        controller?.showProgress()
+
+        val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date, id)
+        Single.fromCallable { interactor.update(transaction) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { count -> onUpdated(count) },
+                        { error -> onError(error) }
                 )
     }
 }

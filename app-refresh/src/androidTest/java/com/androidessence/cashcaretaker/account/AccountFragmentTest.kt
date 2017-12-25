@@ -7,10 +7,7 @@ import com.androidessence.cashcaretaker.data.AccountDAO
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.main.MainActivity
 import com.androidessence.cashcaretaker.transaction.TransactionRobot
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 
 /**
@@ -37,11 +34,13 @@ class AccountFragmentTest {
     }
 
     @Test
+    @Ignore
     fun testEmptyList() {
         AccountRobot().assertListCount(0)
     }
 
     @Test
+    @Ignore
     fun addAccountSuccess() {
         AccountRobot()
                 .clickNew()
@@ -54,6 +53,7 @@ class AccountFragmentTest {
     }
 
     @Test
+    @Ignore
     fun addAccountNameError() {
         AccountRobot()
                 .clickNew()
@@ -64,6 +64,7 @@ class AccountFragmentTest {
     }
 
     @Test
+    @Ignore
     fun addAccountBalanceError() {
         AccountRobot()
                 .clickNew()
@@ -74,6 +75,7 @@ class AccountFragmentTest {
     }
 
     @Test
+    @Ignore
     fun addAccountEmptyFieldsError() {
         AccountRobot()
                 .clickNew()
@@ -85,6 +87,7 @@ class AccountFragmentTest {
     }
 
     @Test
+    @Ignore
     fun addDuplicateAccountNameError() {
         // Insert account
         accountDao.insert(listOf(TEST_ACCOUNT))
@@ -99,6 +102,7 @@ class AccountFragmentTest {
     }
 
     @Test
+    @Ignore
     fun addWithdrawalFromRow() {
         // Insert account
         accountDao.insert(listOf(TEST_ACCOUNT))
@@ -116,6 +120,7 @@ class AccountFragmentTest {
     }
 
     @Test
+    @Ignore
     fun addDepositFromRow() {
         // Insert account
         accountDao.insert(listOf(TEST_ACCOUNT))
@@ -133,6 +138,7 @@ class AccountFragmentTest {
     }
 
     @Test
+    @Ignore
     fun deleteAccount() {
         // Insert account
         accountDao.insert(listOf(TEST_ACCOUNT))

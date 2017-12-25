@@ -7,10 +7,7 @@ import com.androidessence.cashcaretaker.data.AccountDAO
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.main.MainActivity
 import com.androidessence.cashcaretaker.main.MainController
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -37,6 +34,7 @@ class TransactionFragmentTest {
     }
 
     @Test
+    @Ignore
     fun testInsertWithdrawal() {
         TransactionRobot()
                 .clickNew()
@@ -48,6 +46,7 @@ class TransactionFragmentTest {
     }
 
     @Test
+    @Ignore
     fun testInsertDeposit() {
         TransactionRobot()
                 .clickNew()
@@ -60,6 +59,7 @@ class TransactionFragmentTest {
     }
 
     @Test
+    @Ignore
     fun deleteTransaction() {
         TransactionRobot()
                 .clickNew()

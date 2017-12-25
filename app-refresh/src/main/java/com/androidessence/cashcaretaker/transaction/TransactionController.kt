@@ -18,4 +18,16 @@ interface TransactionController : DataController {
      * @param[transaction] The specific transaction that was pressed.
      */
     fun onTransactionLongClicked(transaction: Transaction)
+
+    /**
+     * Displays a view to add a new transaction.
+     */
+    fun showAddTransaction()
+
+    /**
+     * Displays a view to edit an existing transaction.
+     *
+     * @param[transaction] The transaction to edit.
+     */
+    fun showEditTransaction(transaction: Transaction)
 }

@@ -31,13 +31,13 @@ allprojects {
         androidCompileSdkVersion = 26
 
         //Libraries
-        supportLibraryVersion = "27.0.1"
+        supportLibraryVersion = "27.0.2"
         playServicesVersion = "10.2.1"
-        constraintLayoutVersion = "1.1.0-beta3"
+        constraintLayoutVersion = "1.1.0-beta4"
         recyclerViewCursorAdapterVersion = "1.0.0"
         materialDesignSpecsVersion = "2.0.1"
         recyclerViewUtilsVersion = "2.0.2"
-        timberVersion = "4.5.1"
+        timberVersion = "4.6.0"
         wearableVersion = "2.0.1"
         roomLibraryVersion = "1.0.0"
         rxJavaVersion = "2.0.6"

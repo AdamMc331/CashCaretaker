@@ -13,4 +13,10 @@ class AddTransactionInteractorImpl : AddTransactionInteractor {
                 .transactionDao()
                 .insert(transactions)
     }
+
+    override fun update(transaction: Transaction): Int {
+        return CCDatabase.getInMemoryDatabase(App.instance)
+                .transactionDao()
+                .update(transaction)
+    }
 }

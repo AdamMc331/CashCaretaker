@@ -2,6 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+androidExtensions {
+    experimental = true
+}
+
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
 
@@ -44,46 +48,46 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Kotlin/Android
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
-    compile "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
-    compile "com.android.support:design:${supportLibraryVersion}"
-    compile "com.android.support:cardview-v7:${supportLibraryVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
+    implementation "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
+    implementation "com.android.support:design:${supportLibraryVersion}"
+    implementation "com.android.support:cardview-v7:${supportLibraryVersion}"
 
     // Third party
-    compile "com.jakewharton.timber:timber:${timberVersion}"
-    compile "com.adammcneilly:recyclerviewutils:${recyclerViewUtilsVersion}"
-    compile "com.androidessence:materialdesignspecs:${materialDesignSpecsVersion}"
-    compile project(":utility")
+    implementation "com.jakewharton.timber:timber:${timberVersion}"
+    implementation "com.adammcneilly:recyclerviewutils:${recyclerViewUtilsVersion}"
+    implementation "com.androidessence:materialdesignspecs:${materialDesignSpecsVersion}"
+    implementation project(":utility")
 
     // Room/RxJava
-    compile "android.arch.persistence.room:runtime:$roomLibraryVersion"
-    compile "android.arch.persistence.room:rxjava2:$roomLibraryVersion"
-    compile "android.arch.persistence.room:testing:$roomLibraryVersion"
-    compile "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    compile "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation "android.arch.persistence.room:runtime:$roomLibraryVersion"
+    implementation "android.arch.persistence.room:rxjava2:$roomLibraryVersion"
+    implementation "android.arch.persistence.room:testing:$roomLibraryVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$roomLibraryVersion"
     kapt "android.arch.persistence.room:compiler:$roomLibraryVersion"
 
     // Testing
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
-    androidTestCompile("android.arch.core:core-testing:$roomLibraryVersion") {
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation("android.arch.core:core-testing:$roomLibraryVersion") {
         exclude module: 'support-compat'
         exclude module: 'support-annotations'
         exclude module: 'support-core-utils'
     }
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2') {
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.2.2') {
         exclude group: 'com.android.support'
         exclude module: 'support-annotations'
         exclude module: 'support-v4'
         exclude module: 'support-v13'
         exclude module: 'recyclerview-v7'
         exclude module: 'design'
-}
+    }
 }
 repositories {
     mavenCentral()

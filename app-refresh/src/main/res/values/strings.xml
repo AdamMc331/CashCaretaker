@@ -15,6 +15,7 @@
     <string name="description">Description</string>
     <string name="amount">Amount</string>
     <string name="add_transaction">Add Transaction</string>
+    <string name="edit_transaction">Edit Transaction</string>
     <string name="error_invalid_description">Please enter a valid description.</string>
     <string name="error_invalid_amount">Please enter a valid amount.</string>
     <string name="add_withdrawal">Add Withdrawal</string>
@@ -22,4 +23,5 @@
     <string name="withdrawal">Withdrawal</string>
     <string name="date">Date</string>
     <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
 </resources>
