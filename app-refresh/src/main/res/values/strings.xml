@@ -24,4 +24,10 @@
     <string name="date">Date</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
+    <string name="fingerprint_preference_key">fingerprint_preference</string>
+    <string name="fingerprint_preference_summary">Use the fingerprint scanner to secure the application.</string>
+    <string name="fingerprint_preference_title">Use Fingerprint?</string>
+    <string name="pin_preference_key">pin_preference</string>
+    <string name="pin_preference_summary">Use a pin to secure the application.</string>
+    <string name="pin_preference_title">Use Pin?</string>
 </resources>
