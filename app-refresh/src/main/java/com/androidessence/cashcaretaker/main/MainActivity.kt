@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.AccountFragment
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
+import com.androidessence.cashcaretaker.settings.SettingsFragment
 import com.androidessence.cashcaretaker.transaction.TransactionFragment
 import timber.log.Timber
 
@@ -46,9 +48,21 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
                 .commit()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater?.inflate(R.menu.menu_accounts, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
         android.R.id.home -> {
             onBackPressed()
+            true
+        }
+        R.id.action_settings -> {
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.container, SettingsFragment.newInstance(), SettingsFragment.FRAGMENT_NAME)
+                    .addToBackStack(SettingsFragment.FRAGMENT_NAME)
+                    .commit()
             true
         }
         else -> super.onOptionsItemSelected(item)
