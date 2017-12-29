@@ -104,7 +104,7 @@ class TransactionFragment: Fragment(), TransactionController {
         val dialog = AddTransactionDialog.newInstance(transaction)
         dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
 
-        // Hide the action mode because once the dialog is shown the controller is out of our hands.
+        // Hide the action mode because once the dialog is shown the fingerprintController is out of our hands.
         //TODO: This feels like a code smell, but idk how to fix yet.
         presenter.actionMode?.finish()
     }

@@ -30,4 +30,6 @@
     <string name="pin_preference_key">pin_preference</string>
     <string name="pin_preference_summary">Use a pin to secure the application.</string>
     <string name="pin_preference_title">Use Pin?</string>
+    <string name="fingerprint">Fingerprint</string>
+    <string name="confirm_fingerprint">Confirm fingerprint to continue into Cash Caretaker.</string>
 </resources>

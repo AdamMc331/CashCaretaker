@@ -14,7 +14,7 @@ import com.androidessence.utility.isNegative
 /**
  * Adapter for displaying Accounts in a RecyclerView.
  *
- * @property[controller] A controller supplied to handle callbacks for item selection.
+ * @property[controller] A fingerprintController supplied to handle callbacks for item selection.
  * @property[items] The list of accounts to display.
  */
 class AccountAdapter(private val controller: AccountController?, items: List<Account> = ArrayList()): RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
