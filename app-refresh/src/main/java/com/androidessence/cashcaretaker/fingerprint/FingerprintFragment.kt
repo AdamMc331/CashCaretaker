@@ -22,6 +22,11 @@ import javax.crypto.SecretKey
 
 /**
  * Fragment that authenticates the user's fingerprint before moving forward.
+ *
+ * @property[mainController] The main activity that this fragment sits in. It is needed to change the backstack upon authorization.
+ * @property[fingerprintController] The controller used to start and stop listening for authorization.
+ * @property[keyStore] The device key store used for crypto objects required by Fingerprint Manager.
+ * @property[keyGenerator] Used to generate a key for the fingerprint auth that will get stored in the device keystore.
  */
 @RequiresApi(23)
 class FingerprintFragment : Fragment(), FingerprintController.Callback {
@@ -31,7 +36,7 @@ class FingerprintFragment : Fragment(), FingerprintController.Callback {
     }
 
     private var keyStore: KeyStore? = null
-    private var mKeyGenerator: KeyGenerator? = null
+    private var keyGenerator: KeyGenerator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +48,7 @@ class FingerprintFragment : Fragment(), FingerprintController.Callback {
         }
 
         try {
-            mKeyGenerator = KeyGenerator
+            keyGenerator = KeyGenerator
                     .getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
         } catch (e: Exception) {
             throw RuntimeException("Failed to get an instance of KeyGenerator", e)
@@ -112,8 +117,8 @@ class FingerprintFragment : Fragment(), FingerprintController.Callback {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 builder.setInvalidatedByBiometricEnrollment(invalidatedByBiometricEnrollment)
             }
-            mKeyGenerator?.init(builder.build())
-            mKeyGenerator?.generateKey()
+            keyGenerator?.init(builder.build())
+            keyGenerator?.generateKey()
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
@@ -148,18 +153,29 @@ class FingerprintFragment : Fragment(), FingerprintController.Callback {
     }
 
     override fun onError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        fingerprintController.stopListening()
+        fingerprint_text.text = getString(R.string.fingerprint_fatal_error)
     }
 
     override fun onAuthenticated() {
+        fingerprintController.stopListening()
         mainController.showAccounts()
     }
 
     companion object {
+        /**
+         * The name of the key to create for authentication.
+         */
         private val DEFAULT_NAME = "default_key"
 
+        /**
+         * A tag for this fragment to define it in the backstack.
+         */
         val FRAGMENT_NAME: String = FingerprintFragment::class.java.simpleName
 
+        /**
+         * @return A new instance of the FingerprintFragment.
+         */
         fun newInstance(): FingerprintFragment = FingerprintFragment()
     }
 }

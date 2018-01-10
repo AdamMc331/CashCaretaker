@@ -24,7 +24,7 @@ import timber.log.Timber
  *
  * @property[adapter] An adapter responsible for the list of accounts in this fragment.
  * @property[presenter] The presenter that will connect with the data layer for a list of accounts.
- * @property[mainController] A fingerprintController that connects to the activity of this fragment when necessary.
+ * @property[mainController] A controller that connects to the activity of this fragment when necessary.
  */
 class AccountFragment: Fragment(), AccountController {
     override var viewState: DataViewState = DataViewState.Initialized()

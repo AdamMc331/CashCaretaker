@@ -33,4 +33,5 @@
     <string name="fingerprint">Fingerprint</string>
     <string name="confirm_fingerprint">Confirm fingerprint to continue into Cash Caretaker.</string>
     <string name="security_preferences_key">Security Preferences Category</string>
+    <string name="fingerprint_fatal_error">Unable to confirm fingerprint. Please restart the application.</string>
 </resources>

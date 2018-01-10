@@ -17,6 +17,8 @@ import timber.log.Timber
  * @property[selfCancelled] Whether or not this fingerprintController was cancelled by itself.
  * @property[fingerprintManagerCompat] The FingerprintManager that provides any relevant hardware info.
  * @property[isFingerprintAuthAvailable] Boolean flag for whether or not this device supports fingerprint authentication.
+ * @property[context] Helper variable to get the context from one of the views. The view used is arbitrary.
+ * @property[resetErrorTextRunnable] A runnable that resets the fingerprint view back to its default state.
  */
 class FingerprintController(private val fingerprintManagerCompat: FingerprintManagerCompat, private val callback: Callback, private val errorText: TextView, private val icon: ImageView) : FingerprintManagerCompat.AuthenticationCallback() {
     private var cancellationSignal: CancellationSignal? = null
@@ -25,9 +27,6 @@ class FingerprintController(private val fingerprintManagerCompat: FingerprintMan
     private val isFingerprintAuthAvailable: Boolean
         get() = fingerprintManagerCompat.isHardwareDetected && fingerprintManagerCompat.hasEnrolledFingerprints()
 
-    /**
-     * Helper variable to get the context from one of the views. The view used is arbitrary.
-     */
     private val context: Context
         get() = errorText.context
 
@@ -41,6 +40,11 @@ class FingerprintController(private val fingerprintManagerCompat: FingerprintMan
         errorText.post(resetErrorTextRunnable)
     }
 
+    /**
+     * Begins listening for a fingerprint authentication action.
+     *
+     * @param[cryptoObject] The crypto object used to sign the fingerprint auth with.
+     */
     fun startListening(cryptoObject: FingerprintManagerCompat.CryptoObject) {
         if (!isFingerprintAuthAvailable) return
 
@@ -49,6 +53,9 @@ class FingerprintController(private val fingerprintManagerCompat: FingerprintMan
         fingerprintManagerCompat.authenticate(cryptoObject, 0, cancellationSignal, this, null)
     }
 
+    /**
+     * Removes listeners from the fingerprint sensor.
+     */
     fun stopListening() {
         cancellationSignal?.let {
             selfCancelled = true
@@ -57,6 +64,11 @@ class FingerprintController(private val fingerprintManagerCompat: FingerprintMan
         }
     }
 
+    /**
+     * Displays an error text and image on the fingerprint view.
+     *
+     * @param[charSequence] The error message to display to the user.
+     */
     private fun showError(charSequence: CharSequence?) {
         errorText.text = charSequence
         icon.setImageResource(R.drawable.ic_error_white_24dp)
@@ -91,12 +103,29 @@ class FingerprintController(private val fingerprintManagerCompat: FingerprintMan
     }
 
     companion object {
+        /**
+         * The amount of time (in milliseconds) to display an error before resetting the view.
+         */
         private val ERROR_TIMEOUT_MILLIS = 1600L
+
+        /**
+         * The amount of time (in milliseconds) to display success before using the callback.
+         */
         private val SUCCESS_DELAY_MILLIS = 1300L
     }
 
+    /**
+     * A callback that handles successful and unsuccessful authorization.
+     */
     interface Callback {
+        /**
+         * Method that will be called if the user fails to authenticate a fingerprint.
+         */
         fun onError()
+
+        /**
+         * Method that will be called if the user successfully authorizes their fingerprint.
+         */
         fun onAuthenticated()
     }
 }
