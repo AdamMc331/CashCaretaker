@@ -1,11 +1,13 @@
 package com.androidessence.cashcaretaker.fingerprint
 
-import android.annotation.TargetApi
-import android.app.FragmentManager
-import android.hardware.fingerprint.FingerprintManager
-import android.os.CancellationSignal
-import android.support.annotation.RequiresApi
+
+import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import android.support.v4.os.CancellationSignal
+import android.widget.ImageView
+import android.widget.TextView
+import com.androidessence.cashcaretaker.R
 import timber.log.Timber
 
 /**
@@ -16,20 +18,35 @@ import timber.log.Timber
  * @property[fingerprintManagerCompat] The FingerprintManager that provides any relevant hardware info.
  * @property[isFingerprintAuthAvailable] Boolean flag for whether or not this device supports fingerprint authentication.
  */
-@RequiresApi(23)
-class FingerprintController(private val fingerprintManagerCompat: FingerprintManager, private val callback: Callback) : FingerprintManager.AuthenticationCallback() {
+class FingerprintController(private val fingerprintManagerCompat: FingerprintManagerCompat, private val callback: Callback, private val errorText: TextView, private val icon: ImageView) : FingerprintManagerCompat.AuthenticationCallback() {
     private var cancellationSignal: CancellationSignal? = null
     private var selfCancelled: Boolean = false
 
-    val isFingerprintAuthAvailable: Boolean
+    private val isFingerprintAuthAvailable: Boolean
         get() = fingerprintManagerCompat.isHardwareDetected && fingerprintManagerCompat.hasEnrolledFingerprints()
 
-    fun startListening(cryptoObject: FingerprintManager.CryptoObject) {
+    /**
+     * Helper variable to get the context from one of the views. The view used is arbitrary.
+     */
+    private val context: Context
+        get() = errorText.context
+
+    private val resetErrorTextRunnable: Runnable = Runnable {
+        errorText.setTextColor(ContextCompat.getColor(context, R.color.mds_white))
+        errorText.text = context.getString(R.string.confirm_fingerprint)
+        icon.setImageResource(R.drawable.ic_fingerprint_white_24dp)
+    }
+
+    init {
+        errorText.post(resetErrorTextRunnable)
+    }
+
+    fun startListening(cryptoObject: FingerprintManagerCompat.CryptoObject) {
         if (!isFingerprintAuthAvailable) return
 
         cancellationSignal = CancellationSignal()
         selfCancelled = false
-        fingerprintManagerCompat.authenticate(cryptoObject, cancellationSignal, 0, this, null)
+        fingerprintManagerCompat.authenticate(cryptoObject, 0, cancellationSignal, this, null)
     }
 
     fun stopListening() {
@@ -41,16 +58,19 @@ class FingerprintController(private val fingerprintManagerCompat: FingerprintMan
     }
 
     private fun showError(charSequence: CharSequence?) {
-        //TODO: Update icon
-        //TODO: Display error
+        errorText.text = charSequence
+        icon.setImageResource(R.drawable.ic_error_white_24dp)
+        errorText.removeCallbacks(resetErrorTextRunnable)
+        errorText.postDelayed(resetErrorTextRunnable, ERROR_TIMEOUT_MILLIS)
         Timber.e(charSequence.toString())
     }
 
     override fun onAuthenticationError(errMsgId: Int, errString: CharSequence?) {
         if (!selfCancelled) {
             showError(errString)
-            //TODO: Update icon
-            callback.onError()
+            icon.postDelayed({
+                callback.onError()
+            }, ERROR_TIMEOUT_MILLIS)
         }
     }
 
@@ -62,10 +82,17 @@ class FingerprintController(private val fingerprintManagerCompat: FingerprintMan
         showError("Fingerprint not recognized. Try again.")
     }
 
-    override fun onAuthenticationSucceeded(result: FingerprintManager.AuthenticationResult?) {
-        //TODO: Update error text and icon
+    override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult?) {
+        icon.setImageResource(R.drawable.ic_check_circle_white_24dp)
         Timber.d("Authenticated.")
-        callback.onAuthenticated()
+        icon.postDelayed({
+            callback.onAuthenticated()
+        }, SUCCESS_DELAY_MILLIS)
+    }
+
+    companion object {
+        private val ERROR_TIMEOUT_MILLIS = 1600L
+        private val SUCCESS_DELAY_MILLIS = 1300L
     }
 
     interface Callback {

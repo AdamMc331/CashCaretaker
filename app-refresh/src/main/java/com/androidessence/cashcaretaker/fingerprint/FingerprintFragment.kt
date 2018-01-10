@@ -1,25 +1,23 @@
 package com.androidessence.cashcaretaker.fingerprint
 
-import android.hardware.fingerprint.FingerprintManager
 import android.os.Build
 import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.main.MainController
-import java.io.IOException
-import java.security.*
-import java.security.cert.CertificateException
+import kotlinx.android.synthetic.main.fragment_fingerprint.*
+import java.security.KeyStore
+import java.security.KeyStoreException
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
-import javax.crypto.NoSuchPaddingException
 import javax.crypto.SecretKey
 
 /**
@@ -28,7 +26,9 @@ import javax.crypto.SecretKey
 @RequiresApi(23)
 class FingerprintFragment : Fragment(), FingerprintController.Callback {
     private val mainController: MainController by lazy { activity as MainController }
-    private val fingerprintController: FingerprintController by lazy { FingerprintController(context!!.getSystemService(FingerprintManager::class.java), this) }
+    private val fingerprintController: FingerprintController by lazy {
+        FingerprintController(FingerprintManagerCompat.from(context!!), this, fingerprint_text, fingerprint_image)
+    }
 
     private var keyStore: KeyStore? = null
     private var mKeyGenerator: KeyGenerator? = null
@@ -45,14 +45,12 @@ class FingerprintFragment : Fragment(), FingerprintController.Callback {
         try {
             mKeyGenerator = KeyGenerator
                     .getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
-        } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException("Failed to get an instance of KeyGenerator", e)
-        } catch (e: NoSuchProviderException) {
+        } catch (e: Exception) {
             throw RuntimeException("Failed to get an instance of KeyGenerator", e)
         }
 
 
-        createKey("key_not_invalidated", false)
+        createKey(DEFAULT_NAME, false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -61,25 +59,18 @@ class FingerprintFragment : Fragment(), FingerprintController.Callback {
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity).supportActionBar?.hide()
-        //AHHHHH WHAT DOES IT MEAN
-        //TODO:
-        val defaultCipher: Cipher
-        val cipherNotInvalidated: Cipher
-        try {
-            defaultCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/"
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7)
-            cipherNotInvalidated = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/"
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7)
-        } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException("Failed to get an instance of Cipher", e)
-        } catch (e: NoSuchPaddingException) {
-            throw RuntimeException("Failed to get an instance of Cipher", e)
-        }
 
-        if (initCipher(cipherNotInvalidated, "key_not_invalidated")) {
-            fingerprintController.startListening(FingerprintManager.CryptoObject(cipherNotInvalidated))
+        val defaultCipher: Cipher =
+                try {
+                    Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
+                            + KeyProperties.BLOCK_MODE_CBC + "/"
+                            + KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                } catch (e: Exception) {
+                    throw RuntimeException("Failed to get an instance of Cipher", e)
+                }
+
+        if (initCipher(defaultCipher, DEFAULT_NAME)) {
+            fingerprintController.startListening(FingerprintManagerCompat.CryptoObject(defaultCipher))
         }
     }
 
@@ -96,7 +87,7 @@ class FingerprintFragment : Fragment(), FingerprintController.Callback {
      * enrolled.). Note that this parameter is only valid if
      * the app works on Android N developer preview.
      */
-    fun createKey(keyName: String, invalidatedByBiometricEnrollment: Boolean) {
+    private fun createKey(keyName: String, invalidatedByBiometricEnrollment: Boolean) {
         // The enrolling flow for fingerprint. This is where you ask the user to set up fingerprint
         // for your flow. Use of keys is necessary if you need to know if the set of
         // enrolled fingerprints has changed.
@@ -123,13 +114,7 @@ class FingerprintFragment : Fragment(), FingerprintController.Callback {
             }
             mKeyGenerator?.init(builder.build())
             mKeyGenerator?.generateKey()
-        } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException(e)
-        } catch (e: InvalidAlgorithmParameterException) {
-            throw RuntimeException(e)
-        } catch (e: CertificateException) {
-            throw RuntimeException(e)
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             throw RuntimeException(e)
         }
 
@@ -137,6 +122,7 @@ class FingerprintFragment : Fragment(), FingerprintController.Callback {
 
     override fun onPause() {
         (activity as AppCompatActivity).supportActionBar?.show()
+        fingerprintController.stopListening()
         super.onPause()
     }
 
@@ -155,19 +141,7 @@ class FingerprintFragment : Fragment(), FingerprintController.Callback {
             val key = keyStore?.getKey(keyName, null) as SecretKey
             cipher.init(Cipher.ENCRYPT_MODE, key)
             return true
-        } catch (e: KeyPermanentlyInvalidatedException) {
-            return false
-        } catch (e: KeyStoreException) {
-            throw RuntimeException("Failed to init Cipher", e)
-        } catch (e: CertificateException) {
-            throw RuntimeException("Failed to init Cipher", e)
-        } catch (e: UnrecoverableKeyException) {
-            throw RuntimeException("Failed to init Cipher", e)
-        } catch (e: IOException) {
-            throw RuntimeException("Failed to init Cipher", e)
-        } catch (e: NoSuchAlgorithmException) {
-            throw RuntimeException("Failed to init Cipher", e)
-        } catch (e: InvalidKeyException) {
+        } catch (e: Exception) {
             throw RuntimeException("Failed to init Cipher", e)
         }
 
@@ -182,6 +156,8 @@ class FingerprintFragment : Fragment(), FingerprintController.Callback {
     }
 
     companion object {
+        private val DEFAULT_NAME = "default_key"
+
         val FRAGMENT_NAME: String = FingerprintFragment::class.java.simpleName
 
         fun newInstance(): FingerprintFragment = FingerprintFragment()

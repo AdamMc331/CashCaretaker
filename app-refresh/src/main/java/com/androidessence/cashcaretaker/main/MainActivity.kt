@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
         if (fingerprintAuth) {
             supportFragmentManager.beginTransaction()
                     .add(R.id.container, FingerprintFragment.newInstance(), FingerprintFragment.FRAGMENT_NAME)
-                    .addToBackStack(FingerprintFragment.FRAGMENT_NAME)
                     .commit()
         } else {
             showAccounts()
