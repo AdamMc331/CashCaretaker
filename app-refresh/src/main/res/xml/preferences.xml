@@ -8,9 +8,9 @@
             android:summary="@string/fingerprint_preference_summary"
             android:title="@string/fingerprint_preference_title" />
 
-        <!--<CheckBoxPreference-->
-        <!--android:key="@string/pin_preference_key"-->
-        <!--android:summary="@string/pin_preference_summary"-->
-        <!--android:title="@string/pin_preference_title" />-->
+        <CheckBoxPreference
+            android:key="@string/pin_preference_key"
+            android:summary="@string/pin_preference_summary"
+            android:title="@string/pin_preference_title" />
     </PreferenceCategory>
 </PreferenceScreen>
