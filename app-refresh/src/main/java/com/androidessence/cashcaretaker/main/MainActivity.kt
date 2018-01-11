@@ -3,12 +3,14 @@ package com.androidessence.cashcaretaker.main
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.AccountFragment
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
+import com.androidessence.cashcaretaker.fingerprint.FingerprintFragment
 import com.androidessence.cashcaretaker.settings.SettingsFragment
 import com.androidessence.cashcaretaker.transaction.TransactionFragment
 import timber.log.Timber
@@ -25,10 +27,15 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
 
         supportFragmentManager.addOnBackStackChangedListener(this)
 
-        supportFragmentManager.beginTransaction()
-                .add(R.id.container, AccountFragment.newInstance(), AccountFragment.FRAGMENT_NAME)
-                .addToBackStack(AccountFragment.FRAGMENT_NAME)
-                .commit()
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val fingerprintAuth = prefs.getBoolean(getString(R.string.fingerprint_preference_key), false)
+        if (fingerprintAuth) {
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.container, FingerprintFragment.newInstance(), FingerprintFragment.FRAGMENT_NAME)
+                    .commit()
+        } else {
+            showAccounts()
+        }
     }
 
     override fun navigateToAddAccount() {
@@ -46,6 +53,13 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
                 .add(R.id.container, TransactionFragment.newInstance(accountName), TransactionFragment.FRAGMENT_NAME)
                 .addToBackStack(TransactionFragment.FRAGMENT_NAME)
                 .commit()
+    }
+
+    override fun showAccounts() {
+        supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, AccountFragment.newInstance(), AccountFragment.FRAGMENT_NAME)
+                    .addToBackStack(AccountFragment.FRAGMENT_NAME)
+                    .commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

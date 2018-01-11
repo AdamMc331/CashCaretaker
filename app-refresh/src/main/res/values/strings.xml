@@ -30,4 +30,8 @@
     <string name="pin_preference_key">pin_preference</string>
     <string name="pin_preference_summary">Use a pin to secure the application.</string>
     <string name="pin_preference_title">Use Pin?</string>
+    <string name="fingerprint">Fingerprint</string>
+    <string name="confirm_fingerprint">Confirm fingerprint to continue into Cash Caretaker.</string>
+    <string name="security_preferences_key">Security Preferences Category</string>
+    <string name="fingerprint_fatal_error">Unable to confirm fingerprint. Please restart the application.</string>
 </resources>

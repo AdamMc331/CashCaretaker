@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.androidessence.cashcaretaker">
 
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+
     <application
         android:name="com.androidessence.cashcaretaker.App"
         android:allowBackup="true"
