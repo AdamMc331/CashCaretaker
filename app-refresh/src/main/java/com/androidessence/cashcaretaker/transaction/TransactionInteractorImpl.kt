@@ -1,22 +1,15 @@
 package com.androidessence.cashcaretaker.transaction
 
-import com.androidessence.cashcaretaker.App
-import com.androidessence.cashcaretaker.data.CCDatabase
+import com.androidessence.cashcaretaker.data.CCRepository
 import io.reactivex.Flowable
 
 /**
- * Implmentation of TransactionInteractor.
+ * Implementation of TransactionInteractor.
  */
 class TransactionInteractorImpl: TransactionInteractor {
-    override fun getForAccount(accountName: String): Flowable<List<Transaction>> {
-        return CCDatabase.getInMemoryDatabase(App.instance)
-                .transactionDao()
-                .getAllForAccount(accountName)
-    }
+    override fun getForAccount(accountName: String): Flowable<List<Transaction>> =
+            CCRepository.getTransactionsForAccount(accountName)
 
-    override fun delete(transaction: Transaction): Int {
-        return CCDatabase.getInMemoryDatabase(App.instance)
-                .transactionDao()
-                .delete(transaction)
-    }
+    override fun delete(transaction: Transaction): Int =
+            CCRepository.deleteTransaction(transaction)
 }
