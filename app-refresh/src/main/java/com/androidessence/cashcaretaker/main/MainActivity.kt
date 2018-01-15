@@ -1,19 +1,18 @@
 package com.androidessence.cashcaretaker.main
 
 import android.os.Bundle
+import android.support.annotation.IdRes
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.AccountFragment
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
-import com.androidessence.cashcaretaker.fingerprint.FingerprintFragment
 import com.androidessence.cashcaretaker.settings.SettingsFragment
 import com.androidessence.cashcaretaker.transaction.TransactionFragment
-import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBackStackChangedListener {
@@ -27,15 +26,17 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
 
         supportFragmentManager.addOnBackStackChangedListener(this)
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val fingerprintAuth = prefs.getBoolean(getString(R.string.fingerprint_preference_key), false)
-        if (fingerprintAuth) {
-            supportFragmentManager.beginTransaction()
-                    .add(R.id.container, FingerprintFragment.newInstance(), FingerprintFragment.FRAGMENT_NAME)
-                    .commit()
-        } else {
-            showAccounts()
-        }
+        //TODO: We're removing all of this logic until 2.1. The 2.0 release does not need any
+        // auth going into the app.
+//        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+//        val fingerprintAuth = prefs.getBoolean(getString(R.string.fingerprint_preference_key), false)
+//        if (fingerprintAuth) {
+//            showFragment(FingerprintFragment.newInstance(), FingerprintFragment.FRAGMENT_NAME, addToBackStack = false)
+//        } else {
+//            showAccounts()
+//        }
+
+        showAccounts()
     }
 
     override fun navigateToAddAccount() {
@@ -44,28 +45,47 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
     }
 
     override fun onAccountInserted() {
-        Timber.d("onAccountInserted")
         supportFragmentManager.popBackStackImmediate(AccountFragment.FRAGMENT_NAME, 0)
     }
 
     override fun showTransactions(accountName: String) {
-        supportFragmentManager.beginTransaction()
-                .add(R.id.container, TransactionFragment.newInstance(accountName), TransactionFragment.FRAGMENT_NAME)
-                .addToBackStack(TransactionFragment.FRAGMENT_NAME)
-                .commit()
+        showFragment(TransactionFragment.newInstance(accountName), TransactionFragment.FRAGMENT_NAME)
     }
 
     override fun showAccounts() {
-        supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, AccountFragment.newInstance(), AccountFragment.FRAGMENT_NAME)
-                    .addToBackStack(AccountFragment.FRAGMENT_NAME)
-                    .commit()
+        showFragment(AccountFragment.newInstance(), AccountFragment.FRAGMENT_NAME, true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater?.inflate(R.menu.menu_accounts, menu)
-        return true
+    /**
+     * Displays a fragment inside this Activity.
+     *
+     * @param[fragment] The fragment that needs to be displayed.
+     * @param[tag] The tag used to identify this fragment in the backstack.
+     * @param[replace] Flag for whether we should be replacing a fragment (if true), or just add to the activity state (if false).
+     * @param[addToBackStack] Flag for adding this transaction to the back stack so the entry is remembered (if true), or simply ignored after being committed (if false).
+     * @param[container] Identifier of the container view that we are adding/replacing the fragment of.
+     */
+    private fun showFragment(fragment: Fragment, tag: String, replace: Boolean = false, addToBackStack: Boolean = true, @IdRes container: Int = R.id.container) {
+        val transaction = supportFragmentManager.beginTransaction()
+
+        if (replace) {
+            transaction.replace(container, fragment, tag)
+        } else {
+            transaction.add(container, fragment, tag)
+        }
+
+        if (addToBackStack) {
+            transaction.addToBackStack(tag)
+        }
+
+        transaction.commit()
     }
+
+    //TODO: Removing this as nothing from the menu is needed in version 2.0.
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater?.inflate(R.menu.menu_accounts, menu)
+//        return true
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
         android.R.id.home -> {
@@ -73,10 +93,7 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
             true
         }
         R.id.action_settings -> {
-            supportFragmentManager.beginTransaction()
-                    .add(R.id.container, SettingsFragment.newInstance(), SettingsFragment.FRAGMENT_NAME)
-                    .addToBackStack(SettingsFragment.FRAGMENT_NAME)
-                    .commit()
+            showFragment(SettingsFragment.newInstance(), SettingsFragment.FRAGMENT_NAME)
             true
         }
         else -> super.onOptionsItemSelected(item)

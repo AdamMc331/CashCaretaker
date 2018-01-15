@@ -14,9 +14,14 @@ import timber.log.Timber
 
 /**
  * Fragment for displaying a list of potential settings to the user.
+ *
+ * @property[fingerprintPreference] The preference managing whether or not the user has fingerprint authentication for the app.
+ * @property[pinPreference] The preference managing whether or not the user has pin authentication for the app.
+ * @property[securityCategory] The category that security preferences sit in - this is used so we can hide the fingerprint option on certain devices.
  */
 class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener {
     private val fingerprintPreference: Preference by lazy { findPreference(getString(R.string.fingerprint_preference_key)) }
+    private val pinPreference: Preference by lazy { findPreference(getString(R.string.pin_preference_key)) }
     private val securityCategory: PreferenceCategory by lazy { findPreference(getString(R.string.security_preferences_key)) as PreferenceCategory }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -33,13 +38,12 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
         addPreferencesFromResource(R.xml.preferences)
 
         fingerprintPreference.onPreferenceChangeListener = this
-//        findPreference(getString(R.string.pin_preference_key)).onPreferenceChangeListener = this
+        pinPreference.onPreferenceChangeListener = this
 
         // Hide if not supported
         context?.let {
             val manager = FingerprintManagerCompat.from(it)
             if (!manager.isHardwareDetected || !manager.hasEnrolledFingerprints()) {
-                Timber.d("Removing preference.")
                 securityCategory.removePreference(fingerprintPreference)
             }
         }
@@ -55,6 +59,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
             }
             getString(R.string.pin_preference_key) -> {
                 //TODO: Handle this being clicked.
+                // Pop up dialog asking for pin.
                 true
             }
             else -> false
@@ -62,8 +67,14 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
     }
 
     companion object {
+        /**
+         * The tag for this fragment that is used to identify it in the backstack.
+         */
         val FRAGMENT_NAME: String = SettingsFragment::class.java.simpleName
 
+        /**
+         * Creates a separate instance of this fragment to be displayed.
+         */
         fun newInstance(): SettingsFragment = SettingsFragment()
     }
 }
