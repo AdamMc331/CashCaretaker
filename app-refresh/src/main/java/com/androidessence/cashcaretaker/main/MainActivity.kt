@@ -5,14 +5,12 @@ import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.AccountFragment
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
-import com.androidessence.cashcaretaker.fingerprint.FingerprintFragment
 import com.androidessence.cashcaretaker.settings.SettingsFragment
 import com.androidessence.cashcaretaker.transaction.TransactionFragment
 
@@ -28,13 +26,17 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
 
         supportFragmentManager.addOnBackStackChangedListener(this)
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val fingerprintAuth = prefs.getBoolean(getString(R.string.fingerprint_preference_key), false)
-        if (fingerprintAuth) {
-            showFragment(FingerprintFragment.newInstance(), FingerprintFragment.FRAGMENT_NAME, addToBackStack = false)
-        } else {
-            showAccounts()
-        }
+        //TODO: We're removing all of this logic until 2.1. The 2.0 release does not need any
+        // auth going into the app.
+//        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+//        val fingerprintAuth = prefs.getBoolean(getString(R.string.fingerprint_preference_key), false)
+//        if (fingerprintAuth) {
+//            showFragment(FingerprintFragment.newInstance(), FingerprintFragment.FRAGMENT_NAME, addToBackStack = false)
+//        } else {
+//            showAccounts()
+//        }
+
+        showAccounts()
     }
 
     override fun navigateToAddAccount() {
@@ -79,10 +81,11 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
         transaction.commit()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater?.inflate(R.menu.menu_accounts, menu)
-        return true
-    }
+    //TODO: Removing this as nothing from the menu is needed in version 2.0.
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater?.inflate(R.menu.menu_accounts, menu)
+//        return true
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
         android.R.id.home -> {
