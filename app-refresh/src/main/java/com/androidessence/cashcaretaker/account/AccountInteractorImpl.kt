@@ -1,7 +1,6 @@
 package com.androidessence.cashcaretaker.account
 
-import com.androidessence.cashcaretaker.App
-import com.androidessence.cashcaretaker.data.CCDatabase
+import com.androidessence.cashcaretaker.data.CCRepository
 import io.reactivex.Flowable
 
 /**
@@ -9,15 +8,7 @@ import io.reactivex.Flowable
  */
 class AccountInteractorImpl : AccountInteractor {
 
-    override fun getAll(): Flowable<List<Account>> {
-        return CCDatabase.getInMemoryDatabase(App.instance)
-                .accountDao()
-                .getAll()
-    }
+    override fun getAll(): Flowable<List<Account>> = CCRepository.getAllAccounts()
 
-    override fun delete(account: Account): Int {
-        return CCDatabase.getInMemoryDatabase(App.instance)
-                .accountDao()
-                .delete(account)
-    }
+    override fun delete(account: Account): Int = CCRepository.deleteAccount(account)
 }

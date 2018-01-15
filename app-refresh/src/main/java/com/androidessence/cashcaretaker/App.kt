@@ -1,6 +1,8 @@
 package com.androidessence.cashcaretaker
 
 import android.app.Application
+import com.androidessence.cashcaretaker.data.CCDatabase
+import com.androidessence.cashcaretaker.data.CCRepository
 import timber.log.Timber
 
 /**
@@ -10,13 +12,8 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
 
         Timber.plant(Timber.DebugTree())
-    }
-
-    companion object {
-        lateinit var instance: Application
-            private set
+        CCRepository.init(CCDatabase.getInMemoryDatabase(this))
     }
 }
