@@ -7,5 +7,9 @@ import java.util.*
  * Interface defining the required behavior for adding a transfer.
  */
 interface AddTransferInteractor {
-    fun addTransfer(fromAccount: Account, toAccount: Account, amount: Double, date: Date): Boolean
+    fun addTransfer(fromAccount: Account, toAccount: Account, amount: Double, date: Date)
+
+    fun onInserted()
+
+    fun onError(error: Throwable)
 }

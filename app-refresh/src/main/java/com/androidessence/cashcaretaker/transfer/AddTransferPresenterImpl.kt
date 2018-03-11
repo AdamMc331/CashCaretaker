@@ -42,8 +42,8 @@ class AddTransferPresenterImpl(private var controller: AddTransferController?, p
         controller?.onInserted()
     }
 
-    override fun onError() {
+    override fun onError(error: Throwable) {
         controller?.hideProgress()
-        controller?.onError()
+        controller?.onError(error)
     }
 }

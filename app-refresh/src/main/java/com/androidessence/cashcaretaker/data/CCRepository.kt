@@ -1,8 +1,12 @@
 package com.androidessence.cashcaretaker.data
 
+import android.database.sqlite.SQLiteConstraintException
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.transaction.Transaction
 import io.reactivex.Flowable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 /**
@@ -49,7 +53,7 @@ object CCRepository {
      *
      * TODO: Use string template, don't hardcode english here.
      */
-    fun transfer(fromAccount: Account, toAccount: Account, amount: Double, date: Date): Boolean {
+    fun transfer(fromAccount: Account, toAccount: Account, amount: Double, date: Date): Single<Unit> {
         val withdrawal = Transaction(
                 fromAccount.name,
                 "Transfer to ${toAccount.name}.",
@@ -66,17 +70,15 @@ object CCRepository {
                 date
         )
 
-        val result: Boolean
-
-        database.beginTransaction()
-        try {
-            database.transactionDao().insert(listOf(withdrawal, deposit))
-            database.setTransactionSuccessful()
-            result = true
-        } finally {
-            database.endTransaction()
-        }
-
-        return result
+        // We can unwrap balance here because we return if it's null.
+        return Single.fromCallable {
+                    database.beginTransaction()
+                    try {
+                        database.transactionDao().insert(listOf(withdrawal, deposit))
+                        database.setTransactionSuccessful()
+                    } finally {
+                        database.endTransaction()
+                    }
+                }
     }
 }

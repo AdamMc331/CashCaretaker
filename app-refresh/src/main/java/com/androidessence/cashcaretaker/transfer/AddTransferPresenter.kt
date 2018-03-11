@@ -26,5 +26,5 @@ interface AddTransferPresenter : BasePresenter {
     /**
      * Callback method when a transfer is not inserted successfully.
      */
-    fun onError()
+    fun onError(error: Throwable)
 }

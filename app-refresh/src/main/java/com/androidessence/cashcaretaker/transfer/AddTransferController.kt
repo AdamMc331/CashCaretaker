@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker.transfer
 
+import android.app.DatePickerDialog
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.core.DataController
 import java.util.*
@@ -7,7 +8,7 @@ import java.util.*
 /**
  * Controller that defines the behavior of a view for adding a transfer.
  */
-interface AddTransferController : DataController {
+interface AddTransferController : DataController, DatePickerDialog.OnDateSetListener {
     /**
      * Transfers money from one account to another.
      *
@@ -46,5 +47,10 @@ interface AddTransferController : DataController {
     /**
      * Callback method when a transfer is not inserted successfully.
      */
-    fun onError()
+    fun onError(error: Throwable)
+
+    /**
+     * Displays a date picker that allows the user to pick the date of their transaction.
+     */
+    fun showDatePicker()
 }

@@ -6,9 +6,12 @@ import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
+import com.androidessence.cashcaretaker.DatePickerFragment
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
+import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.views.SpinnerInputEditText
 import com.androidessence.utility.asUIString
@@ -20,7 +23,7 @@ import java.util.*
  */
 class AddTransferDialog : DialogFragment(), AddTransferController {
 
-    private val presenter: AddTransferPresenter by lazy { AddTransferPresenterImpl(this, AddTransferInteractorImpl()) }
+    private val presenter: AddTransferPresenter by lazy { AddTransferPresenterImpl(this, AddTransferInteractorImpl(this)) }
 
     private lateinit var fromAccount: SpinnerInputEditText<Account>
     private lateinit var toAccount: SpinnerInputEditText<Account>
@@ -53,6 +56,9 @@ class AddTransferDialog : DialogFragment(), AddTransferController {
         }
 
         transferAmount.filters = arrayOf(DecimalDigitsInputFilter())
+
+        selectedDate = Date()
+        transferDate.setOnClickListener { showDatePicker() }
 
         submitButton.setOnClickListener {
             addTransfer(
@@ -96,7 +102,26 @@ class AddTransferDialog : DialogFragment(), AddTransferController {
         dismiss()
     }
 
-    override fun onError() {
+    override fun onError(error: Throwable) {
         //TODO:
+    }
+
+    override fun showDatePicker() {
+        val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
+        datePickerFragment.setTargetFragment(this, AddTransferDialog.REQUEST_DATE)
+        datePickerFragment.show(fragmentManager, AddTransactionDialog::class.java.simpleName)
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, dayOfMonth)
+        selectedDate = calendar.time
+    }
+
+    companion object {
+        /**
+         * Request code for the date picker.
+         */
+        private val REQUEST_DATE = 0
     }
 }
