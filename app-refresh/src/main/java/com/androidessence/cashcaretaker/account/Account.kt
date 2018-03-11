@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.account
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
+import com.androidessence.utility.asCurrency
 
 /**
  * A bank account that the user may have.
@@ -13,4 +14,7 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(indices = [(Index("name"))])
 data class Account(
         @PrimaryKey(autoGenerate = false) var name: String = "",
-        var balance: Double = 0.0)
+        var balance: Double = 0.0) {
+
+    override fun toString(): String = "$name (${balance.asCurrency()})"
+}

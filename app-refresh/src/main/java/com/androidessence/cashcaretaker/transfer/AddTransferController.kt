@@ -19,6 +19,11 @@ interface AddTransferController : DataController {
     fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date)
 
     /**
+     * Displays an error if the to account and from account are equal.
+     */
+    fun showSameAccountError()
+
+    /**
      * Displays an error if the from account is invalid.
      */
     fun showFromAccountError()

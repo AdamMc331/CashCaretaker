@@ -88,6 +88,10 @@ class AddTransferDialog : DialogFragment(), AddTransferController {
         transferAmount.error = "Amount must not be blank."
     }
 
+    override fun showSameAccountError() {
+        transferToAccount.error = "Must select a different account than the from account."
+    }
+
     override fun onInserted() {
         dismiss()
     }

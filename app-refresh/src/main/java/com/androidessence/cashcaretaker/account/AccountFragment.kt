@@ -17,7 +17,6 @@ import com.androidessence.cashcaretaker.main.MainController
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
 import kotlinx.android.synthetic.main.fragment_account.*
-import timber.log.Timber
 
 /**
  * Displays a list of accounts to the user.
