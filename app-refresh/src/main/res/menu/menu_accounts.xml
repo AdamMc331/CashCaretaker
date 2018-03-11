@@ -2,9 +2,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.adammcneilly.cashcaretaker.com.androidessence.cashcaretaker.main.MainActivity">
+
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:id="@+id/action_transfer"
+        android:icon="@drawable/ic_transfer_white_24dp"
+        android:orderInCategory="1"
+        android:title="@string/transfer"
+        app:showAsAction="ifRoom" />
+
+    <!--TODO: Re-add in v 2.1 -->
+    <!--<item-->
+    <!--android:id="@+id/action_settings"-->
+    <!--android:orderInCategory="100"-->
+    <!--android:title="@string/action_settings"-->
+    <!--app:showAsAction="never" />-->
 </menu>

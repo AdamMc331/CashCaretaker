@@ -13,6 +13,7 @@ import com.androidessence.cashcaretaker.account.AccountFragment
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.settings.SettingsFragment
 import com.androidessence.cashcaretaker.transaction.TransactionFragment
+import com.androidessence.cashcaretaker.transfer.AddTransferDialog
 
 
 class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBackStackChangedListener {
@@ -81,19 +82,25 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
         transaction.commit()
     }
 
-    //TODO: Removing this as nothing from the menu is needed in version 2.0.
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater?.inflate(R.menu.menu_accounts, menu)
-//        return true
-//    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater?.inflate(R.menu.menu_accounts, menu)
+        return true
+    }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
         android.R.id.home -> {
             onBackPressed()
             true
         }
-        R.id.action_settings -> {
-            showFragment(SettingsFragment.newInstance(), SettingsFragment.FRAGMENT_NAME)
+        //TODO:
+//        R.id.action_settings -> {
+//            showFragment(SettingsFragment.newInstance(), SettingsFragment.FRAGMENT_NAME)
+//            true
+//        }
+        R.id.action_transfer -> {
+            //TODO: Clean
+            val dialog = AddTransferDialog()
+            dialog.show(supportFragmentManager, AddTransferDialog::class.java.simpleName)
             true
         }
         else -> super.onOptionsItemSelected(item)

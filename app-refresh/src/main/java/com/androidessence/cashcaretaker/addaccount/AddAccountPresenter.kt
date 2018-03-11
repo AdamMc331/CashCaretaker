@@ -5,7 +5,7 @@ import com.androidessence.cashcaretaker.core.BasePresenter
 /**
  * Presenter for adding an account.
  */
-interface AddAccountPresenter: BasePresenter {
+interface AddAccountPresenter : BasePresenter {
 
     /**
      * Callback for the insertion of a list of accounts.
