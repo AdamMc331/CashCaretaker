@@ -1,15 +1,9 @@
 package com.androidessence.cashcaretaker.account
 
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import com.androidessence.cashcaretaker.R
-import com.androidessence.utility.asCurrency
-import com.androidessence.utility.isNegative
+import com.androidessence.cashcaretaker.databinding.ListItemAccountBinding
 
 /**
  * Adapter for displaying Accounts in a RecyclerView.
@@ -26,9 +20,9 @@ class AccountAdapter(private val controller: AccountController?, items: List<Acc
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
-        val context = parent.context
-        val view = LayoutInflater.from(context).inflate(R.layout.list_item_account, parent, false)
-        return AccountViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ListItemAccountBinding.inflate(inflater, parent, false)
+        return AccountViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
@@ -37,19 +31,20 @@ class AccountAdapter(private val controller: AccountController?, items: List<Acc
 
     override fun getItemCount(): Int = items.size
 
-    inner class AccountViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        private val name = view.findViewById<TextView>(R.id.accountName)
-        private val balance = view.findViewById<TextView>(R.id.accountBalance)
-        private val withdrawalButton = view.findViewById<ImageView>(R.id.withdrawal_button)
-        private val depositButton = view.findViewById<ImageView>(R.id.deposit_button)
-        private val black = ContextCompat.getColor(view.context, R.color.mds_black)
-        private val red = ContextCompat.getColor(view.context, R.color.mds_red_500)
+    inner class AccountViewHolder(private val binding: ListItemAccountBinding): RecyclerView.ViewHolder(binding.root) {
+        private val viewModel: AccountDataModel = AccountDataModel()
+        private val withdrawalButton = binding.withdrawalButton
+        private val depositButton = binding.depositButton
 
         init {
-            withdrawalButton?.setOnClickListener { controller?.onTransactionButtonClicked(items[adapterPosition], true) }
-            depositButton?.setOnClickListener { controller?.onTransactionButtonClicked(items[adapterPosition], false) }
-            view.setOnClickListener { controller?.onAccountSelected(items[adapterPosition]) }
-            view.setOnLongClickListener {
+            binding.account = viewModel
+        }
+
+        init {
+            withdrawalButton.setOnClickListener { controller?.onTransactionButtonClicked(items[adapterPosition], true) }
+            depositButton.setOnClickListener { controller?.onTransactionButtonClicked(items[adapterPosition], false) }
+            itemView.setOnClickListener { controller?.onAccountSelected(items[adapterPosition]) }
+            itemView.setOnLongClickListener {
                 controller?.onAccountLongClicked(items[adapterPosition])
                 true
             }
@@ -59,11 +54,8 @@ class AccountAdapter(private val controller: AccountController?, items: List<Acc
          * Binds an Account object to the row view for display.
          */
         fun bindItem(item: Account?) {
-            name?.text = item?.name
-            balance?.text = item?.balance?.asCurrency()
-            val isNegative = item?.balance?.isNegative() ?: false
-            val balanceColor = if (isNegative) red else black
-            balance?.setTextColor(balanceColor)
+            viewModel.account = item
+            binding.executePendingBindings()
         }
     }
 }

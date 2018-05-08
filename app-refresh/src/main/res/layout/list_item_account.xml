@@ -1,61 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="?android:attr/listPreferredItemHeightLarge"
-    android:orientation="horizontal"
-    android:padding="@dimen/text_padding">
+<layout>
 
-    <TextView
-        android:id="@+id/accountName"
-        android:layout_width="0dp"
+    <data>
+
+        <variable
+            name="account"
+            type="com.androidessence.cashcaretaker.account.AccountDataModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.25"
-        tools:text="Testinsadfasdfag" />
+        android:minHeight="?android:attr/listPreferredItemHeightLarge"
+        android:orientation="horizontal"
+        android:padding="@dimen/text_padding">
 
-    <TextView
-        android:id="@+id/accountBalance"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/double_margin"
-        android:layout_marginRight="@dimen/double_margin"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/accountName"
-        app:layout_constraintRight_toLeftOf="@+id/deposit_button"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="$1,000,000.00" />
+        <TextView
+            android:id="@+id/accountName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{account.name}"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.25"
+            tools:text="Testinsadfasdfag" />
 
-    <ImageView
-        android:id="@+id/deposit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/create_deposit"
-        android:padding="@dimen/double_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/withdrawal_button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_add_green_24dp" />
+        <TextView
+            android:id="@+id/accountBalance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/double_margin"
+            android:layout_marginRight="@dimen/double_margin"
+            android:gravity="center"
+            android:text="@{account.balanceString}"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@{account.textColorResource}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/accountName"
+            app:layout_constraintRight_toLeftOf="@+id/deposit_button"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$1,000,000.00" />
 
-    <ImageView
-        android:id="@+id/withdrawal_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/create_withdrawal"
-        android:padding="@dimen/double_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_remove_red_24dp" />
+        <ImageView
+            android:id="@+id/deposit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/create_deposit"
+            android:padding="@dimen/double_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/withdrawal_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_add_green_24dp" />
 
-</android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/withdrawal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/create_withdrawal"
+            android:padding="@dimen/double_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_remove_red_24dp" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
