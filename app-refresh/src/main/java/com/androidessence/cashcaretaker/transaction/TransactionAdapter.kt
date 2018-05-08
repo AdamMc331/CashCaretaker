@@ -21,14 +21,14 @@ class TransactionAdapter(private val controller: TransactionController?, items: 
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TransactionViewHolder {
-        val context = parent?.context
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
+        val context = parent.context
         val view = LayoutInflater.from(context).inflate(R.layout.list_item_transaction, parent, false)
         return TransactionViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TransactionViewHolder?, position: Int) {
-        holder?.bindItem(items[position])
+    override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
+        holder.bindItem(items[position])
     }
 
     override fun getItemCount(): Int = items.size

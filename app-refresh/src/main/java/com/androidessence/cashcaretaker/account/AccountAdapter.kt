@@ -25,14 +25,14 @@ class AccountAdapter(private val controller: AccountController?, items: List<Acc
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AccountViewHolder {
-        val context = parent?.context
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
+        val context = parent.context
         val view = LayoutInflater.from(context).inflate(R.layout.list_item_account, parent, false)
         return AccountViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: AccountViewHolder?, position: Int) {
-        holder?.bindItem(items[position])
+    override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
+        holder.bindItem(items[position])
     }
 
     override fun getItemCount(): Int = items.size

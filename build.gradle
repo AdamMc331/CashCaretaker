@@ -5,9 +5,10 @@ buildscript {
     repositories {
         jcenter()
         maven { url 'https://maven.google.com' }
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
         //noinspection DifferentKotlinGradleVersion
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
@@ -25,23 +26,23 @@ allprojects {
 
     ext {
         //Android
-        androidBuildToolsVersion = "26.0.2"
+        androidBuildToolsVersion = "27.0.3"
         androidMinSdkVersion = 19
         androidTargetSdkVersion = 26
         androidCompileSdkVersion = 26
 
         //Libraries
-        supportLibraryVersion = "27.0.2"
+        supportLibraryVersion = "27.1.1"
         playServicesVersion = "10.2.1"
-        constraintLayoutVersion = "1.1.0-beta4"
+        constraintLayoutVersion = "1.1.0"
         recyclerViewCursorAdapterVersion = "1.0.0"
         materialDesignSpecsVersion = "2.0.1"
         recyclerViewUtilsVersion = "2.0.2"
-        timberVersion = "4.6.0"
+        timberVersion = "4.7.0"
         wearableVersion = "2.0.1"
         roomLibraryVersion = "1.0.0"
-        rxJavaVersion = "2.0.6"
-        rxAndroidVersion = "2.0.1"
+        rxJavaVersion = "2.1.12"
+        rxAndroidVersion = "2.0.2"
     }
 }
 
