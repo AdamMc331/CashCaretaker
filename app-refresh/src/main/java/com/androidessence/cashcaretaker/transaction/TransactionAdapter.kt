@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.databinding.ListItemTransactionBinding
 import com.androidessence.utility.asCurrency
 import com.androidessence.utility.asUIString
 
@@ -22,9 +23,9 @@ class TransactionAdapter(private val controller: TransactionController?, items: 
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
-        val context = parent.context
-        val view = LayoutInflater.from(context).inflate(R.layout.list_item_transaction, parent, false)
-        return TransactionViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ListItemTransactionBinding.inflate(inflater, parent, false)
+        return TransactionViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
@@ -33,29 +34,16 @@ class TransactionAdapter(private val controller: TransactionController?, items: 
 
     override fun getItemCount(): Int = items.size
 
-    inner class TransactionViewHolder(view: View?): RecyclerView.ViewHolder(view) {
-        private val description = view?.findViewById<TextView>(R.id.transactionDescription) as TextView
-        private val amount = view?.findViewById<TextView>(R.id.transactionAmount) as TextView
-        private val date = view?.findViewById<TextView>(R.id.transactionDate) as TextView
-        private val withdrawalIndicator = view?.findViewById<View>(R.id.withdrawal_indicator) as View
-        private val green = ContextCompat.getColor(view?.context!!, R.color.mds_green_500) //TODO:
-        private val red = ContextCompat.getColor(view?.context!!, R.color.mds_red_500) //TODO:
+    inner class TransactionViewHolder(private val binding: ListItemTransactionBinding): RecyclerView.ViewHolder(binding.root) {
+        private val viewModel = TransactionDataModel()
 
         init {
-            view?.setOnLongClickListener {
-                controller?.onTransactionLongClicked(items[adapterPosition])
-                true
-            }
+            binding.viewModel = viewModel
         }
 
         fun bindItem(item: Transaction?) {
-            description.text = item?.description
-            amount.text = item?.amount?.asCurrency()
-            date.text = item?.date.asUIString()
-
-            val isWithdrawal = item?.withdrawal ?: false
-            val color = if (isWithdrawal) red else green
-            withdrawalIndicator.setBackgroundColor(color)
+            viewModel.transaction = item
+            binding.executePendingBindings()
         }
     }
 }

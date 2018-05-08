@@ -1,59 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="?android:attr/listPreferredItemHeightLarge">
+<layout>
 
-    <View
-        android:id="@+id/withdrawal_indicator"
-        android:layout_width="4dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/transactionDescription"
-        android:layout_width="0dp"
+        <variable
+            name="viewModel"
+            type="com.androidessence.cashcaretaker.transaction.TransactionDataModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/single_margin"
-        android:layout_marginStart="@dimen/single_margin"
-        android:layout_marginTop="@dimen/single_margin"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/black"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.5"
-        tools:text="Speedway" />
+        android:minHeight="?android:attr/listPreferredItemHeightLarge">
 
-    <TextView
-        android:id="@+id/transactionAmount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/single_margin"
-        android:layout_marginStart="@dimen/single_margin"
-        android:gravity="end"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/transactionDescription"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="$1,000.56" />
+        <View
+            android:id="@+id/withdrawal_indicator"
+            android:layout_width="4dp"
+            android:layout_height="0dp"
+            android:background="@{viewModel.indicatorColorResource}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/transactionDate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/single_margin"
-        android:layout_marginStart="@dimen/single_margin"
-        android:layout_marginTop="@dimen/single_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/transactionDescription"
-        app:layout_constraintWidth_percent="0.5"
-        tools:text="January 1, 2018" />
+        <TextView
+            android:id="@+id/transactionDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/single_margin"
+            android:layout_marginStart="@dimen/single_margin"
+            android:layout_marginTop="@dimen/single_margin"
+            android:text="@{viewModel.description}"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.5"
+            tools:text="Speedway" />
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/transactionAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/single_margin"
+            android:layout_marginStart="@dimen/single_margin"
+            android:gravity="end"
+            android:text="@{viewModel.amount}"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/transactionDescription"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$1,000.56" />
+
+        <TextView
+            android:id="@+id/transactionDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/single_margin"
+            android:layout_marginStart="@dimen/single_margin"
+            android:layout_marginTop="@dimen/single_margin"
+            android:text="@{viewModel.dateString}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/transactionDescription"
+            app:layout_constraintWidth_percent="0.5"
+            tools:text="January 1, 2018" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

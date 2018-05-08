@@ -12,7 +12,7 @@ interface TransactionDAO {
     @Query("SELECT * FROM transactionTable ORDER BY date DESC")
     fun getAll(): Flowable<List<Transaction>>
 
-    @Query("SELECT * FROM transactionTable WHERE accountName = :arg0 ORDER BY date DESC")
+    @Query("SELECT * FROM transactionTable WHERE accountName = :accountName ORDER BY date DESC")
     fun getAllForAccount(accountName: String): Flowable<List<Transaction>>
 
     @Insert
