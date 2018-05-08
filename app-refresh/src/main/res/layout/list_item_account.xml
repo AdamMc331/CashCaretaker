@@ -4,7 +4,7 @@
     <data>
 
         <variable
-            name="account"
+            name="viewModel"
             type="com.androidessence.cashcaretaker.account.AccountDataModel" />
     </data>
 
@@ -21,7 +21,7 @@
             android:id="@+id/accountName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{account.name}"
+            android:text="@{viewModel.name}"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/black"
             android:textStyle="bold"
@@ -38,9 +38,9 @@
             android:layout_marginLeft="@dimen/double_margin"
             android:layout_marginRight="@dimen/double_margin"
             android:gravity="center"
-            android:text="@{account.balanceString}"
+            android:text="@{viewModel.balanceString}"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@{account.textColorResource}"
+            android:textColor="@{viewModel.textColorResource}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/accountName"
             app:layout_constraintRight_toLeftOf="@+id/deposit_button"

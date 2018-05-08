@@ -32,12 +32,12 @@ class AccountAdapter(private val controller: AccountController?, items: List<Acc
     override fun getItemCount(): Int = items.size
 
     inner class AccountViewHolder(private val binding: ListItemAccountBinding): RecyclerView.ViewHolder(binding.root) {
-        private val viewModel: AccountDataModel = AccountDataModel()
+        private val viewModel = AccountDataModel()
         private val withdrawalButton = binding.withdrawalButton
         private val depositButton = binding.depositButton
 
         init {
-            binding.account = viewModel
+            binding.viewModel = viewModel
         }
 
         init {
