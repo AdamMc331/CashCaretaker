@@ -11,7 +11,6 @@ import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.AccountFragment
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
-import com.androidessence.cashcaretaker.settings.SettingsFragment
 import com.androidessence.cashcaretaker.transaction.TransactionFragment
 import com.androidessence.cashcaretaker.transfer.AddTransferDialog
 
@@ -26,17 +25,6 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
         setSupportActionBar(toolbar)
 
         supportFragmentManager.addOnBackStackChangedListener(this)
-
-        //TODO: We're removing all of this logic until 2.1. The 2.0 release does not need any
-        // auth going into the app.
-//        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-//        val fingerprintAuth = prefs.getBoolean(getString(R.string.fingerprint_preference_key), false)
-//        if (fingerprintAuth) {
-//            showFragment(FingerprintFragment.newInstance(), FingerprintFragment.FRAGMENT_NAME, addToBackStack = false)
-//        } else {
-//            showAccounts()
-//        }
-
         showAccounts()
     }
 
@@ -92,11 +80,6 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
             onBackPressed()
             true
         }
-        //TODO:
-//        R.id.action_settings -> {
-//            showFragment(SettingsFragment.newInstance(), SettingsFragment.FRAGMENT_NAME)
-//            true
-//        }
         R.id.action_transfer -> {
             //TODO: Clean
             val dialog = AddTransferDialog()
