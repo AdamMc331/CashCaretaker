@@ -6,7 +6,7 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.util.*
 
-class CCRepository(private val database: CCDatabase) {
+open class CCRepository(private val database: CCDatabase) {
     private val accountDAO: AccountDAO = database.accountDao()
     private val transactionDAO: TransactionDAO = database.transactionDao()
 

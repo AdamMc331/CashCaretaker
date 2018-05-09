@@ -4,14 +4,18 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.databinding.ListItemAccountBinding
+import io.reactivex.subjects.PublishSubject
 
 /**
  * Adapter for displaying Accounts in a RecyclerView.
  *
- * @property[controller] A controller supplied to handle callbacks for item selection.
- * @property[items] The list of accounts to display.
+ * This exposes all click events from the [AccountViewHolder] through the various [PublishSubject]s.
  */
-class AccountAdapter(private val controller: AccountController?, items: List<Account> = ArrayList()): RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
+class AccountAdapter(items: List<Account> = ArrayList()) : RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
+    val accountClickSubject: PublishSubject<Account> = PublishSubject.create()
+    val accountLongClickSubject: PublishSubject<Account> = PublishSubject.create()
+    val withdrawalClickSubject: PublishSubject<Account> = PublishSubject.create()
+    val depositClickSubject: PublishSubject<Account> = PublishSubject.create()
 
     var items: List<Account> = items
         set(value) {
@@ -31,28 +35,23 @@ class AccountAdapter(private val controller: AccountController?, items: List<Acc
 
     override fun getItemCount(): Int = items.size
 
-    inner class AccountViewHolder(private val binding: ListItemAccountBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class AccountViewHolder(private val binding: ListItemAccountBinding) : RecyclerView.ViewHolder(binding.root) {
         private val viewModel = AccountDataModel()
-        private val withdrawalButton = binding.withdrawalButton
-        private val depositButton = binding.depositButton
 
         init {
             binding.viewModel = viewModel
         }
 
         init {
-            withdrawalButton.setOnClickListener { controller?.onTransactionButtonClicked(items[adapterPosition], true) }
-            depositButton.setOnClickListener { controller?.onTransactionButtonClicked(items[adapterPosition], false) }
-            itemView.setOnClickListener { controller?.onAccountSelected(items[adapterPosition]) }
+            binding.withdrawalButton.setOnClickListener { withdrawalClickSubject.onNext(items[adapterPosition]) }
+            binding.depositButton.setOnClickListener { depositClickSubject.onNext(items[adapterPosition]) }
+            itemView.setOnClickListener { accountClickSubject.onNext(items[adapterPosition]) }
             itemView.setOnLongClickListener {
-                controller?.onAccountLongClicked(items[adapterPosition])
+                accountLongClickSubject.onNext(items[adapterPosition])
                 true
             }
         }
 
-        /**
-         * Binds an Account object to the row view for display.
-         */
         fun bindItem(item: Account?) {
             viewModel.account = item
             binding.executePendingBindings()

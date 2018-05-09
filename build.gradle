@@ -31,6 +31,7 @@ allprojects {
         androidMinSdkVersion = 19
         androidTargetSdkVersion = 26
         androidCompileSdkVersion = 26
+        architectureComponentsVersion = "1.1.1"
 
         //Libraries
         supportLibraryVersion = "27.1.1"

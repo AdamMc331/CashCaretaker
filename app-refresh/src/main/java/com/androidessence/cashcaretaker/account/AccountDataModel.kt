@@ -5,6 +5,9 @@ import android.databinding.Bindable
 import com.androidessence.cashcaretaker.R
 import com.androidessence.utility.asCurrency
 
+/**
+ * Maintains a reference to an [Account] and exposes the various fields for data binding.
+ */
 class AccountDataModel : BaseObservable() {
 
     var account: Account? = null
