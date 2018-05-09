@@ -10,6 +10,8 @@ import android.widget.DatePicker
 import com.androidessence.cashcaretaker.DatePickerFragment
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.data.CCDatabase
+import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.transaction.Transaction
 import com.androidessence.utility.asUIString
 import kotlinx.android.synthetic.main.dialog_add_transaction.*
@@ -33,7 +35,7 @@ class AddTransactionDialog : DialogFragment(), AddTransactionController {
     private val withdrawalArgument: Boolean by lazy { arguments?.getBoolean(ARG_IS_WITHDRAWAL) ?: true }
     private val isWithdrawal: Boolean
         get() = withdrawalSwitch.isChecked
-    private val presenter: AddTransactionPresenter by lazy { AddTransactionPresenterImpl(this, AddTransactionInteractorImpl()) }
+    private val presenter: AddTransactionPresenter by lazy { AddTransactionPresenterImpl(this, AddTransactionInteractorImpl(CCRepository(CCDatabase.getInMemoryDatabase(context!!)))) }
 
     private var selectedDate: Date = Date()
         set(value) {

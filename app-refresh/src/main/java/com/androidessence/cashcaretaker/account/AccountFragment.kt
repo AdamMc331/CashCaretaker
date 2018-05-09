@@ -12,6 +12,8 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.core.showError
+import com.androidessence.cashcaretaker.data.CCDatabase
+import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.main.MainController
 import com.androidessence.utility.hide
@@ -48,7 +50,7 @@ class AccountFragment: Fragment(), AccountController {
         }
 
     private val adapter = AccountAdapter(this)
-    private val presenter: AccountPresenter by lazy { AccountPresenterImpl(this, AccountInteractorImpl()) }
+    private val presenter: AccountPresenter by lazy { AccountPresenterImpl(this, AccountInteractorImpl(CCRepository(CCDatabase.getInMemoryDatabase(context!!)))) }
     private val mainController: MainController by lazy { (activity as MainController) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =

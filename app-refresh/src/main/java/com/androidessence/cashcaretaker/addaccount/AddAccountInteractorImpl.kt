@@ -6,7 +6,7 @@ import com.androidessence.cashcaretaker.data.CCRepository
 /**
  * Implementation of [AddAccountInteractor].
  */
-class AddAccountInteractorImpl : AddAccountInteractor {
+class AddAccountInteractorImpl(private val repository: CCRepository) : AddAccountInteractor {
     override fun insert(accounts: List<Account>): List<Long> =
-            CCRepository.insertAccounts(accounts)
+            repository.insertAccounts(accounts)
 }

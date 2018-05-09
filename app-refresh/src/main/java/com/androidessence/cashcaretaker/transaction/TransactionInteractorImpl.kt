@@ -6,10 +6,10 @@ import io.reactivex.Flowable
 /**
  * Implementation of TransactionInteractor.
  */
-class TransactionInteractorImpl: TransactionInteractor {
+class TransactionInteractorImpl(private val repository: CCRepository) : TransactionInteractor {
     override fun getForAccount(accountName: String): Flowable<List<Transaction>> =
-            CCRepository.getTransactionsForAccount(accountName)
+            repository.getTransactionsForAccount(accountName)
 
     override fun delete(transaction: Transaction): Int =
-            CCRepository.deleteTransaction(transaction)
+            repository.deleteTransaction(transaction)
 }
