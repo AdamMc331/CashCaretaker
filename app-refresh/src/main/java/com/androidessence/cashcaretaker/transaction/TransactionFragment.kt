@@ -11,11 +11,12 @@ import android.view.ViewGroup
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.core.showError
+import com.androidessence.cashcaretaker.data.CCDatabase
+import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.utility.hide
 import com.androidessence.utility.show
 import kotlinx.android.synthetic.main.fragment_transaction.*
-import timber.log.Timber
 
 /**
  * Fragment that displays a list of Transactions.
@@ -53,7 +54,7 @@ class TransactionFragment: Fragment(), TransactionController {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        presenter = TransactionPresenterImpl(this, TransactionInteractorImpl(), accountName)
+        presenter = TransactionPresenterImpl(this, TransactionInteractorImpl(CCRepository(CCDatabase.getInMemoryDatabase(context!!))), accountName)
 
         val title = if (accountName.isEmpty()) getString(R.string.app_name) else getString(R.string.account_transactions, accountName)
         (activity as AppCompatActivity).supportActionBar?.title = title

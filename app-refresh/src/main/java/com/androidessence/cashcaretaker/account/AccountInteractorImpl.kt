@@ -6,9 +6,9 @@ import io.reactivex.Flowable
 /**
  * Handles the actual logic behind account fetching.
  */
-class AccountInteractorImpl : AccountInteractor {
+class AccountInteractorImpl(private val repository: CCRepository) : AccountInteractor {
 
-    override fun getAll(): Flowable<List<Account>> = CCRepository.getAllAccounts()
+    override fun getAll(): Flowable<List<Account>> = repository.getAllAccounts()
 
-    override fun delete(account: Account): Int = CCRepository.deleteAccount(account)
+    override fun delete(account: Account): Int = repository.deleteAccount(account)
 }

@@ -1,32 +1,14 @@
 package com.androidessence.cashcaretaker.data
 
-import android.database.sqlite.SQLiteConstraintException
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.transaction.Transaction
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-/**
- * Repository singleton that is used to read and write from the database.
- *
- * @property[database] The local database that this repository will interact with.
- * @property[accountDAO] Database Access Object to interact with the account table.
- * @property[transactionDAO] Database Access Object to interact with the transaction table.
- */
-object CCRepository {
-    private lateinit var database: CCDatabase
-
-    private val accountDAO: AccountDAO
-        get() = database.accountDao()
-    private val transactionDAO: TransactionDAO
-        get() = database.transactionDao()
-
-    fun init(database: CCDatabase) {
-        this.database = database
-    }
+class CCRepository(private val database: CCDatabase) {
+    private val accountDAO: AccountDAO = database.accountDao()
+    private val transactionDAO: TransactionDAO = database.transactionDao()
 
     fun getAllAccounts(): Flowable<List<Account>> = accountDAO.getAll()
 

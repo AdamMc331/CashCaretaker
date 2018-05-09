@@ -6,10 +6,10 @@ import com.androidessence.cashcaretaker.transaction.Transaction
 /**
  * Implementation for database interaction.
  */
-class AddTransactionInteractorImpl : AddTransactionInteractor {
+class AddTransactionInteractorImpl(private val repository: CCRepository) : AddTransactionInteractor {
     override fun insert(transactions: List<Transaction>): List<Long> =
-            CCRepository.insertTransactions(transactions)
+            repository.insertTransactions(transactions)
 
     override fun update(transaction: Transaction): Int =
-            CCRepository.updateTransaction(transaction)
+            repository.updateTransaction(transaction)
 }

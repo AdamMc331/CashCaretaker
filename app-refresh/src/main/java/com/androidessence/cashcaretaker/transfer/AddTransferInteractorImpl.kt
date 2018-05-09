@@ -9,9 +9,9 @@ import java.util.*
 /**
  * Implementation of [AddTransferInteractor]
  */
-class AddTransferInteractorImpl(private var controller: AddTransferController?) : AddTransferInteractor {
+class AddTransferInteractorImpl(private var controller: AddTransferController?, private val repository: CCRepository) : AddTransferInteractor {
     override fun addTransfer(fromAccount: Account, toAccount: Account, amount: Double, date: Date) {
-        CCRepository.transfer(fromAccount, toAccount, amount, date)
+        repository.transfer(fromAccount, toAccount, amount, date)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

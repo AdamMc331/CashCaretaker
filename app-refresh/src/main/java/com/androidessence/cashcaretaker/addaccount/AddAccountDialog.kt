@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.data.CCDatabase
+import com.androidessence.cashcaretaker.data.CCRepository
 import kotlinx.android.synthetic.main.dialog_add_account.*
 
 /**
@@ -16,7 +18,7 @@ import kotlinx.android.synthetic.main.dialog_add_account.*
  * @property[presenter] Presenter used to connect to the data layer.
  */
 class AddAccountDialog: DialogFragment(), AddAccountController {
-    private val presenter: AddAccountPresenter by lazy { AddAccountPresenterImpl(this, AddAccountInteractorImpl()) }
+    private val presenter: AddAccountPresenter by lazy { AddAccountPresenterImpl(this, AddAccountInteractorImpl(CCRepository(CCDatabase.getInMemoryDatabase(context!!)))) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.dialog_add_account, container, false)

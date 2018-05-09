@@ -12,6 +12,7 @@ import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
+import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.views.SpinnerInputEditText
 import com.androidessence.utility.asUIString
@@ -23,7 +24,7 @@ import java.util.*
  */
 class AddTransferDialog : DialogFragment(), AddTransferController {
 
-    private val presenter: AddTransferPresenter by lazy { AddTransferPresenterImpl(this, AddTransferInteractorImpl(this)) }
+    private val presenter: AddTransferPresenter by lazy { AddTransferPresenterImpl(this, AddTransferInteractorImpl(this, CCRepository(CCDatabase.getInMemoryDatabase(context!!)))) }
 
     private lateinit var fromAccount: SpinnerInputEditText<Account>
     private lateinit var toAccount: SpinnerInputEditText<Account>
@@ -33,6 +34,8 @@ class AddTransferDialog : DialogFragment(), AddTransferController {
             transferDate.setText(value.asUIString())
             field = value
         }
+
+    private val repository: CCRepository by lazy { CCRepository(CCDatabase.getInMemoryDatabase(context!!)) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.dialog_add_transfer, container, false)
@@ -50,7 +53,7 @@ class AddTransferDialog : DialogFragment(), AddTransferController {
         fromAccount = view.findViewById(R.id.transferFromAccount)
         toAccount = view.findViewById(R.id.transferToAccount)
 
-        CCRepository.getAllAccounts().subscribe {
+        repository.getAllAccounts().subscribe {
             fromAccount.items = it
             toAccount.items = it
         }
