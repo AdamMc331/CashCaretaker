@@ -40,7 +40,7 @@
             android:gravity="center"
             android:text="@{viewModel.balanceString}"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@{viewModel.textColorResource}"
+            app:textColorResource="@{viewModel.textColorResource}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/accountName"
             app:layout_constraintRight_toLeftOf="@+id/deposit_button"

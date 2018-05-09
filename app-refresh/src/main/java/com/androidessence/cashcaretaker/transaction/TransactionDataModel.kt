@@ -23,9 +23,6 @@ class TransactionDataModel : BaseObservable() {
     fun getAmount(): String = transaction?.amount?.asCurrency().orEmpty()
 
     @Bindable
-    fun getIndicatorColorResource(): Int {
-        val amount = transaction?.amount ?: 0.0
-        val isNegative = amount < 0.0
-        return if (isNegative) R.color.mds_red_500 else R.color.mds_black
-    }
+    fun getIndicatorColorResource(): Int =
+            if (transaction?.withdrawal == true) R.color.mds_red_500 else R.color.mds_green_500
 }
