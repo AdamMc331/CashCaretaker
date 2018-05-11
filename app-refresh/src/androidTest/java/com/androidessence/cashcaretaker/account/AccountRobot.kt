@@ -87,7 +87,7 @@ class AccountRobot {
         private val WITHDRAWAL_BUTTON_ID = R.id.withdrawal_button
         private val DEPOSIT_BUTTON_ID = R.id.deposit_button
 
-        private val ADD_BUTTON_MATCHER = withId(R.id.add_account)
+        private val ADD_BUTTON_MATCHER = withId(R.id.addAccountButton)
         private val RECYCLER_VIEW_MATCHER = withId(RECYCLER_VIEW_ID)
         private val ACCOUNT_NAME_MATCHER = withId(ACCOUNT_NAME_ID)
         private val ACCOUNT_BALANCE_MATCHER = withId(ACCOUNT_BALANCE_ID)
