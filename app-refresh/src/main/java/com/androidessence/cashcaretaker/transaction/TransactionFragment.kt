@@ -15,8 +15,8 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_transaction.*
 
 /**
  * Fragment that displays a list of Transactions.
@@ -26,6 +26,7 @@ class TransactionFragment : Fragment() {
     private val adapter = TransactionAdapter()
     private val compositeDisposable = CompositeDisposable()
     private lateinit var viewModel: TransactionViewModel
+    private lateinit var binding: FragmentTransactionBinding
 
     private val viewModelFactory: ViewModelProvider.Factory by lazy {
         object : ViewModelProvider.Factory {
@@ -50,8 +51,10 @@ class TransactionFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_transaction, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentTransactionBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,9 +63,7 @@ class TransactionFragment : Fragment() {
         subscribeToAdapter()
         subscribeToViewModel()
 
-        add_transaction.setOnClickListener({
-            showAddTransaction()
-        })
+        binding.addTransaction.setOnClickListener { showAddTransaction() }
 
         viewModel.fetchTransactionForAccount(accountName)
     }
@@ -93,9 +94,9 @@ class TransactionFragment : Fragment() {
     }
 
     private fun initializeRecyclerView() {
-        transactions.adapter = adapter
-        transactions.layoutManager = LinearLayoutManager(context)
-        transactions.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        binding.transactions.adapter = adapter
+        binding.transactions.layoutManager = LinearLayoutManager(context)
+        binding.transactions.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
     //endregion
 

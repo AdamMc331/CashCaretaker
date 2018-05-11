@@ -11,16 +11,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.main.MainController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_account.*
 
 /**
  * Fragment for displaying a list of acocunts to the user.
@@ -30,6 +29,7 @@ class AccountFragment : Fragment() {
     private val adapter = AccountAdapter()
     private val compositeDisposable = CompositeDisposable()
     private lateinit var viewModel: AccountViewModel
+    private lateinit var binding: FragmentAccountBinding
 
     private val viewModelFactory: ViewModelProvider.Factory by lazy {
         object : ViewModelProvider.Factory {
@@ -51,15 +51,17 @@ class AccountFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_account, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentAccountBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initializeRecyclerView()
 
-        add_account.setOnClickListener { showAddAccountView() }
+        binding.addAccount.setOnClickListener { showAddAccountView() }
 
         subscribeToAdapterClicks()
         subscribeToAccounts()
@@ -77,9 +79,9 @@ class AccountFragment : Fragment() {
     //region Initializations
     private fun initializeRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
-        accountsRecyclerView.adapter = adapter
-        accountsRecyclerView.layoutManager = layoutManager
-        accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        binding.accountsRecyclerView.adapter = adapter
+        binding.accountsRecyclerView.layoutManager = layoutManager
+        binding.accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
 
     private fun subscribeToAccounts() {
