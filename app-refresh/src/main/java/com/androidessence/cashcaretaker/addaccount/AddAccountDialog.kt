@@ -1,6 +1,9 @@
 package com.androidessence.cashcaretaker.addaccount
 
 import android.app.Dialog
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
@@ -8,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.data.CCDatabase
+import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
 import io.reactivex.disposables.CompositeDisposable
 
@@ -18,6 +23,18 @@ class AddAccountDialog : DialogFragment() {
     private val compositeDisposable = CompositeDisposable()
     private lateinit var binding: DialogAddAccountBinding
     private lateinit var viewModel: AddAccountViewModel
+
+    private val viewModelFactory: ViewModelProvider.Factory by lazy {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                val database = CCDatabase.getInMemoryDatabase(context!!)
+                val repository = CCRepository(database)
+
+                @Suppress("UNCHECKED_CAST")
+                return AddAccountViewModel(repository) as T
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogAddAccountBinding.inflate(inflater, container, false)
@@ -43,6 +60,9 @@ class AddAccountDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setTitle(R.string.add_account)
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddAccountViewModel::class.java)
+
         return dialog
     }
 
