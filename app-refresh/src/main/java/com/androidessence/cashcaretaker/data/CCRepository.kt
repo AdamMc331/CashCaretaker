@@ -14,7 +14,7 @@ open class CCRepository(private val database: CCDatabase) {
 
     fun deleteAccount(account: Account): Int = accountDAO.delete(account)
 
-    fun insertAccounts(accounts: List<Account>): List<Long> = accountDAO.insert(accounts)
+    fun insertAccount(account: Account): Long = accountDAO.insert(account)
 
     fun insertTransactions(transactions: List<Transaction>): List<Long> = transactionDAO.insert(transactions)
 
