@@ -1,20 +1,16 @@
 package com.androidessence.cashcaretaker.transaction
 
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.databinding.ListItemTransactionBinding
-import com.androidessence.utility.asCurrency
-import com.androidessence.utility.asUIString
+import io.reactivex.subjects.PublishSubject
 
 /**
  * Adapter for displaying Transactions in a RecyclerView.
  */
-class TransactionAdapter(private val controller: TransactionController?, items: List<Transaction> = ArrayList()): RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+class TransactionAdapter(items: List<Transaction> = ArrayList()): RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+    val transactionLongClicked: PublishSubject<Transaction> = PublishSubject.create()
 
     var items: List<Transaction> = items
         set(value) {
@@ -39,6 +35,10 @@ class TransactionAdapter(private val controller: TransactionController?, items: 
 
         init {
             binding.viewModel = viewModel
+            itemView.setOnLongClickListener {
+                transactionLongClicked.onNext(items[adapterPosition])
+                true
+            }
         }
 
         fun bindItem(item: Transaction?) {
