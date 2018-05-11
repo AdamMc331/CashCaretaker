@@ -1,5 +1,8 @@
 package com.androidessence.cashcaretaker.transaction
 
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -10,54 +13,41 @@ import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.core.showError
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.data.DataViewState
-import com.androidessence.utility.hide
-import com.androidessence.utility.show
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_transaction.*
 
 /**
  * Fragment that displays a list of Transactions.
  */
-class TransactionFragment: Fragment(), TransactionController {
-    override var viewState: DataViewState = DataViewState.Initialized()
-        set(value) {
-            when (value) {
-                is DataViewState.Loading -> showProgress()
-                is DataViewState.ListSuccess<*> -> {
-                    hideProgress()
+class TransactionFragment : Fragment() {
+    //region Properties
+    private val adapter = TransactionAdapter()
+    private val compositeDisposable = CompositeDisposable()
+    private lateinit var viewModel: TransactionViewModel
 
-                    adapter.items = value.items.filterIsInstance<Transaction>()
-                }
-                is DataViewState.ItemsRemoved -> {
-                    hideProgress()
-                    presenter.actionMode?.finish()
-                }
-                is DataViewState.ItemsUpdated -> {
-                    hideProgress()
-                    presenter.actionMode?.finish()
-                }
-                is DataViewState.Error -> {
-                    hideProgress()
+    private val viewModelFactory: ViewModelProvider.Factory by lazy {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                val database = CCDatabase.getInMemoryDatabase(context!!)
+                val repository = CCRepository(database)
 
-                    showError(value.error)
-                }
+                @Suppress("UNCHECKED_CAST")
+                return TransactionViewModel(repository) as T
             }
         }
+    }
+    //endregion
 
-    private val adapter = TransactionAdapter(this)
-    private lateinit var presenter: TransactionPresenter
     private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT).orEmpty() }
 
+    //region Lifecycle Methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        presenter = TransactionPresenterImpl(this, TransactionInteractorImpl(CCRepository(CCDatabase.getInMemoryDatabase(context!!))), accountName)
-
-        val title = if (accountName.isEmpty()) getString(R.string.app_name) else getString(R.string.account_transactions, accountName)
-        (activity as AppCompatActivity).supportActionBar?.title = title
+        setupTitle()
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -66,58 +56,68 @@ class TransactionFragment: Fragment(), TransactionController {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val layoutManager = LinearLayoutManager(context)
-        transactions.adapter = adapter
-        transactions.layoutManager = layoutManager
-        transactions.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        initializeRecyclerView()
+        subscribeToAdapter()
+        subscribeToViewModel()
 
         add_transaction.setOnClickListener({
             showAddTransaction()
         })
+
+        viewModel.fetchTransactionForAccount(accountName)
     }
 
-    override fun onResume() {
-        super.onResume()
-        presenter.onAttach()
+    override fun onPause() {
+        super.onPause()
+        compositeDisposable.dispose()
+    }
+    //endregion
+
+    //region Initializations
+    private fun setupTitle() {
+        val title = if (accountName.isEmpty()) getString(R.string.app_name) else getString(R.string.account_transactions, accountName)
+        (activity as AppCompatActivity).supportActionBar?.title = title
     }
 
-    override fun onDestroyView() {
-        presenter.onDestroy()
-        super.onDestroyView()
+    private fun subscribeToAdapter() {
+        compositeDisposable.add(
+                adapter.transactionLongClicked.subscribe(this::onTransactionLongClicked)
+        )
     }
 
-    override fun showProgress() {
-        transactions.hide()
-        progressBar.show()
+    private fun subscribeToViewModel() {
+        compositeDisposable.addAll(
+                viewModel.transactionList.subscribe { adapter.items = it },
+                viewModel.editClicked.subscribe(this::showEditTransaction)
+        )
     }
 
-    override fun hideProgress() {
-        progressBar.hide()
-        transactions.show()
+    private fun initializeRecyclerView() {
+        transactions.adapter = adapter
+        transactions.layoutManager = LinearLayoutManager(context)
+        transactions.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
+    //endregion
 
-    override fun showAddTransaction() {
+    //region UI Events
+    private fun showAddTransaction() {
         val dialog = AddTransactionDialog.newInstance(accountName, true)
         dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
     }
 
-    override fun showEditTransaction(transaction: Transaction) {
+    private fun showEditTransaction(transaction: Transaction) {
         val dialog = AddTransactionDialog.newInstance(transaction)
         dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
-
-        // Hide the action mode because once the dialog is shown the fingerprintController is out of our hands.
-        //TODO: This feels like a code smell, but idk how to fix yet.
-        presenter.actionMode?.finish()
     }
 
-    override fun onTransactionLongClicked(transaction: Transaction) {
-        presenter.selectedTransaction = transaction
-        presenter.actionMode = (activity as AppCompatActivity).startSupportActionMode(presenter.actionModeCallback)
+    private fun onTransactionLongClicked(transaction: Transaction) {
+        viewModel.startActionModeForTransaction(transaction, activity as AppCompatActivity)
     }
+    //endregion
 
     companion object {
         val FRAGMENT_NAME: String = TransactionFragment::class.java.simpleName
-        private val ARG_ACCOUNT = "accountName"
+        private const val ARG_ACCOUNT = "accountName"
 
         fun newInstance(accountName: String): TransactionFragment {
             val args = Bundle()
