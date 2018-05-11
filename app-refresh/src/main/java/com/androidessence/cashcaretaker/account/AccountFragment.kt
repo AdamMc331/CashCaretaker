@@ -61,7 +61,7 @@ class AccountFragment : Fragment() {
 
         initializeRecyclerView()
 
-        binding.addAccount.setOnClickListener { showAddAccountView() }
+        binding.addAccountButton.setOnClickListener { showAddAccountView() }
 
         subscribeToAdapterClicks()
         subscribeToAccounts()

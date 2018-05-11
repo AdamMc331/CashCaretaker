@@ -63,7 +63,7 @@ class TransactionFragment : Fragment() {
         subscribeToAdapter()
         subscribeToViewModel()
 
-        binding.addTransaction.setOnClickListener { showAddTransaction() }
+        binding.addTransactionButton.setOnClickListener { showAddTransaction() }
 
         viewModel.fetchTransactionForAccount(accountName)
     }
@@ -94,9 +94,9 @@ class TransactionFragment : Fragment() {
     }
 
     private fun initializeRecyclerView() {
-        binding.transactions.adapter = adapter
-        binding.transactions.layoutManager = LinearLayoutManager(context)
-        binding.transactions.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        binding.transactionsRecyclerView.adapter = adapter
+        binding.transactionsRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.transactionsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
     //endregion
 
