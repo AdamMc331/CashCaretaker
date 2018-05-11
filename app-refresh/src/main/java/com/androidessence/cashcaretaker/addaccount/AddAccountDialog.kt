@@ -8,31 +8,36 @@ import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.data.CCDatabase
-import com.androidessence.cashcaretaker.data.CCRepository
-import kotlinx.android.synthetic.main.dialog_add_account.*
+import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
+import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Dialog to insert an account.
- *
- * @property[presenter] Presenter used to connect to the data layer.
  */
-class AddAccountDialog: DialogFragment(), AddAccountController {
-    private val presenter: AddAccountPresenter by lazy { AddAccountPresenterImpl(this, AddAccountInteractorImpl(CCRepository(CCDatabase.getInMemoryDatabase(context!!)))) }
+class AddAccountDialog : DialogFragment() {
+    private val compositeDisposable = CompositeDisposable()
+    private lateinit var binding: DialogAddAccountBinding
+    private lateinit var viewModel: AddAccountViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.dialog_add_account, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = DialogAddAccountBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        accountBalance.filters = arrayOf(DecimalDigitsInputFilter())
+        binding.accountBalanceEditText.filters = arrayOf(DecimalDigitsInputFilter())
 
-        submitButton.setOnClickListener {
-            addAccount(accountName.text.toString(), accountBalance.text.toString())
+        binding.submitButton.setOnClickListener {
+            val name = binding.accountNameEditText.text.toString()
+            val balance = binding.accountBalanceEditText.text.toString()
+            viewModel.addAccount(name, balance)
         }
 
-        accountName.requestFocus()
+        binding.accountNameEditText.requestFocus()
+
+        subscribeToViewModel()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -47,32 +52,17 @@ class AddAccountDialog: DialogFragment(), AddAccountController {
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
-    override fun showProgress() {
-        //TODO:
+    override fun onPause() {
+        super.onPause()
+        compositeDisposable.dispose()
     }
 
-    override fun hideProgress() {
-        //TODO:
-    }
-
-    override fun addAccount(accountName: String, accountBalance: String) {
-        presenter.insert(accountName, accountBalance)
-    }
-
-    override fun onInsertConflict() {
-        accountName.error = getString(R.string.err_account_name_exists)
-    }
-
-    override fun showAccountNameError() {
-        accountName.error = getString(R.string.err_account_name_invalid)
-    }
-
-    override fun showAccountBalanceError() {
-        accountBalance.error = getString(R.string.err_account_balance_invalid)
-    }
-
-    override fun onInserted(ids: List<Long>) {
-        dismiss()
+    private fun subscribeToViewModel() {
+        compositeDisposable.addAll(
+                viewModel.accountNameError.subscribe(binding.accountNameEditText::setError),
+                viewModel.accountBalanceError.subscribe(binding.accountBalanceEditText::setError),
+                viewModel.accountInserted.subscribe { dismiss() }
+        )
     }
 
     companion object {

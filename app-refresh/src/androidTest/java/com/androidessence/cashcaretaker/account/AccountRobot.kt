@@ -82,8 +82,8 @@ class AccountRobot {
 
     companion object {
         private val RECYCLER_VIEW_ID = R.id.accountsRecyclerView
-        private val ACCOUNT_NAME_ID = R.id.accountName
-        private val ACCOUNT_BALANCE_ID = R.id.accountBalance
+        private val ACCOUNT_NAME_ID = R.id.accountNameEditText
+        private val ACCOUNT_BALANCE_ID = R.id.accountBalanceEditText
         private val WITHDRAWAL_BUTTON_ID = R.id.withdrawal_button
         private val DEPOSIT_BUTTON_ID = R.id.deposit_button
 

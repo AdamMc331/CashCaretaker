@@ -18,7 +18,7 @@
         android:padding="@dimen/text_padding">
 
         <TextView
-            android:id="@+id/accountName"
+            android:id="@+id/accountNameEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{viewModel.name}"
@@ -32,7 +32,7 @@
             tools:text="Testinsadfasdfag" />
 
         <TextView
-            android:id="@+id/accountBalance"
+            android:id="@+id/accountBalanceEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/double_margin"
@@ -42,7 +42,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             app:textColorResource="@{viewModel.textColorResource}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/accountName"
+            app:layout_constraintLeft_toRightOf="@id/accountNameEditText"
             app:layout_constraintRight_toLeftOf="@+id/deposit_button"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="$1,000,000.00" />
