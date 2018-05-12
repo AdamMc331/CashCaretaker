@@ -61,10 +61,10 @@ class TransactionRobot {
     }
 
     companion object {
-        private val RECYCLER_VIEW_ID = R.id.transactionsRecyclerView
-        private val WITHDRAWAL_SWITCH_ID = R.id.withdrawalSwitch
-        private val TRANSACTION_DESCRIPTION_ID = R.id.transactionDescription
-        private val TRANSACTION_AMOUNT_ID = R.id.transactionAmount
+        private const val RECYCLER_VIEW_ID = R.id.transactionsRecyclerView
+        private const val WITHDRAWAL_SWITCH_ID = R.id.withdrawalSwitch
+        private const val TRANSACTION_DESCRIPTION_ID = R.id.transactionDescription
+        private const val TRANSACTION_AMOUNT_ID = R.id.transactionAmount
 
         private val ADD_BUTTON_MATCHER = withId(R.id.addTransactionButton)
         private val RECYCLER_VIEW_MATCHER = withId(RECYCLER_VIEW_ID)

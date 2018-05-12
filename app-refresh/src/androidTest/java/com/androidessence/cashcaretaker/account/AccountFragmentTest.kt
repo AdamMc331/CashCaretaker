@@ -90,7 +90,7 @@ class AccountFragmentTest {
     @Ignore
     fun addDuplicateAccountNameError() {
         // Insert account
-        accountDao.insert(listOf(TEST_ACCOUNT))
+        accountDao.insert(TEST_ACCOUNT)
 
         // Try to insert dupe
         AccountRobot()
@@ -105,7 +105,7 @@ class AccountFragmentTest {
     @Ignore
     fun addWithdrawalFromRow() {
         // Insert account
-        accountDao.insert(listOf(TEST_ACCOUNT))
+        accountDao.insert(TEST_ACCOUNT)
 
         // Add transaction
         AccountRobot().clickWithdrawalInList(0)
@@ -123,7 +123,7 @@ class AccountFragmentTest {
     @Ignore
     fun addDepositFromRow() {
         // Insert account
-        accountDao.insert(listOf(TEST_ACCOUNT))
+        accountDao.insert(TEST_ACCOUNT)
 
         // Add transaction
         AccountRobot().clickDepositInList(0)
@@ -141,7 +141,7 @@ class AccountFragmentTest {
     @Ignore
     fun deleteAccount() {
         // Insert account
-        accountDao.insert(listOf(TEST_ACCOUNT))
+        accountDao.insert(TEST_ACCOUNT)
 
         AccountRobot()
                 .assertListCount(1)
@@ -151,14 +151,14 @@ class AccountFragmentTest {
     }
 
     companion object {
-        private val TEST_ACCOUNT_NAME = "Checking"
-        private val TEST_ACCOUNT_BALANCE = "100"
-        private val TEST_BALANCE_STRING = "$100.00"
+        private const val TEST_ACCOUNT_NAME = "Checking"
+        private const val TEST_ACCOUNT_BALANCE = "100"
+        private const val TEST_BALANCE_STRING = "$100.00"
         private val TEST_ACCOUNT = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE.toDouble())
 
-        private val TEST_TRANSACTION_DESCRIPTION = "Speedway"
-        private val TEST_TRANSACTION_AMOUNT = "5.45"
-        private val TEST_BALANCE_AFTER_WITHDRAWAL_STRING = "$94.55"
-        private val TEST_BALANCE_AFTER_DEPOSIT_STRING = "$105.45"
+        private const val TEST_TRANSACTION_DESCRIPTION = "Speedway"
+        private const val TEST_TRANSACTION_AMOUNT = "5.45"
+        private const val TEST_BALANCE_AFTER_WITHDRAWAL_STRING = "$94.55"
+        private const val TEST_BALANCE_AFTER_DEPOSIT_STRING = "$105.45"
     }
 }

@@ -23,7 +23,7 @@ class TransactionFragmentTest {
     @Before
     fun setUp() {
         accountDao.deleteAll()
-        accountDao.insert(listOf(TEST_ACCOUNT))
+        accountDao.insert(TEST_ACCOUNT)
 
         (activityTestRule.activity as MainController).showTransactions(TEST_ACCOUNT_NAME)
     }
@@ -74,15 +74,15 @@ class TransactionFragmentTest {
     }
 
     companion object {
-        private val TEST_ACCOUNT_NAME = "Checking"
-        private val TEST_ACCOUNT_BALANCE = "100"
-        private val TEST_BALANCE_STRING = "$100.00"
+        private const val TEST_ACCOUNT_NAME = "Checking"
+        private const val TEST_ACCOUNT_BALANCE = "100"
+        private const val TEST_BALANCE_STRING = "$100.00"
         private val TEST_ACCOUNT = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE.toDouble())
         private val TEST_TRANSACTION = Transaction(accountName = TEST_ACCOUNT_NAME)
 
-        private val TEST_TRANSACTION_DESCRIPTION = "Speedway"
-        private val TEST_TRANSACTION_AMOUNT = "5.45"
-        private val TEST_BALANCE_AFTER_WITHDRAWAL_STRING = "$94.55"
-        private val TEST_BALANCE_AFTER_DEPOSIT_STRING = "$105.45"
+        private const val TEST_TRANSACTION_DESCRIPTION = "Speedway"
+        private const val TEST_TRANSACTION_AMOUNT = "5.45"
+        private const val TEST_BALANCE_AFTER_WITHDRAWAL_STRING = "$94.55"
+        private const val TEST_BALANCE_AFTER_DEPOSIT_STRING = "$105.45"
     }
 }
