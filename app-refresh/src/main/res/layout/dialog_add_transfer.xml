@@ -1,89 +1,92 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/double_margin">
+<layout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/transfer_from_account_layout"
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="false"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="KeyboardInaccessibleWidget">
+        android:padding="@dimen/double_margin">
 
-        <com.androidessence.cashcaretaker.views.SpinnerInputEditText
-            android:id="@+id/transferFromAccount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/from_account" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/transfer_to_account_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="false"
-        app:layout_constraintTop_toBottomOf="@id/transfer_from_account_layout"
-        tools:ignore="KeyboardInaccessibleWidget">
-
-        <com.androidessence.cashcaretaker.views.SpinnerInputEditText
-            android:id="@+id/transferToAccount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/to_account" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/transfer_amount_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/single_margin"
-        app:layout_constraintTop_toBottomOf="@id/transfer_to_account_layout">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/transferAmount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/amount"
-            android:inputType="numberDecimal" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/transfer_date_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/single_margin"
-        app:layout_constraintTop_toBottomOf="@id/transfer_amount_layout">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/transferDate"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/transfer_from_account_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="false"
-            android:hint="@string/date"
-            android:inputType="date"
-            tools:ignore="KeyboardInaccessibleWidget" />
-    </android.support.design.widget.TextInputLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="KeyboardInaccessibleWidget">
 
-    <LinearLayout
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/transfer_date_layout">
+            <com.androidessence.cashcaretaker.views.SpinnerInputEditText
+                android:id="@+id/transferFromAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/from_account" />
+        </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/submitButton"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/transfer_to_account_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/submit" />
-    </LinearLayout>
+            android:clickable="true"
+            android:focusable="false"
+            app:layout_constraintTop_toBottomOf="@id/transfer_from_account_layout"
+            tools:ignore="KeyboardInaccessibleWidget">
 
-</android.support.constraint.ConstraintLayout>
+            <com.androidessence.cashcaretaker.views.SpinnerInputEditText
+                android:id="@+id/transferToAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/to_account" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/transfer_amount_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/single_margin"
+            app:layout_constraintTop_toBottomOf="@id/transfer_to_account_layout">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/transferAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/amount"
+                android:inputType="numberDecimal" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/transfer_date_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/single_margin"
+            app:layout_constraintTop_toBottomOf="@id/transfer_amount_layout">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/transferDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="@string/date"
+                android:inputType="date"
+                tools:ignore="KeyboardInaccessibleWidget" />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/transfer_date_layout">
+
+            <Button
+                android:id="@+id/submitButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/submit" />
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
