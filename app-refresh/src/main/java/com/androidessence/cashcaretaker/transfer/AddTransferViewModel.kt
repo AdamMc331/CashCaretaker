@@ -1,17 +1,15 @@
 package com.androidessence.cashcaretaker.transfer
 
-import android.arch.lifecycle.ViewModel
 import com.androidessence.cashcaretaker.account.Account
+import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.util.*
 
-class AddTransferViewModel(private val repository: CCRepository) : ViewModel() {
-    private val compositeDisposable = CompositeDisposable()
+class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel() {
     val fromAccountError: PublishSubject<String> = PublishSubject.create()
     val toAccountError: PublishSubject<String> = PublishSubject.create()
     val amountError: PublishSubject<String> = PublishSubject.create()
@@ -34,19 +32,13 @@ class AddTransferViewModel(private val repository: CCRepository) : ViewModel() {
             return
         }
 
-        val subscription = repository.transfer(fromAccount, toAccount, transferAmount, date)
+        repository.transfer(fromAccount, toAccount, transferAmount, date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { transferInserted.onNext(true) },
                         Timber::e
                 )
-
-        compositeDisposable.add(subscription)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.dispose()
+                .addToComposite()
     }
 }

@@ -14,6 +14,7 @@ import android.widget.DatePicker
 import com.androidessence.cashcaretaker.DatePickerFragment
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.base.BaseDialogFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.databinding.DialogAddTransactionBinding
@@ -31,12 +32,13 @@ import java.util.*
  * @property[isWithdrawal] Flag determining if this transaction is a withdrawal based on the switch.
  * @property[selectedDate] The date that will be applied to the transaction.
  */
-class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
-    private val compositeDisposable = CompositeDisposable()
+class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListener {
     private val isEditing: Boolean by lazy { arguments?.containsKey(ARG_TRANSACTION) ?: false }
     private val initialTransaction: Transaction? by lazy { arguments?.getParcelable<Transaction>(ARG_TRANSACTION) }
     private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT_NAME).orEmpty() }
-    private val withdrawalArgument: Boolean by lazy { arguments?.getBoolean(ARG_IS_WITHDRAWAL) ?: true }
+    private val withdrawalArgument: Boolean by lazy {
+        arguments?.getBoolean(ARG_IS_WITHDRAWAL) ?: true
+    }
     private val isWithdrawal: Boolean
         get() = binding.withdrawalSwitch.isChecked
 
@@ -127,16 +129,16 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     }
 
     private fun subscribeToViewModel() {
-        compositeDisposable.addAll(
-                viewModel.transactionDescriptionError.subscribe {
-                    binding.transactionDescription.error = getString(it)
-                },
-                viewModel.transactionAmountError.subscribe {
-                    binding.transactionAmount.error = getString(it)
-                },
-                viewModel.transactionInserted.subscribe { dismiss() },
-                viewModel.transactionUpdated.subscribe { dismiss() }
-        )
+        viewModel.transactionDescriptionError.subscribe {
+            binding.transactionDescription.error = getString(it)
+        }.addToComposite()
+
+        viewModel.transactionAmountError.subscribe {
+            binding.transactionAmount.error = getString(it)
+        }.addToComposite()
+
+        viewModel.transactionInserted.subscribe { dismiss() }.addToComposite()
+        viewModel.transactionUpdated.subscribe { dismiss() }.addToComposite()
     }
 
     private fun showDatePicker() {
@@ -208,10 +210,5 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
             return fragment
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        compositeDisposable.dispose()
     }
 }

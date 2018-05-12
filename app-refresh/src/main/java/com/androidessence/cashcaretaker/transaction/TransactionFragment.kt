@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -13,18 +12,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
+import com.androidessence.cashcaretaker.base.BaseFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
-import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Fragment that displays a list of Transactions.
  */
-class TransactionFragment : Fragment() {
+class TransactionFragment : BaseFragment() {
     //region Properties
     private val adapter = TransactionAdapter()
-    private val compositeDisposable = CompositeDisposable()
     private lateinit var viewModel: TransactionViewModel
     private lateinit var binding: FragmentTransactionBinding
 
@@ -67,11 +65,6 @@ class TransactionFragment : Fragment() {
 
         viewModel.fetchTransactionForAccount(accountName)
     }
-
-    override fun onPause() {
-        super.onPause()
-        compositeDisposable.dispose()
-    }
     //endregion
 
     //region Initializations
@@ -81,16 +74,12 @@ class TransactionFragment : Fragment() {
     }
 
     private fun subscribeToAdapter() {
-        compositeDisposable.add(
-                adapter.transactionLongClicked.subscribe(this::onTransactionLongClicked)
-        )
+        adapter.transactionLongClicked.subscribe(this::onTransactionLongClicked).addToComposite()
     }
 
     private fun subscribeToViewModel() {
-        compositeDisposable.addAll(
-                viewModel.transactionList.subscribe { adapter.items = it },
-                viewModel.editClicked.subscribe(this::showEditTransaction)
-        )
+        viewModel.transactionList.subscribe { adapter.items = it }.addToComposite()
+        viewModel.editClicked.subscribe(this::showEditTransaction).addToComposite()
     }
 
     private fun initializeRecyclerView() {
