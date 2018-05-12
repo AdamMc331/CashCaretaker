@@ -78,7 +78,6 @@ class AccountFragmentTest {
                 .accountBalance("")
                 .submit()
                 .assertAccountNameError(activityTestRule.activity.getString(R.string.err_account_name_invalid))
-                .assertAccountBalanceError(activityTestRule.activity.getString(R.string.err_account_balance_invalid))
     }
 
     @Test
