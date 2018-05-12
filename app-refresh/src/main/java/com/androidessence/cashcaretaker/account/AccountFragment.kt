@@ -130,7 +130,6 @@ class AccountFragment : Fragment() {
 
     companion object {
         val FRAGMENT_NAME: String = AccountFragment::class.java.simpleName
-
         fun newInstance(): AccountFragment = AccountFragment()
     }
 }

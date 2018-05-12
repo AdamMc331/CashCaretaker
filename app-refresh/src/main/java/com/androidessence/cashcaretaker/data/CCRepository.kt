@@ -26,13 +26,6 @@ open class CCRepository(private val database: CCDatabase) {
 
     /**
      * Transfers money from one account to another.
-     *
-     * @param[fromAccount] The account that has the money to be transferred.
-     * @param[toAccount] The account that we are transferring money to.
-     * @param[amount] The amount of money to transfer.
-     * @param[date] The date of the transfer.
-     * @return True if creating the transfer transactions was successful, false otherwise.
-     *
      * TODO: Use string template, don't hardcode english here.
      */
     fun transfer(fromAccount: Account, toAccount: Account, amount: Double, date: Date): Single<Unit> {
@@ -54,14 +47,14 @@ open class CCRepository(private val database: CCDatabase) {
 
         // We can unwrap balance here because we return if it's null.
         return Single.fromCallable {
-                    database.beginTransaction()
-                    try {
-                        database.transactionDao().insert(withdrawal)
-                        database.transactionDao().insert(deposit)
-                        database.setTransactionSuccessful()
-                    } finally {
-                        database.endTransaction()
-                    }
-                }
+            database.beginTransaction()
+            try {
+                database.transactionDao().insert(withdrawal)
+                database.transactionDao().insert(deposit)
+                database.setTransactionSuccessful()
+            } finally {
+                database.endTransaction()
+            }
+        }
     }
 }

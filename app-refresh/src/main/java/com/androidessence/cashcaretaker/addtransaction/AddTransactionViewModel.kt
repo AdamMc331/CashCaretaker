@@ -24,22 +24,18 @@ class AddTransactionViewModel(private val repository: CCRepository) : ViewModel(
      * TODO: String resources?
      */
     fun addTransaction(accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
-        var isValid = true
-
         if (transactionDescription.isEmpty()) {
             transactionDescriptionError.onNext("Transaction description is invalid.")
-            isValid = false
+            return
         }
 
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
             transactionAmountError.onNext("Transaction amount is invalid.")
-            isValid = false
+            return
         }
 
-        if (!isValid) return
-
-        val transaction = Transaction(accountName, transactionDescription, amount!!, withdrawal, date)
+        val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date)
         val subscription = Single.fromCallable { repository.insertTransaction(transaction) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -52,22 +48,18 @@ class AddTransactionViewModel(private val repository: CCRepository) : ViewModel(
     }
 
     fun updateTransaction(id: Long, accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
-        var isValid = true
-
         if (transactionDescription.isEmpty()) {
             transactionDescriptionError.onNext("Transaction description is invalid.")
-            isValid = false
+            return
         }
 
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
             transactionAmountError.onNext("Transaction amount is invalid.")
-            isValid = false
+            return
         }
 
-        if (!isValid) return
-
-        val transaction = Transaction(accountName, transactionDescription, amount!!, withdrawal, date, id)
+        val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date, id)
         val subscription = Single.fromCallable { repository.updateTransaction(transaction) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

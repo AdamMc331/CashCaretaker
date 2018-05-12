@@ -47,12 +47,6 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
 
     /**
      * Displays a fragment inside this Activity.
-     *
-     * @param[fragment] The fragment that needs to be displayed.
-     * @param[tag] The tag used to identify this fragment in the backstack.
-     * @param[replace] Flag for whether we should be replacing a fragment (if true), or just add to the activity state (if false).
-     * @param[addToBackStack] Flag for adding this transaction to the back stack so the entry is remembered (if true), or simply ignored after being committed (if false).
-     * @param[container] Identifier of the container view that we are adding/replacing the fragment of.
      */
     private fun showFragment(fragment: Fragment, tag: String, replace: Boolean = false, addToBackStack: Boolean = true, @IdRes container: Int = R.id.container) {
         val transaction = supportFragmentManager.beginTransaction()

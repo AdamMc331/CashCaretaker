@@ -46,15 +46,19 @@ class AddAccountDialog : DialogFragment() {
 
         binding.accountBalanceEditText.filters = arrayOf(DecimalDigitsInputFilter())
 
+        setSubmitListener()
+
+        binding.accountNameEditText.requestFocus()
+
+        subscribeToViewModel()
+    }
+
+    private fun setSubmitListener() {
         binding.submitButton.setOnClickListener {
             val name = binding.accountNameEditText.text.toString()
             val balance = binding.accountBalanceEditText.text.toString()
             viewModel.addAccount(name, balance)
         }
-
-        binding.accountNameEditText.requestFocus()
-
-        subscribeToViewModel()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -86,9 +90,6 @@ class AddAccountDialog : DialogFragment() {
     }
 
     companion object {
-        /**
-         * The tag that is used when this account is inserted.
-         */
         val FRAGMENT_NAME: String = AddAccountDialog::class.java.simpleName
     }
 }

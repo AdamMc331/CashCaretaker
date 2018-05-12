@@ -23,22 +23,18 @@ class AddAccountViewModel(private val repository: CCRepository) : ViewModel() {
      * TODO: String resources?
      */
     fun addAccount(name: String?, balanceString: String?) {
-        var isValid = true
-
-        if (name.isNullOrEmpty()) {
+        if (name == null || name.isEmpty()) {
             accountNameError.onNext("Account name is invalid.")
-            isValid = false
+            return
         }
 
         val balance = balanceString?.toDoubleOrNull()
         if (balance == null) {
             accountBalanceError.onNext("Account balance is invalid.")
-            isValid = false
+            return
         }
 
-        if (!isValid) return
-
-        val account = Account(name!!, balance!!)
+        val account = Account(name, balance)
 
         val subscription = Single.fromCallable { repository.insertAccount(account) }
                 .subscribeOn(Schedulers.io())
