@@ -7,7 +7,10 @@ import com.androidessence.cashcaretaker.data.AccountDAO
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.main.MainActivity
 import com.androidessence.cashcaretaker.main.MainController
-import org.junit.*
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -42,6 +45,8 @@ class TransactionFragmentTest {
                 .transactionAmount(TEST_TRANSACTION_AMOUNT)
                 .submit()
                 .assertListCount(1)
+                .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
+                .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
     }
 
     @Test
@@ -54,6 +59,8 @@ class TransactionFragmentTest {
                 .transactionAmount(TEST_TRANSACTION_AMOUNT)
                 .submit()
                 .assertListCount(1)
+                .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
+                .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
     }
 
     @Test
@@ -65,6 +72,8 @@ class TransactionFragmentTest {
                 .transactionAmount(TEST_TRANSACTION_AMOUNT)
                 .submit()
                 .assertListCount(1)
+                .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
+                .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
                 .longClick(0)
                 .delete()
                 .assertListCount(0)
@@ -73,13 +82,10 @@ class TransactionFragmentTest {
     companion object {
         private const val TEST_ACCOUNT_NAME = "Checking"
         private const val TEST_ACCOUNT_BALANCE = "100"
-        private const val TEST_BALANCE_STRING = "$100.00"
         private val TEST_ACCOUNT = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE.toDouble())
-        private val TEST_TRANSACTION = Transaction(accountName = TEST_ACCOUNT_NAME)
 
         private const val TEST_TRANSACTION_DESCRIPTION = "Speedway"
         private const val TEST_TRANSACTION_AMOUNT = "5.45"
-        private const val TEST_BALANCE_AFTER_WITHDRAWAL_STRING = "$94.55"
-        private const val TEST_BALANCE_AFTER_DEPOSIT_STRING = "$105.45"
+        private const val TEST_TRANSACTION_CURRENCY = "$5.45"
     }
 }

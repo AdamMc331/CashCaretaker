@@ -82,11 +82,13 @@ class AccountFragmentTest {
 
     @Test
     fun addDuplicateAccountNameError() {
-        // Insert account
-        accountDao.insert(TEST_ACCOUNT)
-
         // Try to insert dupe
         AccountRobot()
+                .clickNew()
+                .accountName(TEST_ACCOUNT_NAME)
+                .accountBalance(TEST_ACCOUNT_BALANCE)
+                .submit()
+                .assertListCount(1)
                 .clickNew()
                 .accountName(TEST_ACCOUNT_NAME)
                 .accountBalance(TEST_ACCOUNT_BALANCE)
@@ -96,11 +98,15 @@ class AccountFragmentTest {
 
     @Test
     fun addWithdrawalFromRow() {
-        // Insert account
-        accountDao.insert(TEST_ACCOUNT)
-
         // Add transaction
-        AccountRobot().clickWithdrawalInList(0)
+        AccountRobot()
+                .clickNew()
+                .accountName(TEST_ACCOUNT_NAME)
+                .accountBalance(TEST_ACCOUNT_BALANCE)
+                .submit()
+                .assertListCount(1)
+                .clickWithdrawalInList(0)
+
         TransactionRobot()
                 .assertWithdrawalSwitchState(true)
                 .transactionDescription(TEST_TRANSACTION_DESCRIPTION)
@@ -113,11 +119,15 @@ class AccountFragmentTest {
 
     @Test
     fun addDepositFromRow() {
-        // Insert account
-        accountDao.insert(TEST_ACCOUNT)
-
         // Add transaction
-        AccountRobot().clickDepositInList(0)
+        AccountRobot()
+                .clickNew()
+                .accountName(TEST_ACCOUNT_NAME)
+                .accountBalance(TEST_ACCOUNT_BALANCE)
+                .submit()
+                .assertListCount(1)
+                .clickDepositInList(0)
+
         TransactionRobot()
                 .assertWithdrawalSwitchState(false)
                 .transactionDescription(TEST_TRANSACTION_DESCRIPTION)
@@ -145,7 +155,6 @@ class AccountFragmentTest {
         private const val TEST_ACCOUNT_NAME = "Checking"
         private const val TEST_ACCOUNT_BALANCE = "100"
         private const val TEST_BALANCE_STRING = "$100.00"
-        private val TEST_ACCOUNT = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE.toDouble())
 
         private const val TEST_TRANSACTION_DESCRIPTION = "Speedway"
         private const val TEST_TRANSACTION_AMOUNT = "5.45"

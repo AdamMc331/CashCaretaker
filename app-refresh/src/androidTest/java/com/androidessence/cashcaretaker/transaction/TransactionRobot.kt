@@ -8,6 +8,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers.*
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.RecyclerViewItemCountAssertion
+import com.androidessence.cashcaretaker.TestUtils.Companion.matchTextInRecyclerView
 import com.androidessence.cashcaretaker.TestUtils.Companion.setChecked
 
 /**
@@ -47,6 +48,16 @@ class TransactionRobot {
 
     fun transactionAmount(amount: String): TransactionRobot {
         onView(TRANSACTION_AMOUNT_MATCHER).perform(clearText(), typeText(amount), closeSoftKeyboard())
+        return this
+    }
+
+    fun assertTransactionDescriptionAtPosition(description: String, position: Int): TransactionRobot {
+        matchTextInRecyclerView<TransactionAdapter.TransactionViewHolder>(description, RECYCLER_VIEW_ID, TRANSACTION_DESCRIPTION_ID, position)
+        return this
+    }
+
+    fun assertTransactionAmountAtPosition(amount: String, position: Int): TransactionRobot {
+        matchTextInRecyclerView<TransactionAdapter.TransactionViewHolder>(amount, RECYCLER_VIEW_ID, TRANSACTION_AMOUNT_ID, position)
         return this
     }
 
