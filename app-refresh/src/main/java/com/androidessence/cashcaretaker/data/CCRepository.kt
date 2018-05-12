@@ -16,7 +16,7 @@ open class CCRepository(private val database: CCDatabase) {
 
     fun insertAccount(account: Account): Long = accountDAO.insert(account)
 
-    fun insertTransactions(transactions: List<Transaction>): List<Long> = transactionDAO.insert(transactions)
+    fun insertTransaction(transaction: Transaction): Long = transactionDAO.insert(transaction)
 
     fun updateTransaction(transaction: Transaction): Int = transactionDAO.update(transaction)
 
@@ -56,7 +56,8 @@ open class CCRepository(private val database: CCDatabase) {
         return Single.fromCallable {
                     database.beginTransaction()
                     try {
-                        database.transactionDao().insert(listOf(withdrawal, deposit))
+                        database.transactionDao().insert(withdrawal)
+                        database.transactionDao().insert(deposit)
                         database.setTransactionSuccessful()
                     } finally {
                         database.endTransaction()
