@@ -1,6 +1,7 @@
 package com.androidessence.cashcaretaker.addtransaction
 
 import android.arch.lifecycle.ViewModel
+import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.transaction.Transaction
 import io.reactivex.Single
@@ -15,8 +16,8 @@ class AddTransactionViewModel(private val repository: CCRepository) : ViewModel(
     private val compositeDisposable = CompositeDisposable()
     val transactionInserted: PublishSubject<Long> = PublishSubject.create()
     val transactionUpdated: PublishSubject<Int> = PublishSubject.create()
-    val transactionDescriptionError: PublishSubject<String> = PublishSubject.create()
-    val transactionAmountError: PublishSubject<String> = PublishSubject.create()
+    val transactionDescriptionError: PublishSubject<Int> = PublishSubject.create()
+    val transactionAmountError: PublishSubject<Int> = PublishSubject.create()
 
     /**
      * Checks that the information passed in is valid, and inserts an account if it is.
@@ -25,13 +26,13 @@ class AddTransactionViewModel(private val repository: CCRepository) : ViewModel(
      */
     fun addTransaction(accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
         if (transactionDescription.isEmpty()) {
-            transactionDescriptionError.onNext("Transaction description is invalid.")
+            transactionDescriptionError.onNext(R.string.error_invalid_description)
             return
         }
 
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
-            transactionAmountError.onNext("Transaction amount is invalid.")
+            transactionAmountError.onNext(R.string.error_invalid_amount)
             return
         }
 
@@ -49,13 +50,13 @@ class AddTransactionViewModel(private val repository: CCRepository) : ViewModel(
 
     fun updateTransaction(id: Long, accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
         if (transactionDescription.isEmpty()) {
-            transactionDescriptionError.onNext("Transaction description is invalid.")
+            transactionDescriptionError.onNext(R.string.error_invalid_description)
             return
         }
 
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
-            transactionAmountError.onNext("Transaction amount is invalid.")
+            transactionAmountError.onNext(R.string.error_invalid_amount)
             return
         }
 

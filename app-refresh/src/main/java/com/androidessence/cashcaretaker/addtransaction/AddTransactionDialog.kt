@@ -128,8 +128,12 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
     private fun subscribeToViewModel() {
         compositeDisposable.addAll(
-                viewModel.transactionDescriptionError.subscribe(binding.transactionDescription::setError),
-                viewModel.transactionAmountError.subscribe(binding.transactionAmount::setError),
+                viewModel.transactionDescriptionError.subscribe {
+                    binding.transactionDescription.error = getString(it)
+                },
+                viewModel.transactionAmountError.subscribe {
+                    binding.transactionAmount.error = getString(it)
+                },
                 viewModel.transactionInserted.subscribe { dismiss() },
                 viewModel.transactionUpdated.subscribe { dismiss() }
         )

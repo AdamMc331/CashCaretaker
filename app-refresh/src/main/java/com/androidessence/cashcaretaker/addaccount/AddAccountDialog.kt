@@ -83,8 +83,12 @@ class AddAccountDialog : DialogFragment() {
 
     private fun subscribeToViewModel() {
         compositeDisposable.addAll(
-                viewModel.accountNameError.subscribe(binding.accountNameEditText::setError),
-                viewModel.accountBalanceError.subscribe(binding.accountBalanceEditText::setError),
+                viewModel.accountNameError.subscribe {
+                    binding.accountNameEditText.error = getString(it)
+                },
+                viewModel.accountBalanceError.subscribe {
+                    binding.accountBalanceEditText.error = getString(it)
+                },
                 viewModel.accountInserted.subscribe { dismiss() }
         )
     }

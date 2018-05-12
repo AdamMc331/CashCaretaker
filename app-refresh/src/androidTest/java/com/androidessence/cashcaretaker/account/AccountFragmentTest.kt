@@ -34,13 +34,11 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun testEmptyList() {
         AccountRobot().assertListCount(0)
     }
 
     @Test
-    @Ignore
     fun addAccountSuccess() {
         AccountRobot()
                 .clickNew()
@@ -53,7 +51,6 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun addAccountNameError() {
         AccountRobot()
                 .clickNew()
@@ -64,7 +61,6 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun addAccountBalanceError() {
         AccountRobot()
                 .clickNew()
@@ -75,7 +71,6 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun addAccountEmptyFieldsError() {
         AccountRobot()
                 .clickNew()
@@ -87,7 +82,6 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun addDuplicateAccountNameError() {
         // Insert account
         accountDao.insert(TEST_ACCOUNT)
@@ -102,7 +96,6 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun addWithdrawalFromRow() {
         // Insert account
         accountDao.insert(TEST_ACCOUNT)
@@ -120,7 +113,6 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun addDepositFromRow() {
         // Insert account
         accountDao.insert(TEST_ACCOUNT)
@@ -138,12 +130,12 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun deleteAccount() {
-        // Insert account
-        accountDao.insert(TEST_ACCOUNT)
-
         AccountRobot()
+                .clickNew()
+                .accountName(TEST_ACCOUNT_NAME)
+                .accountBalance(TEST_ACCOUNT_BALANCE)
+                .submit()
                 .assertListCount(1)
                 .longClick(0)
                 .delete()

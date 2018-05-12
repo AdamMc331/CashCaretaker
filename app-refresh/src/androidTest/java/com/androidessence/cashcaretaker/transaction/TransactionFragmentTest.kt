@@ -34,7 +34,6 @@ class TransactionFragmentTest {
     }
 
     @Test
-    @Ignore
     fun testInsertWithdrawal() {
         TransactionRobot()
                 .clickNew()
@@ -46,7 +45,6 @@ class TransactionFragmentTest {
     }
 
     @Test
-    @Ignore
     fun testInsertDeposit() {
         TransactionRobot()
                 .clickNew()
@@ -59,7 +57,6 @@ class TransactionFragmentTest {
     }
 
     @Test
-    @Ignore
     fun deleteTransaction() {
         TransactionRobot()
                 .clickNew()

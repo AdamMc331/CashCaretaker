@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.addaccount
 
 import android.arch.lifecycle.ViewModel
 import android.database.sqlite.SQLiteConstraintException
+import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import io.reactivex.Single
@@ -14,8 +15,8 @@ import timber.log.Timber
 class AddAccountViewModel(private val repository: CCRepository) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
     val accountInserted: PublishSubject<Long> = PublishSubject.create()
-    val accountNameError: PublishSubject<String> = PublishSubject.create()
-    val accountBalanceError: PublishSubject<String> = PublishSubject.create()
+    val accountNameError: PublishSubject<Int> = PublishSubject.create()
+    val accountBalanceError: PublishSubject<Int> = PublishSubject.create()
 
     /**
      * Checks that the information passed in is valid, and inserts an account if it is.
@@ -24,13 +25,13 @@ class AddAccountViewModel(private val repository: CCRepository) : ViewModel() {
      */
     fun addAccount(name: String?, balanceString: String?) {
         if (name == null || name.isEmpty()) {
-            accountNameError.onNext("Account name is invalid.")
+            accountNameError.onNext(R.string.err_account_name_invalid)
             return
         }
 
         val balance = balanceString?.toDoubleOrNull()
         if (balance == null) {
-            accountBalanceError.onNext("Account balance is invalid.")
+            accountBalanceError.onNext(R.string.err_account_balance_invalid)
             return
         }
 
@@ -43,7 +44,7 @@ class AddAccountViewModel(private val repository: CCRepository) : ViewModel() {
                         accountInserted::onNext,
                         { error ->
                             if (error is SQLiteConstraintException) {
-                                accountNameError.onNext("An account with this name already exists.")
+                                accountNameError.onNext(R.string.err_account_name_exists)
                             } else {
                                 Timber.e(error)
                             }
