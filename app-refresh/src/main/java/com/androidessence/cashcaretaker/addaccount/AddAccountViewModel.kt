@@ -1,19 +1,17 @@
 package com.androidessence.cashcaretaker.addaccount
 
-import android.arch.lifecycle.ViewModel
 import android.database.sqlite.SQLiteConstraintException
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
+import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
-class AddAccountViewModel(private val repository: CCRepository) : ViewModel() {
-    private val compositeDisposable = CompositeDisposable()
+class AddAccountViewModel(private val repository: CCRepository) : BaseViewModel() {
     val accountInserted: PublishSubject<Long> = PublishSubject.create()
     val accountNameError: PublishSubject<Int> = PublishSubject.create()
     val accountBalanceError: PublishSubject<Int> = PublishSubject.create()
@@ -37,7 +35,7 @@ class AddAccountViewModel(private val repository: CCRepository) : ViewModel() {
 
         val account = Account(name, balance)
 
-        val subscription = Single.fromCallable { repository.insertAccount(account) }
+        Single.fromCallable { repository.insertAccount(account) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -50,12 +48,6 @@ class AddAccountViewModel(private val repository: CCRepository) : ViewModel() {
                             }
                         }
                 )
-
-        compositeDisposable.add(subscription)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.dispose()
+                .addToComposite()
     }
 }

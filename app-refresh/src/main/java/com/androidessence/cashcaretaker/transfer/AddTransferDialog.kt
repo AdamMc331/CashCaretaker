@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,19 +15,18 @@ import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
+import com.androidessence.cashcaretaker.base.BaseDialogFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.databinding.DialogAddTransferBinding
 import com.androidessence.cashcaretaker.views.SpinnerInputEditText
 import com.androidessence.utility.asUIString
-import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
 /**
  * Dialog that allows a user to transfer money from one account to another.
  */
-class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
-    private val compositeDisposable = CompositeDisposable()
+class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var viewModel: AddTransferViewModel
     private lateinit var binding: DialogAddTransferBinding
 
@@ -98,12 +96,10 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun subscribeToViewModel() {
-        compositeDisposable.addAll(
-                viewModel.fromAccountError.subscribe(fromAccount::setError),
-                viewModel.toAccountError.subscribe(toAccount::setError),
-                viewModel.amountError.subscribe(binding.transferAmount::setError),
-                viewModel.transferInserted.subscribe { dismiss() }
-        )
+        viewModel.fromAccountError.subscribe(fromAccount::setError).addToComposite()
+                viewModel.toAccountError.subscribe(toAccount::setError).addToComposite()
+                viewModel.amountError.subscribe(binding.transferAmount::setError).addToComposite()
+                viewModel.transferInserted.subscribe { dismiss() }.addToComposite()
     }
 
     private fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {
@@ -124,15 +120,7 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
         selectedDate = calendar.time
     }
 
-    override fun onPause() {
-        super.onPause()
-        compositeDisposable.dispose()
-    }
-
     companion object {
-        /**
-         * Request code for the date picker.
-         */
         private const val REQUEST_DATE = 0
     }
 }

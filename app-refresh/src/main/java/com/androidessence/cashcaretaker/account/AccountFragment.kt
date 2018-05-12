@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -13,21 +12,26 @@ import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
+import com.androidessence.cashcaretaker.base.BaseFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.main.MainController
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 /**
- * Fragment for displaying a list of acocunts to the user.
+ * Fragment for displaying a list of accounts to the user.
+ *
+ * The Fragment is responsible for any UI related actions, which are triggered by subscribing to
+ * subjects exposed by the [viewModel].
+ *
+ * @property[viewModel] A LifeCycle aware component that is responsible for fetching accounts and
+ * notifying the fragment. This component also handles the ActionMode behavior.
  */
-class AccountFragment : Fragment() {
+class AccountFragment : BaseFragment() {
     //region Properties
     private val adapter = AccountAdapter()
-    private val compositeDisposable = CompositeDisposable()
     private lateinit var viewModel: AccountViewModel
     private lateinit var binding: FragmentAccountBinding
 
@@ -69,11 +73,6 @@ class AccountFragment : Fragment() {
 
         fragmentManager?.addOnBackStackChangedListener { viewModel.clearActionMode() }
     }
-
-    override fun onPause() {
-        super.onPause()
-        compositeDisposable.dispose()
-    }
     //endregion
 
     //region Initializations
@@ -85,21 +84,18 @@ class AccountFragment : Fragment() {
     }
 
     private fun subscribeToAccounts() {
-        val subscription = viewModel.accountList
+        viewModel.accountList
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { adapter.items = it }
-
-        compositeDisposable.add(subscription)
+                .addToComposite()
     }
 
     private fun subscribeToAdapterClicks() {
-        compositeDisposable.addAll(
-                adapter.accountClickSubject.subscribe(this::onAccountSelected),
-                adapter.accountLongClickSubject.subscribe(this::onAccountLongClicked),
-                adapter.withdrawalClickSubject.subscribe(this::onWithdrawalButtonClicked),
-                adapter.depositClickSubject.subscribe(this::onDepositButtonClicked)
-        )
+        adapter.accountClickSubject.subscribe(this::onAccountSelected).addToComposite()
+                adapter.accountLongClickSubject.subscribe(this::onAccountLongClicked).addToComposite()
+                adapter.withdrawalClickSubject.subscribe(this::onWithdrawalButtonClicked).addToComposite()
+                adapter.depositClickSubject.subscribe(this::onDepositButtonClicked).addToComposite()
     }
     //endregion
 

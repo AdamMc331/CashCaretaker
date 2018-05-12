@@ -1,21 +1,22 @@
 package com.androidessence.cashcaretaker.account
 
-import android.arch.lifecycle.ViewModel
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 
-class AccountViewModel(private val repository: CCRepository) : ViewModel() {
-    private val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
+/**
+ * LifeCycle aware class that fetches accounts from the database and exposes them through a BehaviorSubject.
+ */
+class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
     val accountList: BehaviorSubject<List<Account>> = BehaviorSubject.create()
 
     //region Action Mode
@@ -54,19 +55,26 @@ class AccountViewModel(private val repository: CCRepository) : ViewModel() {
     //endregion
 
     //region Data Interactions
+    /**
+     * Fetches a list of accounts from the [repository] as long as we haven't already.
+     */
     fun fetchAccounts() {
-        val subscription = repository
-                .getAllAccounts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        accountList::onNext,
-                        Timber::e
-                )
-
-        compositeDisposable.add(subscription)
+        if (accountList.value == null) {
+            repository
+                    .getAllAccounts()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            accountList::onNext,
+                            Timber::e
+                    )
+                    .addToComposite()
+        }
     }
 
+    /**
+     * Deletes whatever account was selected by the user in the [actionMode].
+     */
     private fun deleteSelectedAccount() {
         selectedAccount?.let { account ->
             Single.fromCallable { repository.deleteAccount(account) }
@@ -82,7 +90,6 @@ class AccountViewModel(private val repository: CCRepository) : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.dispose()
         actionMode = null
         selectedAccount = null
     }

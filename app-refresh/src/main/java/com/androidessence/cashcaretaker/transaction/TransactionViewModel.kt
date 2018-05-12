@@ -1,22 +1,20 @@
 package com.androidessence.cashcaretaker.transaction
 
-import android.arch.lifecycle.ViewModel
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
-class TransactionViewModel(private val repository: CCRepository): ViewModel() {
-    private val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
+class TransactionViewModel(private val repository: CCRepository): BaseViewModel() {
     val editClicked: PublishSubject<Transaction> = PublishSubject.create()
     val transactionList: BehaviorSubject<List<Transaction>> = BehaviorSubject.create()
 
@@ -61,7 +59,7 @@ class TransactionViewModel(private val repository: CCRepository): ViewModel() {
 
     //region Data Interactions
     fun fetchTransactionForAccount(accountName: String) {
-        val subscription = repository
+        repository
                 .getTransactionsForAccount(accountName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -69,8 +67,7 @@ class TransactionViewModel(private val repository: CCRepository): ViewModel() {
                         transactionList::onNext,
                         Timber::e
                 )
-
-        compositeDisposable.add(subscription)
+                .addToComposite()
     }
 
     private fun deleteSelectedTransaction() {
@@ -82,13 +79,13 @@ class TransactionViewModel(private val repository: CCRepository): ViewModel() {
                             { clearActionMode() },
                             Timber::e
                     )
+                    .addToComposite()
         }
     }
     //endregion
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.dispose()
         actionMode = null
         selectedTransaction = null
     }

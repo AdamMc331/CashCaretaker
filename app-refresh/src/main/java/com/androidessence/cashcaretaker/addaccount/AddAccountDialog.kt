@@ -5,22 +5,20 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.base.BaseDialogFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
-import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Dialog to insert an account.
  */
-class AddAccountDialog : DialogFragment() {
-    private val compositeDisposable = CompositeDisposable()
+class AddAccountDialog : BaseDialogFragment() {
     private lateinit var binding: DialogAddAccountBinding
     private lateinit var viewModel: AddAccountViewModel
 
@@ -76,21 +74,16 @@ class AddAccountDialog : DialogFragment() {
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
-    override fun onPause() {
-        super.onPause()
-        compositeDisposable.dispose()
-    }
-
     private fun subscribeToViewModel() {
-        compositeDisposable.addAll(
-                viewModel.accountNameError.subscribe {
-                    binding.accountNameEditText.error = getString(it)
-                },
-                viewModel.accountBalanceError.subscribe {
-                    binding.accountBalanceEditText.error = getString(it)
-                },
-                viewModel.accountInserted.subscribe { dismiss() }
-        )
+        viewModel.accountNameError.subscribe {
+            binding.accountNameEditText.error = getString(it)
+        }.addToComposite()
+
+        viewModel.accountBalanceError.subscribe {
+            binding.accountBalanceEditText.error = getString(it)
+        }.addToComposite()
+
+        viewModel.accountInserted.subscribe { dismiss() }.addToComposite()
     }
 
     companion object {
