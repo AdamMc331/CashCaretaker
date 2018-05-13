@@ -3,10 +3,10 @@ package com.androidessence.cashcaretaker.transfer
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.crashlytics.android.Crashlytics
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import timber.log.Timber
 import java.util.*
 
 class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel() {
@@ -37,7 +37,7 @@ class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { transferInserted.onNext(true) },
-                        Timber::e
+                        Crashlytics::logException
                 )
                 .addToComposite()
     }

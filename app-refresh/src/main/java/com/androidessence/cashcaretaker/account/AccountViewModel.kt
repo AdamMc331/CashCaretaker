@@ -7,11 +7,11 @@ import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.crashlytics.android.Crashlytics
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import timber.log.Timber
 
 /**
  * LifeCycle aware class that fetches accounts from the database and exposes them through a BehaviorSubject.
@@ -66,7 +66,7 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             accountList::onNext,
-                            Timber::e
+                            Crashlytics::logException
                     )
                     .addToComposite()
         }
@@ -82,7 +82,7 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             { clearActionMode() },
-                            Timber::e
+                            Crashlytics::logException
                     )
         }
     }

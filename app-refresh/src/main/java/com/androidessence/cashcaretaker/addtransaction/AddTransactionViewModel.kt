@@ -4,11 +4,11 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.transaction.Transaction
+import com.crashlytics.android.Crashlytics
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import timber.log.Timber
 import java.util.*
 
 /**
@@ -44,7 +44,7 @@ class AddTransactionViewModel(private val repository: CCRepository) : BaseViewMo
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         transactionInserted::onNext,
-                        Timber::e
+                        Crashlytics::logException
                 )
                 .addToComposite()
     }
@@ -70,7 +70,7 @@ class AddTransactionViewModel(private val repository: CCRepository) : BaseViewMo
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         transactionUpdated::onNext,
-                        Timber::e
+                        Crashlytics::logException
                 )
                 .addToComposite()
     }

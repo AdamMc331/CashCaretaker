@@ -7,12 +7,12 @@ import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.crashlytics.android.Crashlytics
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import timber.log.Timber
 
 class TransactionViewModel(private val repository: CCRepository): BaseViewModel() {
     val editClicked: PublishSubject<Transaction> = PublishSubject.create()
@@ -65,7 +65,7 @@ class TransactionViewModel(private val repository: CCRepository): BaseViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         transactionList::onNext,
-                        Timber::e
+                        Crashlytics::logException
                 )
                 .addToComposite()
     }
@@ -77,7 +77,7 @@ class TransactionViewModel(private val repository: CCRepository): BaseViewModel(
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             { clearActionMode() },
-                            Timber::e
+                            Crashlytics::logException
                     )
                     .addToComposite()
         }
