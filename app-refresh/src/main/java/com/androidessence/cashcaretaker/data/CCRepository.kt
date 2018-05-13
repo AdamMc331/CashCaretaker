@@ -6,6 +6,11 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.util.*
 
+/**
+ * Repository that connects to a database to insert/update items.
+ *
+ * TODO: Break this up into an interface, and have a repository for accounts and transactions separately.
+ */
 open class CCRepository(private val database: CCDatabase) {
     private val accountDAO: AccountDAO = database.accountDao()
     private val transactionDAO: TransactionDAO = database.transactionDao()

@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,25 +19,19 @@ import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.databinding.DialogAddTransactionBinding
 import com.androidessence.cashcaretaker.transaction.Transaction
 import com.androidessence.utility.asUIString
-import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
 
 /**
  * Dialog for adding a new transaction.
- *
- * @property[accountName] The name of the account that we're creating a transaction for.
- * @property[withdrawalArgument] The initial argument for whether this transaction is a withdrawal.
- * @property[isWithdrawal] Flag determining if this transaction is a withdrawal based on the switch.
- * @property[selectedDate] The date that will be applied to the transaction.
  */
 class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListener {
-    private val isEditing: Boolean by lazy { arguments?.containsKey(ARG_TRANSACTION) ?: false }
-    private val initialTransaction: Transaction? by lazy { arguments?.getParcelable<Transaction>(ARG_TRANSACTION) }
-    private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT_NAME).orEmpty() }
-    private val withdrawalArgument: Boolean by lazy {
-        arguments?.getBoolean(ARG_IS_WITHDRAWAL) ?: true
-    }
+    //region Properties
+    private lateinit var accountName: String
+    private var isEditing: Boolean = false
+    private var initialTransaction: Transaction? = null
+    private var withdrawalArgument: Boolean = true
+
     private val isWithdrawal: Boolean
         get() = binding.withdrawalSwitch.isChecked
 
@@ -63,7 +56,9 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
             }
         }
     }
+    //endregion
 
+    //region Lifecycle Methods
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogAddTransactionBinding.inflate(inflater, container, false)
         return binding.root
@@ -73,23 +68,7 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
         super.onViewCreated(view, savedInstanceState)
 
         if (isEditing) {
-            initialTransaction?.let { transaction ->
-                binding.withdrawalSwitch.isChecked = transaction.withdrawal
-                binding.transactionDescription.setText(transaction.description)
-                binding.transactionAmount.setText(transaction.amount.toString())
-                selectedDate = transaction.date
-
-                binding.submitButton.setOnClickListener {
-                    viewModel.updateTransaction(
-                            transaction.id,
-                            transaction.accountName,
-                            binding.transactionDescription.text.toString(),
-                            binding.transactionAmount.text.toString(),
-                            isWithdrawal,
-                            selectedDate
-                    )
-                }
-            }
+            displayInitialTransaction()
         } else {
             binding.withdrawalSwitch.isChecked = withdrawalArgument
             selectedDate = Date()
@@ -115,11 +94,16 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
-        val titleResource = if (isEditing) R.string.edit_transaction else R.string.add_transaction
-        dialog.setTitle(getString(titleResource))
+        setupTitle(dialog)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddTransactionViewModel::class.java)
+        readArguments()
         return dialog
+    }
+
+    private fun setupTitle(dialog: Dialog) {
+        val titleResource = if (isEditing) R.string.edit_transaction else R.string.add_transaction
+        dialog.setTitle(getString(titleResource))
     }
 
     override fun onResume() {
@@ -127,7 +111,47 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
 
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
+    //endregion
 
+    //region Helper Functions
+    /**
+     * Takes all the fields from the [initialTransaction] and displays them.
+     *
+     * @see [newInstance]
+     */
+    private fun displayInitialTransaction() {
+        initialTransaction?.let { transaction ->
+            binding.withdrawalSwitch.isChecked = transaction.withdrawal
+            binding.transactionDescription.setText(transaction.description)
+            binding.transactionAmount.setText(transaction.amount.toString())
+            selectedDate = transaction.date
+
+            binding.submitButton.setOnClickListener {
+                viewModel.updateTransaction(
+                        transaction.id,
+                        transaction.accountName,
+                        binding.transactionDescription.text.toString(),
+                        binding.transactionAmount.text.toString(),
+                        isWithdrawal,
+                        selectedDate
+                )
+            }
+        }
+    }
+
+    /**
+     * Reads the fragment arguments and sets the appropriate properties.
+     */
+    private fun readArguments() {
+        isEditing = arguments?.containsKey(ARG_TRANSACTION) ?: false
+        initialTransaction = arguments?.getParcelable(ARG_TRANSACTION)
+        accountName = arguments?.getString(ARG_ACCOUNT_NAME).orEmpty()
+        withdrawalArgument = arguments?.getBoolean(ARG_IS_WITHDRAWAL) ?: true
+    }
+
+    /**
+     * Subscribes to ViewModel events for errors and transaction actions.
+     */
     private fun subscribeToViewModel() {
         viewModel.transactionDescriptionError.subscribe {
             binding.transactionDescription.error = getString(it)
@@ -141,12 +165,21 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
         viewModel.transactionUpdated.subscribe { dismiss() }.addToComposite()
     }
 
+    /**
+     * Displays a date picker dialog for the user to select a date. The [DatePickerFragment] uses
+     * this fragment for the [DatePickerDialog.OnDateSetListener].
+     *
+     * @see [onDateSet]
+     */
     private fun showDatePicker() {
         val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
         datePickerFragment.setTargetFragment(this, REQUEST_DATE)
         datePickerFragment.show(fragmentManager, AddTransactionDialog::class.java.simpleName)
     }
 
+    /**
+     * Sets the [selectedDate] for the fragment.
+     */
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         val calendar = Calendar.getInstance()
         calendar.set(year, month, dayOfMonth)
@@ -154,36 +187,16 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
     }
 
     companion object {
-        /**
-         * Key for the account name argument.
-         */
         private const val ARG_ACCOUNT_NAME = "AccountName"
-
-        /**
-         * Key for the withdrawal flag argument.
-         */
         private const val ARG_IS_WITHDRAWAL = "IsWithdrawal"
-
-        /**
-         * Key used when we're editing an existing transaction instead of starting a new one.
-         */
         private const val ARG_TRANSACTION = "Transaction"
-
-        /**
-         * Request code for the date picker.
-         */
         private const val REQUEST_DATE = 0
 
-        /**
-         * The tag used when displaying this dialog.
-         */
         val FRAGMENT_NAME: String = AddTransactionDialog::class.java.simpleName
 
         /**
-         * Creates a new dialog fragment to add a transaction.
-         *
-         * @param[accountName] The name of the account to create a transaction for.
-         * @param[isWithdrawal] Flag for the initial status of the withdrawal switch.
+         * Creates a new dialog fragment to add a transaction. This method takes in the account we'll be
+         * adding a transaction for, and the initial withdrawal state.
          */
         fun newInstance(accountName: String, isWithdrawal: Boolean): AddTransactionDialog {
             val args = Bundle()
@@ -197,9 +210,7 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
         }
 
         /**
-         * Creates a new dialog fragment to edit a transaction.
-         *
-         * @param[transaction] The transaction that we'll be editing.
+         * Creates a new dialog fragment to edit a transaction, with the initial transaction to be edited.
          */
         fun newInstance(transaction: Transaction): AddTransactionDialog {
             val args = Bundle()
