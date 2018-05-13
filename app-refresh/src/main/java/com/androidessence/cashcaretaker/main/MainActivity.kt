@@ -14,7 +14,9 @@ import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.transaction.TransactionFragment
 import com.androidessence.cashcaretaker.transfer.AddTransferDialog
 
-
+/**
+ * Main entry point into the application.
+ */
 class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBackStackChangedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +77,7 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
             true
         }
         R.id.action_transfer -> {
-            //TODO: Clean
+            //TODO: Clean this up. It should only be in the account fragment and only when there's >= 2 accounts.
             val dialog = AddTransferDialog()
             dialog.show(supportFragmentManager, AddTransferDialog::class.java.simpleName)
             true

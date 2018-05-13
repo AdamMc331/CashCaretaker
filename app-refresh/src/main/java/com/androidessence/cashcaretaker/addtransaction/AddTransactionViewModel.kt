@@ -11,6 +11,12 @@ import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.util.*
 
+/**
+ * ViewModel for adding a transaction. It exposes the insert/update events, as well as errors through
+ * various [PublishSubject]s.
+ *
+ * @property[repository] A repository that is used to insert/update accounts.
+ */
 class AddTransactionViewModel(private val repository: CCRepository) : BaseViewModel() {
     val transactionInserted: PublishSubject<Long> = PublishSubject.create()
     val transactionUpdated: PublishSubject<Int> = PublishSubject.create()
@@ -19,8 +25,6 @@ class AddTransactionViewModel(private val repository: CCRepository) : BaseViewMo
 
     /**
      * Checks that the information passed in is valid, and inserts an account if it is.
-     *
-     * TODO: String resources?
      */
     fun addTransaction(accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
         if (transactionDescription.isEmpty()) {
@@ -45,6 +49,9 @@ class AddTransactionViewModel(private val repository: CCRepository) : BaseViewMo
                 .addToComposite()
     }
 
+    /**
+     * Checks that the information passed in is valid, and updates the transaction if it is.
+     */
     fun updateTransaction(id: Long, accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
         if (transactionDescription.isEmpty()) {
             transactionDescriptionError.onNext(R.string.error_invalid_description)

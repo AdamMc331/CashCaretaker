@@ -34,6 +34,10 @@ abstract class CCDatabase : RoomDatabase() {
         }
 
         //TODO: Find a way to reference this in the test class too without making it public.
+        /**
+         * This is a database callback that creates the triggers to update account balance based on
+         * actions to the transaction table.
+         */
         val CALLBACK = object : RoomDatabase.Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)

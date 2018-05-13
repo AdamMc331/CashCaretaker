@@ -97,15 +97,14 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
 
     private fun subscribeToViewModel() {
         viewModel.fromAccountError.subscribe(fromAccount::setError).addToComposite()
-                viewModel.toAccountError.subscribe(toAccount::setError).addToComposite()
-                viewModel.amountError.subscribe(binding.transferAmount::setError).addToComposite()
-                viewModel.transferInserted.subscribe { dismiss() }.addToComposite()
+        viewModel.toAccountError.subscribe(toAccount::setError).addToComposite()
+        viewModel.amountError.subscribe(binding.transferAmount::setError).addToComposite()
+        viewModel.transferInserted.subscribe { dismiss() }.addToComposite()
     }
 
     private fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {
         viewModel.addTransfer(fromAccount, toAccount, amount, date)
     }
-
 
 
     private fun showDatePicker() {

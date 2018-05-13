@@ -39,13 +39,14 @@ class TransactionFragment : BaseFragment() {
     }
     //endregion
 
-    private val accountName: String by lazy { arguments?.getString(ARG_ACCOUNT).orEmpty() }
+    private lateinit var accountName: String
 
     //region Lifecycle Methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setupTitle()
+        readArguments()
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionViewModel::class.java)
     }
 
@@ -68,6 +69,10 @@ class TransactionFragment : BaseFragment() {
     //endregion
 
     //region Initializations
+    private fun readArguments() {
+        accountName = arguments?.getString(ARG_ACCOUNT).orEmpty()
+    }
+
     private fun setupTitle() {
         val title = if (accountName.isEmpty()) getString(R.string.app_name) else getString(R.string.account_transactions, accountName)
         (activity as AppCompatActivity).supportActionBar?.title = title
