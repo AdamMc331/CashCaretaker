@@ -4,6 +4,9 @@ import android.arch.persistence.room.TypeConverter;
 
 import java.util.Date;
 
+/**
+ * Database converters that will convert longs to dates and vise versa when inserting/pulling from the database.
+ */
 @SuppressWarnings("WeakerAccess")
 public class Converters {
     @TypeConverter

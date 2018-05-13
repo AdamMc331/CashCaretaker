@@ -34,13 +34,11 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun testEmptyList() {
         AccountRobot().assertListCount(0)
     }
 
     @Test
-    @Ignore
     fun addAccountSuccess() {
         AccountRobot()
                 .clickNew()
@@ -53,7 +51,6 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun addAccountNameError() {
         AccountRobot()
                 .clickNew()
@@ -64,7 +61,6 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun addAccountBalanceError() {
         AccountRobot()
                 .clickNew()
@@ -75,7 +71,6 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun addAccountEmptyFieldsError() {
         AccountRobot()
                 .clickNew()
@@ -83,17 +78,17 @@ class AccountFragmentTest {
                 .accountBalance("")
                 .submit()
                 .assertAccountNameError(activityTestRule.activity.getString(R.string.err_account_name_invalid))
-                .assertAccountBalanceError(activityTestRule.activity.getString(R.string.err_account_balance_invalid))
     }
 
     @Test
-    @Ignore
     fun addDuplicateAccountNameError() {
-        // Insert account
-        accountDao.insert(listOf(TEST_ACCOUNT))
-
         // Try to insert dupe
         AccountRobot()
+                .clickNew()
+                .accountName(TEST_ACCOUNT_NAME)
+                .accountBalance(TEST_ACCOUNT_BALANCE)
+                .submit()
+                .assertListCount(1)
                 .clickNew()
                 .accountName(TEST_ACCOUNT_NAME)
                 .accountBalance(TEST_ACCOUNT_BALANCE)
@@ -102,13 +97,16 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun addWithdrawalFromRow() {
-        // Insert account
-        accountDao.insert(listOf(TEST_ACCOUNT))
-
         // Add transaction
-        AccountRobot().clickWithdrawalInList(0)
+        AccountRobot()
+                .clickNew()
+                .accountName(TEST_ACCOUNT_NAME)
+                .accountBalance(TEST_ACCOUNT_BALANCE)
+                .submit()
+                .assertListCount(1)
+                .clickWithdrawalInList(0)
+
         TransactionRobot()
                 .assertWithdrawalSwitchState(true)
                 .transactionDescription(TEST_TRANSACTION_DESCRIPTION)
@@ -120,13 +118,16 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun addDepositFromRow() {
-        // Insert account
-        accountDao.insert(listOf(TEST_ACCOUNT))
-
         // Add transaction
-        AccountRobot().clickDepositInList(0)
+        AccountRobot()
+                .clickNew()
+                .accountName(TEST_ACCOUNT_NAME)
+                .accountBalance(TEST_ACCOUNT_BALANCE)
+                .submit()
+                .assertListCount(1)
+                .clickDepositInList(0)
+
         TransactionRobot()
                 .assertWithdrawalSwitchState(false)
                 .transactionDescription(TEST_TRANSACTION_DESCRIPTION)
@@ -138,12 +139,12 @@ class AccountFragmentTest {
     }
 
     @Test
-    @Ignore
     fun deleteAccount() {
-        // Insert account
-        accountDao.insert(listOf(TEST_ACCOUNT))
-
         AccountRobot()
+                .clickNew()
+                .accountName(TEST_ACCOUNT_NAME)
+                .accountBalance(TEST_ACCOUNT_BALANCE)
+                .submit()
                 .assertListCount(1)
                 .longClick(0)
                 .delete()
@@ -151,14 +152,13 @@ class AccountFragmentTest {
     }
 
     companion object {
-        private val TEST_ACCOUNT_NAME = "Checking"
-        private val TEST_ACCOUNT_BALANCE = "100"
-        private val TEST_BALANCE_STRING = "$100.00"
-        private val TEST_ACCOUNT = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE.toDouble())
+        private const val TEST_ACCOUNT_NAME = "Checking"
+        private const val TEST_ACCOUNT_BALANCE = "100"
+        private const val TEST_BALANCE_STRING = "$100.00"
 
-        private val TEST_TRANSACTION_DESCRIPTION = "Speedway"
-        private val TEST_TRANSACTION_AMOUNT = "5.45"
-        private val TEST_BALANCE_AFTER_WITHDRAWAL_STRING = "$94.55"
-        private val TEST_BALANCE_AFTER_DEPOSIT_STRING = "$105.45"
+        private const val TEST_TRANSACTION_DESCRIPTION = "Speedway"
+        private const val TEST_TRANSACTION_AMOUNT = "5.45"
+        private const val TEST_BALANCE_AFTER_WITHDRAWAL_STRING = "$94.55"
+        private const val TEST_BALANCE_AFTER_DEPOSIT_STRING = "$105.45"
     }
 }

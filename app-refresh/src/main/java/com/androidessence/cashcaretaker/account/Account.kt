@@ -6,10 +6,7 @@ import android.arch.persistence.room.PrimaryKey
 import com.androidessence.utility.asCurrency
 
 /**
- * A bank account that the user may have.
- *
- * @property[name] The name of the account.
- * @property[balance] The amount of funds in the account.
+ * POKO for a user's bank account. This is the entity that will be saved in the [com.androidessence.cashcaretaker.data.CCDatabase].
  */
 @Entity(indices = [(Index("name"))])
 data class Account(

@@ -1,8 +1,6 @@
 package com.androidessence.cashcaretaker
 
 import android.app.Application
-import com.androidessence.cashcaretaker.data.CCDatabase
-import com.androidessence.cashcaretaker.data.CCRepository
 import timber.log.Timber
 
 /**
@@ -13,7 +11,11 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Timber.plant(Timber.DebugTree())
-        CCRepository.init(CCDatabase.getInMemoryDatabase(this))
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        } else {
+            Timber.plant(CrashlyticsTree())
+        }
+
     }
 }

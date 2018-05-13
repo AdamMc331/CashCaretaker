@@ -13,13 +13,19 @@ import com.androidessence.cashcaretaker.account.AccountFragment
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.transaction.TransactionFragment
 import com.androidessence.cashcaretaker.transfer.AddTransferDialog
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 
-
+/**
+ * Main entry point into the application.
+ */
 class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBackStackChangedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        Fabric.with(this, Crashlytics())
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -47,12 +53,6 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
 
     /**
      * Displays a fragment inside this Activity.
-     *
-     * @param[fragment] The fragment that needs to be displayed.
-     * @param[tag] The tag used to identify this fragment in the backstack.
-     * @param[replace] Flag for whether we should be replacing a fragment (if true), or just add to the activity state (if false).
-     * @param[addToBackStack] Flag for adding this transaction to the back stack so the entry is remembered (if true), or simply ignored after being committed (if false).
-     * @param[container] Identifier of the container view that we are adding/replacing the fragment of.
      */
     private fun showFragment(fragment: Fragment, tag: String, replace: Boolean = false, addToBackStack: Boolean = true, @IdRes container: Int = R.id.container) {
         val transaction = supportFragmentManager.beginTransaction()
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
             true
         }
         R.id.action_transfer -> {
-            //TODO: Clean
+            //TODO: Clean this up. It should only be in the account fragment and only when there's >= 2 accounts.
             val dialog = AddTransferDialog()
             dialog.show(supportFragmentManager, AddTransferDialog::class.java.simpleName)
             true

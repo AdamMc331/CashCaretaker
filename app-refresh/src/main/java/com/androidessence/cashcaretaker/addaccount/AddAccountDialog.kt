@@ -1,41 +1,70 @@
 package com.androidessence.cashcaretaker.addaccount
 
 import android.app.Dialog
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
-import kotlinx.android.synthetic.main.dialog_add_account.*
+import com.androidessence.cashcaretaker.base.BaseDialogFragment
+import com.androidessence.cashcaretaker.data.CCDatabase
+import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
 
 /**
  * Dialog to insert an account.
- *
- * @property[presenter] Presenter used to connect to the data layer.
  */
-class AddAccountDialog: DialogFragment(), AddAccountController {
-    private val presenter: AddAccountPresenter by lazy { AddAccountPresenterImpl(this, AddAccountInteractorImpl()) }
+class AddAccountDialog : BaseDialogFragment() {
+    private lateinit var binding: DialogAddAccountBinding
+    private lateinit var viewModel: AddAccountViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.dialog_add_account, container, false)
+    private val viewModelFactory: ViewModelProvider.Factory by lazy {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                val database = CCDatabase.getInMemoryDatabase(context!!)
+                val repository = CCRepository(database)
+
+                @Suppress("UNCHECKED_CAST")
+                return AddAccountViewModel(repository) as T
+            }
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = DialogAddAccountBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        accountBalance.filters = arrayOf(DecimalDigitsInputFilter())
+        binding.accountBalanceEditText.filters = arrayOf(DecimalDigitsInputFilter())
 
-        submitButton.setOnClickListener {
-            addAccount(accountName.text.toString(), accountBalance.text.toString())
+        setSubmitListener()
+
+        binding.accountNameEditText.requestFocus()
+
+        subscribeToViewModel()
+    }
+
+    private fun setSubmitListener() {
+        binding.submitButton.setOnClickListener {
+            val name = binding.accountNameEditText.text.toString()
+            val balance = binding.accountBalanceEditText.text.toString()
+            viewModel.addAccount(name, balance)
         }
-
-        accountName.requestFocus()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setTitle(R.string.add_account)
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddAccountViewModel::class.java)
+
         return dialog
     }
 
@@ -45,38 +74,19 @@ class AddAccountDialog: DialogFragment(), AddAccountController {
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
-    override fun showProgress() {
-        //TODO:
-    }
+    private fun subscribeToViewModel() {
+        viewModel.accountNameError.subscribe {
+            binding.accountNameEditText.error = getString(it)
+        }.addToComposite()
 
-    override fun hideProgress() {
-        //TODO:
-    }
+        viewModel.accountBalanceError.subscribe {
+            binding.accountBalanceEditText.error = getString(it)
+        }.addToComposite()
 
-    override fun addAccount(accountName: String, accountBalance: String) {
-        presenter.insert(accountName, accountBalance)
-    }
-
-    override fun onInsertConflict() {
-        accountName.error = getString(R.string.err_account_name_exists)
-    }
-
-    override fun showAccountNameError() {
-        accountName.error = getString(R.string.err_account_name_invalid)
-    }
-
-    override fun showAccountBalanceError() {
-        accountBalance.error = getString(R.string.err_account_balance_invalid)
-    }
-
-    override fun onInserted(ids: List<Long>) {
-        dismiss()
+        viewModel.accountInserted.subscribe { dismiss() }.addToComposite()
     }
 
     companion object {
-        /**
-         * The tag that is used when this account is inserted.
-         */
         val FRAGMENT_NAME: String = AddAccountDialog::class.java.simpleName
     }
 }

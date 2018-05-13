@@ -2,7 +2,6 @@ package com.androidessence.utility
 
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import java.util.*
 
 /**
  * Tests methods in DoubleUtils.kt

@@ -16,7 +16,7 @@ interface TransactionDAO {
     fun getAllForAccount(accountName: String): Flowable<List<Transaction>>
 
     @Insert
-    fun insert(transactions: List<Transaction>): List<Long>
+    fun insert(transaction: Transaction): Long
 
     @Update
     fun update(transaction: Transaction): Int

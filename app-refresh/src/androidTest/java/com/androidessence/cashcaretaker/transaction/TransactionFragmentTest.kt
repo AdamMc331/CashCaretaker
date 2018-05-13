@@ -7,7 +7,10 @@ import com.androidessence.cashcaretaker.data.AccountDAO
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.main.MainActivity
 import com.androidessence.cashcaretaker.main.MainController
-import org.junit.*
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -23,7 +26,7 @@ class TransactionFragmentTest {
     @Before
     fun setUp() {
         accountDao.deleteAll()
-        accountDao.insert(listOf(TEST_ACCOUNT))
+        accountDao.insert(TEST_ACCOUNT)
 
         (activityTestRule.activity as MainController).showTransactions(TEST_ACCOUNT_NAME)
     }
@@ -34,7 +37,6 @@ class TransactionFragmentTest {
     }
 
     @Test
-    @Ignore
     fun testInsertWithdrawal() {
         TransactionRobot()
                 .clickNew()
@@ -43,10 +45,11 @@ class TransactionFragmentTest {
                 .transactionAmount(TEST_TRANSACTION_AMOUNT)
                 .submit()
                 .assertListCount(1)
+                .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
+                .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
     }
 
     @Test
-    @Ignore
     fun testInsertDeposit() {
         TransactionRobot()
                 .clickNew()
@@ -56,10 +59,11 @@ class TransactionFragmentTest {
                 .transactionAmount(TEST_TRANSACTION_AMOUNT)
                 .submit()
                 .assertListCount(1)
+                .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
+                .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
     }
 
     @Test
-    @Ignore
     fun deleteTransaction() {
         TransactionRobot()
                 .clickNew()
@@ -68,21 +72,20 @@ class TransactionFragmentTest {
                 .transactionAmount(TEST_TRANSACTION_AMOUNT)
                 .submit()
                 .assertListCount(1)
+                .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
+                .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
                 .longClick(0)
                 .delete()
                 .assertListCount(0)
     }
 
     companion object {
-        private val TEST_ACCOUNT_NAME = "Checking"
-        private val TEST_ACCOUNT_BALANCE = "100"
-        private val TEST_BALANCE_STRING = "$100.00"
+        private const val TEST_ACCOUNT_NAME = "Checking"
+        private const val TEST_ACCOUNT_BALANCE = "100"
         private val TEST_ACCOUNT = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE.toDouble())
-        private val TEST_TRANSACTION = Transaction(accountName = TEST_ACCOUNT_NAME)
 
-        private val TEST_TRANSACTION_DESCRIPTION = "Speedway"
-        private val TEST_TRANSACTION_AMOUNT = "5.45"
-        private val TEST_BALANCE_AFTER_WITHDRAWAL_STRING = "$94.55"
-        private val TEST_BALANCE_AFTER_DEPOSIT_STRING = "$105.45"
+        private const val TEST_TRANSACTION_DESCRIPTION = "Speedway"
+        private const val TEST_TRANSACTION_AMOUNT = "5.45"
+        private const val TEST_TRANSACTION_CURRENCY = "$5.45"
     }
 }
