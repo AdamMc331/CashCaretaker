@@ -5,11 +5,11 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.crashlytics.android.Crashlytics
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
 
 class AddAccountViewModel(private val repository: CCRepository) : BaseViewModel() {
     val accountInserted: PublishSubject<Long> = PublishSubject.create()
@@ -44,7 +44,7 @@ class AddAccountViewModel(private val repository: CCRepository) : BaseViewModel(
                             if (error is SQLiteConstraintException) {
                                 accountNameError.onNext(R.string.err_account_name_exists)
                             } else {
-                                Crashlytics.logException(error)
+                                Timber.e(error)
                             }
                         }
                 )
