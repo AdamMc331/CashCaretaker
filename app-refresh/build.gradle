@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 
 androidExtensions {
     experimental = true
@@ -76,6 +77,11 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$roomLibraryVersion"
     kapt "android.arch.persistence.room:compiler:$roomLibraryVersion"
 
+    // Reporting
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.2@aar') {
+        transitive = true
+    }
+
     // Testing
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.16.0'
@@ -98,4 +104,5 @@ dependencies {
 }
 repositories {
     mavenCentral()
+    maven { url 'https://maven.fabric.io/public' }
 }
