@@ -10,10 +10,21 @@ import timber.log.Timber
 import java.util.*
 
 class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel() {
+    val accounts: PublishSubject<List<Account>> = PublishSubject.create()
     val fromAccountError: PublishSubject<String> = PublishSubject.create()
     val toAccountError: PublishSubject<String> = PublishSubject.create()
     val amountError: PublishSubject<String> = PublishSubject.create()
     val transferInserted: PublishSubject<Boolean> = PublishSubject.create()
+
+    fun getAccounts() {
+        repository.getAllAccounts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        accounts::onNext,
+                        Timber::e
+                )
+    }
 
     fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {
         if (fromAccount == null) {
