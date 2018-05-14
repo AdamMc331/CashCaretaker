@@ -33,11 +33,6 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
     private lateinit var fromAccount: SpinnerInputEditText<Account>
     private lateinit var toAccount: SpinnerInputEditText<Account>
 
-    private val repository: CCRepository by lazy {
-        val database = CCDatabase.getInMemoryDatabase(context!!)
-        CCRepository(database)
-    }
-
     private var selectedDate: Date = Date()
         set(value) {
             binding.transferDate.setText(value.asUIString())
@@ -47,6 +42,9 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
     private val viewModelFactory: ViewModelProvider.Factory by lazy {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                val database = CCDatabase.getInMemoryDatabase(context!!)
+                val repository = CCRepository(database)
+
                 @Suppress("UNCHECKED_CAST")
                 return AddTransferViewModel(repository) as T
             }
@@ -73,10 +71,7 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
         fromAccount = view.findViewById(R.id.transferFromAccount)
         toAccount = view.findViewById(R.id.transferToAccount)
 
-        repository.getAllAccounts().subscribe {
-            fromAccount.items = it
-            toAccount.items = it
-        }
+        subscribeToAccounts()
 
         binding.transferAmount.filters = arrayOf(DecimalDigitsInputFilter())
 
@@ -93,6 +88,13 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
         }
 
         subscribeToViewModel()
+    }
+
+    private fun subscribeToAccounts() {
+        viewModel.accounts.subscribe {
+            fromAccount.items = it
+            toAccount.items = it
+        }.addToComposite()
     }
 
     private fun subscribeToViewModel() {
