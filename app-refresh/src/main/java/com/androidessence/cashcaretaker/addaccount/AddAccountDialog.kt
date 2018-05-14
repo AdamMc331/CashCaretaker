@@ -47,8 +47,6 @@ class AddAccountDialog : BaseDialogFragment() {
         setSubmitListener()
 
         binding.accountNameEditText.requestFocus()
-
-        subscribeToViewModel()
     }
 
     private fun setSubmitListener() {
@@ -64,6 +62,7 @@ class AddAccountDialog : BaseDialogFragment() {
         dialog.setTitle(R.string.add_account)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddAccountViewModel::class.java)
+        subscribeToViewModel()
 
         return dialog
     }
