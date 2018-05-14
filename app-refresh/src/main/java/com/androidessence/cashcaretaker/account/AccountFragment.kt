@@ -7,9 +7,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.base.BaseFragment
@@ -17,8 +16,10 @@ import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.main.MainController
+import com.androidessence.cashcaretaker.transfer.AddTransferDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 /**
  * Fragment for displaying a list of accounts to the user.
@@ -52,7 +53,11 @@ class AccountFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setHasOptionsMenu(true)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountViewModel::class.java)
+
+        subscribeToAdapterClicks()
+        subscribeToAccounts()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,11 +72,30 @@ class AccountFragment : BaseFragment() {
 
         binding.addAccountButton.setOnClickListener { showAddAccountView() }
 
-        subscribeToAdapterClicks()
-        subscribeToAccounts()
         viewModel.fetchAccounts()
 
         fragmentManager?.addOnBackStackChangedListener { viewModel.clearActionMode() }
+    }
+    //endregion
+
+    //region Menu
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_accounts, menu)
+
+        // Only allow transfers if we have greater than or equal to 2 numAccounts.
+        val numAccounts = adapter.items.size
+        menu?.findItem(R.id.action_transfer)?.isVisible = numAccounts >= 2
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_transfer -> {
+                val dialog = AddTransferDialog()
+                dialog.show(fragmentManager, AddTransferDialog::class.java.simpleName)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
     //endregion
 
@@ -87,15 +111,23 @@ class AccountFragment : BaseFragment() {
         viewModel.accountList
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { adapter.items = it }
+                .subscribe {
+                    adapter.items = it
+                    activity?.invalidateOptionsMenu()
+                }
                 .addToComposite()
     }
 
     private fun subscribeToAdapterClicks() {
-        adapter.accountClickSubject.subscribe(this::onAccountSelected).addToComposite()
-                adapter.accountLongClickSubject.subscribe(this::onAccountLongClicked).addToComposite()
-                adapter.withdrawalClickSubject.subscribe(this::onWithdrawalButtonClicked).addToComposite()
-                adapter.depositClickSubject.subscribe(this::onDepositButtonClicked).addToComposite()
+        adapter.accountClickSubject
+                .subscribe {
+                    onAccountSelected(it)
+                    Timber.d("AccountClicked")
+                }
+                .addToComposite()
+        adapter.accountLongClickSubject.subscribe(this::onAccountLongClicked).addToComposite()
+        adapter.withdrawalClickSubject.subscribe(this::onWithdrawalButtonClicked).addToComposite()
+        adapter.depositClickSubject.subscribe(this::onDepositButtonClicked).addToComposite()
     }
     //endregion
 

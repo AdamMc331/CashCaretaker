@@ -87,8 +87,6 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
         binding.transactionDate.setOnClickListener { showDatePicker() }
         binding.transactionAmount.filters = arrayOf(DecimalDigitsInputFilter())
         binding.transactionDescription.requestFocus()
-
-        subscribeToViewModel()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -97,6 +95,7 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
         setupTitle(dialog)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddTransactionViewModel::class.java)
+        subscribeToViewModel()
         readArguments()
         return dialog
     }

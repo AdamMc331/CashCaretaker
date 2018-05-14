@@ -45,13 +45,16 @@ class TransactionFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupTitle()
         readArguments()
+        setupTitle()
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionViewModel::class.java)
+        subscribeToAdapter()
+        subscribeToViewModel()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentTransactionBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(false)
         return binding.root
     }
 
@@ -59,8 +62,6 @@ class TransactionFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initializeRecyclerView()
-        subscribeToAdapter()
-        subscribeToViewModel()
 
         binding.addTransactionButton.setOnClickListener { showAddTransaction() }
 
