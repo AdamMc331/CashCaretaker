@@ -61,6 +61,9 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
 
         dialog.setTitle(getString(R.string.add_transfer))
 
+        subscribeToAccounts()
+        subscribeToViewModel()
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddTransferViewModel::class.java)
         return dialog
     }
@@ -70,8 +73,6 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
 
         fromAccount = view.findViewById(R.id.transferFromAccount)
         toAccount = view.findViewById(R.id.transferToAccount)
-
-        subscribeToAccounts()
 
         binding.transferAmount.filters = arrayOf(DecimalDigitsInputFilter())
 
@@ -87,7 +88,7 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
             )
         }
 
-        subscribeToViewModel()
+        viewModel.getAccounts()
     }
 
     private fun subscribeToAccounts() {
