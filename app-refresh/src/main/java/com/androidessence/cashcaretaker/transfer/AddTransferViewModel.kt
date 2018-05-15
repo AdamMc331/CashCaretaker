@@ -24,6 +24,7 @@ class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel
                         accounts::onNext,
                         Timber::e
                 )
+                .addToComposite()
     }
 
     fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {

@@ -44,7 +44,7 @@ allprojects {
         recyclerViewUtilsVersion = "2.0.2"
         timberVersion = "4.7.0"
         wearableVersion = "2.0.1"
-        roomLibraryVersion = "1.0.0"
+        roomLibraryVersion = "1.1.0"
         rxJavaVersion = "2.1.12"
         rxAndroidVersion = "2.0.2"
     }
