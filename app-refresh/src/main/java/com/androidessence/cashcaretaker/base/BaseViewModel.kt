@@ -1,9 +1,9 @@
 package com.androidessence.cashcaretaker.base
 
-import android.arch.lifecycle.ViewModel
-import android.databinding.Bindable
-import android.databinding.Observable
-import android.databinding.PropertyChangeRegistry
+import androidx.databinding.Observable
+import androidx.databinding.Bindable
+import androidx.databinding.PropertyChangeRegistry
+import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 

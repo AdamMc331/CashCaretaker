@@ -1,11 +1,11 @@
 package com.androidessence.cashcaretaker.main
 
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.AccountFragment
@@ -18,7 +18,7 @@ import timber.log.Timber
 /**
  * Main entry point into the application.
  */
-class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBackStackChangedListener {
+class MainActivity : AppCompatActivity(), MainController, androidx.fragment.app.FragmentManager.OnBackStackChangedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
     /**
      * Displays a fragment inside this Activity.
      */
-    private fun showFragment(fragment: Fragment, tag: String, @IdRes container: Int = R.id.container) {
+    private fun showFragment(fragment: androidx.fragment.app.Fragment, tag: String, @IdRes container: Int = R.id.container) {
         Timber.d("Adding fragment: $tag")
         supportFragmentManager
                 .beginTransaction()

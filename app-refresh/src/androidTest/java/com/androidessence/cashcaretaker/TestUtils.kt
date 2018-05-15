@@ -1,15 +1,15 @@
 package com.androidessence.cashcaretaker
 
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.ViewAction
-import android.support.test.espresso.action.ViewActions.click
-import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.contrib.RecyclerViewActions
-import android.support.test.espresso.matcher.ViewMatchers.*
-import android.support.v7.widget.RecyclerView
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.appcompat.widget.RecyclerView
 import org.hamcrest.Matchers.allOf
 import android.widget.Checkable
-import android.support.test.espresso.UiController
+import androidx.test.espresso.UiController
 import android.view.View
 import org.hamcrest.Description
 import org.hamcrest.Matcher

@@ -7,7 +7,7 @@
             type="com.androidessence.cashcaretaker.transaction.TransactionViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
             app:srcCompat="@drawable/ic_money_off_black_24dp"
             app:visibilityCondition="@{viewModel.showEmptyMessage}" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/no_transactions_message"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -53,7 +53,7 @@
             app:layout_constraintTop_toBottomOf="@id/no_transactions_image"
             app:visibilityCondition="@{viewModel.showEmptyMessage}" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/transactionsRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -63,7 +63,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:visibilityCondition="@{viewModel.showTransactions}" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addTransactionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,5 +71,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_add_white_24dp" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.ConstraintLayout>
 </layout>

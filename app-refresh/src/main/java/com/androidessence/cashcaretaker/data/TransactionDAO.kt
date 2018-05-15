@@ -1,6 +1,6 @@
 package com.androidessence.cashcaretaker.data
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import com.androidessence.cashcaretaker.transaction.Transaction
 import io.reactivex.Flowable
 

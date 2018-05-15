@@ -1,10 +1,10 @@
 package com.androidessence.cashcaretaker.account
 
-import android.databinding.Bindable
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.view.ActionMode
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import androidx.databinding.Bindable
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository

@@ -1,11 +1,11 @@
 package com.androidessence.cashcaretaker.data
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
 import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.transaction.Transaction
 
@@ -49,7 +49,8 @@ abstract class CCDatabase : RoomDatabase() {
                                 "BEGIN " +
                                 "UPDATE account " +
                                 "SET balance = balance - new.amount " +
-                                "WHERE name = new.accountName; END;")
+                                "WHERE name = new.accountName; END;"
+                )
 
                 db.execSQL(
                         "CREATE TRIGGER update_balance_for_deposit " +
@@ -57,7 +58,7 @@ abstract class CCDatabase : RoomDatabase() {
                                 "WHEN NOT new.withdrawal " +
                                 "BEGIN " +
                                 "UPDATE account " +
-                                "SET balance = balance + new.amount " +
+                                "SET balance = balanAccouce + new.amount " +
                                 "WHERE name = new.accountName; END;"
                 )
 
