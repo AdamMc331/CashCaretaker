@@ -57,14 +57,11 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
     implementation "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
     implementation "com.android.support:design:${supportLibraryVersion}"
-    implementation "com.android.support:cardview-v7:${supportLibraryVersion}"
-    implementation "com.android.support:preference-v7:${supportLibraryVersion}"
     implementation "android.arch.lifecycle:extensions:${architectureComponentsVersion}"
     kapt "com.android.databinding:compiler:${build_tools_version}"
 
     // Third party
     implementation "com.jakewharton.timber:timber:${timberVersion}"
-    implementation "com.adammcneilly:recyclerviewutils:${recyclerViewUtilsVersion}"
     implementation "com.androidessence:materialdesignspecs:${materialDesignSpecsVersion}"
     implementation project(":utility")
 
