@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker.account
 
+import android.databinding.Bindable
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
 import android.view.Menu
@@ -18,6 +19,18 @@ import timber.log.Timber
  */
 class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
     val accountList: BehaviorSubject<List<Account>> = BehaviorSubject.create()
+
+    @Bindable
+    fun getShowAccounts(): Boolean {
+        val accountSize = accountList.value?.size ?: 0
+        return accountSize != 0
+    }
+
+    @Bindable
+    fun getShowEmptyMessage(): Boolean {
+        val accountSize = accountList.value?.size ?: 0
+        return accountSize == 0
+    }
 
     //region Action Mode
     private var selectedAccount: Account? = null
@@ -65,7 +78,10 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            accountList::onNext,
+                            {
+                                accountList.onNext(it)
+                                notifyChange()
+                            },
                             Timber::e
                     )
                     .addToComposite()
@@ -81,7 +97,10 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            { clearActionMode() },
+                            {
+                                clearActionMode()
+                                notifyChange()
+                            },
                             Timber::e
                     )
         }

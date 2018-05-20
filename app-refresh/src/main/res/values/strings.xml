@@ -38,4 +38,6 @@
     <string name="to_account">To Account</string>
     <string name="transfer">Transfer</string>
     <string name="add_transfer">Add Transfer</string>
+    <string name="no_accounts">No Accounts</string>
+    <string name="no_accounts_message">Looks like you don\'t have any accounts! Click the button below to add one.</string>
 </resources>

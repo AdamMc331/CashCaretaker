@@ -31,3 +31,11 @@ fun setBackgroundColor(view: View?, @ColorRes colorRes: Int) {
         view.setBackgroundColor(color)
     }
 }
+
+/**
+ * Sets a view to visible or gone based on a condition.
+ */
+@BindingAdapter("visibilityCondition")
+fun setVisibilityCondition(view: View?, condition: Boolean) {
+    view?.visibility = if (condition) View.VISIBLE else View.GONE
+}
