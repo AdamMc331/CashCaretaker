@@ -62,6 +62,7 @@ class AccountFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
         return binding.root
     }
 

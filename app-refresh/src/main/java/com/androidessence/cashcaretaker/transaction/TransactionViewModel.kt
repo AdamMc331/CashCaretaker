@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker.transaction
 
+import android.databinding.Bindable
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
 import android.view.Menu
@@ -14,9 +15,21 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
-class TransactionViewModel(private val repository: CCRepository): BaseViewModel() {
+class TransactionViewModel(private val repository: CCRepository) : BaseViewModel() {
     val editClicked: PublishSubject<Transaction> = PublishSubject.create()
     val transactionList: BehaviorSubject<List<Transaction>> = BehaviorSubject.create()
+
+    @Bindable
+    fun getShowTransactions(): Boolean {
+        val transactionCount = transactionList.value?.size ?: 0
+        return transactionCount != 0
+    }
+
+    @Bindable
+    fun getShowEmptyMessage(): Boolean {
+        val transactionCount = transactionList.value?.size ?: 0
+        return transactionCount == 0
+    }
 
     //region Action Mode
     private var selectedTransaction: Transaction? = null
@@ -64,7 +77,10 @@ class TransactionViewModel(private val repository: CCRepository): BaseViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        transactionList::onNext,
+                        {
+                            transactionList.onNext(it)
+                            notifyChange()
+                        },
                         Timber::e
                 )
                 .addToComposite()
@@ -76,7 +92,10 @@ class TransactionViewModel(private val repository: CCRepository): BaseViewModel(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            { clearActionMode() },
+                            {
+                                clearActionMode()
+                                notifyChange()
+                            },
                             Timber::e
                     )
                     .addToComposite()

@@ -54,6 +54,7 @@ class TransactionFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentTransactionBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
         setHasOptionsMenu(false)
         return binding.root
     }
