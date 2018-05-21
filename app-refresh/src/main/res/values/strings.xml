@@ -40,4 +40,6 @@
     <string name="add_transfer">Add Transfer</string>
     <string name="no_accounts">No Accounts</string>
     <string name="no_accounts_message">Looks like you don\'t have any accounts! Click the button below to add one.</string>
+    <string name="no_transactions">No Transactions</string>
+    <string name="no_transactions_message">Looks like you don\'t have any transactions! Click the button below to add one.</string>
 </resources>
