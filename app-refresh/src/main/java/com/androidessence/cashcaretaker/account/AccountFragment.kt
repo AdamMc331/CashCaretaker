@@ -21,6 +21,8 @@ import com.androidessence.cashcaretaker.transfer.AddTransferDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import android.support.v7.widget.RecyclerView
+
 
 /**
  * Fragment for displaying a list of accounts to the user.
@@ -107,6 +109,21 @@ class AccountFragment : BaseFragment() {
         binding.accountsRecyclerView.adapter = adapter
         binding.accountsRecyclerView.layoutManager = layoutManager
         binding.accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+
+        // https://stackoverflow.com/a/39813266/3131147
+        binding.accountsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                if (dy > 0 || dy < 0 && binding.addAccountButton.isShown)
+                    binding.addAccountButton.hide()
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    binding.addAccountButton.show()
+                }
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+        })
     }
 
     /**

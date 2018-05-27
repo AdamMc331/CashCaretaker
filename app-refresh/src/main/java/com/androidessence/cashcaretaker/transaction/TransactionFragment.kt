@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -112,6 +113,22 @@ class TransactionFragment : BaseFragment() {
         binding.transactionsRecyclerView.adapter = adapter
         binding.transactionsRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.transactionsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+
+        // https://stackoverflow.com/a/39813266/3131147
+        binding.transactionsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                if (dy > 0 || dy < 0 && binding.addTransactionButton.isShown) {
+                    binding.addTransactionButton.hide()
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    binding.addTransactionButton.show()
+                }
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+        })
     }
     //endregion
 
