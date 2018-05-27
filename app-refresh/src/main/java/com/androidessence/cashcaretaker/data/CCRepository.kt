@@ -15,7 +15,14 @@ open class CCRepository(private val database: CCDatabase) {
     private val accountDAO: AccountDAO = database.accountDao()
     private val transactionDAO: TransactionDAO = database.transactionDao()
 
-    fun getAllAccounts(): Flowable<List<Account>> = accountDAO.getAll()
+    fun getAllAccounts(): Flowable<DataViewState> = accountDAO.getAll()
+            .map {
+                if (it.isNotEmpty()) {
+                    DataViewState.Success(it)
+                } else {
+                    DataViewState.Empty()
+                }
+            }
 
     fun deleteAccount(account: Account): Int = accountDAO.delete(account)
 

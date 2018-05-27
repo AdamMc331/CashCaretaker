@@ -8,6 +8,7 @@ import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.DataViewState
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -18,18 +19,21 @@ import timber.log.Timber
  * LifeCycle aware class that fetches accounts from the database and exposes them through a BehaviorSubject.
  */
 class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
-    val accountList: BehaviorSubject<List<Account>> = BehaviorSubject.create()
+    val state: BehaviorSubject<DataViewState> = BehaviorSubject.create()
 
     @Bindable
     fun getShowAccounts(): Boolean {
-        val accountSize = accountList.value?.size ?: 0
-        return accountSize != 0
+        return state.value is DataViewState.Success<*>
     }
 
     @Bindable
     fun getShowEmptyMessage(): Boolean {
-        val accountSize = accountList.value?.size ?: 0
-        return accountSize == 0
+        return state.value is DataViewState.Empty
+    }
+
+    @Bindable
+    fun getShowLoading(): Boolean {
+        return state.value is DataViewState.Loading
     }
 
     //region Action Mode
@@ -72,17 +76,19 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
      * Fetches a list of accounts from the [repository] as long as we haven't already.
      */
     fun fetchAccounts() {
-        if (accountList.value == null) {
+        if (state.value !is DataViewState.Success<*>) {
+            postState(DataViewState.Loading())
+
             repository
                     .getAllAccounts()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             {
-                                accountList.onNext(it)
-                                notifyChange()
+                                Timber.d("State Observed")
+                                postState(it)
                             },
-                            Timber::e
+                            Timber::e //TODO: Show error.
                     )
                     .addToComposite()
         }
@@ -104,6 +110,11 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
                             Timber::e
                     )
         }
+    }
+
+    private fun postState(newState: DataViewState) {
+        state.onNext(newState)
+        notifyChange()
     }
     //endregion
 
