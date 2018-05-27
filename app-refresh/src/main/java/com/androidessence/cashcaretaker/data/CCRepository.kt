@@ -17,10 +17,10 @@ open class CCRepository(private val database: CCDatabase) {
 
     fun getAllAccounts(): Flowable<DataViewState> = accountDAO.getAll()
             .map {
-                if (it.isNotEmpty()) {
-                    DataViewState.Success(it)
-                } else {
+                if (it.isEmpty()) {
                     DataViewState.Empty()
+                } else {
+                    DataViewState.Success(it)
                 }
             }
 
@@ -34,10 +34,10 @@ open class CCRepository(private val database: CCDatabase) {
 
     fun getTransactionsForAccount(accountName: String): Flowable<DataViewState> = transactionDAO.getAllForAccount(accountName)
             .map {
-                if (it.isNotEmpty()) {
-                    DataViewState.Success(it)
-                } else {
+                if (it.isEmpty()) {
                     DataViewState.Empty()
+                } else {
+                    DataViewState.Success(it)
                 }
             }
 

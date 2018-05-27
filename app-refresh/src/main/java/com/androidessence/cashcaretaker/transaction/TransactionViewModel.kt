@@ -75,6 +75,11 @@ class TransactionViewModel(private val repository: CCRepository) : BaseViewModel
     //endregion
 
     //region Data Interactions
+    /**
+     * Retrieves a number of transactions from the [repository] for a given [accountName].
+     *
+     * @param[accountName] The unique identifier for an account that we want to request transaction for.
+     */
     fun fetchTransactionForAccount(accountName: String) {
         if (state.value !is DataViewState.Success<*>) {
             postState(DataViewState.Loading())
@@ -84,9 +89,7 @@ class TransactionViewModel(private val repository: CCRepository) : BaseViewModel
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            {
-                                postState(it)
-                            },
+                            this::postState,
                             Timber::e
                     )
                     .addToComposite()
@@ -109,6 +112,10 @@ class TransactionViewModel(private val repository: CCRepository) : BaseViewModel
         }
     }
 
+    /**
+     * Consumes a [newState] and posts it to our [state] subject. Also notifies that the bindable
+     * properties of this ViewModel have changed.
+     */
     private fun postState(newState: DataViewState) {
         state.onNext(newState)
         notifyChange()

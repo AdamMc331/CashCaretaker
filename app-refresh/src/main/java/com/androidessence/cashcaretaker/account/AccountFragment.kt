@@ -109,12 +109,15 @@ class AccountFragment : BaseFragment() {
         binding.accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
 
+    /**
+     * Subscribes to any subjects that the [viewModel] is exposing. This includes the [viewModel] state,
+     * which we use to update the adpater when a list is pulled successfully.
+     */
     private fun subscribeToViewModel() {
         viewModel.state
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { state ->
-                    Timber.d("State Observed: $state")
                     when (state) {
                         is DataViewState.Success<*> -> {
                             @Suppress("UNCHECKED_CAST")

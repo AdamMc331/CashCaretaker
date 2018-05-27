@@ -84,11 +84,8 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            {
-                                Timber.d("State Observed")
-                                postState(it)
-                            },
-                            Timber::e //TODO: Show error.
+                            this::postState,
+                            Timber::e
                     )
                     .addToComposite()
         }
@@ -112,6 +109,10 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
         }
     }
 
+    /**
+     * Consumes a [newState] and posts it to our [state] subject. Also notifies that the bindable
+     * properties of this ViewModel have changed.
+     */
     private fun postState(newState: DataViewState) {
         state.onNext(newState)
         notifyChange()

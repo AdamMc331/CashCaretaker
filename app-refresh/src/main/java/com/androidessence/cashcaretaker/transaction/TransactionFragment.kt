@@ -87,6 +87,10 @@ class TransactionFragment : BaseFragment() {
         adapter.transactionLongClicked.subscribe(this::onTransactionLongClicked).addToComposite()
     }
 
+    /**
+     * Subscribes to any subjects the [viewModel] exposes such as the state (which is used to update the adapter),
+     * and the click subject to edit a transaction.
+     */
     private fun subscribeToViewModel() {
         viewModel.state
                 .subscribeOn(Schedulers.io())
