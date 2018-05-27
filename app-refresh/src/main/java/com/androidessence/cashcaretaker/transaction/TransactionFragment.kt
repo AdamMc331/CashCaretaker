@@ -15,7 +15,10 @@ import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.base.BaseFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Fragment that displays a list of Transactions.
@@ -84,8 +87,24 @@ class TransactionFragment : BaseFragment() {
         adapter.transactionLongClicked.subscribe(this::onTransactionLongClicked).addToComposite()
     }
 
+    /**
+     * Subscribes to any subjects the [viewModel] exposes such as the state (which is used to update the adapter),
+     * and the click subject to edit a transaction.
+     */
     private fun subscribeToViewModel() {
-        viewModel.transactionList.subscribe { adapter.items = it }.addToComposite()
+        viewModel.state
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { state ->
+                    when (state) {
+                        is DataViewState.Success<*> -> {
+                            @Suppress("UNCHECKED_CAST")
+                            (state.result as? List<Transaction>)?.let { transactions ->
+                                adapter.items = transactions
+                            }
+                        }
+                    }
+                }.addToComposite()
         viewModel.editClicked.subscribe(this::showEditTransaction).addToComposite()
     }
 

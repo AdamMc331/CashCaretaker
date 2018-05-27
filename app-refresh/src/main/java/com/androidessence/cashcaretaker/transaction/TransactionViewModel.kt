@@ -8,6 +8,7 @@ import android.view.MenuItem
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.DataViewState
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -17,18 +18,21 @@ import timber.log.Timber
 
 class TransactionViewModel(private val repository: CCRepository) : BaseViewModel() {
     val editClicked: PublishSubject<Transaction> = PublishSubject.create()
-    val transactionList: BehaviorSubject<List<Transaction>> = BehaviorSubject.create()
+    val state: BehaviorSubject<DataViewState> = BehaviorSubject.create()
 
     @Bindable
     fun getShowTransactions(): Boolean {
-        val transactionCount = transactionList.value?.size ?: 0
-        return transactionCount != 0
+        return state.value is DataViewState.Success<*>
     }
 
     @Bindable
     fun getShowEmptyMessage(): Boolean {
-        val transactionCount = transactionList.value?.size ?: 0
-        return transactionCount == 0
+        return state.value is DataViewState.Empty
+    }
+
+    @Bindable
+    fun getShowLoading(): Boolean {
+        return state.value is DataViewState.Loading
     }
 
     //region Action Mode
@@ -71,19 +75,25 @@ class TransactionViewModel(private val repository: CCRepository) : BaseViewModel
     //endregion
 
     //region Data Interactions
+    /**
+     * Retrieves a number of transactions from the [repository] for a given [accountName].
+     *
+     * @param[accountName] The unique identifier for an account that we want to request transaction for.
+     */
     fun fetchTransactionForAccount(accountName: String) {
-        repository
-                .getTransactionsForAccount(accountName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            transactionList.onNext(it)
-                            notifyChange()
-                        },
-                        Timber::e
-                )
-                .addToComposite()
+        if (state.value !is DataViewState.Success<*>) {
+            postState(DataViewState.Loading())
+
+            repository
+                    .getTransactionsForAccount(accountName)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            this::postState,
+                            Timber::e
+                    )
+                    .addToComposite()
+        }
     }
 
     private fun deleteSelectedTransaction() {
@@ -100,6 +110,15 @@ class TransactionViewModel(private val repository: CCRepository) : BaseViewModel
                     )
                     .addToComposite()
         }
+    }
+
+    /**
+     * Consumes a [newState] and posts it to our [state] subject. Also notifies that the bindable
+     * properties of this ViewModel have changed.
+     */
+    private fun postState(newState: DataViewState) {
+        state.onNext(newState)
+        notifyChange()
     }
     //endregion
 

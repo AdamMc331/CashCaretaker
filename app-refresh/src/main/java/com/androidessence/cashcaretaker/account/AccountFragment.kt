@@ -14,6 +14,7 @@ import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.base.BaseFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.main.MainController
 import com.androidessence.cashcaretaker.transfer.AddTransferDialog
@@ -57,7 +58,7 @@ class AccountFragment : BaseFragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountViewModel::class.java)
 
         subscribeToAdapterClicks()
-        subscribeToAccounts()
+        subscribeToViewModel()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -108,13 +109,24 @@ class AccountFragment : BaseFragment() {
         binding.accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
 
-    private fun subscribeToAccounts() {
-        viewModel.accountList
+    /**
+     * Subscribes to any subjects that the [viewModel] is exposing. This includes the [viewModel] state,
+     * which we use to update the adpater when a list is pulled successfully.
+     */
+    private fun subscribeToViewModel() {
+        viewModel.state
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    adapter.items = it
-                    activity?.invalidateOptionsMenu()
+                .subscribe { state ->
+                    when (state) {
+                        is DataViewState.Success<*> -> {
+                            @Suppress("UNCHECKED_CAST")
+                            (state.result as? List<Account>)?.let { accounts ->
+                                adapter.items = accounts
+                                activity?.invalidateOptionsMenu()
+                            }
+                        }
+                    }
                 }
                 .addToComposite()
     }

@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.transfer
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.DataViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
@@ -21,7 +22,14 @@ class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        accounts::onNext,
+                        { state ->
+                            if (state is DataViewState.Success<*>) {
+                                @Suppress("UNCHECKED_CAST")
+                                (state.result as? List<Account>)?.let { accountList ->
+                                    accounts.onNext(accountList)
+                                }
+                            }
+                        },
                         Timber::e
                 )
                 .addToComposite()
