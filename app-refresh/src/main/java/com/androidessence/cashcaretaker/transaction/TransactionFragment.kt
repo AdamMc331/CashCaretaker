@@ -49,7 +49,6 @@ class TransactionFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
 
         readArguments()
-        setupTitle()
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionViewModel::class.java)
         subscribeToAdapter()
         subscribeToViewModel()
@@ -64,6 +63,7 @@ class TransactionFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupTitle()
 
         initializeRecyclerView()
 

@@ -30,7 +30,11 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
         setSupportActionBar(toolbar)
 
         supportFragmentManager.addOnBackStackChangedListener(this)
-        showAccounts()
+        initializeBackButton()
+
+        if (savedInstanceState == null) {
+            showAccounts()
+        }
     }
 
     override fun navigateToAddAccount() {
@@ -79,11 +83,18 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
     }
 
     override fun onBackStackChanged() {
-        val shouldShowUp = supportFragmentManager.backStackEntryCount > 1
-        supportActionBar?.setDisplayHomeAsUpEnabled(shouldShowUp)
+        initializeBackButton()
 
         when (supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name) {
             AccountFragment.FRAGMENT_NAME -> supportActionBar?.setTitle(R.string.app_name)
         }
+    }
+
+    /**
+     * Checks the size of the back stack and sets the visibility of the back button if necessary.
+     */
+    private fun initializeBackButton() {
+        val shouldShowUp = supportFragmentManager.backStackEntryCount > 1
+        supportActionBar?.setDisplayHomeAsUpEnabled(shouldShowUp)
     }
 }
