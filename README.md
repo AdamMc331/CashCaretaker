@@ -1,3 +1,5 @@
+![feature graphic-01](https://user-images.githubusercontent.com/37731582/40625750-97e1a5bc-62b4-11e8-951b-80a5bec0aa2a.png)
+
 [<img src="http://new.dafdealer.co.uk/image-uploads/images/google_play_icon.png" width="300" height="100">](https://play.google.com/store/apps/details?id=com.androidessence.cashcaretaker&hl=en)
 
 Description
