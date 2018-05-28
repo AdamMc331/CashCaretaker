@@ -18,8 +18,8 @@ android {
         applicationId "com.androidessence.cashcaretaker"
         minSdkVersion globalConfiguration["androidMinSdkVersion"]
         targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
-        versionCode 1
-        versionName "1.0"
+        versionCode 10
+        versionName "2.0.0"
 
         vectorDrawables.useSupportLibrary = true
 
