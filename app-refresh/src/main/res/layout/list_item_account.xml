@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.androidessence.cashcaretaker.account.AccountDataModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/listPreferredItemHeightLarge"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/double_margin"
+        android:paddingTop="@dimen/single_margin"
+        android:paddingEnd="@dimen/double_margin"
+        android:paddingBottom="@dimen/single_margin">
+
+        <TextView
+            android:id="@+id/accountNameEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.name}"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.25"
+            tools:text="Testinsadfasdfag" />
+
+        <TextView
+            android:id="@+id/accountBalanceEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/double_margin"
+            android:layout_marginRight="@dimen/double_margin"
+            android:gravity="center"
+            android:text="@{viewModel.balanceString}"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/accountNameEditText"
+            app:layout_constraintRight_toLeftOf="@+id/deposit_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:textColorResource="@{viewModel.textColorResource}"
+            tools:text="$1,000,000.00" />
+
+        <ImageView
+            android:id="@+id/deposit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/create_deposit"
+            android:padding="@dimen/double_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/withdrawal_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_add_green_24dp" />
+
+        <ImageView
+            android:id="@+id/withdrawal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/create_withdrawal"
+            android:padding="@dimen/double_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_remove_red_24dp" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

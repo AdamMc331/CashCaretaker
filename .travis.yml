@@ -1,0 +1,36 @@
+language: android
+
+android:
+  components:
+    - tools
+    - build-tools-27.0.3
+    - android-27
+    - android-26
+    - android-22
+    - platform-tools
+    - extra-android-support
+    - extra-android-m2repositor
+    - extra-google-google_play_servicesy
+    - extra-google-m2repository
+    - sys-img-armeabi-v7a-android-22
+  licenses:
+    - android-sdk-license-.+
+
+sudo: required
+
+jdk:
+  - oraclejdk8
+
+# Emulator Management: Create, Start and Wait
+#before_script:
+#  - chmod +x gradlew
+#  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+#  - emulator -avd test -no-audio -no-window &
+#  - android-wait-for-emulator
+#  - adb shell input keyevent 82 &
+
+script:
+  # - ./gradlew clean build test connectedCheck --stacktrace
+  - ./gradlew clean build test --stacktrace
+
+after_failure: "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
