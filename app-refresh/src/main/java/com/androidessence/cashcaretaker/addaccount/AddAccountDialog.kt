@@ -61,8 +61,7 @@ class AddAccountDialog : BaseDialogFragment() {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setTitle(R.string.add_account)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddAccountViewModel::class.java)
-        subscribeToViewModel()
+        initializeViewModel()
 
         return dialog
     }
@@ -73,7 +72,9 @@ class AddAccountDialog : BaseDialogFragment() {
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
-    private fun subscribeToViewModel() {
+    private fun initializeViewModel() {
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddAccountViewModel::class.java)
+
         viewModel.accountNameError.subscribe {
             binding.accountNameEditText.error = getString(it)
         }.addToComposite()

@@ -50,9 +50,8 @@ class TransactionFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
 
         readArguments()
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionViewModel::class.java)
         subscribeToAdapter()
-        subscribeToViewModel()
+        initializeViewModel()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -92,7 +91,9 @@ class TransactionFragment : BaseFragment() {
      * Subscribes to any subjects the [viewModel] exposes such as the state (which is used to update the adapter),
      * and the click subject to edit a transaction.
      */
-    private fun subscribeToViewModel() {
+    private fun initializeViewModel() {
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionViewModel::class.java)
+
         viewModel.state
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -106,6 +107,7 @@ class TransactionFragment : BaseFragment() {
                         }
                     }
                 }.addToComposite()
+
         viewModel.editClicked.subscribe(this::showEditTransaction).addToComposite()
     }
 

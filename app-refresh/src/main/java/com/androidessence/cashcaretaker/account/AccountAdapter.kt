@@ -40,9 +40,13 @@ class AccountAdapter(items: List<Account> = ArrayList()) : RecyclerView.Adapter<
 
         init {
             binding.viewModel = viewModel
+            setClickListeners()
         }
 
-        init {
+        /**
+         * Sets a click listener on each of the UI items in this view holder.
+         */
+        private fun setClickListeners() {
             binding.withdrawalButton.setOnClickListener { withdrawalClickSubject.onNext(items[adapterPosition]) }
             binding.depositButton.setOnClickListener { depositClickSubject.onNext(items[adapterPosition]) }
             itemView.setOnClickListener { accountClickSubject.onNext(items[adapterPosition]) }
@@ -52,6 +56,9 @@ class AccountAdapter(items: List<Account> = ArrayList()) : RecyclerView.Adapter<
             }
         }
 
+        /**
+         * Binds an [Account] with this particular view holder.
+         */
         fun bindItem(item: Account?) {
             viewModel.account = item
             binding.executePendingBindings()

@@ -57,10 +57,9 @@ class AccountFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountViewModel::class.java)
 
         subscribeToAdapterClicks()
-        subscribeToViewModel()
+        initializeViewModel()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -130,7 +129,9 @@ class AccountFragment : BaseFragment() {
      * Subscribes to any subjects that the [viewModel] is exposing. This includes the [viewModel] state,
      * which we use to update the adpater when a list is pulled successfully.
      */
-    private fun subscribeToViewModel() {
+    private fun initializeViewModel() {
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountViewModel::class.java)
+
         viewModel.state
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

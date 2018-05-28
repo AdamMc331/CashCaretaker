@@ -18,8 +18,6 @@ class AddAccountViewModel(private val repository: CCRepository) : BaseViewModel(
 
     /**
      * Checks that the information passed in is valid, and inserts an account if it is.
-     *
-     * TODO: String resources?
      */
     fun addAccount(name: String?, balanceString: String?) {
         if (name == null || name.isEmpty()) {
