@@ -10,7 +10,7 @@ import io.reactivex.disposables.Disposable
  * @property[compositeDisposable] Maintains a reference to any observable requests this Fragment
  * is making, and clears them when the fragment is destroyed.
  */
-open class BaseFragment : androidx.fragment.app.Fragment() {
+open class BaseFragment : Fragment() {
     private val compositeDisposable = CompositeDisposable()
 
     override fun onDestroy() {

@@ -10,7 +10,7 @@ import java.util.*
 /**
  * Dialog fragment that allows user to pick a date.
  */
-class DatePickerFragment : androidx.fragment.app.DialogFragment() {
+class DatePickerFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dateArg = arguments?.getSerializable(ARG_DATE) as Date

@@ -18,7 +18,7 @@ import timber.log.Timber
 /**
  * Main entry point into the application.
  */
-class MainActivity : AppCompatActivity(), MainController, androidx.fragment.app.FragmentManager.OnBackStackChangedListener {
+class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBackStackChangedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), MainController, androidx.fragment.app.
     /**
      * Displays a fragment inside this Activity.
      */
-    private fun showFragment(fragment: androidx.fragment.app.Fragment, tag: String, @IdRes container: Int = R.id.container) {
+    private fun showFragment(fragment: Fragment, tag: String, @IdRes container: Int = R.id.container) {
         Timber.d("Adding fragment: $tag")
         supportFragmentManager
                 .beginTransaction()

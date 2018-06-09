@@ -58,7 +58,7 @@ abstract class CCDatabase : RoomDatabase() {
                                 "WHEN NOT new.withdrawal " +
                                 "BEGIN " +
                                 "UPDATE account " +
-                                "SET balance = balanAccouce + new.amount " +
+                                "SET balance = balance + new.amount " +
                                 "WHERE name = new.accountName; END;"
                 )
 
