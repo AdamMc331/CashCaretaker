@@ -3,14 +3,14 @@ package com.androidessence.cashcaretaker
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import java.util.*
 
 
 /**
  * Dialog fragment that allows user to pick a date.
  */
-class DatePickerFragment : DialogFragment() {
+class DatePickerFragment : androidx.fragment.app.DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dateArg = arguments?.getSerializable(ARG_DATE) as Date

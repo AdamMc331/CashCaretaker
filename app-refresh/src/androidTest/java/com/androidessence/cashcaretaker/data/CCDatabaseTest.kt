@@ -1,9 +1,10 @@
 package com.androidessence.cashcaretaker.data
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.persistence.room.Room
-import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.room.Room
+import androidx.sqlite.room.Room
+import androidx.test.rule.ActivityTestRule
+import androidx.test.runner.AndroidJUnit4
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.main.MainActivity
 import com.androidessence.cashcaretaker.transaction.Transaction

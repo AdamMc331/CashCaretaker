@@ -1,7 +1,7 @@
 package com.androidessence.cashcaretaker.account
 
-import android.databinding.BaseObservable
-import android.databinding.Bindable
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
 import com.androidessence.cashcaretaker.R
 import com.androidessence.utility.asCurrency
 

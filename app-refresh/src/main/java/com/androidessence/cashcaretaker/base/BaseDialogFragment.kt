@@ -1,6 +1,6 @@
 package com.androidessence.cashcaretaker.base
 
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -10,7 +10,7 @@ import io.reactivex.disposables.Disposable
  * @property[compositeDisposable] Maintains a reference to any observable requests this DialogFragment
  * is making, and clears them when the fragment is destroyed.
  */
-open class BaseDialogFragment : DialogFragment() {
+open class BaseDialogFragment : androidx.fragment.app.DialogFragment() {
     private val compositeDisposable = CompositeDisposable()
 
     override fun onDestroy() {
