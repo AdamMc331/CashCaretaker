@@ -42,4 +42,7 @@
     <string name="no_accounts_message">Looks like you don\'t have any accounts! Click the button below to add one.</string>
     <string name="no_transactions">No Transactions</string>
     <string name="no_transactions_message">Looks like you don\'t have any transactions! Click the button below to add one.</string>
+    <string name="from_account_invalid">From account is invalid.</string>
+    <string name="to_account_invalid">To account is invalid.</string>
+    <string name="amount_invalid">Amount is invalid.</string>
 </resources>
