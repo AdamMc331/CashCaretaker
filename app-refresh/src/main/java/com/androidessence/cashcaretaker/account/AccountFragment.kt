@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.account
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -19,8 +20,6 @@ import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.main.MainController
 import com.androidessence.cashcaretaker.transfer.AddTransferDialog
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 
@@ -132,21 +131,17 @@ class AccountFragment : BaseFragment() {
     private fun initializeViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountViewModel::class.java)
 
-        viewModel.state
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { state ->
-                    when (state) {
-                        is DataViewState.Success<*> -> {
-                            @Suppress("UNCHECKED_CAST")
-                            (state.result as? List<Account>)?.let { accounts ->
-                                adapter.items = accounts
-                                activity?.invalidateOptionsMenu()
-                            }
-                        }
+        viewModel.state.observe(this, Observer { state ->
+            when (state) {
+                is DataViewState.Success<*> -> {
+                    @Suppress("UNCHECKED_CAST")
+                    (state.result as? List<Account>)?.let { accounts ->
+                        adapter.items = accounts
+                        activity?.invalidateOptionsMenu()
                     }
                 }
-                .addToComposite()
+            }
+        })
     }
 
     private fun subscribeToAdapterClicks() {

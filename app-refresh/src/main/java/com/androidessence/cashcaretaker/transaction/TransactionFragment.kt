@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -18,8 +19,7 @@ import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 /**
  * Fragment that displays a list of Transactions.
@@ -94,21 +94,18 @@ class TransactionFragment : BaseFragment() {
     private fun initializeViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionViewModel::class.java)
 
-        viewModel.state
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { state ->
-                    when (state) {
-                        is DataViewState.Success<*> -> {
-                            @Suppress("UNCHECKED_CAST")
-                            (state.result as? List<Transaction>)?.let { transactions ->
-                                adapter.items = transactions
-                            }
-                        }
+        viewModel.state.observe(this, Observer { state ->
+            when (state) {
+                is DataViewState.Success<*> -> {
+                    @Suppress("UNCHECKED_CAST")
+                    (state.result as? List<Transaction>)?.let { transactions ->
+                        adapter.items = transactions
                     }
-                }.addToComposite()
+                }
+            }
+        })
 
-        viewModel.editClicked.subscribe(this::showEditTransaction).addToComposite()
+        viewModel.editClicked.subscribe(this::showEditTransaction, Timber::e).addToComposite()
     }
 
     private fun initializeRecyclerView() {

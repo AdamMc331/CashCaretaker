@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseDialogFragment
@@ -75,13 +76,17 @@ class AddAccountDialog : BaseDialogFragment() {
     private fun initializeViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddAccountViewModel::class.java)
 
-        viewModel.accountNameError.subscribe {
-            binding.accountNameEditText.error = getString(it)
-        }.addToComposite()
+        viewModel.accountNameError.observe(this, Observer { errorRes ->
+            errorRes?.let {
+                binding.accountNameEditText.error = getString(errorRes)
+            }
+        })
 
-        viewModel.accountBalanceError.subscribe {
-            binding.accountBalanceEditText.error = getString(it)
-        }.addToComposite()
+        viewModel.accountBalanceError.observe(this, Observer { errorRes ->
+            errorRes?.let {
+                binding.accountBalanceEditText.error = getString(errorRes)
+            }
+        })
 
         viewModel.accountInserted.subscribe { dismiss() }.addToComposite()
     }

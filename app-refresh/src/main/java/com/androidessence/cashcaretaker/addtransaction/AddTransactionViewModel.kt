@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker.addtransaction
 
+import androidx.lifecycle.MutableLiveData
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
@@ -20,21 +21,21 @@ import java.util.*
 class AddTransactionViewModel(private val repository: CCRepository) : BaseViewModel() {
     val transactionInserted: PublishSubject<Long> = PublishSubject.create()
     val transactionUpdated: PublishSubject<Int> = PublishSubject.create()
-    val transactionDescriptionError: PublishSubject<Int> = PublishSubject.create()
-    val transactionAmountError: PublishSubject<Int> = PublishSubject.create()
+    val transactionDescriptionError = MutableLiveData<Int>()
+    val transactionAmountError = MutableLiveData<Int>()
 
     /**
      * Checks that the information passed in is valid, and inserts an account if it is.
      */
     fun addTransaction(accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
         if (transactionDescription.isEmpty()) {
-            transactionDescriptionError.onNext(R.string.error_invalid_description)
+            transactionDescriptionError.postValue(R.string.error_invalid_description)
             return
         }
 
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
-            transactionAmountError.onNext(R.string.error_invalid_amount)
+            transactionAmountError.postValue(R.string.error_invalid_amount)
             return
         }
 
@@ -54,13 +55,13 @@ class AddTransactionViewModel(private val repository: CCRepository) : BaseViewMo
      */
     fun updateTransaction(id: Long, accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
         if (transactionDescription.isEmpty()) {
-            transactionDescriptionError.onNext(R.string.error_invalid_description)
+            transactionDescriptionError.postValue(R.string.error_invalid_description)
             return
         }
 
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
-            transactionAmountError.onNext(R.string.error_invalid_amount)
+            transactionAmountError.postValue(R.string.error_invalid_amount)
             return
         }
 

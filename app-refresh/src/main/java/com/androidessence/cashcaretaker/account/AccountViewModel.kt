@@ -1,10 +1,11 @@
 package com.androidessence.cashcaretaker.account
 
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.databinding.Bindable
+import androidx.lifecycle.MutableLiveData
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
@@ -12,14 +13,13 @@ import com.androidessence.cashcaretaker.data.DataViewState
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 
 /**
- * LifeCycle aware class that fetches accounts from the database and exposes them through a BehaviorSubject.
+ * LifeCycle aware class that fetches accounts from the database and exposes them through the [state].
  */
 class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
-    val state: BehaviorSubject<DataViewState> = BehaviorSubject.create()
+    val state = MutableLiveData<DataViewState>()
 
     @Bindable
     fun getShowAccounts(): Boolean {
@@ -33,7 +33,7 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
 
     @Bindable
     fun getShowLoading(): Boolean {
-        return state.value is DataViewState.Loading
+        return state.value == null || state.value is DataViewState.Loading
     }
 
     //region Action Mode
@@ -114,7 +114,7 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
      * properties of this ViewModel have changed.
      */
     private fun postState(newState: DataViewState) {
-        state.onNext(newState)
+        state.postValue(newState)
         notifyChange()
     }
     //endregion

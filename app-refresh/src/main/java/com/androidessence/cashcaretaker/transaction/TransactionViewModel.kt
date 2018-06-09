@@ -5,6 +5,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.databinding.Bindable
+import androidx.lifecycle.MutableLiveData
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
@@ -12,13 +13,12 @@ import com.androidessence.cashcaretaker.data.DataViewState
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
 class TransactionViewModel(private val repository: CCRepository) : BaseViewModel() {
     val editClicked: PublishSubject<Transaction> = PublishSubject.create()
-    val state: BehaviorSubject<DataViewState> = BehaviorSubject.create()
+    val state = MutableLiveData<DataViewState>()
 
     @Bindable
     fun getShowTransactions(): Boolean {
@@ -117,7 +117,7 @@ class TransactionViewModel(private val repository: CCRepository) : BaseViewModel
      * properties of this ViewModel have changed.
      */
     private fun postState(newState: DataViewState) {
-        state.onNext(newState)
+        state.postValue(newState)
         notifyChange()
     }
     //endregion
