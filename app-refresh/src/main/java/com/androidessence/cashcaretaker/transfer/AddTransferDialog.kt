@@ -98,16 +98,22 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
             }
         })
 
-        viewModel.fromAccountError.observe(this, androidx.lifecycle.Observer {
-            fromAccount.error = it
+        viewModel.fromAccountError.observe(this, androidx.lifecycle.Observer { errorRes ->
+            errorRes?.let {
+                fromAccount.error = getString(it)
+            }
         })
 
-        viewModel.toAccountError.observe(this, androidx.lifecycle.Observer {
-            toAccount.error = it
+        viewModel.toAccountError.observe(this, androidx.lifecycle.Observer { errorRes ->
+            errorRes?.let {
+                toAccount.error = getString(it)
+            }
         })
 
-        viewModel.amountError.observe(this, androidx.lifecycle.Observer {
-            binding.transferAmount.error = it
+        viewModel.amountError.observe(this, androidx.lifecycle.Observer { errorRes ->
+            errorRes?.let {
+                binding.transferAmount.error = getString(it)
+            }
         })
 
         viewModel.transferInserted.subscribe { dismiss() }.addToComposite()
