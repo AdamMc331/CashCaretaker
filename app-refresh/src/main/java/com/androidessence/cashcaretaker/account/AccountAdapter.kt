@@ -1,8 +1,9 @@
 package com.androidessence.cashcaretaker.account
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.androidessence.cashcaretaker.account.AccountAdapter.AccountViewHolder
 import com.androidessence.cashcaretaker.databinding.ListItemAccountBinding
 import io.reactivex.subjects.PublishSubject
 

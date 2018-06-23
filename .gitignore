@@ -6,6 +6,7 @@
 .DS_Store
 /build
 /captures
+/app-refreash/release/
 ## Directory-based project format:
 .idea/
 fabric.properties

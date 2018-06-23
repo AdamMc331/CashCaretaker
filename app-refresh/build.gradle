@@ -18,12 +18,12 @@ android {
         applicationId "com.androidessence.cashcaretaker"
         minSdkVersion globalConfiguration["androidMinSdkVersion"]
         targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
-        versionCode 10
-        versionName "2.0.0"
+        versionCode 11
+        versionName "2.0.1"
 
         vectorDrawables.useSupportLibrary = true
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -54,25 +54,25 @@ dependencies {
 
     // Kotlin/Android
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
-    implementation "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
-    implementation "com.android.support:design:${supportLibraryVersion}"
-    implementation "android.arch.lifecycle:extensions:${architectureComponentsVersion}"
-    kapt "com.android.databinding:compiler:${build_tools_version}"
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "com.google.android.material:material:$materialVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$architectureComponentsVersion"
+    kapt "androidx.databinding:databinding-compiler:$build_tools_version"
 
     // Third party
-    implementation "com.jakewharton.timber:timber:${timberVersion}"
-    implementation "com.androidessence:materialdesignspecs:${materialDesignSpecsVersion}"
+    implementation "com.jakewharton.timber:timber:$timberVersion"
+    implementation "com.androidessence:materialdesignspecs:$materialDesignSpecsVersion"
     implementation project(":utility")
 
     // Room/RxJava
-    implementation "android.arch.persistence.room:runtime:$roomLibraryVersion"
-    implementation "android.arch.persistence.room:rxjava2:$roomLibraryVersion"
-    implementation "android.arch.persistence.room:testing:$roomLibraryVersion"
+    implementation "androidx.room:room-runtime:$architectureComponentsVersion"
+    implementation "androidx.room:room-rxjava2:$architectureComponentsVersion"
+    implementation "androidx.room:room-testing:$architectureComponentsVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
-    annotationProcessor "android.arch.persistence.room:compiler:$roomLibraryVersion"
-    kapt "android.arch.persistence.room:compiler:$roomLibraryVersion"
+    annotationProcessor "androidx.room:room-compiler:$architectureComponentsVersion"
+    kapt "androidx.room:room-compiler:$architectureComponentsVersion"
 
     // Reporting
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.2@aar') {
@@ -81,16 +81,16 @@ dependencies {
 
     // Testing
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.18.3'
-    androidTestImplementation("android.arch.core:core-testing:$roomLibraryVersion") {
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    androidTestImplementation("androidx.arch.core:core-testing:$architectureComponentsVersion") {
         exclude module: 'support-compat'
         exclude module: 'support-annotations'
         exclude module: 'support-core-utils'
     }
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.2.2') {
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion") {
         exclude group: 'com.android.support'
         exclude module: 'support-annotations'
         exclude module: 'support-v4'

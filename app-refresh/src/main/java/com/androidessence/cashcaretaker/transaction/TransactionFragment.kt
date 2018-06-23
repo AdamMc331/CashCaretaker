@@ -1,16 +1,17 @@
 package com.androidessence.cashcaretaker.transaction
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.base.BaseFragment
@@ -18,8 +19,7 @@ import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 /**
  * Fragment that displays a list of Transactions.
@@ -94,21 +94,18 @@ class TransactionFragment : BaseFragment() {
     private fun initializeViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionViewModel::class.java)
 
-        viewModel.state
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { state ->
-                    when (state) {
-                        is DataViewState.Success<*> -> {
-                            @Suppress("UNCHECKED_CAST")
-                            (state.result as? List<Transaction>)?.let { transactions ->
-                                adapter.items = transactions
-                            }
-                        }
+        viewModel.state.observe(this, Observer { state ->
+            when (state) {
+                is DataViewState.Success<*> -> {
+                    @Suppress("UNCHECKED_CAST")
+                    (state.result as? List<Transaction>)?.let { transactions ->
+                        adapter.items = transactions
                     }
-                }.addToComposite()
+                }
+            }
+        })
 
-        viewModel.editClicked.subscribe(this::showEditTransaction).addToComposite()
+        viewModel.editClicked.subscribe(this::showEditTransaction, Timber::e).addToComposite()
     }
 
     private fun initializeRecyclerView() {
@@ -118,13 +115,13 @@ class TransactionFragment : BaseFragment() {
 
         // https://stackoverflow.com/a/39813266/3131147
         binding.transactionsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0 || dy < 0 && binding.addTransactionButton.isShown) {
                     binding.addTransactionButton.hide()
                 }
             }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     binding.addTransactionButton.show()
                 }

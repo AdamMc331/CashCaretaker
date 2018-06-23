@@ -1,7 +1,7 @@
 package com.androidessence.cashcaretaker.transaction
 
-import android.databinding.BaseObservable
-import android.databinding.Bindable
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
 import com.androidessence.cashcaretaker.R
 import com.androidessence.utility.asCurrency
 import com.androidessence.utility.asUIString
@@ -14,7 +14,15 @@ class TransactionDataModel : BaseObservable() {
         }
 
     @Bindable
-    fun getDescription(): String = transaction?.description.orEmpty()
+    fun getDescription(): String {
+        val description = transaction?.description.orEmpty()
+
+        return if (description.isEmpty()) {
+            "N/A"
+        } else {
+            description
+        }
+    }
 
     @Bindable
     fun getDateString(): String = transaction?.date?.asUIString().orEmpty()

@@ -2,9 +2,9 @@ package com.androidessence.cashcaretaker.addtransaction
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -152,13 +152,18 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
      * Subscribes to ViewModel events for errors and transaction actions.
      */
     private fun subscribeToViewModel() {
-        viewModel.transactionDescriptionError.subscribe {
-            binding.transactionDescription.error = getString(it)
-        }.addToComposite()
+        viewModel.transactionDescriptionError.observe(this, androidx.lifecycle.Observer { errorRes ->
+            errorRes?.let{
+                binding.transactionDescription.error = getString(errorRes)
+            }
 
-        viewModel.transactionAmountError.subscribe {
-            binding.transactionAmount.error = getString(it)
-        }.addToComposite()
+        })
+
+        viewModel.transactionAmountError.observe(this, androidx.lifecycle.Observer { errorRes ->
+            errorRes?.let{
+                binding.transactionAmount.error = getString(it)
+            }
+        })
 
         viewModel.transactionInserted.subscribe { dismiss() }.addToComposite()
         viewModel.transactionUpdated.subscribe { dismiss() }.addToComposite()

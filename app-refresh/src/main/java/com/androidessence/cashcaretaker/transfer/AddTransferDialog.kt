@@ -2,9 +2,9 @@ package com.androidessence.cashcaretaker.transfer
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -91,14 +91,31 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
     }
 
     private fun subscribeToViewModel() {
-        viewModel.accounts.subscribe {
-            fromAccount.items = it
-            toAccount.items = it
-        }.addToComposite()
+        viewModel.accounts.observe(this, androidx.lifecycle.Observer { accounts ->
+            accounts?.let {
+                fromAccount.items = it
+                toAccount.items = it
+            }
+        })
 
-        viewModel.fromAccountError.subscribe(fromAccount::setError).addToComposite()
-        viewModel.toAccountError.subscribe(toAccount::setError).addToComposite()
-        viewModel.amountError.subscribe(binding.transferAmount::setError).addToComposite()
+        viewModel.fromAccountError.observe(this, androidx.lifecycle.Observer { errorRes ->
+            errorRes?.let {
+                fromAccount.error = getString(it)
+            }
+        })
+
+        viewModel.toAccountError.observe(this, androidx.lifecycle.Observer { errorRes ->
+            errorRes?.let {
+                toAccount.error = getString(it)
+            }
+        })
+
+        viewModel.amountError.observe(this, androidx.lifecycle.Observer { errorRes ->
+            errorRes?.let {
+                binding.transferAmount.error = getString(it)
+            }
+        })
+
         viewModel.transferInserted.subscribe { dismiss() }.addToComposite()
     }
 

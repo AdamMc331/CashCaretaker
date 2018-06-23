@@ -1,5 +1,7 @@
 package com.androidessence.cashcaretaker.transfer
 
+import androidx.lifecycle.MutableLiveData
+import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
@@ -11,10 +13,10 @@ import timber.log.Timber
 import java.util.*
 
 class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel() {
-    val accounts: PublishSubject<List<Account>> = PublishSubject.create()
-    val fromAccountError: PublishSubject<String> = PublishSubject.create()
-    val toAccountError: PublishSubject<String> = PublishSubject.create()
-    val amountError: PublishSubject<String> = PublishSubject.create()
+    val accounts = MutableLiveData<List<Account>>()
+    val fromAccountError = MutableLiveData<Int>()
+    val toAccountError = MutableLiveData<Int>()
+    val amountError = MutableLiveData<Int>()
     val transferInserted: PublishSubject<Boolean> = PublishSubject.create()
 
     fun getAccounts() {
@@ -26,7 +28,7 @@ class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel
                             if (state is DataViewState.Success<*>) {
                                 @Suppress("UNCHECKED_CAST")
                                 (state.result as? List<Account>)?.let { accountList ->
-                                    accounts.onNext(accountList)
+                                    accounts.value = accountList
                                 }
                             }
                         },
@@ -37,18 +39,18 @@ class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel
 
     fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {
         if (fromAccount == null) {
-            fromAccountError.onNext("From account is invalid.")
+            fromAccountError.value = R.string.from_account_invalid
             return
         }
 
         if (toAccount == null) {
-            toAccountError.onNext("To account is invalid.")
+            toAccountError.value = R.string.to_account_invalid
             return
         }
 
         val transferAmount = amount.toDoubleOrNull()
         if (transferAmount == null) {
-            amountError.onNext("Amount is invalid.")
+            amountError.value = R.string.amount_invalid
             return
         }
 

@@ -1,8 +1,8 @@
 package com.androidessence.cashcaretaker.transaction
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.databinding.ListItemTransactionBinding
 import io.reactivex.subjects.PublishSubject
 
