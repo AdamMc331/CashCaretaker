@@ -29,13 +29,13 @@ class AddTransactionViewModel(private val repository: CCRepository) : BaseViewMo
      */
     fun addTransaction(accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
         if (transactionDescription.isEmpty()) {
-            transactionDescriptionError.postValue(R.string.error_invalid_description)
+            transactionDescriptionError.value = R.string.error_invalid_description
             return
         }
 
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
-            transactionAmountError.postValue(R.string.error_invalid_amount)
+            transactionAmountError.value = R.string.error_invalid_amount
             return
         }
 
@@ -55,13 +55,13 @@ class AddTransactionViewModel(private val repository: CCRepository) : BaseViewMo
      */
     fun updateTransaction(id: Long, accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
         if (transactionDescription.isEmpty()) {
-            transactionDescriptionError.postValue(R.string.error_invalid_description)
+            transactionDescriptionError.value = R.string.error_invalid_description
             return
         }
 
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
-            transactionAmountError.postValue(R.string.error_invalid_amount)
+            transactionAmountError.value = R.string.error_invalid_amount
             return
         }
 

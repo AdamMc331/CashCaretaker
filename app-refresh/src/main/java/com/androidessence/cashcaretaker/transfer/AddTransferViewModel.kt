@@ -28,7 +28,7 @@ class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel
                             if (state is DataViewState.Success<*>) {
                                 @Suppress("UNCHECKED_CAST")
                                 (state.result as? List<Account>)?.let { accountList ->
-                                    accounts.postValue(accountList)
+                                    accounts.value = accountList
                                 }
                             }
                         },
@@ -39,18 +39,18 @@ class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel
 
     fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {
         if (fromAccount == null) {
-            fromAccountError.postValue(R.string.from_account_invalid)
+            fromAccountError.value = R.string.from_account_invalid
             return
         }
 
         if (toAccount == null) {
-            toAccountError.postValue(R.string.to_account_invalid)
+            toAccountError.value = R.string.to_account_invalid
             return
         }
 
         val transferAmount = amount.toDoubleOrNull()
         if (transferAmount == null) {
-            amountError.postValue(R.string.amount_invalid)
+            amountError.value = R.string.amount_invalid
             return
         }
 

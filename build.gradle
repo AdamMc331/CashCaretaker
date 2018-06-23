@@ -2,7 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.2.41'
-    ext.build_tools_version = '3.2.0-alpha17'
+    ext.build_tools_version = '3.2.0-beta01'
     repositories {
         jcenter()
         maven { url 'https://maven.google.com' }
@@ -34,6 +34,8 @@ allprojects {
         androidMinSdkVersion = 19
         androidTargetSdkVersion = 'P'
         androidCompileSdkVersion = 'android-P'
+
+
         architectureComponentsVersion = "2.0.0-alpha1"
         materialVersion = "1.0.0-alpha3"
         espressoVersion = "3.1.0-alpha2"

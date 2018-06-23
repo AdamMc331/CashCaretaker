@@ -117,7 +117,7 @@ class TransactionViewModel(private val repository: CCRepository) : BaseViewModel
      * properties of this ViewModel have changed.
      */
     private fun postState(newState: DataViewState) {
-        state.postValue(newState)
+        state.value = newState
         notifyChange()
     }
     //endregion
