@@ -34,8 +34,6 @@ allprojects {
         androidMinSdkVersion = 19
         androidTargetSdkVersion = 'P'
         androidCompileSdkVersion = 'android-P'
-
-
         architectureComponentsVersion = "2.0.0-alpha1"
         materialVersion = "1.0.0-alpha3"
         espressoVersion = "3.1.0-alpha2"
