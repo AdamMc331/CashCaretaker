@@ -22,13 +22,13 @@ class AddAccountViewModel(private val repository: CCRepository) : BaseViewModel(
      */
     fun addAccount(name: String?, balanceString: String?) {
         if (name == null || name.isEmpty()) {
-            accountNameError.postValue(R.string.err_account_name_invalid)
+            accountNameError.value = R.string.err_account_name_invalid
             return
         }
 
         val balance = balanceString?.toDoubleOrNull()
         if (balance == null) {
-            accountBalanceError.postValue(R.string.err_account_balance_invalid)
+            accountBalanceError.value = R.string.err_account_balance_invalid
             return
         }
 
@@ -38,15 +38,14 @@ class AddAccountViewModel(private val repository: CCRepository) : BaseViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        accountInserted::onNext,
-                        { error ->
-                            if (error is SQLiteConstraintException) {
-                                accountNameError.postValue(R.string.err_account_name_exists)
-                            } else {
-                                Timber.e(error)
-                            }
-                        }
-                )
+                        accountInserted::onNext
+                ) { error ->
+                    if (error is SQLiteConstraintException) {
+                        accountNameError.value = R.string.err_account_name_exists
+                    } else {
+                        Timber.e(error)
+                    }
+                }
                 .addToComposite()
     }
 }
