@@ -14,7 +14,15 @@ class TransactionDataModel : BaseObservable() {
         }
 
     @Bindable
-    fun getDescription(): String = transaction?.description.orEmpty()
+    fun getDescription(): String {
+        val description = transaction?.description.orEmpty()
+
+        return if (description.isEmpty()) {
+            "N/A"
+        } else {
+            description
+        }
+    }
 
     @Bindable
     fun getDateString(): String = transaction?.date?.asUIString().orEmpty()

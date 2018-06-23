@@ -28,11 +28,6 @@ class AddTransactionViewModel(private val repository: CCRepository) : BaseViewMo
      * Checks that the information passed in is valid, and inserts an account if it is.
      */
     fun addTransaction(accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
-        if (transactionDescription.isEmpty()) {
-            transactionDescriptionError.value = R.string.error_invalid_description
-            return
-        }
-
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
             transactionAmountError.value = R.string.error_invalid_amount
@@ -54,11 +49,6 @@ class AddTransactionViewModel(private val repository: CCRepository) : BaseViewMo
      * Checks that the information passed in is valid, and updates the transaction if it is.
      */
     fun updateTransaction(id: Long, accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
-        if (transactionDescription.isEmpty()) {
-            transactionDescriptionError.value = R.string.error_invalid_description
-            return
-        }
-
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
             transactionAmountError.value = R.string.error_invalid_amount
