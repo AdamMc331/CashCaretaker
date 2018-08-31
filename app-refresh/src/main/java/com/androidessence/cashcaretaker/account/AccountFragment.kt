@@ -83,10 +83,7 @@ class AccountFragment : BaseFragment() {
     //region Menu
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_accounts, menu)
-
-        // Only allow transfers if we have greater than or equal to 2 numAccounts.
-        val numAccounts = adapter.items.size
-        menu?.findItem(R.id.action_transfer)?.isVisible = numAccounts >= 2
+        menu?.findItem(R.id.action_transfer)?.isVisible = viewModel.allowTransfers
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

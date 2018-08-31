@@ -13,8 +13,8 @@ class TransactionDataModel : BaseObservable() {
             notifyChange()
         }
 
-    @Bindable
-    fun getDescription(): String {
+    val description: String
+    @Bindable get() {
         val description = transaction?.description.orEmpty()
 
         return if (description.isEmpty()) {
@@ -24,13 +24,12 @@ class TransactionDataModel : BaseObservable() {
         }
     }
 
-    @Bindable
-    fun getDateString(): String = transaction?.date?.asUIString().orEmpty()
+    val dateString: String
+        @Bindable get() = transaction?.date?.asUIString().orEmpty()
 
-    @Bindable
-    fun getAmount(): String = transaction?.amount?.asCurrency().orEmpty()
+    val amount: String
+        @Bindable get() = transaction?.amount?.asCurrency().orEmpty()
 
-    @Bindable
-    fun getIndicatorColorResource(): Int =
-            if (transaction?.withdrawal == true) R.color.mds_red_500 else R.color.mds_green_500
+    val indicatorColorResource: Int
+        @Bindable get() = if (transaction?.withdrawal == true) R.color.mds_red_500 else R.color.mds_green_500
 }

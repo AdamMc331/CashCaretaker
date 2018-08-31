@@ -8,7 +8,7 @@
             type="com.androidessence.cashcaretaker.transaction.TransactionDataModel" />
     </data>
 
-    <androidx.constraintlayout.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -69,5 +69,5 @@
             app:layout_constraintWidth_percent="0.5"
             tools:text="January 1, 2018" />
 
-    </androidx.constraintlayout.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

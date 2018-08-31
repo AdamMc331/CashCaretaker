@@ -38,6 +38,8 @@ class AccountAdapter(items: List<Account> = ArrayList()) : RecyclerView.Adapter<
 
     inner class AccountViewHolder(private val binding: ListItemAccountBinding) : RecyclerView.ViewHolder(binding.root) {
         private val viewModel = AccountDataModel()
+        private val currentItem: Account
+            get() = items[adapterPosition]
 
         init {
             binding.viewModel = viewModel
@@ -48,11 +50,11 @@ class AccountAdapter(items: List<Account> = ArrayList()) : RecyclerView.Adapter<
          * Sets a click listener on each of the UI items in this view holder.
          */
         private fun setClickListeners() {
-            binding.withdrawalButton.setOnClickListener { withdrawalClickSubject.onNext(items[adapterPosition]) }
-            binding.depositButton.setOnClickListener { depositClickSubject.onNext(items[adapterPosition]) }
-            itemView.setOnClickListener { accountClickSubject.onNext(items[adapterPosition]) }
+            binding.withdrawalButton.setOnClickListener { withdrawalClickSubject.onNext(currentItem) }
+            binding.depositButton.setOnClickListener { depositClickSubject.onNext(currentItem) }
+            itemView.setOnClickListener { accountClickSubject.onNext(currentItem) }
             itemView.setOnLongClickListener {
-                accountLongClickSubject.onNext(items[adapterPosition])
+                accountLongClickSubject.onNext(currentItem)
                 true
             }
         }
