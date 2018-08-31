@@ -81,7 +81,7 @@ dependencies {
 
     // Testing
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-core:2.21.0"
     androidTestImplementation("androidx.arch.core:core-testing:$architectureComponentsVersion") {
         exclude module: 'support-compat'
         exclude module: 'support-annotations'

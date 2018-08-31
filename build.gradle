@@ -2,7 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.2.61'
-    ext.build_tools_version = '3.3.0-alpha03'
+    ext.build_tools_version = '3.3.0-alpha08'
     repositories {
         jcenter()
         maven { url 'https://maven.google.com' }
@@ -29,22 +29,22 @@ allprojects {
 
     ext {
         //Android
-        appCompatVersion = "1.0.0-alpha3"
-        androidBuildToolsVersion = "27.0.3"
+        appCompatVersion = "1.0.0-rc02"
+        androidBuildToolsVersion = "28.0.2"
         androidMinSdkVersion = 19
         androidTargetSdkVersion = 28
         androidCompileSdkVersion = 28
-        architectureComponentsVersion = "2.0.0-alpha1"
-        materialVersion = "1.0.0-alpha3"
+        architectureComponentsVersion = "2.0.0-rc01"
+        materialVersion = "1.0.0-rc01"
         espressoVersion = "3.1.0-alpha2"
 
         //Libraries
-        constraintLayoutVersion = "1.1.1"
+        constraintLayoutVersion = "1.1.3"
         materialDesignSpecsVersion = "2.0.1"
         mockitoVersion = "2.16.0"
-        timberVersion = "4.7.0"
-        rxJavaVersion = "2.1.12"
-        rxAndroidVersion = "2.0.2"
+        timberVersion = "4.7.1"
+        rxJavaVersion = "2.2.1"
+        rxAndroidVersion = "2.1.0"
     }
 }
 
