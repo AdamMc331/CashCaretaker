@@ -6,5 +6,4 @@ package com.androidessence.cashcaretaker.main
 interface MainController {
     fun navigateToAddAccount()
     fun showTransactions(accountName: String)
-    fun showAccounts()
 }

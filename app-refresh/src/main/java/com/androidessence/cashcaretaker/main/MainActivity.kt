@@ -1,16 +1,13 @@
 package com.androidessence.cashcaretaker.main
 
 import android.os.Bundle
-import androidx.annotation.IdRes
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
+import androidx.navigation.NavController
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.account.AccountFragment
-import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
-import com.androidessence.cashcaretaker.transaction.TransactionFragment
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import timber.log.Timber
@@ -18,7 +15,10 @@ import timber.log.Timber
 /**
  * Main entry point into the application.
  */
-class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBackStackChangedListener {
+class MainActivity : AppCompatActivity(), MainController {
+
+    private val navController: NavController
+        get() = findNavController(this, R.id.container)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,39 +28,15 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-        supportFragmentManager.addOnBackStackChangedListener(this)
-        initializeBackButton()
-
-        if (savedInstanceState == null) {
-            showAccounts()
-        }
     }
 
     override fun navigateToAddAccount() {
-        val dialog = AddAccountDialog()
-        dialog.show(supportFragmentManager, AddAccountDialog.FRAGMENT_NAME)
+        navController.navigate(R.id.action_accountFragment_to_addAccountDialog)
     }
 
     override fun showTransactions(accountName: String) {
         Timber.d("Showing Transactions")
-        showFragment(TransactionFragment.newInstance(accountName), TransactionFragment.FRAGMENT_NAME)
-    }
-
-    override fun showAccounts() {
-        showFragment(AccountFragment.newInstance(), AccountFragment.FRAGMENT_NAME)
-    }
-
-    /**
-     * Displays a fragment inside this Activity.
-     */
-    private fun showFragment(fragment: Fragment, tag: String, @IdRes container: Int = R.id.container) {
-        Timber.d("Adding fragment: $tag")
-        supportFragmentManager
-                .beginTransaction()
-                .replace(container, fragment, tag)
-                .addToBackStack(tag)
-                .commit()
+        navController.navigate(R.id.action_accountFragment_to_transactionFragment)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
@@ -71,30 +47,7 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        val backStackCount = supportFragmentManager.backStackEntryCount
-
-        if (backStackCount > 1) {
-            Timber.d("Popping BackStack")
-            supportFragmentManager.popBackStackImmediate()
-        } else {
-            finish()
-        }
-    }
-
-    override fun onBackStackChanged() {
-        initializeBackButton()
-
-        when (supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name) {
-            AccountFragment.FRAGMENT_NAME -> supportActionBar?.setTitle(R.string.app_name)
-        }
-    }
-
-    /**
-     * Checks the size of the back stack and sets the visibility of the back button if necessary.
-     */
-    private fun initializeBackButton() {
-        val shouldShowUp = supportFragmentManager.backStackEntryCount > 1
-        supportActionBar?.setDisplayHomeAsUpEnabled(shouldShowUp)
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
     }
 }
