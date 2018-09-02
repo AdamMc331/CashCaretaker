@@ -13,50 +13,10 @@
         <action
             android:id="@+id/action_accountFragment_to_transactionFragment"
             app:destination="@id/transactionFragment" />
-        <action
-            android:id="@+id/action_accountFragment_to_addAccountDialog"
-            app:destination="@id/addAccountDialog" />
-        <action
-            android:id="@+id/action_accountFragment_to_addTransactionDialog"
-            app:destination="@id/addTransactionDialog" />
-        <action
-            android:id="@+id/action_accountFragment_to_addTransferDialog"
-            app:destination="@id/addTransferDialog" />
     </fragment>
     <fragment
         android:id="@+id/transactionFragment"
         android:name="com.androidessence.cashcaretaker.transaction.TransactionFragment"
         android:label="TransactionFragment"
-        tools:layout="@layout/fragment_transaction">
-        <action
-            android:id="@+id/action_transactionFragment_to_addTransactionDialog"
-            app:destination="@id/addTransactionDialog" />
-    </fragment>
-    <fragment
-        android:id="@+id/addAccountDialog"
-        android:name="com.androidessence.cashcaretaker.addaccount.AddAccountDialog"
-        android:label="AddAccountDialog"
-        tools:layout="@layout/dialog_add_account" />
-    <fragment
-        android:id="@+id/addTransactionDialog"
-        android:name="com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog"
-        android:label="AddTransactionDialog"
-        tools:layout="@layout/dialog_add_transaction" >
-        <action
-            android:id="@+id/action_addTransactionDialog_to_datePickerFragment"
-            app:destination="@id/datePickerFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/addTransferDialog"
-        android:name="com.androidessence.cashcaretaker.transfer.AddTransferDialog"
-        android:label="AddTransferDialog"
-        tools:layout="@layout/dialog_add_transfer" >
-        <action
-            android:id="@+id/action_addTransferDialog_to_datePickerFragment"
-            app:destination="@id/datePickerFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/datePickerFragment"
-        android:name="com.androidessence.cashcaretaker.DatePickerFragment"
-        android:label="DatePickerFragment" />
+        tools:layout="@layout/fragment_transaction" />
 </navigation>
