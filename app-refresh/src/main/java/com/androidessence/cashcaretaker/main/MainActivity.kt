@@ -1,16 +1,15 @@
 package com.androidessence.cashcaretaker.main
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import android.view.MenuItem
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
-import timber.log.Timber
 
 /**
  * Main entry point into the application.
@@ -31,11 +30,11 @@ class MainActivity : AppCompatActivity(), MainController {
     }
 
     override fun navigateToAddAccount() {
-        navController.navigate(R.id.action_accountFragment_to_addAccountDialog)
+        val dialog = AddAccountDialog()
+        dialog.show(supportFragmentManager, AddAccountDialog.FRAGMENT_NAME)
     }
 
     override fun showTransactions(accountName: String) {
-        Timber.d("Showing Transactions")
         navController.navigate(R.id.action_accountFragment_to_transactionFragment)
     }
 
