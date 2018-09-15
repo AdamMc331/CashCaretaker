@@ -1,8 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.2.41'
-    ext.build_tools_version = '3.2.0-beta01'
+    ext.kotlin_version = '1.2.70'
+    ext.build_tools_version = '3.3.0-alpha08'
     repositories {
         jcenter()
         maven { url 'https://maven.google.com' }
@@ -30,10 +30,10 @@ allprojects {
     ext {
         //Android
         appCompatVersion = "1.0.0-alpha3"
-        androidBuildToolsVersion = "27.0.3"
+        androidBuildToolsVersion = "28.0.2"
         androidMinSdkVersion = 19
         androidTargetSdkVersion = 28
-        androidCompileSdkVersion = 'android-P'
+        androidCompileSdkVersion = 28
         architectureComponentsVersion = "2.0.0-alpha1"
         materialVersion = "1.0.0-alpha3"
         espressoVersion = "3.1.0-alpha2"
