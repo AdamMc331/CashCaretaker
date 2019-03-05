@@ -1,18 +1,16 @@
 package com.androidessence.cashcaretaker.main
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.annotation.IdRes
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import android.view.MenuItem
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.AccountFragment
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.transaction.TransactionFragment
-import com.crashlytics.android.Crashlytics
-import io.fabric.sdk.android.Fabric
 import timber.log.Timber
 
 /**
@@ -23,8 +21,6 @@ class MainActivity : AppCompatActivity(), MainController, FragmentManager.OnBack
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        Fabric.with(this, Crashlytics())
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
