@@ -1,7 +1,7 @@
 package com.androidessence.cashcaretaker.transaction
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.data.AccountDAO
 import com.androidessence.cashcaretaker.data.CCDatabase
@@ -64,7 +64,7 @@ class TransactionFragmentTest {
                 .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
     }
 
-    @Ignore
+    @Ignore("The assertion for an empty list always fails even though I tested manually. Probably a result of binding not being fast enough?")
     @Test
     fun deleteTransaction() {
         TransactionRobot()

@@ -1,7 +1,7 @@
 package com.androidessence.cashcaretaker.account
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.data.AccountDAO
 import com.androidessence.cashcaretaker.data.CCDatabase
@@ -142,7 +142,7 @@ class AccountFragmentTest {
         AccountRobot().assertAccountBalanceInList(TEST_BALANCE_AFTER_DEPOSIT_STRING, 0)
     }
 
-    @Ignore
+    @Ignore("The assertion for an empty list always fails even though I tested manually. Probably a result of binding not being fast enough?")
     @Test
     fun deleteAccount() {
         AccountRobot()
