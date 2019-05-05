@@ -2,14 +2,14 @@ package com.androidessence.cashcaretaker.addtransaction
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.androidessence.cashcaretaker.DatePickerFragment
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
@@ -19,8 +19,8 @@ import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.databinding.DialogAddTransactionBinding
 import com.androidessence.cashcaretaker.transaction.Transaction
 import com.androidessence.utility.asUIString
-import java.util.*
-
+import java.util.Calendar
+import java.util.Date
 
 /**
  * Dialog for adding a new transaction.
@@ -43,7 +43,6 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
             binding.transactionDate.setText(value.asUIString())
             field = value
         }
-
 
     private val viewModelFactory: ViewModelProvider.Factory by lazy {
         object : ViewModelProvider.Factory {
@@ -153,14 +152,13 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
      */
     private fun subscribeToViewModel() {
         viewModel.transactionDescriptionError.observe(this, androidx.lifecycle.Observer { errorRes ->
-            errorRes?.let{
+            errorRes?.let {
                 binding.transactionDescription.error = getString(errorRes)
             }
-
         })
 
         viewModel.transactionAmountError.observe(this, androidx.lifecycle.Observer { errorRes ->
-            errorRes?.let{
+            errorRes?.let {
                 binding.transactionAmount.error = getString(it)
             }
         })

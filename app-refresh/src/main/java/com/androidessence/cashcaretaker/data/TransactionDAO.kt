@@ -1,6 +1,10 @@
 package com.androidessence.cashcaretaker.data
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 import com.androidessence.cashcaretaker.transaction.Transaction
 import io.reactivex.Flowable
 

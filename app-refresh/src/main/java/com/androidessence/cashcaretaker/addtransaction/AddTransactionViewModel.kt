@@ -10,7 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
-import java.util.*
+import java.util.Date
 
 /**
  * ViewModel for adding a transaction. It exposes the insert/update events, as well as errors through

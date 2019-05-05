@@ -10,8 +10,8 @@ import com.androidessence.utility.asCurrency
  */
 @Entity(indices = [(Index("name"))])
 data class Account(
-        @PrimaryKey(autoGenerate = false) var name: String = "",
-        var balance: Double = 0.0
+    @PrimaryKey(autoGenerate = false) var name: String = "",
+    var balance: Double = 0.0
 ) {
     override fun toString(): String = "$name (${balance.asCurrency()})"
 }

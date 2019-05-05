@@ -9,7 +9,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.transaction.Transaction
 
-
 /**
  * Database class for the CC application.
  */
@@ -33,7 +32,7 @@ abstract class CCDatabase : RoomDatabase() {
             return INSTANCE!!
         }
 
-        //TODO: Find a way to reference this in the test class too without making it public.
+        // TODO: Find a way to reference this in the test class too without making it public.
         /**
          * This is a database callback that creates the triggers to update account balance based on
          * actions to the transaction table.

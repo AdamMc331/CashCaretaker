@@ -4,8 +4,8 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import java.util.*
-
+import java.util.Calendar
+import java.util.Date
 
 /**
  * Dialog fragment that allows user to pick a date.
@@ -23,7 +23,7 @@ class DatePickerFragment : DialogFragment() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        //TODO: Consider a better callback than the target fragment.
+        // TODO: Consider a better callback than the target fragment.
         return DatePickerDialog(activity, targetFragment as DatePickerDialog.OnDateSetListener, year, month, day)
     }
 

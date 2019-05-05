@@ -4,7 +4,7 @@ import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.transaction.Transaction
 import io.reactivex.Flowable
 import io.reactivex.Single
-import java.util.*
+import java.util.Date
 
 /**
  * Repository that connects to a database to insert/update items.
