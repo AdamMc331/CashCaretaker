@@ -2,7 +2,6 @@ package com.androidessence.cashcaretaker.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
-import androidx.sqlite.room.Room
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.androidessence.cashcaretaker.account.Account

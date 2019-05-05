@@ -9,6 +9,7 @@ import com.androidessence.cashcaretaker.main.MainActivity
 import com.androidessence.cashcaretaker.main.MainController
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -63,6 +64,7 @@ class TransactionFragmentTest {
                 .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
     }
 
+    @Ignore
     @Test
     fun deleteTransaction() {
         TransactionRobot()
