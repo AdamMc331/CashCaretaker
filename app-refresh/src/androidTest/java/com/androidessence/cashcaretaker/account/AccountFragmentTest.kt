@@ -1,13 +1,15 @@
 package com.androidessence.cashcaretaker.account
 
-import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.data.AccountDAO
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.main.MainActivity
 import com.androidessence.cashcaretaker.transaction.TransactionRobot
-import org.junit.*
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 
 /**

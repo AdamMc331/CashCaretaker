@@ -9,7 +9,7 @@ import io.reactivex.subjects.PublishSubject
 /**
  * Adapter for displaying Transactions in a RecyclerView.
  */
-class TransactionAdapter(items: List<Transaction> = ArrayList()): RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+class TransactionAdapter(items: List<Transaction> = ArrayList()) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
     val transactionLongClicked: PublishSubject<Transaction> = PublishSubject.create()
 
     var items: List<Transaction> = items
@@ -30,7 +30,7 @@ class TransactionAdapter(items: List<Transaction> = ArrayList()): RecyclerView.A
 
     override fun getItemCount(): Int = items.size
 
-    inner class TransactionViewHolder(private val binding: ListItemTransactionBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class TransactionViewHolder(private val binding: ListItemTransactionBinding) : RecyclerView.ViewHolder(binding.root) {
         private val viewModel = TransactionDataModel()
 
         init {

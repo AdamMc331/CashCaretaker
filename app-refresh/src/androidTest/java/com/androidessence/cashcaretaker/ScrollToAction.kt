@@ -1,21 +1,23 @@
 package com.androidessence.cashcaretaker
 
 import android.graphics.Rect
-import androidx.test.espresso.util.HumanReadables
-import androidx.test.espresso.PerformException
-import androidx.test.espresso.UiController
-import androidx.core.widget.NestedScrollView
+import android.view.View
 import android.widget.HorizontalScrollView
 import android.widget.ScrollView
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.core.widget.NestedScrollView
+import androidx.test.espresso.PerformException
+import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.matcher.ViewMatchers.*
-import android.view.View
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast
+import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
+import androidx.test.espresso.util.HumanReadables
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anyOf
 import timber.log.Timber
-
 
 /**
  * Scrolls to an item in a scroll view.
@@ -53,7 +55,6 @@ class ScrollToAction : ViewAction {
                     .withViewDescription(HumanReadables.describe(view))
                     .withCause(RuntimeException("Scrolling to view was attempted, but the view was not displayed."))
                     .build()
-
         }
     }
 }
