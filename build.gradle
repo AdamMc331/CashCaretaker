@@ -29,13 +29,13 @@ allprojects {
 
     ext {
         //Android
-        appCompatVersion = "1.0.0-rc02"
+        appCompatVersion = "1.0.2"
         androidBuildToolsVersion = "28.0.3"
         androidMinSdkVersion = 19
         androidTargetSdkVersion = 28
         androidCompileSdkVersion = 28
-        architectureComponentsVersion = "2.0.0-rc01"
-        materialVersion = "1.0.0-rc01"
+        architectureComponentsVersion = "2.0.0"
+        materialVersion = "1.0.0"
         espressoVersion = "3.1.0-alpha2"
 
         //Libraries
@@ -44,7 +44,7 @@ allprojects {
         mockitoVersion = "2.16.0"
         timberVersion = "4.7.1"
         rxJavaVersion = "2.2.1"
-        rxAndroidVersion = "2.1.0"
+        rxAndroidVersion = "2.1.1"
     }
 }
 
