@@ -7,7 +7,7 @@ import java.util.Date
 /**
  * Database converters that will convert longs to dates and vise versa when inserting/pulling from the database.
  */
-object Converters {
+class Converters {
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {
         return if (value == null) null else Date(value)
