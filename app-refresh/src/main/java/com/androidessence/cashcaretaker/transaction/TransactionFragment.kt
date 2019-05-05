@@ -118,13 +118,13 @@ class TransactionFragment : BaseFragment() {
 
         // https://stackoverflow.com/a/39813266/3131147
         binding.transactionsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0 || dy < 0 && binding.addTransactionButton.isShown) {
                     binding.addTransactionButton.hide()
                 }
             }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     binding.addTransactionButton.show()
                 }
