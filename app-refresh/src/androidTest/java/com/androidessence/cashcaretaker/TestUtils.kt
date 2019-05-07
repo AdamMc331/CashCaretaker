@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker
 
 import android.view.View
 import android.widget.Checkable
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction

@@ -1,10 +1,9 @@
 package com.androidessence.cashcaretaker
 
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAssertion
-import androidx.appcompat.widget.RecyclerView
-import android.view.View
-
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import org.hamcrest.Matchers.`is`
 
@@ -20,7 +19,7 @@ class RecyclerViewItemCountAssertion(private val expectedCount: Int) : ViewAsser
 
         val recyclerView = view as RecyclerView
         val adapter = recyclerView.adapter
-        assertThat(adapter.itemCount, `is`(expectedCount))
+        assertThat(adapter?.itemCount, `is`(expectedCount))
     }
 
     companion object {
