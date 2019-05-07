@@ -10,6 +10,7 @@ All information for Cash Caretaker is entered by the user, and stored locally on
 
 Version History
 ----
+- 2.1.0 - Removed Crashlytics. Didn't want to make a privacy policy for Google Play, and I didn't really need it anyways.
 - 2.0.0 - Complete redesign of the architecture, removed wear support (for now), and some UI overhaul. Added transfers.
 - 1.4.1 - Added Fabric SDK for better crash reporting and app statistics.
 - 1.4.0 - New feature to add transaction categories, and auto complete suggestion for transaction descriptions.
