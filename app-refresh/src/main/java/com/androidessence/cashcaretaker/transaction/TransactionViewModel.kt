@@ -20,20 +20,14 @@ class TransactionViewModel(private val repository: CCRepository) : BaseViewModel
     val editClicked: PublishSubject<Transaction> = PublishSubject.create()
     val state = MutableLiveData<DataViewState>()
 
-    @Bindable
-    fun getShowTransactions(): Boolean {
-        return state.value is DataViewState.Success<*>
-    }
+    val showTransactions: Boolean
+        @Bindable get() = state.value is DataViewState.Success<*>
 
-    @Bindable
-    fun getShowEmptyMessage(): Boolean {
-        return state.value is DataViewState.Empty
-    }
+    val showEmptyMessage: Boolean
+        @Bindable get() = state.value is DataViewState.Empty
 
-    @Bindable
-    fun getShowLoading(): Boolean {
-        return state.value is DataViewState.Loading
-    }
+    val showLoading: Boolean
+        @Bindable get() = state.value is DataViewState.Loading
 
     //region Action Mode
     private var selectedTransaction: Transaction? = null
@@ -82,7 +76,7 @@ class TransactionViewModel(private val repository: CCRepository) : BaseViewModel
      */
     fun fetchTransactionForAccount(accountName: String) {
         if (state.value !is DataViewState.Success<*>) {
-            postState(DataViewState.Loading())
+            postState(DataViewState.Loading)
 
             repository
                     .getTransactionsForAccount(accountName)

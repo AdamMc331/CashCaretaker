@@ -21,20 +21,21 @@ import timber.log.Timber
 class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
     val state = MutableLiveData<DataViewState>()
 
-    @Bindable
-    fun getShowAccounts(): Boolean {
-        return state.value is DataViewState.Success<*>
-    }
+    val allowTransfers: Boolean
+        get() {
+            @Suppress("UNCHECKED_CAST")
+            val count = (state.value as? DataViewState.Success<Account>)?.result?.count() ?: 0
+            return count >= 2
+        }
 
-    @Bindable
-    fun getShowEmptyMessage(): Boolean {
-        return state.value is DataViewState.Empty
-    }
+    val showAccounts: Boolean
+        @Bindable get() = state.value is DataViewState.Success<*>
 
-    @Bindable
-    fun getShowLoading(): Boolean {
-        return state.value == null || state.value is DataViewState.Loading
-    }
+    val showEmptyMessage: Boolean
+        @Bindable get() = state.value is DataViewState.Empty
+
+    val showLoading: Boolean
+        @Bindable get() = state.value == null || state.value is DataViewState.Loading
 
     //region Action Mode
     private var selectedAccount: Account? = null
@@ -77,7 +78,7 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
      */
     fun fetchAccounts() {
         if (state.value !is DataViewState.Success<*>) {
-            postState(DataViewState.Loading())
+            postState(DataViewState.Loading)
 
             repository
                     .getAllAccounts()

@@ -1,7 +1,12 @@
 package com.androidessence.cashcaretaker.account
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -21,7 +26,6 @@ import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.main.MainController
 import com.androidessence.cashcaretaker.transfer.AddTransferDialog
 import timber.log.Timber
-
 
 /**
  * Fragment for displaying a list of accounts to the user.
@@ -83,10 +87,7 @@ class AccountFragment : BaseFragment() {
     //region Menu
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_accounts, menu)
-
-        // Only allow transfers if we have greater than or equal to 2 numAccounts.
-        val numAccounts = adapter.items.size
-        menu?.findItem(R.id.action_transfer)?.isVisible = numAccounts >= 2
+        menu?.findItem(R.id.action_transfer)?.isVisible = viewModel.allowTransfers
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

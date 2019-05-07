@@ -4,7 +4,7 @@ import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.transaction.Transaction
 import io.reactivex.Flowable
 import io.reactivex.Single
-import java.util.*
+import java.util.Date
 
 /**
  * Repository that connects to a database to insert/update items.
@@ -18,7 +18,7 @@ open class CCRepository(private val database: CCDatabase) {
     fun getAllAccounts(): Flowable<DataViewState> = accountDAO.getAll()
             .map {
                 if (it.isEmpty()) {
-                    DataViewState.Empty()
+                    DataViewState.Empty
                 } else {
                     DataViewState.Success(it)
                 }
@@ -35,7 +35,7 @@ open class CCRepository(private val database: CCDatabase) {
     fun getTransactionsForAccount(accountName: String): Flowable<DataViewState> = transactionDAO.getAllForAccount(accountName)
             .map {
                 if (it.isEmpty()) {
-                    DataViewState.Empty()
+                    DataViewState.Empty
                 } else {
                     DataViewState.Success(it)
                 }

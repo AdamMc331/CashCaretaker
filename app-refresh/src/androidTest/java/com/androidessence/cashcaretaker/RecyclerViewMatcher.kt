@@ -1,8 +1,8 @@
 package com.androidessence.cashcaretaker
 
 import android.content.res.Resources
-import androidx.appcompat.widget.RecyclerView
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -13,7 +13,7 @@ import org.hamcrest.TypeSafeMatcher
 class RecyclerViewMatcher(private val recyclerViewId: Int) {
 
     fun atPositionOnView(position: Int, targetViewId: Int): Matcher<View> {
-        return  object : TypeSafeMatcher<View>() {
+        return object : TypeSafeMatcher<View>() {
             var childView: View? = null
             var resources: Resources? = null
 
@@ -24,7 +24,7 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
                     val recyclerView = item?.rootView?.findViewById(recyclerViewId) as? RecyclerView
 
                     if (recyclerView != null && recyclerView.id == recyclerViewId) {
-                        childView = recyclerView.findViewHolderForAdapterPosition(position).itemView
+                        childView = recyclerView.findViewHolderForAdapterPosition(position)?.itemView
                     } else {
                         return false
                     }

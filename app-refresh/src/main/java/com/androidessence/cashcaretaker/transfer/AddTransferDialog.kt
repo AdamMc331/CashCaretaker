@@ -2,14 +2,14 @@ package com.androidessence.cashcaretaker.transfer
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.androidessence.cashcaretaker.DatePickerFragment
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
@@ -21,7 +21,8 @@ import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.databinding.DialogAddTransferBinding
 import com.androidessence.cashcaretaker.views.SpinnerInputEditText
 import com.androidessence.utility.asUIString
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 
 /**
  * Dialog that allows a user to transfer money from one account to another.
@@ -122,7 +123,6 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
     private fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {
         viewModel.addTransfer(fromAccount, toAccount, amount, date)
     }
-
 
     private fun showDatePicker() {
         val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
