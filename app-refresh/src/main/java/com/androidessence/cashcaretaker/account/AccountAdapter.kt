@@ -5,12 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.account.AccountAdapter.AccountViewHolder
 import com.androidessence.cashcaretaker.databinding.ListItemAccountBinding
-import io.reactivex.subjects.PublishSubject
 
 /**
  * Adapter for displaying Accounts in a RecyclerView.
- *
- * This exposes all click events from the [AccountViewHolder] through the various [PublishSubject]s.
  */
 class AccountAdapter(
         private val accountClicked: (Account) -> Unit,
