@@ -26,7 +26,9 @@ import timber.log.Timber
  */
 class TransactionFragment : BaseFragment() {
     //region Properties
-    private val adapter = TransactionAdapter()
+    private val adapter = TransactionAdapter(
+            this::onTransactionLongClicked
+    )
     private lateinit var viewModel: TransactionViewModel
     private lateinit var binding: FragmentTransactionBinding
 
@@ -50,7 +52,6 @@ class TransactionFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
 
         readArguments()
-        subscribeToAdapter()
         initializeViewModel()
     }
 
@@ -81,10 +82,6 @@ class TransactionFragment : BaseFragment() {
     private fun setupTitle() {
         val title = if (accountName.isEmpty()) getString(R.string.app_name) else getString(R.string.account_transactions, accountName)
         (activity as AppCompatActivity).supportActionBar?.title = title
-    }
-
-    private fun subscribeToAdapter() {
-        adapter.transactionLongClicked.subscribe(this::onTransactionLongClicked).addToComposite()
     }
 
     /**
