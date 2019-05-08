@@ -4,15 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.databinding.ListItemTransactionBinding
-import io.reactivex.subjects.PublishSubject
 
 /**
  * Adapter for displaying Transactions in a RecyclerView.
  */
-class TransactionAdapter(items: List<Transaction> = ArrayList()) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
-    val transactionLongClicked: PublishSubject<Transaction> = PublishSubject.create()
+class TransactionAdapter(
+    private val transactionLongClicked: (Transaction) -> Unit
+) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
-    var items: List<Transaction> = items
+    var items: List<Transaction> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -21,7 +21,10 @@ class TransactionAdapter(items: List<Transaction> = ArrayList()) : RecyclerView.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemTransactionBinding.inflate(inflater, parent, false)
-        return TransactionViewHolder(binding)
+        return TransactionViewHolder(
+                binding,
+                transactionLongClicked
+        )
     }
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
@@ -30,13 +33,16 @@ class TransactionAdapter(items: List<Transaction> = ArrayList()) : RecyclerView.
 
     override fun getItemCount(): Int = items.size
 
-    inner class TransactionViewHolder(private val binding: ListItemTransactionBinding) : RecyclerView.ViewHolder(binding.root) {
+    class TransactionViewHolder(
+        private val binding: ListItemTransactionBinding,
+        private val transactionLongClicked: (Transaction) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
         private val viewModel = TransactionDataModel()
 
         init {
             binding.viewModel = viewModel
             itemView.setOnLongClickListener {
-                transactionLongClicked.onNext(items[adapterPosition])
+                viewModel.transaction?.let(transactionLongClicked::invoke)
                 true
             }
         }

@@ -19,14 +19,15 @@ import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
-import timber.log.Timber
 
 /**
  * Fragment that displays a list of Transactions.
  */
 class TransactionFragment : BaseFragment() {
     //region Properties
-    private val adapter = TransactionAdapter()
+    private val adapter = TransactionAdapter(
+            this::onTransactionLongClicked
+    )
     private lateinit var viewModel: TransactionViewModel
     private lateinit var binding: FragmentTransactionBinding
 
@@ -37,7 +38,10 @@ class TransactionFragment : BaseFragment() {
                 val repository = CCRepository(database)
 
                 @Suppress("UNCHECKED_CAST")
-                return TransactionViewModel(repository) as T
+                return TransactionViewModel(
+                        repository = repository,
+                        editClicked = this@TransactionFragment::showEditTransaction
+                ) as T
             }
         }
     }
@@ -50,7 +54,6 @@ class TransactionFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
 
         readArguments()
-        subscribeToAdapter()
         initializeViewModel()
     }
 
@@ -83,10 +86,6 @@ class TransactionFragment : BaseFragment() {
         (activity as AppCompatActivity).supportActionBar?.title = title
     }
 
-    private fun subscribeToAdapter() {
-        adapter.transactionLongClicked.subscribe(this::onTransactionLongClicked).addToComposite()
-    }
-
     /**
      * Subscribes to any subjects the [viewModel] exposes such as the state (which is used to update the adapter),
      * and the click subject to edit a transaction.
@@ -104,8 +103,6 @@ class TransactionFragment : BaseFragment() {
                 }
             }
         })
-
-        viewModel.editClicked.subscribe(this::showEditTransaction, Timber::e).addToComposite()
     }
 
     private fun initializeRecyclerView() {

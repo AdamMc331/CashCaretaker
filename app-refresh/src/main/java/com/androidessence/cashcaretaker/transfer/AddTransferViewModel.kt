@@ -8,16 +8,17 @@ import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.util.Date
 
-class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel() {
+class AddTransferViewModel(
+    private val repository: CCRepository,
+    private val transferInserted: (Boolean) -> Unit
+) : BaseViewModel() {
     val accounts = MutableLiveData<List<Account>>()
     val fromAccountError = MutableLiveData<Int>()
     val toAccountError = MutableLiveData<Int>()
     val amountError = MutableLiveData<Int>()
-    val transferInserted: PublishSubject<Boolean> = PublishSubject.create()
 
     fun getAccounts() {
         repository.getAllAccounts()
@@ -58,7 +59,7 @@ class AddTransferViewModel(private val repository: CCRepository) : BaseViewModel
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { transferInserted.onNext(true) },
+                        { transferInserted.invoke(true) },
                         Timber::e
                 )
                 .addToComposite()

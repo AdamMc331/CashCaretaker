@@ -25,7 +25,6 @@ import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.main.MainController
 import com.androidessence.cashcaretaker.transfer.AddTransferDialog
-import timber.log.Timber
 
 /**
  * Fragment for displaying a list of accounts to the user.
@@ -38,7 +37,12 @@ import timber.log.Timber
  */
 class AccountFragment : BaseFragment() {
     //region Properties
-    private val adapter = AccountAdapter()
+    private val adapter = AccountAdapter(
+            accountClicked = this::onAccountSelected,
+            accountLongClicked = this::onAccountLongClicked,
+            withdrawalClicked = this::onWithdrawalButtonClicked,
+            depositClicked = this::onDepositButtonClicked
+    )
     private lateinit var viewModel: AccountViewModel
     private lateinit var binding: FragmentAccountBinding
 
@@ -58,10 +62,8 @@ class AccountFragment : BaseFragment() {
     //region Lifecycle Methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setHasOptionsMenu(true)
 
-        subscribeToAdapterClicks()
         initializeViewModel()
     }
 
@@ -143,18 +145,6 @@ class AccountFragment : BaseFragment() {
                 }
             }
         })
-    }
-
-    private fun subscribeToAdapterClicks() {
-        adapter.accountClickSubject
-                .subscribe {
-                    onAccountSelected(it)
-                    Timber.d("AccountClicked")
-                }
-                .addToComposite()
-        adapter.accountLongClickSubject.subscribe(this::onAccountLongClicked).addToComposite()
-        adapter.withdrawalClickSubject.subscribe(this::onWithdrawalButtonClicked).addToComposite()
-        adapter.depositClickSubject.subscribe(this::onDepositButtonClicked).addToComposite()
     }
     //endregion
 

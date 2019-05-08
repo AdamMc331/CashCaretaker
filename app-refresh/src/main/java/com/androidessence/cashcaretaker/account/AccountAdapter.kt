@@ -5,20 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.account.AccountAdapter.AccountViewHolder
 import com.androidessence.cashcaretaker.databinding.ListItemAccountBinding
-import io.reactivex.subjects.PublishSubject
 
 /**
  * Adapter for displaying Accounts in a RecyclerView.
- *
- * This exposes all click events from the [AccountViewHolder] through the various [PublishSubject]s.
  */
-class AccountAdapter(items: List<Account> = ArrayList()) : RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
-    val accountClickSubject: PublishSubject<Account> = PublishSubject.create()
-    val accountLongClickSubject: PublishSubject<Account> = PublishSubject.create()
-    val withdrawalClickSubject: PublishSubject<Account> = PublishSubject.create()
-    val depositClickSubject: PublishSubject<Account> = PublishSubject.create()
-
-    var items: List<Account> = items
+class AccountAdapter(
+    private val accountClicked: (Account) -> Unit,
+    private val accountLongClicked: (Account) -> Unit,
+    private val withdrawalClicked: (Account) -> Unit,
+    private val depositClicked: (Account) -> Unit
+) : RecyclerView.Adapter<AccountViewHolder>() {
+    var items: List<Account> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -27,7 +24,13 @@ class AccountAdapter(items: List<Account> = ArrayList()) : RecyclerView.Adapter<
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemAccountBinding.inflate(inflater, parent, false)
-        return AccountViewHolder(binding)
+        return AccountViewHolder(
+                binding,
+                accountClicked,
+                accountLongClicked,
+                withdrawalClicked,
+                depositClicked
+        )
     }
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
@@ -36,10 +39,14 @@ class AccountAdapter(items: List<Account> = ArrayList()) : RecyclerView.Adapter<
 
     override fun getItemCount(): Int = items.size
 
-    inner class AccountViewHolder(private val binding: ListItemAccountBinding) : RecyclerView.ViewHolder(binding.root) {
+    class AccountViewHolder(
+        private val binding: ListItemAccountBinding,
+        private val accountClicked: (Account) -> Unit,
+        private val accountLongClicked: (Account) -> Unit,
+        private val withdrawalClicked: (Account) -> Unit,
+        private val depositClicked: (Account) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
         private val viewModel = AccountDataModel()
-        private val currentItem: Account
-            get() = items[adapterPosition]
 
         init {
             binding.viewModel = viewModel
@@ -50,11 +57,19 @@ class AccountAdapter(items: List<Account> = ArrayList()) : RecyclerView.Adapter<
          * Sets a click listener on each of the UI items in this view holder.
          */
         private fun setClickListeners() {
-            binding.withdrawalButton.setOnClickListener { withdrawalClickSubject.onNext(currentItem) }
-            binding.depositButton.setOnClickListener { depositClickSubject.onNext(currentItem) }
-            itemView.setOnClickListener { accountClickSubject.onNext(currentItem) }
+            binding.withdrawalButton.setOnClickListener {
+                viewModel.account?.let(withdrawalClicked::invoke)
+            }
+
+            binding.depositButton.setOnClickListener {
+                viewModel.account?.let(depositClicked::invoke)
+            }
+
+            itemView.setOnClickListener {
+                viewModel.account?.let(accountClicked::invoke)
+            }
             itemView.setOnLongClickListener {
-                accountLongClickSubject.onNext(currentItem)
+                viewModel.account?.let(accountLongClicked::invoke)
                 true
             }
         }

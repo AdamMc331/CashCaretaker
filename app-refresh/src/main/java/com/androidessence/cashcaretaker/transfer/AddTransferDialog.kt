@@ -47,7 +47,12 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
                 val repository = CCRepository(database)
 
                 @Suppress("UNCHECKED_CAST")
-                return AddTransferViewModel(repository) as T
+                return AddTransferViewModel(
+                        repository = repository,
+                        transferInserted = {
+                            dismiss()
+                        }
+                ) as T
             }
         }
     }
@@ -116,8 +121,6 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
                 binding.transferAmount.error = getString(it)
             }
         })
-
-        viewModel.transferInserted.subscribe { dismiss() }.addToComposite()
     }
 
     private fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {
@@ -126,7 +129,7 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
 
     private fun showDatePicker() {
         val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
-        datePickerFragment.setTargetFragment(this, AddTransferDialog.REQUEST_DATE)
+        datePickerFragment.setTargetFragment(this, REQUEST_DATE)
         datePickerFragment.show(fragmentManager, AddTransactionDialog::class.java.simpleName)
     }
 
