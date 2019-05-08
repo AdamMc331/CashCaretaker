@@ -9,11 +9,12 @@ import com.androidessence.cashcaretaker.data.CCRepository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
-class AddAccountViewModel(private val repository: CCRepository) : BaseViewModel() {
-    val accountInserted: PublishSubject<Long> = PublishSubject.create()
+class AddAccountViewModel(
+    private val repository: CCRepository,
+    private val accountInserted: (Long) -> Unit
+) : BaseViewModel() {
     val accountNameError = MutableLiveData<Int>()
     val accountBalanceError = MutableLiveData<Int>()
 
@@ -38,7 +39,7 @@ class AddAccountViewModel(private val repository: CCRepository) : BaseViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        accountInserted::onNext
+                        accountInserted::invoke
                 ) { error ->
                     if (error is SQLiteConstraintException) {
                         accountNameError.value = R.string.err_account_name_exists

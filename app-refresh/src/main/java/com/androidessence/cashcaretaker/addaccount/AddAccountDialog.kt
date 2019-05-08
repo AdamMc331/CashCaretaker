@@ -30,7 +30,12 @@ class AddAccountDialog : BaseDialogFragment() {
                 val repository = CCRepository(database)
 
                 @Suppress("UNCHECKED_CAST")
-                return AddAccountViewModel(repository) as T
+                return AddAccountViewModel(
+                        repository = repository,
+                        accountInserted = {
+                            dismiss()
+                        }
+                ) as T
             }
         }
     }
@@ -87,8 +92,6 @@ class AddAccountDialog : BaseDialogFragment() {
                 binding.accountBalanceEditText.error = getString(errorRes)
             }
         })
-
-        viewModel.accountInserted.subscribe { dismiss() }.addToComposite()
     }
 
     companion object {

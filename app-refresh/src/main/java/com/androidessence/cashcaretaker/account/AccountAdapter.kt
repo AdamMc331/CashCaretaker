@@ -10,10 +10,10 @@ import com.androidessence.cashcaretaker.databinding.ListItemAccountBinding
  * Adapter for displaying Accounts in a RecyclerView.
  */
 class AccountAdapter(
-        private val accountClicked: (Account) -> Unit,
-        private val accountLongClicked: (Account) -> Unit,
-        private val withdrawalClicked: (Account) -> Unit,
-        private val depositClicked: (Account) -> Unit
+    private val accountClicked: (Account) -> Unit,
+    private val accountLongClicked: (Account) -> Unit,
+    private val withdrawalClicked: (Account) -> Unit,
+    private val depositClicked: (Account) -> Unit
 ) : RecyclerView.Adapter<AccountViewHolder>() {
     var items: List<Account> = emptyList()
         set(value) {
@@ -40,11 +40,11 @@ class AccountAdapter(
     override fun getItemCount(): Int = items.size
 
     class AccountViewHolder(
-            private val binding: ListItemAccountBinding,
-            private val accountClicked: (Account) -> Unit,
-            private val accountLongClicked: (Account) -> Unit,
-            private val withdrawalClicked: (Account) -> Unit,
-            private val depositClicked: (Account) -> Unit
+        private val binding: ListItemAccountBinding,
+        private val accountClicked: (Account) -> Unit,
+        private val accountLongClicked: (Account) -> Unit,
+        private val withdrawalClicked: (Account) -> Unit,
+        private val depositClicked: (Account) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         private val viewModel = AccountDataModel()
 

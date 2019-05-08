@@ -9,7 +9,7 @@ import com.androidessence.cashcaretaker.databinding.ListItemTransactionBinding
  * Adapter for displaying Transactions in a RecyclerView.
  */
 class TransactionAdapter(
-        private val transactionLongClicked: (Transaction) -> Unit
+    private val transactionLongClicked: (Transaction) -> Unit
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     var items: List<Transaction> = emptyList()
@@ -34,8 +34,8 @@ class TransactionAdapter(
     override fun getItemCount(): Int = items.size
 
     class TransactionViewHolder(
-            private val binding: ListItemTransactionBinding,
-            private val transactionLongClicked: (Transaction) -> Unit
+        private val binding: ListItemTransactionBinding,
+        private val transactionLongClicked: (Transaction) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         private val viewModel = TransactionDataModel()
 
