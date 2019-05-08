@@ -8,19 +8,19 @@ import com.androidessence.cashcaretaker.transaction.Transaction
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.util.Date
 
 /**
- * ViewModel for adding a transaction. It exposes the insert/update events, as well as errors through
- * various [PublishSubject]s.
+ * ViewModel for adding a transaction.
  *
  * @property[repository] A repository that is used to insert/update accounts.
  */
-class AddTransactionViewModel(private val repository: CCRepository) : BaseViewModel() {
-    val transactionInserted: PublishSubject<Long> = PublishSubject.create()
-    val transactionUpdated: PublishSubject<Int> = PublishSubject.create()
+class AddTransactionViewModel(
+    private val repository: CCRepository,
+    private val transactionInserted: (Long) -> Unit,
+    private val transactionUpdated: (Int) -> Unit
+) : BaseViewModel() {
     val transactionDescriptionError = MutableLiveData<Int>()
     val transactionAmountError = MutableLiveData<Int>()
 
@@ -39,7 +39,7 @@ class AddTransactionViewModel(private val repository: CCRepository) : BaseViewMo
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        transactionInserted::onNext,
+                        transactionInserted::invoke,
                         Timber::e
                 )
                 .addToComposite()
@@ -60,7 +60,7 @@ class AddTransactionViewModel(private val repository: CCRepository) : BaseViewMo
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        transactionUpdated::onNext,
+                        transactionUpdated::invoke,
                         Timber::e
                 )
                 .addToComposite()

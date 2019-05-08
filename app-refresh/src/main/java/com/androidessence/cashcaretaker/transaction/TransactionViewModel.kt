@@ -13,11 +13,12 @@ import com.androidessence.cashcaretaker.data.DataViewState
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
-class TransactionViewModel(private val repository: CCRepository) : BaseViewModel() {
-    val editClicked: PublishSubject<Transaction> = PublishSubject.create()
+class TransactionViewModel(
+    private val repository: CCRepository,
+    private val editClicked: (Transaction) -> Unit
+) : BaseViewModel() {
     val state = MutableLiveData<DataViewState>()
 
     val showTransactions: Boolean
@@ -37,7 +38,7 @@ class TransactionViewModel(private val repository: CCRepository) : BaseViewModel
             when (item?.itemId) {
                 R.id.action_delete -> deleteSelectedTransaction()
                 R.id.action_edit -> {
-                    selectedTransaction?.let(editClicked::onNext)
+                    selectedTransaction?.let(editClicked::invoke)
                     clearActionMode()
                 }
             }

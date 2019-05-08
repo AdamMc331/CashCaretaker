@@ -51,7 +51,15 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
                 val repository = CCRepository(database)
 
                 @Suppress("UNCHECKED_CAST")
-                return AddTransactionViewModel(repository) as T
+                return AddTransactionViewModel(
+                        repository = repository,
+                        transactionInserted = {
+                            dismiss()
+                        },
+                        transactionUpdated = {
+                            dismiss()
+                        }
+                ) as T
             }
         }
     }
@@ -162,9 +170,6 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
                 binding.transactionAmount.error = getString(it)
             }
         })
-
-        viewModel.transactionInserted.subscribe { dismiss() }.addToComposite()
-        viewModel.transactionUpdated.subscribe { dismiss() }.addToComposite()
     }
 
     /**

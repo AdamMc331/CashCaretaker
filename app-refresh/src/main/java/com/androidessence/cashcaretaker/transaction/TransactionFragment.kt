@@ -19,7 +19,6 @@ import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
-import timber.log.Timber
 
 /**
  * Fragment that displays a list of Transactions.
@@ -39,7 +38,10 @@ class TransactionFragment : BaseFragment() {
                 val repository = CCRepository(database)
 
                 @Suppress("UNCHECKED_CAST")
-                return TransactionViewModel(repository) as T
+                return TransactionViewModel(
+                        repository = repository,
+                        editClicked = this@TransactionFragment::showEditTransaction
+                ) as T
             }
         }
     }
@@ -101,8 +103,6 @@ class TransactionFragment : BaseFragment() {
                 }
             }
         })
-
-        viewModel.editClicked.subscribe(this::showEditTransaction, Timber::e).addToComposite()
     }
 
     private fun initializeRecyclerView() {
