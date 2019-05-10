@@ -16,11 +16,11 @@ interface AccountDAO {
     fun getAll(): Flowable<List<Account>>
 
     @Insert
-    fun insert(account: Account): Long
+    suspend fun insert(account: Account): Long
 
     @Delete
-    fun delete(account: Account): Int
+    suspend fun delete(account: Account): Int
 
     @Query("DELETE FROM account")
-    fun deleteAll(): Int
+    suspend fun deleteAll(): Int
 }

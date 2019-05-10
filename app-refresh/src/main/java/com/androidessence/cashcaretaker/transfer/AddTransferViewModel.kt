@@ -8,6 +8,9 @@ import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Date
 
@@ -55,13 +58,9 @@ class AddTransferViewModel(
             return
         }
 
-        repository.transfer(fromAccount, toAccount, transferAmount, date)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { transferInserted.invoke(true) },
-                        Timber::e
-                )
-                .addToComposite()
+        job = CoroutineScope(Dispatchers.IO).launch {
+            repository.transfer(fromAccount, toAccount, transferAmount, date)
+            transferInserted.invoke(true)
+        }
     }
 }

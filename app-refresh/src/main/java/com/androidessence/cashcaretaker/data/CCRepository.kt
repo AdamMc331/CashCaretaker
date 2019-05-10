@@ -3,7 +3,6 @@ package com.androidessence.cashcaretaker.data
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.transaction.Transaction
 import io.reactivex.Flowable
-import io.reactivex.Single
 import java.util.Date
 
 /**
@@ -24,13 +23,13 @@ open class CCRepository(private val database: CCDatabase) {
                 }
             }
 
-    fun deleteAccount(account: Account): Int = accountDAO.delete(account)
+    suspend fun deleteAccount(account: Account): Int = accountDAO.delete(account)
 
-    fun insertAccount(account: Account): Long = accountDAO.insert(account)
+    suspend fun insertAccount(account: Account): Long = accountDAO.insert(account)
 
-    fun insertTransaction(transaction: Transaction): Long = transactionDAO.insert(transaction)
+    suspend fun insertTransaction(transaction: Transaction): Long = transactionDAO.insert(transaction)
 
-    fun updateTransaction(transaction: Transaction): Int = transactionDAO.update(transaction)
+    suspend fun updateTransaction(transaction: Transaction): Int = transactionDAO.update(transaction)
 
     fun getTransactionsForAccount(accountName: String): Flowable<DataViewState> = transactionDAO.getAllForAccount(accountName)
             .map {
@@ -41,13 +40,13 @@ open class CCRepository(private val database: CCDatabase) {
                 }
             }
 
-    fun deleteTransaction(transaction: Transaction): Int = transactionDAO.delete(transaction)
+    suspend fun deleteTransaction(transaction: Transaction): Int = transactionDAO.delete(transaction)
 
     /**
      * Transfers money from one account to another.
      * TODO: Use string template, don't hardcode english here.
      */
-    fun transfer(fromAccount: Account, toAccount: Account, amount: Double, date: Date): Single<Unit> {
+    suspend fun transfer(fromAccount: Account, toAccount: Account, amount: Double, date: Date) {
         val withdrawal = Transaction(
                 fromAccount.name,
                 "Transfer to ${toAccount.name}.",
@@ -64,16 +63,13 @@ open class CCRepository(private val database: CCDatabase) {
                 date
         )
 
-        // We can unwrap balance here because we return if it's null.
-        return Single.fromCallable {
-            database.beginTransaction()
-            try {
-                database.transactionDao().insert(withdrawal)
-                database.transactionDao().insert(deposit)
-                database.setTransactionSuccessful()
-            } finally {
-                database.endTransaction()
-            }
+        database.beginTransaction()
+        try {
+            database.transactionDao().insert(withdrawal)
+            database.transactionDao().insert(deposit)
+            database.setTransactionSuccessful()
+        } finally {
+            database.endTransaction()
         }
     }
 }

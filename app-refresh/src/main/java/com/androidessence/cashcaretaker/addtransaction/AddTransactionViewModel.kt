@@ -5,10 +5,9 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.transaction.Transaction
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Date
 
 /**
@@ -35,14 +34,11 @@ class AddTransactionViewModel(
         }
 
         val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date)
-        Single.fromCallable { repository.insertTransaction(transaction) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        transactionInserted::invoke,
-                        Timber::e
-                )
-                .addToComposite()
+
+        job = CoroutineScope(Dispatchers.IO).launch {
+            val transactionId = repository.insertTransaction(transaction)
+            transactionInserted.invoke(transactionId)
+        }
     }
 
     /**
@@ -56,13 +52,10 @@ class AddTransactionViewModel(
         }
 
         val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date, id)
-        Single.fromCallable { repository.updateTransaction(transaction) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        transactionUpdated::invoke,
-                        Timber::e
-                )
-                .addToComposite()
+
+        job = CoroutineScope(Dispatchers.IO).launch {
+            val updatedCount = repository.updateTransaction(transaction)
+            transactionUpdated.invoke(updatedCount)
+        }
     }
 }

@@ -10,9 +10,11 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
@@ -96,17 +98,13 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
      * Deletes whatever account was selected by the user in the [actionMode].
      */
     private fun deleteSelectedAccount() {
+
         selectedAccount?.let { account ->
-            Single.fromCallable { repository.deleteAccount(account) }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {
-                                clearActionMode()
-                                notifyChange()
-                            },
-                            Timber::e
-                    )
+            job = CoroutineScope(Dispatchers.IO).launch {
+                repository.deleteAccount(account)
+                clearActionMode()
+                notifyChange()
+            }
         }
     }
 
