@@ -6,10 +6,10 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddAccountViewModel(
     private val repository: CCRepository,
@@ -35,18 +35,17 @@ class AddAccountViewModel(
 
         val account = Account(name, balance)
 
-        Single.fromCallable { repository.insertAccount(account) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        accountInserted::invoke
-                ) { error ->
-                    if (error is SQLiteConstraintException) {
-                        accountNameError.value = R.string.err_account_name_exists
-                    } else {
-                        Timber.e(error)
-                    }
+        job = CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val accountId = repository.insertAccount(account)
+                withContext(Dispatchers.Main) {
+                    accountInserted.invoke(accountId)
                 }
-                .addToComposite()
+            } catch (constraintException: SQLiteConstraintException) {
+                withContext(Dispatchers.Main) {
+                    accountNameError.value = R.string.err_account_name_exists
+                }
+            }
+        }
     }
 }

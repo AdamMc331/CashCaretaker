@@ -7,6 +7,7 @@ import com.androidessence.cashcaretaker.data.AccountDAO
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.main.MainActivity
 import com.androidessence.cashcaretaker.transaction.TransactionRobot
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
@@ -29,12 +30,16 @@ class AccountFragmentTest {
 
     @Before
     fun setUp() {
-        accountDao.deleteAll()
+        runBlocking {
+            accountDao.deleteAll()
+        }
     }
 
     @After
     fun tearDown() {
-        accountDao.deleteAll()
+        runBlocking {
+            accountDao.deleteAll()
+        }
     }
 
     @Test

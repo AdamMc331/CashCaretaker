@@ -32,6 +32,9 @@ allprojects {
         androidMinSdkVersion = 19
         androidTargetSdkVersion = 28
         androidCompileSdkVersion = 28
+        roomVersion = '2.1.0-beta01'
+        lifecycleVersion = '2.0.0'
+        coroutinesVersion = '1.2.0'
         architectureComponentsVersion = "2.0.0"
         materialVersion = "1.0.0"
         espressoVersion = "3.1.0-alpha2"
