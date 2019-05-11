@@ -47,6 +47,9 @@ android {
     dataBinding {
         enabled = true
     }
+    packagingOptions {
+        exclude 'META-INF/atomicfu.kotlin_module'
+    }
 }
 
 dependencies {
@@ -57,7 +60,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
     implementation "com.google.android.material:material:$materialVersion"
-    implementation "androidx.lifecycle:lifecycle-extensions:$architectureComponentsVersion"
     annotationProcessor "androidx.databinding:databinding-compiler:$build_tools_version"
     kapt "androidx.databinding:databinding-compiler:$build_tools_version"
 
@@ -66,10 +68,26 @@ dependencies {
     implementation "com.androidessence:materialdesignspecs:$materialDesignSpecsVersion"
     implementation project(":utility")
 
-    // Room/RxJava
-    implementation "androidx.room:room-runtime:$architectureComponentsVersion"
-    implementation "androidx.room:room-rxjava2:$architectureComponentsVersion"
-    implementation "androidx.room:room-testing:$architectureComponentsVersion"
+    // Room components
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-rxjava2:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$roomVersion"
+
+    // Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
+    androidTestImplementation "androidx.arch.core:core-testing:$lifecycleVersion"
+
+    // ViewModel Kotlin support
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
+    // RxJava
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     annotationProcessor "androidx.room:room-compiler:$architectureComponentsVersion"
@@ -82,11 +100,6 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation("androidx.arch.core:core-testing:$architectureComponentsVersion") {
-        exclude module: 'support-compat'
-        exclude module: 'support-annotations'
-        exclude module: 'support-core-utils'
-    }
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

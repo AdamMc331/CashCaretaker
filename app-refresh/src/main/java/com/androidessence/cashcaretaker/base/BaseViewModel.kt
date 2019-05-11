@@ -6,6 +6,7 @@ import androidx.databinding.PropertyChangeRegistry
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Job
 
 /**
  * Base ViewModel class that maintains a reference to a [CompositeDisposable].
@@ -15,10 +16,12 @@ import io.reactivex.disposables.Disposable
  */
 open class BaseViewModel : ViewModel(), Observable {
     private val compositeDisposable = CompositeDisposable()
+    protected var job: Job? = null
 
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
+        job?.cancel()
     }
 
     /**

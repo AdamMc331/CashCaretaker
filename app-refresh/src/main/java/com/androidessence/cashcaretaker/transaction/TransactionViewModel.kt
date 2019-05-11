@@ -10,9 +10,11 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class TransactionViewModel(
@@ -93,17 +95,11 @@ class TransactionViewModel(
 
     private fun deleteSelectedTransaction() {
         selectedTransaction?.let { transaction ->
-            Single.fromCallable { repository.deleteTransaction(transaction) }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {
-                                clearActionMode()
-                                notifyChange()
-                            },
-                            Timber::e
-                    )
-                    .addToComposite()
+            job = CoroutineScope(Dispatchers.IO).launch {
+                repository.deleteTransaction(transaction)
+                clearActionMode()
+                notifyChange()
+            }
         }
     }
 
