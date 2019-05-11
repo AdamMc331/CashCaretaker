@@ -23,6 +23,7 @@ class CCDatabaseTest {
     private lateinit var database: CCDatabase
     private lateinit var accountDao: AccountDAO
     private lateinit var transactionDao: TransactionDAO
+    private lateinit var databaseRobot: CCDatabaseRobot
 
     @JvmField
     @Rule
@@ -37,13 +38,14 @@ class CCDatabaseTest {
         database = Room.inMemoryDatabaseBuilder(context, CCDatabase::class.java).addCallback(CCDatabase.CALLBACK).allowMainThreadQueries().build()
         accountDao = database.accountDao()
         transactionDao = database.transactionDao()
+        databaseRobot = CCDatabaseRobot(database)
     }
 
     @After
     fun tearDown() {
         runBlocking {
-            accountDao.deleteAll()
-            database.close()
+            databaseRobot.deleteAllAccounts()
+            databaseRobot.closeDatabase()
         }
     }
 
@@ -51,10 +53,10 @@ class CCDatabaseTest {
     fun testWriteReadAccount() {
         runBlocking {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
-            accountDao.insert(testAccount)
+            databaseRobot.insertAccount(testAccount)
 
             val expected = listOf(testAccount)
-            assertEquals(expected, accountDao.getAll().test().values().first())
+            databaseRobot.assertAccountsEqual(expected)
         }
     }
 
@@ -63,13 +65,13 @@ class CCDatabaseTest {
         runBlocking {
             // Insert
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
-            accountDao.insert(testAccount)
+            databaseRobot.insertAccount(testAccount)
 
             // Delete
-            val removedCount = accountDao.delete(testAccount)
+            val removedCount = databaseRobot.deleteAccount(testAccount)
             assertEquals(1, removedCount)
 
-            assertEquals(emptyList<Account>(), accountDao.getAll().test().values().first())
+            databaseRobot.assertAccountsEqual(emptyList())
         }
     }
 
@@ -77,14 +79,14 @@ class CCDatabaseTest {
     fun testWriteReadTransactionWithGetForAccount() {
         runBlocking {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
-            accountDao.insert(testAccount)
+            databaseRobot.insertAccount(testAccount)
 
             val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT)
-            val transactionId = transactionDao.insert(testWithdrawal)
+            val transactionId = databaseRobot.insertTransaction(testWithdrawal)
             testWithdrawal.id = transactionId
 
             val expected = listOf(testWithdrawal)
-            assertEquals(expected, transactionDao.getAllForAccount(testAccount.name).test().values().first())
+            databaseRobot.assertTransactionsForAccount(expected, testAccount.name)
         }
     }
 
@@ -92,12 +94,12 @@ class CCDatabaseTest {
     fun testWithdrawalBalanceChangeTrigger() {
         runBlocking {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
-            accountDao.insert(testAccount)
+            databaseRobot.insertAccount(testAccount)
 
             val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT)
-            transactionDao.insert(testWithdrawal)
+            databaseRobot.insertTransaction(testWithdrawal)
 
-            val account = accountDao.getAll().test().values().first().first()
+            val account = databaseRobot.getFirstAccount()
             assertEquals(TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
         }
     }
@@ -106,12 +108,12 @@ class CCDatabaseTest {
     fun testDepositBalanceChangeTrigger() {
         runBlocking {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
-            accountDao.insert(testAccount)
+            databaseRobot.insertAccount(testAccount)
 
             val testDeposit = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
-            transactionDao.insert(testDeposit)
+            databaseRobot.insertTransaction(testDeposit)
 
-            val account = accountDao.getAll().test().values().first().first()
+            val account = databaseRobot.getFirstAccount()
             assertEquals(TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
         }
     }
@@ -120,19 +122,19 @@ class CCDatabaseTest {
     fun testDepositRemovalBalanceChangeTrigger() {
         runBlocking {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
-            accountDao.insert(testAccount)
+            databaseRobot.insertAccount(testAccount)
 
             val testDeposit = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
-            val transactionId = transactionDao.insert(testDeposit)
+            val transactionId = databaseRobot.insertTransaction(testDeposit)
 
-            val account = accountDao.getAll().test().values().first().first()
+            val account = databaseRobot.getFirstAccount()
             assertEquals(TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
 
             testDeposit.id = transactionId
-            val removalCount = transactionDao.delete(testDeposit)
+            val removalCount = databaseRobot.deleteTransaction(testDeposit)
             assertEquals(1, removalCount)
 
-            val account2 = accountDao.getAll().test().values().first().first()
+            val account2 = databaseRobot.getFirstAccount()
             assertEquals(TEST_ACCOUNT_BALANCE, account2.balance, 0.0)
         }
     }
@@ -141,20 +143,19 @@ class CCDatabaseTest {
     fun testWithdrawalRemovalBalanceChangeTrigger() {
         runBlocking {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
-
-            accountDao.insert(testAccount)
+            databaseRobot.insertAccount(testAccount)
 
             val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
-            val transactionId = transactionDao.insert(testWithdrawal)
+            val transactionId = databaseRobot.insertTransaction(testWithdrawal)
 
-            val account = accountDao.getAll().test().values().first().first()
+            val account = databaseRobot.getFirstAccount()
             assertEquals(TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
 
             testWithdrawal.id = transactionId
-            val removalCount = transactionDao.delete(testWithdrawal)
+            val removalCount = databaseRobot.deleteTransaction(testWithdrawal)
             assertEquals(1, removalCount)
 
-            val account2 = accountDao.getAll().test().values().first().first()
+            val account2 = databaseRobot.getFirstAccount()
             assertEquals(TEST_ACCOUNT_BALANCE, account2.balance, 0.0)
         }
     }
@@ -163,20 +164,20 @@ class CCDatabaseTest {
     fun testUpdateWithdrawal() {
         runBlocking {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
-            accountDao.insert(testAccount)
+            databaseRobot.insertAccount(testAccount)
 
             val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
-            val transactionId = transactionDao.insert(testWithdrawal)
+            val transactionId = databaseRobot.insertTransaction(testWithdrawal)
 
             // Update transaction to be 2 times the amount to test balance change
             testWithdrawal.id = transactionId
             testWithdrawal.amount *= 2
 
-            val updateCount = transactionDao.update(testWithdrawal)
+            val updateCount = databaseRobot.updateTransaction(testWithdrawal)
             assertEquals(1, updateCount)
 
             val expectedBalance = TEST_ACCOUNT_BALANCE - testWithdrawal.amount
-            val account = accountDao.getAll().test().values().first().first()
+            val account = databaseRobot.getFirstAccount()
             assertEquals(expectedBalance, account.balance, 0.0)
         }
     }
@@ -185,20 +186,20 @@ class CCDatabaseTest {
     fun testUpdateDeposit() {
         runBlocking {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
-            accountDao.insert(testAccount)
+            databaseRobot.insertAccount(testAccount)
 
             val testDeposit = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
-            val transactionId = transactionDao.insert(testDeposit)
+            val transactionId = databaseRobot.insertTransaction(testDeposit)
 
             // Update transaction to be 2 times the amount to test balance change
             testDeposit.id = transactionId
             testDeposit.amount *= 2
 
-            val updateCount = transactionDao.update(testDeposit)
+            val updateCount = databaseRobot.updateTransaction(testDeposit)
             assertEquals(1, updateCount)
 
             val expectedBalance = TEST_ACCOUNT_BALANCE + testDeposit.amount
-            val account = accountDao.getAll().test().values().first().first()
+            val account = databaseRobot.getFirstAccount()
             assertEquals(expectedBalance, account.balance, 0.0)
         }
     }
@@ -207,21 +208,21 @@ class CCDatabaseTest {
     fun testWithdrawalToDepositChange() {
         runBlocking {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
-            accountDao.insert(testAccount)
+            databaseRobot.insertAccount(testAccount)
 
             val testTransaction = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
-            val transactionId = transactionDao.insert(testTransaction)
+            val transactionId = databaseRobot.insertTransaction(testTransaction)
 
             // Update transaction to be 2 times the amount to test balance change
             testTransaction.id = transactionId
             testTransaction.amount *= 2
             testTransaction.withdrawal = false
 
-            val updateCount = transactionDao.update(testTransaction)
+            val updateCount = databaseRobot.updateTransaction(testTransaction)
             assertEquals(1, updateCount)
 
             val expectedBalance = TEST_ACCOUNT_BALANCE + testTransaction.amount
-            val account = accountDao.getAll().test().values().first().first()
+            val account = databaseRobot.getFirstAccount()
             assertEquals(expectedBalance, account.balance, 0.0)
         }
     }
@@ -230,21 +231,21 @@ class CCDatabaseTest {
     fun testDepositToWithdrawalChange() {
         runBlocking {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
-            accountDao.insert(testAccount)
+            databaseRobot.insertAccount(testAccount)
 
             val testTransaction = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
-            val transactionId = transactionDao.insert(testTransaction)
+            val transactionId = databaseRobot.insertTransaction(testTransaction)
 
             // Update transaction to be 2 times the amount to test balance change
             testTransaction.id = transactionId
             testTransaction.amount *= 2
             testTransaction.withdrawal = true
 
-            val updateCount = transactionDao.update(testTransaction)
+            val updateCount = databaseRobot.updateTransaction(testTransaction)
             assertEquals(1, updateCount)
 
             val expectedBalance = TEST_ACCOUNT_BALANCE - testTransaction.amount
-            val account = accountDao.getAll().test().values().first().first()
+            val account = databaseRobot.getFirstAccount()
             assertEquals(expectedBalance, account.balance, 0.0)
         }
     }
