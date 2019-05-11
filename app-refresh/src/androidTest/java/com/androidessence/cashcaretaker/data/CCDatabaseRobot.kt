@@ -5,7 +5,7 @@ import com.androidessence.cashcaretaker.transaction.Transaction
 import org.junit.Assert.assertEquals
 
 class CCDatabaseRobot(
-        private val database: CCDatabase
+    private val database: CCDatabase
 ) {
     suspend fun deleteAllAccounts(): Int {
         return database.accountDao().deleteAll()
