@@ -31,13 +31,13 @@ class TransactionFragmentViewModel(
     }
 
     val showTransactions: Boolean
-        @Bindable get() = state.value is DataViewState.Success<*>
+        get() = state.value is DataViewState.Success<*>
 
     val showEmptyMessage: Boolean
-        @Bindable get() = state.value is DataViewState.Empty
+        get() = state.value is DataViewState.Empty
 
     val showLoading: Boolean
-        @Bindable get() = state.value is DataViewState.Loading
+        get() = state.value is DataViewState.Loading
 
     //region Action Mode
     private var selectedTransaction: Transaction? = null
