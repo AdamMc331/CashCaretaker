@@ -1,17 +1,17 @@
 package com.androidessence.cashcaretaker.addaccount
 
 import android.app.Dialog
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.base.BaseDialogFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCDatabaseService
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
@@ -19,7 +19,7 @@ import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
 /**
  * Dialog to insert an account.
  */
-class AddAccountDialog : BaseDialogFragment() {
+class AddAccountDialog : DialogFragment() {
     private lateinit var binding: DialogAddAccountBinding
     private lateinit var viewModel: AddAccountViewModel
 
