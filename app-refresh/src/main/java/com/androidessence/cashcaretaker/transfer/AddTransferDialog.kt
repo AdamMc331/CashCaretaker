@@ -92,7 +92,6 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
             )
         }
 
-        viewModel.getAccounts()
         subscribeToViewModel()
     }
 

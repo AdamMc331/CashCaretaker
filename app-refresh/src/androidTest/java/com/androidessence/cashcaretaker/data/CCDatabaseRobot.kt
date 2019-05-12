@@ -1,6 +1,7 @@
 package com.androidessence.cashcaretaker.data
 
 import com.androidessence.cashcaretaker.account.Account
+import com.androidessence.cashcaretaker.testObserver
 import com.androidessence.cashcaretaker.transaction.Transaction
 import org.junit.Assert.assertEquals
 
@@ -19,12 +20,12 @@ class CCDatabaseRobot(
         return database.accountDao().delete(account)
     }
 
-    fun getFirstAccount(): Account {
-        return database.accountDao().getAll().test().values().first().first()
+    fun getFirstAccount(): Account? {
+        return database.accountDao().getAll().testObserver().observedValue?.first()
     }
 
     fun assertAccountsEqual(expectedAccounts: List<Account>) {
-        val actualAccounts = database.accountDao().getAll().test().values().first()
+        val actualAccounts = database.accountDao().getAll().testObserver().observedValue
         assertEquals(expectedAccounts, actualAccounts)
     }
 

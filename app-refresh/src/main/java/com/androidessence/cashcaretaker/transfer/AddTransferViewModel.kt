@@ -1,45 +1,30 @@
 package com.androidessence.cashcaretaker.transfer
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.data.DataViewState
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.util.Date
 
 class AddTransferViewModel(
     private val repository: CCRepository,
     private val transferInserted: (Boolean) -> Unit
 ) : BaseViewModel() {
-    val accounts = MutableLiveData<List<Account>>()
+    val accounts: LiveData<List<Account>> = Transformations.map(repository.getAllAccounts()) {
+        when {
+            it.isNotEmpty() -> it
+            else -> null
+        }
+    }
     val fromAccountError = MutableLiveData<Int>()
     val toAccountError = MutableLiveData<Int>()
     val amountError = MutableLiveData<Int>()
-
-    fun getAccounts() {
-        repository.getAllAccounts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { state ->
-                            if (state is DataViewState.Success<*>) {
-                                @Suppress("UNCHECKED_CAST")
-                                (state.result as? List<Account>)?.let { accountList ->
-                                    accounts.value = accountList
-                                }
-                            }
-                        },
-                        Timber::e
-                )
-                .addToComposite()
-    }
 
     fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {
         if (fromAccount == null) {

@@ -80,8 +80,6 @@ class AccountFragment : BaseFragment() {
 
         binding.addAccountButton.setOnClickListener { showAddAccountView() }
 
-        viewModel.fetchAccounts()
-
         fragmentManager?.addOnBackStackChangedListener { viewModel.clearActionMode() }
     }
     //endregion
