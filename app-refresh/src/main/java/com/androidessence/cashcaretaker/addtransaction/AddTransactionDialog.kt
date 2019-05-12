@@ -15,7 +15,7 @@ import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseDialogFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
-import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.CCDatabaseService
 import com.androidessence.cashcaretaker.databinding.DialogAddTransactionBinding
 import com.androidessence.cashcaretaker.transaction.Transaction
 import com.androidessence.utility.asUIString
@@ -48,7 +48,7 @@ class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetLis
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 val database = CCDatabase.getInMemoryDatabase(context!!)
-                val repository = CCRepository(database)
+                val repository = CCDatabaseService(database)
 
                 @Suppress("UNCHECKED_CAST")
                 return AddTransactionViewModel(

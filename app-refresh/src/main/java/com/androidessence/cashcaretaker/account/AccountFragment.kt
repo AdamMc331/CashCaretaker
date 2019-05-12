@@ -20,7 +20,7 @@ import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.base.BaseFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
-import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.CCDatabaseService
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.main.MainController
@@ -50,7 +50,7 @@ class AccountFragment : BaseFragment() {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 val database = CCDatabase.getInMemoryDatabase(context!!)
-                val repository = CCRepository(database)
+                val repository = CCDatabaseService(database)
 
                 @Suppress("UNCHECKED_CAST")
                 return AccountViewModel(repository) as T
