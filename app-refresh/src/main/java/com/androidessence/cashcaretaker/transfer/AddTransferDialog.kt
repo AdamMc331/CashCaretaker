@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -15,7 +16,6 @@ import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.base.BaseDialogFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCDatabaseService
 import com.androidessence.cashcaretaker.databinding.DialogAddTransferBinding
@@ -27,7 +27,7 @@ import java.util.Date
 /**
  * Dialog that allows a user to transfer money from one account to another.
  */
-class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListener {
+class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var viewModel: AddTransferViewModel
     private lateinit var binding: DialogAddTransferBinding
 
@@ -92,7 +92,6 @@ class AddTransferDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListen
             )
         }
 
-        viewModel.getAccounts()
         subscribeToViewModel()
     }
 

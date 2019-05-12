@@ -7,13 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.androidessence.cashcaretaker.DatePickerFragment
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.base.BaseDialogFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCDatabaseService
 import com.androidessence.cashcaretaker.databinding.DialogAddTransactionBinding
@@ -25,7 +25,7 @@ import java.util.Date
 /**
  * Dialog for adding a new transaction.
  */
-class AddTransactionDialog : BaseDialogFragment(), DatePickerDialog.OnDateSetListener {
+class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     //region Properties
     private lateinit var accountName: String
     private var isEditing: Boolean = false

@@ -1,8 +1,8 @@
 package com.androidessence.cashcaretaker.data
 
+import androidx.lifecycle.LiveData
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.transaction.Transaction
-import io.reactivex.Flowable
 import java.util.Date
 
 /**
@@ -14,14 +14,7 @@ open class CCDatabaseService(
     private val accountDAO: AccountDAO = database.accountDao()
     private val transactionDAO: TransactionDAO = database.transactionDao()
 
-    override fun getAllAccounts(): Flowable<DataViewState> = accountDAO.getAll()
-            .map {
-                if (it.isEmpty()) {
-                    DataViewState.Empty
-                } else {
-                    DataViewState.Success(it)
-                }
-            }
+    override fun getAllAccounts(): LiveData<List<Account>> = accountDAO.getAll()
 
     override suspend fun deleteAccount(account: Account): Int = accountDAO.delete(account)
 
@@ -31,14 +24,7 @@ open class CCDatabaseService(
 
     override suspend fun updateTransaction(transaction: Transaction): Int = transactionDAO.update(transaction)
 
-    override fun getTransactionsForAccount(accountName: String): Flowable<DataViewState> = transactionDAO.getAllForAccount(accountName)
-            .map {
-                if (it.isEmpty()) {
-                    DataViewState.Empty
-                } else {
-                    DataViewState.Success(it)
-                }
-            }
+    override fun getTransactionsForAccount(accountName: String): LiveData<List<Transaction>> = transactionDAO.getAllForAccount(accountName)
 
     override suspend fun deleteTransaction(transaction: Transaction): Int = transactionDAO.delete(transaction)
 
