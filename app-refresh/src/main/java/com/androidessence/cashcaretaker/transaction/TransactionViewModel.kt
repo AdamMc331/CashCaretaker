@@ -21,6 +21,8 @@ class TransactionViewModel(
     private val editClicked: (Transaction) -> Unit
 ) : BaseViewModel() {
     val state: LiveData<DataViewState> = Transformations.map(repository.getTransactionsForAccount(accountName)) {
+        notifyChange()
+
         when {
             it == null -> DataViewState.Loading
             it.isEmpty() -> DataViewState.Empty
