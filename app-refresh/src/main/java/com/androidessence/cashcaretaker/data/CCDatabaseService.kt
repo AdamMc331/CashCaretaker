@@ -9,7 +9,7 @@ import java.util.Date
  * Repository that connects to a database to insert/update items.
  */
 open class CCDatabaseService(
-    private val database: CCDatabase
+    database: CCDatabase
 ) : CCRepository {
     private val accountDAO: AccountDAO = database.accountDao()
     private val transactionDAO: TransactionDAO = database.transactionDao()
@@ -63,13 +63,6 @@ open class CCDatabaseService(
                 date
         )
 
-        database.beginTransaction()
-        try {
-            database.transactionDao().insert(withdrawal)
-            database.transactionDao().insert(deposit)
-            database.setTransactionSuccessful()
-        } finally {
-            database.endTransaction()
-        }
+        transactionDAO.transfer(withdrawal, deposit)
     }
 }
