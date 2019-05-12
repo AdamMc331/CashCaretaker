@@ -24,4 +24,10 @@ interface TransactionDAO {
 
     @Delete
     suspend fun delete(transaction: Transaction): Int
+
+    @androidx.room.Transaction
+    suspend fun transfer(withdrawal: Transaction, deposit: Transaction) {
+        insert(withdrawal)
+        insert(deposit)
+    }
 }
