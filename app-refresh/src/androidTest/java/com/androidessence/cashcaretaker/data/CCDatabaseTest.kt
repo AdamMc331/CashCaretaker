@@ -100,7 +100,7 @@ class CCDatabaseTest {
             databaseRobot.insertTransaction(testWithdrawal)
 
             val account = databaseRobot.getFirstAccount()
-            assertEquals(TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
+            assertEquals(TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT, account?.balance ?: 0.0, 0.0)
         }
     }
 
@@ -114,7 +114,7 @@ class CCDatabaseTest {
             databaseRobot.insertTransaction(testDeposit)
 
             val account = databaseRobot.getFirstAccount()
-            assertEquals(TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
+            assertEquals(TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT, account?.balance ?: 0.0, 0.0)
         }
     }
 
@@ -128,14 +128,14 @@ class CCDatabaseTest {
             val transactionId = databaseRobot.insertTransaction(testDeposit)
 
             val account = databaseRobot.getFirstAccount()
-            assertEquals(TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
+            assertEquals(TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT, account?.balance ?: 0.0, 0.0)
 
             testDeposit.id = transactionId
             val removalCount = databaseRobot.deleteTransaction(testDeposit)
             assertEquals(1, removalCount)
 
             val account2 = databaseRobot.getFirstAccount()
-            assertEquals(TEST_ACCOUNT_BALANCE, account2.balance, 0.0)
+            assertEquals(TEST_ACCOUNT_BALANCE, account2?.balance ?: 0.0, 0.0)
         }
     }
 
@@ -149,14 +149,14 @@ class CCDatabaseTest {
             val transactionId = databaseRobot.insertTransaction(testWithdrawal)
 
             val account = databaseRobot.getFirstAccount()
-            assertEquals(TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT, account.balance, 0.0)
+            assertEquals(TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT, account?.balance ?: 0.0, 0.0)
 
             testWithdrawal.id = transactionId
             val removalCount = databaseRobot.deleteTransaction(testWithdrawal)
             assertEquals(1, removalCount)
 
             val account2 = databaseRobot.getFirstAccount()
-            assertEquals(TEST_ACCOUNT_BALANCE, account2.balance, 0.0)
+            assertEquals(TEST_ACCOUNT_BALANCE, account2?.balance ?: 0.0, 0.0)
         }
     }
 
@@ -178,7 +178,7 @@ class CCDatabaseTest {
 
             val expectedBalance = TEST_ACCOUNT_BALANCE - testWithdrawal.amount
             val account = databaseRobot.getFirstAccount()
-            assertEquals(expectedBalance, account.balance, 0.0)
+            assertEquals(expectedBalance, account?.balance ?: 0.0, 0.0)
         }
     }
 
@@ -200,7 +200,7 @@ class CCDatabaseTest {
 
             val expectedBalance = TEST_ACCOUNT_BALANCE + testDeposit.amount
             val account = databaseRobot.getFirstAccount()
-            assertEquals(expectedBalance, account.balance, 0.0)
+            assertEquals(expectedBalance, account?.balance ?: 0.0, 0.0)
         }
     }
 
@@ -223,7 +223,7 @@ class CCDatabaseTest {
 
             val expectedBalance = TEST_ACCOUNT_BALANCE + testTransaction.amount
             val account = databaseRobot.getFirstAccount()
-            assertEquals(expectedBalance, account.balance, 0.0)
+            assertEquals(expectedBalance, account?.balance ?: 0.0, 0.0)
         }
     }
 
@@ -246,7 +246,7 @@ class CCDatabaseTest {
 
             val expectedBalance = TEST_ACCOUNT_BALANCE - testTransaction.amount
             val account = databaseRobot.getFirstAccount()
-            assertEquals(expectedBalance, account.balance, 0.0)
+            assertEquals(expectedBalance, account?.balance ?: 0.0, 0.0)
         }
     }
 
