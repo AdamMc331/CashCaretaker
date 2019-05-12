@@ -37,7 +37,7 @@ class TransactionAdapter(
         private val binding: ListItemTransactionBinding,
         private val transactionLongClicked: (Transaction) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
-        private val viewModel = TransactionDataModel()
+        private val viewModel = TransactionViewModel()
 
         init {
             binding.viewModel = viewModel
