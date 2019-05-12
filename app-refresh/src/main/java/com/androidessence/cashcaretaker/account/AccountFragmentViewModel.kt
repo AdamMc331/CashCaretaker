@@ -4,7 +4,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.androidessence.cashcaretaker.R
@@ -18,7 +17,9 @@ import kotlinx.coroutines.launch
 /**
  * LifeCycle aware class that fetches accounts from the database and exposes them through the [state].
  */
-class AccountFragmentViewModel(private val repository: CCRepository) : BaseViewModel() {
+class AccountFragmentViewModel(
+        private val repository: CCRepository
+) : BaseViewModel() {
     val state: LiveData<DataViewState> = Transformations.map(repository.getAllAccounts()) {
         notifyChange()
 
@@ -37,13 +38,13 @@ class AccountFragmentViewModel(private val repository: CCRepository) : BaseViewM
         }
 
     val showAccounts: Boolean
-        @Bindable get() = state.value is DataViewState.Success<*>
+        get() = state.value is DataViewState.Success<*>
 
     val showEmptyMessage: Boolean
-        @Bindable get() = state.value is DataViewState.Empty
+        get() = state.value is DataViewState.Empty
 
     val showLoading: Boolean
-        @Bindable get() = state.value == null || state.value is DataViewState.Loading
+        get() = state.value == null || state.value is DataViewState.Loading
 
     //region Action Mode
     private var selectedAccount: Account? = null
@@ -84,7 +85,6 @@ class AccountFragmentViewModel(private val repository: CCRepository) : BaseViewM
      * Deletes whatever account was selected by the user in the [actionMode].
      */
     private fun deleteSelectedAccount() {
-
         selectedAccount?.let { account ->
             job = CoroutineScope(Dispatchers.IO).launch {
                 repository.deleteAccount(account)
