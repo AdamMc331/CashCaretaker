@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -14,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.base.BaseFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCDatabaseService
 import com.androidessence.cashcaretaker.data.DataViewState
@@ -23,7 +23,7 @@ import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
 /**
  * Fragment that displays a list of Transactions.
  */
-class TransactionFragment : BaseFragment() {
+class TransactionFragment : Fragment() {
     //region Properties
     private val adapter = TransactionAdapter(
             this::onTransactionLongClicked

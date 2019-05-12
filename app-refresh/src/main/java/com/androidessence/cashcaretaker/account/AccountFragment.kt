@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -18,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.base.BaseFragment
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCDatabaseService
 import com.androidessence.cashcaretaker.data.DataViewState
@@ -35,7 +35,7 @@ import com.androidessence.cashcaretaker.transfer.AddTransferDialog
  * @property[viewModel] A LifeCycle aware component that is responsible for fetching accounts and
  * notifying the fragment. This component also handles the ActionMode behavior.
  */
-class AccountFragment : BaseFragment() {
+class AccountFragment : Fragment() {
     //region Properties
     private val adapter = AccountAdapter(
             accountClicked = this::onAccountSelected,
