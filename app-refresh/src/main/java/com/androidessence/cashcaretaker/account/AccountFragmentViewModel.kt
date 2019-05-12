@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
  * LifeCycle aware class that fetches accounts from the database and exposes them through the [state].
  */
 class AccountFragmentViewModel(
-        private val repository: CCRepository
+    private val repository: CCRepository
 ) : BaseViewModel() {
     val state: LiveData<DataViewState> = Transformations.map(repository.getAllAccounts()) {
         notifyChange()
