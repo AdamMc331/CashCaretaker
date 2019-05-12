@@ -28,6 +28,10 @@ class TransactionFragment : BaseFragment() {
     private val adapter = TransactionAdapter(
             this::onTransactionLongClicked
     )
+
+    private val accountName: String
+        get() = arguments?.getString(ARG_ACCOUNT).orEmpty()
+
     private lateinit var viewModel: TransactionViewModel
     private lateinit var binding: FragmentTransactionBinding
 
@@ -40,6 +44,7 @@ class TransactionFragment : BaseFragment() {
                 @Suppress("UNCHECKED_CAST")
                 return TransactionViewModel(
                         repository = repository,
+                        accountName = accountName,
                         editClicked = this@TransactionFragment::showEditTransaction
                 ) as T
             }
@@ -47,13 +52,10 @@ class TransactionFragment : BaseFragment() {
     }
     //endregion
 
-    private lateinit var accountName: String
-
     //region Lifecycle Methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        readArguments()
         initializeViewModel()
     }
 
@@ -71,16 +73,10 @@ class TransactionFragment : BaseFragment() {
         initializeRecyclerView()
 
         binding.addTransactionButton.setOnClickListener { showAddTransaction() }
-
-        viewModel.fetchTransactionForAccount(accountName)
     }
     //endregion
 
     //region Initializations
-    private fun readArguments() {
-        accountName = arguments?.getString(ARG_ACCOUNT).orEmpty()
-    }
-
     private fun setupTitle() {
         val title = if (accountName.isEmpty()) getString(R.string.app_name) else getString(R.string.account_transactions, accountName)
         (activity as AppCompatActivity).supportActionBar?.title = title

@@ -22,7 +22,7 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
     val state: LiveData<DataViewState> = Transformations.map(repository.getAllAccounts()) {
         notifyChange()
 
-        when  {
+        when {
             it == null -> DataViewState.Loading
             it.isEmpty() -> DataViewState.Empty
             else -> DataViewState.Success(it)
