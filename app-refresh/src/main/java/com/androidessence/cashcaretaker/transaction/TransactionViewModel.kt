@@ -5,23 +5,28 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.databinding.Bindable
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class TransactionViewModel(
     private val repository: CCRepository,
+    accountName: String,
     private val editClicked: (Transaction) -> Unit
 ) : BaseViewModel() {
-    val state = MutableLiveData<DataViewState>()
+    val state: LiveData<DataViewState> = Transformations.map(repository.getTransactionsForAccount(accountName)) {
+        when {
+            it == null -> DataViewState.Loading
+            it.isEmpty() -> DataViewState.Empty
+            else -> DataViewState.Success(it)
+        }
+    }
 
     val showTransactions: Boolean
         @Bindable get() = state.value is DataViewState.Success<*>
@@ -71,28 +76,6 @@ class TransactionViewModel(
     fun clearActionMode() = actionMode?.finish()
     //endregion
 
-    //region Data Interactions
-    /**
-     * Retrieves a number of transactions from the [repository] for a given [accountName].
-     *
-     * @param[accountName] The unique identifier for an account that we want to request transaction for.
-     */
-    fun fetchTransactionForAccount(accountName: String) {
-        if (state.value !is DataViewState.Success<*>) {
-            postState(DataViewState.Loading)
-
-            repository
-                    .getTransactionsForAccount(accountName)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            this::postState,
-                            Timber::e
-                    )
-                    .addToComposite()
-        }
-    }
-
     private fun deleteSelectedTransaction() {
         selectedTransaction?.let { transaction ->
             job = CoroutineScope(Dispatchers.IO).launch {
@@ -102,16 +85,6 @@ class TransactionViewModel(
             }
         }
     }
-
-    /**
-     * Consumes a [newState] and posts it to our [state] subject. Also notifies that the bindable
-     * properties of this ViewModel have changed.
-     */
-    private fun postState(newState: DataViewState) {
-        state.value = newState
-        notifyChange()
-    }
-    //endregion
 
     override fun onCleared() {
         super.onCleared()
