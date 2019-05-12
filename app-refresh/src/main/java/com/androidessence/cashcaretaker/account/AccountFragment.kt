@@ -43,7 +43,7 @@ class AccountFragment : Fragment() {
             withdrawalClicked = this::onWithdrawalButtonClicked,
             depositClicked = this::onDepositButtonClicked
     )
-    private lateinit var viewModel: AccountViewModel
+    private lateinit var viewModel: AccountFragmentViewModel
     private lateinit var binding: FragmentAccountBinding
 
     private val viewModelFactory: ViewModelProvider.Factory by lazy {
@@ -53,7 +53,7 @@ class AccountFragment : Fragment() {
                 val repository = CCDatabaseService(database)
 
                 @Suppress("UNCHECKED_CAST")
-                return AccountViewModel(repository) as T
+                return AccountFragmentViewModel(repository) as T
             }
         }
     }
@@ -130,7 +130,7 @@ class AccountFragment : Fragment() {
      * which we use to update the adpater when a list is pulled successfully.
      */
     private fun initializeViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountFragmentViewModel::class.java)
 
         viewModel.state.observe(this, Observer { state ->
             when (state) {

@@ -46,7 +46,7 @@ class AccountAdapter(
         private val withdrawalClicked: (Account) -> Unit,
         private val depositClicked: (Account) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
-        private val viewModel = AccountDataModel()
+        private val viewModel = AccountViewModel()
 
         init {
             binding.viewModel = viewModel

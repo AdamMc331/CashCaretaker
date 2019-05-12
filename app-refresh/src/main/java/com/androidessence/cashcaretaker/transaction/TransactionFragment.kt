@@ -32,7 +32,7 @@ class TransactionFragment : Fragment() {
     private val accountName: String
         get() = arguments?.getString(ARG_ACCOUNT).orEmpty()
 
-    private lateinit var viewModel: TransactionViewModel
+    private lateinit var viewModel: TransactionFragmentViewModel
     private lateinit var binding: FragmentTransactionBinding
 
     private val viewModelFactory: ViewModelProvider.Factory by lazy {
@@ -42,7 +42,7 @@ class TransactionFragment : Fragment() {
                 val repository = CCDatabaseService(database)
 
                 @Suppress("UNCHECKED_CAST")
-                return TransactionViewModel(
+                return TransactionFragmentViewModel(
                         repository = repository,
                         accountName = accountName,
                         editClicked = this@TransactionFragment::showEditTransaction
@@ -87,7 +87,7 @@ class TransactionFragment : Fragment() {
      * and the click subject to edit a transaction.
      */
     private fun initializeViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionFragmentViewModel::class.java)
 
         viewModel.state.observe(this, Observer { state ->
             when (state) {
