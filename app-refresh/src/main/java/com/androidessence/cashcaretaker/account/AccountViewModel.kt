@@ -5,23 +5,29 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.databinding.Bindable
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * LifeCycle aware class that fetches accounts from the database and exposes them through the [state].
  */
 class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
-    val state = MutableLiveData<DataViewState>()
+    val state: LiveData<DataViewState> = Transformations.map(repository.getAllAccounts()) {
+        notifyChange()
+
+        when  {
+            it == null -> DataViewState.Loading
+            it.isEmpty() -> DataViewState.Empty
+            else -> DataViewState.Success(it)
+        }
+    }
 
     val allowTransfers: Boolean
         get() {
@@ -74,26 +80,6 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
     fun clearActionMode() = actionMode?.finish()
     //endregion
 
-    //region Data Interactions
-    /**
-     * Fetches a list of accounts from the [repository] as long as we haven't already.
-     */
-    fun fetchAccounts() {
-        if (state.value !is DataViewState.Success<*>) {
-            postState(DataViewState.Loading)
-
-            repository
-                    .getAllAccounts()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            this::postState,
-                            Timber::e
-                    )
-                    .addToComposite()
-        }
-    }
-
     /**
      * Deletes whatever account was selected by the user in the [actionMode].
      */
@@ -107,16 +93,6 @@ class AccountViewModel(private val repository: CCRepository) : BaseViewModel() {
             }
         }
     }
-
-    /**
-     * Consumes a [newState] and posts it to our [state] subject. Also notifies that the bindable
-     * properties of this ViewModel have changed.
-     */
-    private fun postState(newState: DataViewState) {
-        state.value = newState
-        notifyChange()
-    }
-    //endregion
 
     override fun onCleared() {
         super.onCleared()
