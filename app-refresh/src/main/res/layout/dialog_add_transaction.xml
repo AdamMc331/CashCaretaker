@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/double_margin">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:text="@string/add_transaction"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Switch
             android:id="@+id/withdrawalSwitch"
@@ -15,33 +27,31 @@
             android:layout_marginTop="@dimen/single_margin"
             android:layout_marginBottom="@dimen/single_margin"
             app:layout_constraintBottom_toBottomOf="@id/withdrawal_label"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/title"
             app:layout_constraintStart_toEndOf="@+id/withdrawal_label"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/withdrawal_label" />
 
         <TextView
             android:id="@+id/withdrawal_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingStart="4dp"
             android:paddingTop="@dimen/single_margin"
             android:paddingEnd="4dp"
             android:paddingBottom="@dimen/single_margin"
             android:text="@string/withdrawal"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/mds_black"
+            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintBottom_toTopOf="@+id/transaction_description_layout"
             app:layout_constraintEnd_toStartOf="@id/withdrawalSwitch"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="@id/title"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            tools:ignore="RtlSymmetry" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/transaction_description_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/single_margin"
             android:layout_marginTop="@dimen/single_margin"
-            android:layout_marginEnd="@dimen/single_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/withdrawal_label">
@@ -58,9 +68,7 @@
             android:id="@+id/transaction_amount_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/single_margin"
             android:layout_marginTop="@dimen/single_margin"
-            android:layout_marginEnd="@dimen/single_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/transaction_description_layout">
@@ -77,9 +85,7 @@
             android:id="@+id/transaction_date_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/single_margin"
             android:layout_marginTop="@dimen/single_margin"
-            android:layout_marginEnd="@dimen/single_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/transaction_amount_layout">

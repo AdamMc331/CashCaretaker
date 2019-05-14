@@ -45,7 +45,7 @@
             android:padding="32dp"
             android:text="@string/no_transactions_message"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/mds_grey_700"
+            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.25"

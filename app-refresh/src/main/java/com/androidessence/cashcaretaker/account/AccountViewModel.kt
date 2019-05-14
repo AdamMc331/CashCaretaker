@@ -21,10 +21,10 @@ class AccountViewModel : BaseObservable() {
     val balanceString: String
         get() = account?.balance?.asCurrency().orEmpty()
 
-    val textColorResource: Int
+    val textColorResource: Int?
         get() {
             val balance = account?.balance ?: 0.0
             val isNegative = balance < 0.0
-            return if (isNegative) R.color.mds_red_500 else R.color.mds_black
+            return if (isNegative) R.color.mds_red_500 else null
         }
 }

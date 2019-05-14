@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
-import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCDatabaseService
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
@@ -65,7 +64,6 @@ class AddAccountDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setTitle(R.string.add_account)
 
         initializeViewModel()
 
