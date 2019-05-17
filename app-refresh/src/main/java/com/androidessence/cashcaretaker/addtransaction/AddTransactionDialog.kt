@@ -181,7 +181,7 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     private fun showDatePicker() {
         val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
         datePickerFragment.setTargetFragment(this, REQUEST_DATE)
-        datePickerFragment.show(fragmentManager, AddTransactionDialog::class.java.simpleName)
+        datePickerFragment.show(requireFragmentManager(), AddTransactionDialog::class.java.simpleName)
     }
 
     /**
