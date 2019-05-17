@@ -68,6 +68,7 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     //region Lifecycle Methods
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogAddTransactionBinding.inflate(inflater, container, false)
+        setupTitle()
         return binding.root
     }
 
@@ -99,17 +100,15 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
-        setupTitle(dialog)
-
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddTransactionViewModel::class.java)
         subscribeToViewModel()
         readArguments()
         return dialog
     }
 
-    private fun setupTitle(dialog: Dialog) {
+    private fun setupTitle() {
         val titleResource = if (isEditing) R.string.edit_transaction else R.string.add_transaction
-        dialog.setTitle(getString(titleResource))
+        binding.title?.setText(titleResource)
     }
 
     override fun onResume() {
