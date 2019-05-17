@@ -65,8 +65,6 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
-        dialog.setTitle(getString(R.string.add_transfer))
-
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddTransferViewModel::class.java)
 
         return dialog
@@ -93,6 +91,11 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
         }
 
         subscribeToViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     private fun subscribeToViewModel() {
@@ -129,7 +132,7 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private fun showDatePicker() {
         val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
         datePickerFragment.setTargetFragment(this, REQUEST_DATE)
-        datePickerFragment.show(fragmentManager, AddTransactionDialog::class.java.simpleName)
+        datePickerFragment.show(requireFragmentManager(), AddTransactionDialog::class.java.simpleName)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {

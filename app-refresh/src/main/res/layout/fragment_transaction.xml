@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            app:srcCompat="@drawable/ic_money_off_black_24dp"
+            app:srcCompat="@drawable/ic_money_off_24dp"
             app:visibilityCondition="@{viewModel.showEmptyMessage}" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -45,7 +45,7 @@
             android:padding="32dp"
             android:text="@string/no_transactions_message"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/mds_grey_700"
+            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.25"
