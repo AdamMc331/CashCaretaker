@@ -36,7 +36,7 @@ class AccountViewModelTest {
             this.account = account
         }
 
-        assertEquals(R.color.mds_black, viewModel.textColorResource)
+        assertEquals(null, viewModel.textColorResource)
     }
 
     @Test

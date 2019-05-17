@@ -127,12 +127,12 @@ class TransactionFragment : Fragment() {
     //region UI Events
     private fun showAddTransaction() {
         val dialog = AddTransactionDialog.newInstance(accountName, true)
-        dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
+        dialog.show(requireFragmentManager(), AddTransactionDialog.FRAGMENT_NAME)
     }
 
     private fun showEditTransaction(transaction: Transaction) {
         val dialog = AddTransactionDialog.newInstance(transaction)
-        dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
+        dialog.show(requireFragmentManager(), AddTransactionDialog.FRAGMENT_NAME)
     }
 
     private fun onTransactionLongClicked(transaction: Transaction) {

@@ -85,16 +85,16 @@ class AccountFragment : Fragment() {
     //endregion
 
     //region Menu
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_accounts, menu)
-        menu?.findItem(R.id.action_transfer)?.isVisible = viewModel.allowTransfers
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_accounts, menu)
+        menu.findItem(R.id.action_transfer)?.isVisible = viewModel.allowTransfers
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_transfer -> {
                 val dialog = AddTransferDialog()
-                dialog.show(fragmentManager, AddTransferDialog::class.java.simpleName)
+                dialog.show(requireFragmentManager(), AddTransferDialog::class.java.simpleName)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -149,12 +149,12 @@ class AccountFragment : Fragment() {
     //region UI Events
     private fun onWithdrawalButtonClicked(account: Account) {
         val dialog = AddTransactionDialog.newInstance(account.name, true)
-        dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
+        dialog.show(requireFragmentManager(), AddTransactionDialog.FRAGMENT_NAME)
     }
 
     private fun onDepositButtonClicked(account: Account) {
         val dialog = AddTransactionDialog.newInstance(account.name, false)
-        dialog.show(fragmentManager, AddTransactionDialog.FRAGMENT_NAME)
+        dialog.show(requireFragmentManager(), AddTransactionDialog.FRAGMENT_NAME)
     }
 
     private fun onAccountSelected(account: Account) {
@@ -167,7 +167,7 @@ class AccountFragment : Fragment() {
 
     private fun showAddAccountView() {
         val dialog = AddAccountDialog()
-        dialog.show(fragmentManager, AddAccountDialog.FRAGMENT_NAME)
+        dialog.show(requireFragmentManager(), AddAccountDialog.FRAGMENT_NAME)
     }
     //endregion
 
