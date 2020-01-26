@@ -26,7 +26,7 @@ import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
 class TransactionFragment : Fragment() {
     //region Properties
     private val adapter = TransactionAdapter(
-            this::onTransactionLongClicked
+        this::onTransactionLongClicked
     )
 
     private val accountName: String
@@ -43,9 +43,9 @@ class TransactionFragment : Fragment() {
 
                 @Suppress("UNCHECKED_CAST")
                 return TransactionFragmentViewModel(
-                        repository = repository,
-                        accountName = accountName,
-                        editClicked = this@TransactionFragment::showEditTransaction
+                    repository = repository,
+                    accountName = accountName,
+                    editClicked = this@TransactionFragment::showEditTransaction
                 ) as T
             }
         }
@@ -59,7 +59,11 @@ class TransactionFragment : Fragment() {
         initializeViewModel()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentTransactionBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         setHasOptionsMenu(false)
@@ -78,7 +82,10 @@ class TransactionFragment : Fragment() {
 
     //region Initializations
     private fun setupTitle() {
-        val title = if (accountName.isEmpty()) getString(R.string.app_name) else getString(R.string.account_transactions, accountName)
+        val title = if (accountName.isEmpty()) getString(R.string.app_name) else getString(
+            R.string.account_transactions,
+            accountName
+        )
         (activity as AppCompatActivity).supportActionBar?.title = title
     }
 
@@ -87,40 +94,50 @@ class TransactionFragment : Fragment() {
      * and the click subject to edit a transaction.
      */
     private fun initializeViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransactionFragmentViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(TransactionFragmentViewModel::class.java)
 
-        viewModel.state.observe(this, Observer { state ->
-            when (state) {
-                is DataViewState.Success<*> -> {
-                    @Suppress("UNCHECKED_CAST")
-                    (state.result as? List<Transaction>)?.let { transactions ->
-                        adapter.items = transactions
+        viewModel.state.observe(
+            this,
+            Observer { state ->
+                when (state) {
+                    is DataViewState.Success<*> -> {
+                        @Suppress("UNCHECKED_CAST")
+                        (state.result as? List<Transaction>)?.let { transactions ->
+                            adapter.items = transactions
+                        }
                     }
                 }
             }
-        })
+        )
     }
 
     private fun initializeRecyclerView() {
         binding.transactionsRecyclerView.adapter = adapter
         binding.transactionsRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.transactionsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        binding.transactionsRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         // https://stackoverflow.com/a/39813266/3131147
-        binding.transactionsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0 || dy < 0 && binding.addTransactionButton.isShown) {
-                    binding.addTransactionButton.hide()
+        binding.transactionsRecyclerView.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (dy > 0 || dy < 0 && binding.addTransactionButton.isShown) {
+                        binding.addTransactionButton.hide()
+                    }
                 }
-            }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    binding.addTransactionButton.show()
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        binding.addTransactionButton.show()
+                    }
+                    super.onScrollStateChanged(recyclerView, newState)
                 }
-                super.onScrollStateChanged(recyclerView, newState)
-            }
-        })
+            })
     }
     //endregion
 

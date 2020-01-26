@@ -25,12 +25,16 @@ import timber.log.Timber
 class ScrollToAction : ViewAction {
 
     override fun getConstraints(): Matcher<View> {
-        return allOf(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE),
-                isDescendantOfA(anyOf(
-                        isAssignableFrom(ScrollView::class.java),
-                        isAssignableFrom(HorizontalScrollView::class.java),
-                        isAssignableFrom(NestedScrollView::class.java))
-                ))
+        return allOf(
+            withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE),
+            isDescendantOfA(
+                anyOf(
+                    isAssignableFrom(ScrollView::class.java),
+                    isAssignableFrom(HorizontalScrollView::class.java),
+                    isAssignableFrom(NestedScrollView::class.java)
+                )
+            )
+        )
     }
 
     override fun getDescription(): String = "scroll to"
@@ -51,10 +55,14 @@ class ScrollToAction : ViewAction {
         uiController.loopMainThreadUntilIdle()
         if (!isDisplayingAtLeast(90).matches(view)) {
             throw PerformException.Builder()
-                    .withActionDescription(description)
-                    .withViewDescription(HumanReadables.describe(view))
-                    .withCause(RuntimeException("Scrolling to view was attempted, but the view was not displayed."))
-                    .build()
+                .withActionDescription(description)
+                .withViewDescription(HumanReadables.describe(view))
+                .withCause(
+                    RuntimeException(
+                        "Scrolling to view was attempted, but the view was not displayed."
+                    )
+                )
+                .build()
         }
     }
 }

@@ -22,8 +22,8 @@ class TransactionAdapter(
         val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemTransactionBinding.inflate(inflater, parent, false)
         return TransactionViewHolder(
-                binding,
-                transactionLongClicked
+            binding,
+            transactionLongClicked
         )
     }
 

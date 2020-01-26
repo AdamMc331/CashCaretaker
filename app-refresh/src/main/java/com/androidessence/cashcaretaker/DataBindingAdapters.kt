@@ -2,11 +2,11 @@ package com.androidessence.cashcaretaker
 
 import android.content.Context
 import android.util.TypedValue
-import androidx.databinding.BindingAdapter
-import androidx.annotation.ColorRes
-import androidx.core.content.ContextCompat
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
+import androidx.databinding.BindingAdapter
 
 /**
  * DataBinding adapter that applies a color resource to the text color of a TextView.

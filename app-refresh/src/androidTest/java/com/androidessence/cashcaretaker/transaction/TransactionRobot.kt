@@ -32,7 +32,11 @@ class TransactionRobot {
     }
 
     fun assertListCount(expectedCount: Int): TransactionRobot {
-        onView(RECYCLER_VIEW_MATCHER).check(RecyclerViewItemCountAssertion.withItemCount(expectedCount))
+        onView(RECYCLER_VIEW_MATCHER).check(
+            RecyclerViewItemCountAssertion.withItemCount(
+                expectedCount
+            )
+        )
         return this
     }
 
@@ -48,27 +52,53 @@ class TransactionRobot {
     }
 
     fun transactionDescription(description: String): TransactionRobot {
-        onView(TRANSACTION_DESCRIPTION_MATCHER).perform(clearText(), typeText(description), closeSoftKeyboard())
+        onView(TRANSACTION_DESCRIPTION_MATCHER).perform(
+            clearText(),
+            typeText(description),
+            closeSoftKeyboard()
+        )
         return this
     }
 
     fun transactionAmount(amount: String): TransactionRobot {
-        onView(TRANSACTION_AMOUNT_MATCHER).perform(clearText(), typeText(amount), closeSoftKeyboard())
+        onView(TRANSACTION_AMOUNT_MATCHER).perform(
+            clearText(),
+            typeText(amount),
+            closeSoftKeyboard()
+        )
         return this
     }
 
-    fun assertTransactionDescriptionAtPosition(description: String, position: Int): TransactionRobot {
-        matchTextInRecyclerView<TransactionAdapter.TransactionViewHolder>(description, RECYCLER_VIEW_ID, TRANSACTION_DESCRIPTION_ID, position)
+    fun assertTransactionDescriptionAtPosition(
+        description: String,
+        position: Int
+    ): TransactionRobot {
+        matchTextInRecyclerView<TransactionAdapter.TransactionViewHolder>(
+            description,
+            RECYCLER_VIEW_ID,
+            TRANSACTION_DESCRIPTION_ID,
+            position
+        )
         return this
     }
 
     fun assertTransactionAmountAtPosition(amount: String, position: Int): TransactionRobot {
-        matchTextInRecyclerView<TransactionAdapter.TransactionViewHolder>(amount, RECYCLER_VIEW_ID, TRANSACTION_AMOUNT_ID, position)
+        matchTextInRecyclerView<TransactionAdapter.TransactionViewHolder>(
+            amount,
+            RECYCLER_VIEW_ID,
+            TRANSACTION_AMOUNT_ID,
+            position
+        )
         return this
     }
 
     fun longClick(position: Int): TransactionRobot {
-        onView(RECYCLER_VIEW_MATCHER).perform(RecyclerViewActions.actionOnItemAtPosition<TransactionAdapter.TransactionViewHolder>(position, longClick()))
+        onView(RECYCLER_VIEW_MATCHER).perform(
+            RecyclerViewActions.actionOnItemAtPosition<TransactionAdapter.TransactionViewHolder>(
+                position,
+                longClick()
+            )
+        )
         return this
     }
 

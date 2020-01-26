@@ -55,27 +55,50 @@ class AccountRobot {
     }
 
     fun assertAccountNameInList(name: String, position: Int): AccountRobot {
-        matchTextInRecyclerView<AccountAdapter.AccountViewHolder>(name, RECYCLER_VIEW_ID, ACCOUNT_NAME_ID, position)
+        matchTextInRecyclerView<AccountAdapter.AccountViewHolder>(
+            name,
+            RECYCLER_VIEW_ID,
+            ACCOUNT_NAME_ID,
+            position
+        )
         return this
     }
 
     fun assertAccountBalanceInList(balance: String, position: Int): AccountRobot {
-        matchTextInRecyclerView<AccountAdapter.AccountViewHolder>(balance, RECYCLER_VIEW_ID, ACCOUNT_BALANCE_ID, position)
+        matchTextInRecyclerView<AccountAdapter.AccountViewHolder>(
+            balance,
+            RECYCLER_VIEW_ID,
+            ACCOUNT_BALANCE_ID,
+            position
+        )
         return this
     }
 
     fun clickWithdrawalInList(position: Int): AccountRobot {
-        clickItemInRecyclerView<AccountAdapter.AccountViewHolder>(RECYCLER_VIEW_ID, WITHDRAWAL_BUTTON_ID, position)
+        clickItemInRecyclerView<AccountAdapter.AccountViewHolder>(
+            RECYCLER_VIEW_ID,
+            WITHDRAWAL_BUTTON_ID,
+            position
+        )
         return this
     }
 
     fun clickDepositInList(position: Int): AccountRobot {
-        clickItemInRecyclerView<AccountAdapter.AccountViewHolder>(RECYCLER_VIEW_ID, DEPOSIT_BUTTON_ID, position)
+        clickItemInRecyclerView<AccountAdapter.AccountViewHolder>(
+            RECYCLER_VIEW_ID,
+            DEPOSIT_BUTTON_ID,
+            position
+        )
         return this
     }
 
     fun longClick(position: Int): AccountRobot {
-        onView(RECYCLER_VIEW_MATCHER).perform(RecyclerViewActions.actionOnItemAtPosition<AccountAdapter.AccountViewHolder>(position, longClick()))
+        onView(RECYCLER_VIEW_MATCHER).perform(
+            RecyclerViewActions.actionOnItemAtPosition<AccountAdapter.AccountViewHolder>(
+                position,
+                longClick()
+            )
+        )
         return this
     }
 

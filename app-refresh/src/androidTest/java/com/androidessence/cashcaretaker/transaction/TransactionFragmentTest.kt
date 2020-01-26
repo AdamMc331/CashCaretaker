@@ -45,45 +45,48 @@ class TransactionFragmentTest {
     @Test
     fun testInsertWithdrawal() {
         TransactionRobot()
-                .clickNew()
-                .assertWithdrawalSwitchState(true)
-                .transactionDescription(TEST_TRANSACTION_DESCRIPTION)
-                .transactionAmount(TEST_TRANSACTION_AMOUNT)
-                .submit()
-                .assertListCount(1)
-                .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
-                .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
+            .clickNew()
+            .assertWithdrawalSwitchState(true)
+            .transactionDescription(TEST_TRANSACTION_DESCRIPTION)
+            .transactionAmount(TEST_TRANSACTION_AMOUNT)
+            .submit()
+            .assertListCount(1)
+            .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
+            .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
     }
 
     @Test
     fun testInsertDeposit() {
         TransactionRobot()
-                .clickNew()
-                .setWithdrawalSwitch(false)
-                .assertWithdrawalSwitchState(false)
-                .transactionDescription(TEST_TRANSACTION_DESCRIPTION)
-                .transactionAmount(TEST_TRANSACTION_AMOUNT)
-                .submit()
-                .assertListCount(1)
-                .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
-                .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
+            .clickNew()
+            .setWithdrawalSwitch(false)
+            .assertWithdrawalSwitchState(false)
+            .transactionDescription(TEST_TRANSACTION_DESCRIPTION)
+            .transactionAmount(TEST_TRANSACTION_AMOUNT)
+            .submit()
+            .assertListCount(1)
+            .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
+            .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
     }
 
-    @Ignore("The assertion for an empty list always fails even though I tested manually. Probably a result of binding not being fast enough?")
+    @Ignore(
+        "The assertion for an empty list always fails even though I tested manually. " +
+            "Probably a result of binding not being fast enough?"
+    )
     @Test
     fun deleteTransaction() {
         TransactionRobot()
-                .clickNew()
-                .assertWithdrawalSwitchState(true)
-                .transactionDescription(TEST_TRANSACTION_DESCRIPTION)
-                .transactionAmount(TEST_TRANSACTION_AMOUNT)
-                .submit()
-                .assertListCount(1)
-                .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
-                .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
-                .longClick(0)
-                .delete()
-                .assertListCount(0)
+            .clickNew()
+            .assertWithdrawalSwitchState(true)
+            .transactionDescription(TEST_TRANSACTION_DESCRIPTION)
+            .transactionAmount(TEST_TRANSACTION_AMOUNT)
+            .submit()
+            .assertListCount(1)
+            .assertTransactionDescriptionAtPosition(TEST_TRANSACTION_DESCRIPTION, 0)
+            .assertTransactionAmountAtPosition(TEST_TRANSACTION_CURRENCY, 0)
+            .longClick(0)
+            .delete()
+            .assertListCount(0)
     }
 
     companion object {

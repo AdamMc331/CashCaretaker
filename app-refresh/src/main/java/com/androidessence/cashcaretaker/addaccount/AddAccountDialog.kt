@@ -30,16 +30,20 @@ class AddAccountDialog : DialogFragment() {
 
                 @Suppress("UNCHECKED_CAST")
                 return AddAccountViewModel(
-                        repository = repository,
-                        accountInserted = {
-                            dismiss()
-                        }
+                    repository = repository,
+                    accountInserted = {
+                        dismiss()
+                    }
                 ) as T
             }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = DialogAddAccountBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -73,23 +77,33 @@ class AddAccountDialog : DialogFragment() {
     override fun onResume() {
         super.onResume()
 
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
 
     private fun initializeViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddAccountViewModel::class.java)
+        viewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(AddAccountViewModel::class.java)
 
-        viewModel.accountNameError.observe(this, Observer { errorRes ->
-            errorRes?.let {
-                binding.accountNameEditText.error = getString(errorRes)
+        viewModel.accountNameError.observe(
+            this,
+            Observer { errorRes ->
+                errorRes?.let {
+                    binding.accountNameEditText.error = getString(errorRes)
+                }
             }
-        })
+        )
 
-        viewModel.accountBalanceError.observe(this, Observer { errorRes ->
-            errorRes?.let {
-                binding.accountBalanceEditText.error = getString(errorRes)
+        viewModel.accountBalanceError.observe(
+            this,
+            Observer { errorRes ->
+                errorRes?.let {
+                    binding.accountBalanceEditText.error = getString(errorRes)
+                }
             }
-        })
+        )
     }
 
     companion object {
