@@ -2,8 +2,8 @@ package com.androidessence.cashcaretaker.transaction
 
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.transaction.TransactionViewModel.Companion.NO_DESCRIPTION
-import com.androidessence.utility.asCurrency
-import com.androidessence.utility.asUIString
+import com.androidessence.cashcaretaker.util.asCurrency
+import com.androidessence.cashcaretaker.util.asUIString
 import java.util.Date
 import org.junit.Assert.assertEquals
 import org.junit.Test
