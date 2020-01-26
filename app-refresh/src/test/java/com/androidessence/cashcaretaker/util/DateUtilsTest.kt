@@ -1,9 +1,10 @@
-package com.androidessence.utility
+package com.androidessence.cashcaretaker.util
 
+import java.util.Calendar
+import java.util.Date
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.util.*
 
 /**
  * Unit tests the DateUtils.kt class.

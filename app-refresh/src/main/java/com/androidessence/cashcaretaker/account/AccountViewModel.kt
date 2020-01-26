@@ -2,7 +2,7 @@ package com.androidessence.cashcaretaker.account
 
 import androidx.databinding.BaseObservable
 import com.androidessence.cashcaretaker.R
-import com.androidessence.utility.asCurrency
+import com.androidessence.cashcaretaker.util.asCurrency
 
 /**
  * Maintains a reference to an [account] and exposes the various fields required for data binding.

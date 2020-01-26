@@ -2,8 +2,8 @@ package com.androidessence.cashcaretaker.transaction
 
 import androidx.databinding.BaseObservable
 import com.androidessence.cashcaretaker.R
-import com.androidessence.utility.asCurrency
-import com.androidessence.utility.asUIString
+import com.androidessence.cashcaretaker.util.asCurrency
+import com.androidessence.cashcaretaker.util.asUIString
 
 class TransactionViewModel : BaseObservable() {
     var transaction: Transaction? = null

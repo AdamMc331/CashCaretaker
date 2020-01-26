@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">Utility</string>
-    <string name="add_account_path">/addAccount</string>
-    <string name="edit_account_path">/editAccount</string>
-    <string name="delete_account_path">/deleteAccount</string>
-</resources>
