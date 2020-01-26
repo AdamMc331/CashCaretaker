@@ -19,15 +19,16 @@ class TransactionFragmentViewModel(
     accountName: String,
     private val editClicked: (Transaction) -> Unit
 ) : BaseViewModel() {
-    val state: LiveData<DataViewState> = Transformations.map(repository.getTransactionsForAccount(accountName)) {
-        notifyChange()
+    val state: LiveData<DataViewState> =
+        Transformations.map(repository.getTransactionsForAccount(accountName)) {
+            notifyChange()
 
-        when {
-            it == null -> DataViewState.Loading
-            it.isEmpty() -> DataViewState.Empty
-            else -> DataViewState.Success(it)
+            when {
+                it == null -> DataViewState.Loading
+                it.isEmpty() -> DataViewState.Empty
+                else -> DataViewState.Success(it)
+            }
         }
-    }
 
     val showTransactions: Boolean
         get() = state.value is DataViewState.Success<*>

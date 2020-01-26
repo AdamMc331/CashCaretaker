@@ -24,31 +24,58 @@ import org.hamcrest.Matchers.isA
  */
 class TestUtils {
     companion object {
-        fun <T : RecyclerView.ViewHolder> matchTextInRecyclerView(text: String, recyclerViewId: Int, textViewId: Int, position: Int) {
-            onView(allOf(withId(recyclerViewId), isCompletelyDisplayed())).perform(RecyclerViewActions.actionOnItemAtPosition<T>(position, scrollTo()))
+        fun <T : RecyclerView.ViewHolder> matchTextInRecyclerView(
+            text: String,
+            recyclerViewId: Int,
+            textViewId: Int,
+            position: Int
+        ) {
+            onView(allOf(withId(recyclerViewId), isCompletelyDisplayed())).perform(
+                RecyclerViewActions.actionOnItemAtPosition<T>(position, scrollTo())
+            )
 
-            onView(allOf(withRecyclerView(recyclerViewId).atPositionOnView(position, textViewId), isCompletelyDisplayed())).check(matches(withText(text)))
+            onView(
+                allOf(
+                    withRecyclerView(recyclerViewId).atPositionOnView(position, textViewId),
+                    isCompletelyDisplayed()
+                )
+            ).check(matches(withText(text)))
         }
 
-        fun <T : RecyclerView.ViewHolder> clickItemInRecyclerView(recyclerViewId: Int, targetViewId: Int, position: Int) {
-            onView(allOf(withId(recyclerViewId), isCompletelyDisplayed())).perform(RecyclerViewActions.actionOnItemAtPosition<T>(position, scrollTo()))
+        fun <T : RecyclerView.ViewHolder> clickItemInRecyclerView(
+            recyclerViewId: Int,
+            targetViewId: Int,
+            position: Int
+        ) {
+            onView(allOf(withId(recyclerViewId), isCompletelyDisplayed())).perform(
+                RecyclerViewActions.actionOnItemAtPosition<T>(position, scrollTo())
+            )
 
-            onView(allOf(withRecyclerView(recyclerViewId).atPositionOnView(position, targetViewId), isCompletelyDisplayed())).perform(click())
+            onView(
+                allOf(
+                    withRecyclerView(recyclerViewId).atPositionOnView(position, targetViewId),
+                    isCompletelyDisplayed()
+                )
+            ).perform(click())
         }
 
         private fun scrollTo(): ViewAction = ScrollToAction()
 
         private fun withRecyclerView(recyclerViewId: Int): RecyclerViewMatcher =
-                RecyclerViewMatcher(recyclerViewId)
+            RecyclerViewMatcher(recyclerViewId)
 
         fun setChecked(checked: Boolean): ViewAction {
             return object : ViewAction {
                 override fun getConstraints(): Matcher<View> {
                     return object : Matcher<View> {
                         override fun matches(item: Any): Boolean =
-                                isA(Checkable::class.java).matches(item)
+                            isA(Checkable::class.java).matches(item)
 
-                        override fun describeMismatch(item: Any, mismatchDescription: Description) {}
+                        override fun describeMismatch(
+                            item: Any,
+                            mismatchDescription: Description
+                        ) {
+                        }
 
                         override fun describeTo(description: Description) {}
 

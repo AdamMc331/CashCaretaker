@@ -25,11 +25,11 @@ class AccountAdapter(
         val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemAccountBinding.inflate(inflater, parent, false)
         return AccountViewHolder(
-                binding,
-                accountClicked,
-                accountLongClicked,
-                withdrawalClicked,
-                depositClicked
+            binding,
+            accountClicked,
+            accountLongClicked,
+            withdrawalClicked,
+            depositClicked
         )
     }
 

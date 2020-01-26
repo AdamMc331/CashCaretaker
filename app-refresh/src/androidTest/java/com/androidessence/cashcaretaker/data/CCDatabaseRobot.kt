@@ -42,7 +42,8 @@ class CCDatabaseRobot(
     }
 
     fun assertTransactionsForAccount(expectedTransactions: List<Transaction>, accountName: String) {
-        val actualTransactions = database.transactionDao().getAllForAccount(accountName).testObserver().observedValue
+        val actualTransactions =
+            database.transactionDao().getAllForAccount(accountName).testObserver().observedValue
         assertEquals(expectedTransactions, actualTransactions)
     }
 

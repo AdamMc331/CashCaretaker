@@ -5,10 +5,10 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.transaction.Transaction
+import java.util.Date
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Date
 
 /**
  * ViewModel for adding a transaction.
@@ -26,7 +26,13 @@ class AddTransactionViewModel(
     /**
      * Checks that the information passed in is valid, and inserts an account if it is.
      */
-    fun addTransaction(accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
+    fun addTransaction(
+        accountName: String,
+        transactionDescription: String,
+        transactionAmount: String,
+        withdrawal: Boolean,
+        date: Date
+    ) {
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
             transactionAmountError.value = R.string.error_invalid_amount
@@ -44,14 +50,22 @@ class AddTransactionViewModel(
     /**
      * Checks that the information passed in is valid, and updates the transaction if it is.
      */
-    fun updateTransaction(id: Long, accountName: String, transactionDescription: String, transactionAmount: String, withdrawal: Boolean, date: Date) {
+    fun updateTransaction(
+        id: Long,
+        accountName: String,
+        transactionDescription: String,
+        transactionAmount: String,
+        withdrawal: Boolean,
+        date: Date
+    ) {
         val amount = transactionAmount.toDoubleOrNull()
         if (amount == null) {
             transactionAmountError.value = R.string.error_invalid_amount
             return
         }
 
-        val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date, id)
+        val transaction =
+            Transaction(accountName, transactionDescription, amount, withdrawal, date, id)
 
         job = CoroutineScope(Dispatchers.IO).launch {
             val updatedCount = repository.updateTransaction(transaction)

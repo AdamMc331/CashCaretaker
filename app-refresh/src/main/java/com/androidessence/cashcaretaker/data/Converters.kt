@@ -1,7 +1,6 @@
 package com.androidessence.cashcaretaker.data
 
 import androidx.room.TypeConverter
-
 import java.util.Date
 
 /**

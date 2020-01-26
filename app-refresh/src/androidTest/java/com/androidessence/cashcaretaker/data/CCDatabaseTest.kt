@@ -35,7 +35,8 @@ class CCDatabaseTest {
     @Before
     fun setUp() {
         val context = mainActivity.activity
-        database = Room.inMemoryDatabaseBuilder(context, CCDatabase::class.java).addCallback(CCDatabase.CALLBACK).allowMainThreadQueries().build()
+        database = Room.inMemoryDatabaseBuilder(context, CCDatabase::class.java)
+            .addCallback(CCDatabase.CALLBACK).allowMainThreadQueries().build()
         accountDao = database.accountDao()
         transactionDao = database.transactionDao()
         databaseRobot = CCDatabaseRobot(database)
@@ -81,7 +82,8 @@ class CCDatabaseTest {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
             databaseRobot.insertAccount(testAccount)
 
-            val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT)
+            val testWithdrawal =
+                Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT)
             val transactionId = databaseRobot.insertTransaction(testWithdrawal)
             testWithdrawal.id = transactionId
 
@@ -96,11 +98,16 @@ class CCDatabaseTest {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
             databaseRobot.insertAccount(testAccount)
 
-            val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT)
+            val testWithdrawal =
+                Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT)
             databaseRobot.insertTransaction(testWithdrawal)
 
             val account = databaseRobot.getFirstAccount()
-            assertEquals(TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT, account?.balance ?: 0.0, 0.0)
+            assertEquals(
+                TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT,
+                account?.balance ?: 0.0,
+                0.0
+            )
         }
     }
 
@@ -110,11 +117,20 @@ class CCDatabaseTest {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
             databaseRobot.insertAccount(testAccount)
 
-            val testDeposit = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
+            val testDeposit = Transaction(
+                TEST_ACCOUNT_NAME,
+                TEST_TRANSACTION_NAME,
+                TEST_TRANSACTION_AMOUNT,
+                false
+            )
             databaseRobot.insertTransaction(testDeposit)
 
             val account = databaseRobot.getFirstAccount()
-            assertEquals(TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT, account?.balance ?: 0.0, 0.0)
+            assertEquals(
+                TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT,
+                account?.balance ?: 0.0,
+                0.0
+            )
         }
     }
 
@@ -124,11 +140,20 @@ class CCDatabaseTest {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
             databaseRobot.insertAccount(testAccount)
 
-            val testDeposit = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
+            val testDeposit = Transaction(
+                TEST_ACCOUNT_NAME,
+                TEST_TRANSACTION_NAME,
+                TEST_TRANSACTION_AMOUNT,
+                false
+            )
             val transactionId = databaseRobot.insertTransaction(testDeposit)
 
             val account = databaseRobot.getFirstAccount()
-            assertEquals(TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT, account?.balance ?: 0.0, 0.0)
+            assertEquals(
+                TEST_ACCOUNT_BALANCE + TEST_TRANSACTION_AMOUNT,
+                account?.balance ?: 0.0,
+                0.0
+            )
 
             testDeposit.id = transactionId
             val removalCount = databaseRobot.deleteTransaction(testDeposit)
@@ -145,11 +170,16 @@ class CCDatabaseTest {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
             databaseRobot.insertAccount(testAccount)
 
-            val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
+            val testWithdrawal =
+                Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
             val transactionId = databaseRobot.insertTransaction(testWithdrawal)
 
             val account = databaseRobot.getFirstAccount()
-            assertEquals(TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT, account?.balance ?: 0.0, 0.0)
+            assertEquals(
+                TEST_ACCOUNT_BALANCE - TEST_TRANSACTION_AMOUNT,
+                account?.balance ?: 0.0,
+                0.0
+            )
 
             testWithdrawal.id = transactionId
             val removalCount = databaseRobot.deleteTransaction(testWithdrawal)
@@ -166,7 +196,8 @@ class CCDatabaseTest {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
             databaseRobot.insertAccount(testAccount)
 
-            val testWithdrawal = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
+            val testWithdrawal =
+                Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
             val transactionId = databaseRobot.insertTransaction(testWithdrawal)
 
             // Update transaction to be 2 times the amount to test balance change
@@ -188,7 +219,12 @@ class CCDatabaseTest {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
             databaseRobot.insertAccount(testAccount)
 
-            val testDeposit = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
+            val testDeposit = Transaction(
+                TEST_ACCOUNT_NAME,
+                TEST_TRANSACTION_NAME,
+                TEST_TRANSACTION_AMOUNT,
+                false
+            )
             val transactionId = databaseRobot.insertTransaction(testDeposit)
 
             // Update transaction to be 2 times the amount to test balance change
@@ -210,7 +246,8 @@ class CCDatabaseTest {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
             databaseRobot.insertAccount(testAccount)
 
-            val testTransaction = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
+            val testTransaction =
+                Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, true)
             val transactionId = databaseRobot.insertTransaction(testTransaction)
 
             // Update transaction to be 2 times the amount to test balance change
@@ -233,7 +270,12 @@ class CCDatabaseTest {
             val testAccount = Account(TEST_ACCOUNT_NAME, TEST_ACCOUNT_BALANCE)
             databaseRobot.insertAccount(testAccount)
 
-            val testTransaction = Transaction(TEST_ACCOUNT_NAME, TEST_TRANSACTION_NAME, TEST_TRANSACTION_AMOUNT, false)
+            val testTransaction = Transaction(
+                TEST_ACCOUNT_NAME,
+                TEST_TRANSACTION_NAME,
+                TEST_TRANSACTION_AMOUNT,
+                false
+            )
             val transactionId = databaseRobot.insertTransaction(testTransaction)
 
             // Update transaction to be 2 times the amount to test balance change

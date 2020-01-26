@@ -4,9 +4,9 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.transaction.TransactionViewModel.Companion.NO_DESCRIPTION
 import com.androidessence.utility.asCurrency
 import com.androidessence.utility.asUIString
+import java.util.Date
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.util.Date
 
 class TransactionViewModelTest {
     private val viewModel = TransactionViewModel()

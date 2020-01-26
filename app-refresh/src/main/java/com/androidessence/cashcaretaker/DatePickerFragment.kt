@@ -24,7 +24,13 @@ class DatePickerFragment : DialogFragment() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         // TODO: Consider a better callback than the target fragment.
-        return DatePickerDialog(activity, targetFragment as DatePickerDialog.OnDateSetListener, year, month, day)
+        return DatePickerDialog(
+            activity,
+            targetFragment as DatePickerDialog.OnDateSetListener,
+            year,
+            month,
+            day
+        )
     }
 
     companion object {

@@ -20,33 +20,42 @@ open class CCDatabaseService(
 
     override suspend fun insertAccount(account: Account): Long = accountDAO.insert(account)
 
-    override suspend fun insertTransaction(transaction: Transaction): Long = transactionDAO.insert(transaction)
+    override suspend fun insertTransaction(transaction: Transaction): Long =
+        transactionDAO.insert(transaction)
 
-    override suspend fun updateTransaction(transaction: Transaction): Int = transactionDAO.update(transaction)
+    override suspend fun updateTransaction(transaction: Transaction): Int =
+        transactionDAO.update(transaction)
 
-    override fun getTransactionsForAccount(accountName: String): LiveData<List<Transaction>> = transactionDAO.getAllForAccount(accountName)
+    override fun getTransactionsForAccount(accountName: String): LiveData<List<Transaction>> =
+        transactionDAO.getAllForAccount(accountName)
 
-    override suspend fun deleteTransaction(transaction: Transaction): Int = transactionDAO.delete(transaction)
+    override suspend fun deleteTransaction(transaction: Transaction): Int =
+        transactionDAO.delete(transaction)
 
     /**
      * Transfers money from one account to another.
      * TODO: Use string template, don't hardcode english here.
      */
-    override suspend fun transfer(fromAccount: Account, toAccount: Account, amount: Double, date: Date) {
+    override suspend fun transfer(
+        fromAccount: Account,
+        toAccount: Account,
+        amount: Double,
+        date: Date
+    ) {
         val withdrawal = Transaction(
-                fromAccount.name,
-                "Transfer to ${toAccount.name}.",
-                amount,
-                true,
-                date
+            fromAccount.name,
+            "Transfer to ${toAccount.name}.",
+            amount,
+            true,
+            date
         )
 
         val deposit = Transaction(
-                toAccount.name,
-                "Transfer from ${fromAccount.name}.",
-                amount,
-                false,
-                date
+            toAccount.name,
+            "Transfer from ${fromAccount.name}.",
+            amount,
+            false,
+            date
         )
 
         transactionDAO.transfer(withdrawal, deposit)
