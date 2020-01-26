@@ -19,8 +19,8 @@ import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCDatabaseService
 import com.androidessence.cashcaretaker.databinding.DialogAddTransferBinding
+import com.androidessence.cashcaretaker.util.asUIString
 import com.androidessence.cashcaretaker.views.SpinnerInputEditText
-import com.androidessence.utility.asUIString
 import java.util.Calendar
 import java.util.Date
 

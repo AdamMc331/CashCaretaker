@@ -1,14 +1,16 @@
-package com.androidessence.utility
+package com.androidessence.cashcaretaker.util
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 /**
  * Utility methods for Dates in Kotlin
  */
 
 object DateFormats {
-    private val UI_DATE_FORMAT = "MMMM dd, yyyy"
+    private const val UI_DATE_FORMAT = "MMMM dd, yyyy"
     val UI_DATE_FORMATTER = SimpleDateFormat(UI_DATE_FORMAT, Locale.getDefault())
 }
 

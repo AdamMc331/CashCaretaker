@@ -1,1 +1,1 @@
-include ':utility', ':app-refresh'
+include ':app-refresh'
