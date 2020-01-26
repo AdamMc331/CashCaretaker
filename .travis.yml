@@ -33,6 +33,7 @@ jobs:
 
     - stage: danger checks
       script:
+        - ./gradlew dependencyUpdates
         - gem install bundler
         - bundle install
         - bundle exec danger
