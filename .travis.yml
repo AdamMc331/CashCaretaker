@@ -31,6 +31,12 @@ jobs:
     - stage: lint checks
       script: ./gradlew ktlint
 
+    - stage: danger checks
+      script:
+        - gem install bundler
+        - bundle install
+        - bundle exec danger
+
     - stage: ui test
       if: branch == develop
       script:
