@@ -1,6 +1,8 @@
-package com.androidessence.utility
+package com.androidessence.cashcaretaker.util
 
-import junit.framework.TestCase.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**

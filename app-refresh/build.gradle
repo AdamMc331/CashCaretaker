@@ -66,7 +66,6 @@ dependencies {
     // Third party
     implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation "com.androidessence:materialdesignspecs:$materialDesignSpecsVersion"
-    implementation project(":utility")
 
     // Room components
     implementation "androidx.room:room-runtime:$roomVersion"
