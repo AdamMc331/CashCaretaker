@@ -24,6 +24,6 @@ class RecyclerViewItemCountAssertion(private val expectedCount: Int) : ViewAsser
 
     companion object {
         fun withItemCount(expectedCount: Int): RecyclerViewItemCountAssertion =
-                RecyclerViewItemCountAssertion(expectedCount)
+            RecyclerViewItemCountAssertion(expectedCount)
     }
 }

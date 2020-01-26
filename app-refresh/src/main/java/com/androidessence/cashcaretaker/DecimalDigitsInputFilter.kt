@@ -13,8 +13,20 @@ class DecimalDigitsInputFilter : InputFilter {
     /**
      * Filters the text based on the Regex pattern.
      */
-    override fun filter(source: CharSequence, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int): CharSequence? {
-        val matcher = pattern.matcher(dest.subSequence(0, dstart).toString() + source.subSequence(start, end).toString() + dest.subSequence(dend, dest.length))
+    override fun filter(
+        source: CharSequence,
+        start: Int,
+        end: Int,
+        dest: Spanned,
+        dstart: Int,
+        dend: Int
+    ): CharSequence? {
+        val matcher = pattern.matcher(
+            dest.subSequence(0, dstart).toString() + source.subSequence(
+                start,
+                end
+            ).toString() + dest.subSequence(dend, dest.length)
+        )
 
         return if (!matcher.matches()) {
             ""

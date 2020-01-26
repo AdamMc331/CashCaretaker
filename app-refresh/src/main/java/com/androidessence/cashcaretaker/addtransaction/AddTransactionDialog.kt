@@ -52,13 +52,13 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
                 @Suppress("UNCHECKED_CAST")
                 return AddTransactionViewModel(
-                        repository = repository,
-                        transactionInserted = {
-                            dismiss()
-                        },
-                        transactionUpdated = {
-                            dismiss()
-                        }
+                    repository = repository,
+                    transactionInserted = {
+                        dismiss()
+                    },
+                    transactionUpdated = {
+                        dismiss()
+                    }
                 ) as T
             }
         }
@@ -66,7 +66,11 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     //endregion
 
     //region Lifecycle Methods
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = DialogAddTransactionBinding.inflate(inflater, container, false)
         setupTitle()
         return binding.root
@@ -83,11 +87,11 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
             binding.submitButton.setOnClickListener {
                 viewModel.addTransaction(
-                        accountName,
-                        binding.transactionDescription.text.toString(),
-                        binding.transactionAmount.text.toString(),
-                        isWithdrawal,
-                        selectedDate
+                    accountName,
+                    binding.transactionDescription.text.toString(),
+                    binding.transactionAmount.text.toString(),
+                    isWithdrawal,
+                    selectedDate
                 )
             }
         }
@@ -100,7 +104,8 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddTransactionViewModel::class.java)
+        viewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(AddTransactionViewModel::class.java)
         subscribeToViewModel()
         readArguments()
         return dialog
@@ -114,7 +119,10 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     override fun onResume() {
         super.onResume()
 
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
     //endregion
 
@@ -133,12 +141,12 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
             binding.submitButton.setOnClickListener {
                 viewModel.updateTransaction(
-                        transaction.id,
-                        transaction.accountName,
-                        binding.transactionDescription.text.toString(),
-                        binding.transactionAmount.text.toString(),
-                        isWithdrawal,
-                        selectedDate
+                    transaction.id,
+                    transaction.accountName,
+                    binding.transactionDescription.text.toString(),
+                    binding.transactionAmount.text.toString(),
+                    isWithdrawal,
+                    selectedDate
                 )
             }
         }
@@ -158,17 +166,23 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
      * Subscribes to ViewModel events for errors and transaction actions.
      */
     private fun subscribeToViewModel() {
-        viewModel.transactionDescriptionError.observe(this, androidx.lifecycle.Observer { errorRes ->
-            errorRes?.let {
-                binding.transactionDescription.error = getString(errorRes)
+        viewModel.transactionDescriptionError.observe(
+            this,
+            androidx.lifecycle.Observer { errorRes ->
+                errorRes?.let {
+                    binding.transactionDescription.error = getString(errorRes)
+                }
             }
-        })
+        )
 
-        viewModel.transactionAmountError.observe(this, androidx.lifecycle.Observer { errorRes ->
-            errorRes?.let {
-                binding.transactionAmount.error = getString(it)
+        viewModel.transactionAmountError.observe(
+            this,
+            androidx.lifecycle.Observer { errorRes ->
+                errorRes?.let {
+                    binding.transactionAmount.error = getString(it)
+                }
             }
-        })
+        )
     }
 
     /**
@@ -180,7 +194,10 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     private fun showDatePicker() {
         val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
         datePickerFragment.setTargetFragment(this, REQUEST_DATE)
-        datePickerFragment.show(requireFragmentManager(), AddTransactionDialog::class.java.simpleName)
+        datePickerFragment.show(
+            requireFragmentManager(),
+            AddTransactionDialog::class.java.simpleName
+        )
     }
 
     /**

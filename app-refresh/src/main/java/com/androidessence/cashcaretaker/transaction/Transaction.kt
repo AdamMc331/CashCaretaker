@@ -5,14 +5,26 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.androidessence.cashcaretaker.account.Account
-import kotlinx.android.parcel.Parcelize
 import java.util.Date
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Transaction entity for an account
  */
 @Parcelize
-@Entity(tableName = "transactionTable", foreignKeys = [(ForeignKey(entity = Account::class, parentColumns = arrayOf("name"), childColumns = arrayOf("accountName"), onDelete = ForeignKey.CASCADE))])
+@Entity(
+    tableName = "transactionTable",
+    foreignKeys = [
+        (
+            ForeignKey(
+                entity = Account::class,
+                parentColumns = arrayOf("name"),
+                childColumns = arrayOf("accountName"),
+                onDelete = ForeignKey.CASCADE
+            )
+            )
+    ]
+)
 data class Transaction(
     var accountName: String = "",
     var description: String = "",

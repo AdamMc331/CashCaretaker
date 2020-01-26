@@ -38,10 +38,10 @@ import com.androidessence.cashcaretaker.transfer.AddTransferDialog
 class AccountFragment : Fragment() {
     //region Properties
     private val adapter = AccountAdapter(
-            accountClicked = this::onAccountSelected,
-            accountLongClicked = this::onAccountLongClicked,
-            withdrawalClicked = this::onWithdrawalButtonClicked,
-            depositClicked = this::onDepositButtonClicked
+        accountClicked = this::onAccountSelected,
+        accountLongClicked = this::onAccountLongClicked,
+        withdrawalClicked = this::onWithdrawalButtonClicked,
+        depositClicked = this::onDepositButtonClicked
     )
     private lateinit var viewModel: AccountFragmentViewModel
     private lateinit var binding: FragmentAccountBinding
@@ -67,7 +67,11 @@ class AccountFragment : Fragment() {
         initializeViewModel()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         return binding.root
@@ -107,13 +111,19 @@ class AccountFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.accountsRecyclerView.adapter = adapter
         binding.accountsRecyclerView.layoutManager = layoutManager
-        binding.accountsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        binding.accountsRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         // https://stackoverflow.com/a/39813266/3131147
         binding.accountsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0 || dy < 0 && binding.addAccountButton.isShown)
+                if (dy > 0 || dy < 0 && binding.addAccountButton.isShown) {
                     binding.addAccountButton.hide()
+                }
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -130,19 +140,23 @@ class AccountFragment : Fragment() {
      * which we use to update the adpater when a list is pulled successfully.
      */
     private fun initializeViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountFragmentViewModel::class.java)
+        viewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(AccountFragmentViewModel::class.java)
 
-        viewModel.state.observe(this, Observer { state ->
-            when (state) {
-                is DataViewState.Success<*> -> {
-                    @Suppress("UNCHECKED_CAST")
-                    (state.result as? List<Account>)?.let { accounts ->
-                        adapter.items = accounts
-                        activity?.invalidateOptionsMenu()
+        viewModel.state.observe(
+            this,
+            Observer { state ->
+                when (state) {
+                    is DataViewState.Success<*> -> {
+                        @Suppress("UNCHECKED_CAST")
+                        (state.result as? List<Account>)?.let { accounts ->
+                            adapter.items = accounts
+                            activity?.invalidateOptionsMenu()
+                        }
                     }
                 }
             }
-        })
+        )
     }
     //endregion
 

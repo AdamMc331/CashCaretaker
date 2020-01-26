@@ -2,9 +2,9 @@ package com.androidessence.cashcaretaker.views
 
 import android.content.Context
 import android.graphics.Canvas
+import android.util.AttributeSet
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
-import android.util.AttributeSet
 
 @Suppress("MemberVisibilityCanPrivate")
 /**
@@ -32,7 +32,11 @@ class SpinnerInputEditText<T> : AppCompatEditText {
         configureOnClickListener()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         mHint = hint
         configureOnClickListener()
     }

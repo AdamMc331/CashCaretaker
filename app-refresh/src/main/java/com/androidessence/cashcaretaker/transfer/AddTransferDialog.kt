@@ -48,16 +48,20 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
                 @Suppress("UNCHECKED_CAST")
                 return AddTransferViewModel(
-                        repository = repository,
-                        transferInserted = {
-                            dismiss()
-                        }
+                    repository = repository,
+                    transferInserted = {
+                        dismiss()
+                    }
                 ) as T
             }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = DialogAddTransferBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -65,7 +69,8 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddTransferViewModel::class.java)
+        viewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(AddTransferViewModel::class.java)
 
         return dialog
     }
@@ -83,10 +88,10 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
         binding.submitButton.setOnClickListener {
             addTransfer(
-                    fromAccount.selectedItem,
-                    toAccount.selectedItem,
-                    binding.transferAmount.text.toString(),
-                    selectedDate
+                fromAccount.selectedItem,
+                toAccount.selectedItem,
+                binding.transferAmount.text.toString(),
+                selectedDate
             )
         }
 
@@ -95,44 +100,67 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onResume() {
         super.onResume()
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
 
     private fun subscribeToViewModel() {
-        viewModel.accounts.observe(this, androidx.lifecycle.Observer { accounts ->
-            accounts?.let {
-                fromAccount.items = it
-                toAccount.items = it
+        viewModel.accounts.observe(
+            this,
+            androidx.lifecycle.Observer { accounts ->
+                accounts?.let {
+                    fromAccount.items = it
+                    toAccount.items = it
+                }
             }
-        })
+        )
 
-        viewModel.fromAccountError.observe(this, androidx.lifecycle.Observer { errorRes ->
-            errorRes?.let {
-                fromAccount.error = getString(it)
+        viewModel.fromAccountError.observe(
+            this,
+            androidx.lifecycle.Observer { errorRes ->
+                errorRes?.let {
+                    fromAccount.error = getString(it)
+                }
             }
-        })
+        )
 
-        viewModel.toAccountError.observe(this, androidx.lifecycle.Observer { errorRes ->
-            errorRes?.let {
-                toAccount.error = getString(it)
+        viewModel.toAccountError.observe(
+            this,
+            androidx.lifecycle.Observer { errorRes ->
+                errorRes?.let {
+                    toAccount.error = getString(it)
+                }
             }
-        })
+        )
 
-        viewModel.amountError.observe(this, androidx.lifecycle.Observer { errorRes ->
-            errorRes?.let {
-                binding.transferAmount.error = getString(it)
+        viewModel.amountError.observe(
+            this,
+            androidx.lifecycle.Observer { errorRes ->
+                errorRes?.let {
+                    binding.transferAmount.error = getString(it)
+                }
             }
-        })
+        )
     }
 
-    private fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {
+    private fun addTransfer(
+        fromAccount: Account?,
+        toAccount: Account?,
+        amount: String,
+        date: Date
+    ) {
         viewModel.addTransfer(fromAccount, toAccount, amount, date)
     }
 
     private fun showDatePicker() {
         val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
         datePickerFragment.setTargetFragment(this, REQUEST_DATE)
-        datePickerFragment.show(requireFragmentManager(), AddTransactionDialog::class.java.simpleName)
+        datePickerFragment.show(
+            requireFragmentManager(),
+            AddTransactionDialog::class.java.simpleName
+        )
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
