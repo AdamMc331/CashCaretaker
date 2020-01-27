@@ -10,7 +10,6 @@ import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.androidessence.cashcaretaker.DatePickerFragment
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
@@ -69,8 +68,7 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
-        viewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(AddTransferViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(AddTransferViewModel::class.java)
 
         return dialog
     }
@@ -108,7 +106,7 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     private fun subscribeToViewModel() {
         viewModel.accounts.observe(
-            this,
+            viewLifecycleOwner,
             androidx.lifecycle.Observer { accounts ->
                 accounts?.let {
                     fromAccount.items = it
@@ -118,7 +116,7 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
         )
 
         viewModel.fromAccountError.observe(
-            this,
+            viewLifecycleOwner,
             androidx.lifecycle.Observer { errorRes ->
                 errorRes?.let {
                     fromAccount.error = getString(it)
@@ -127,7 +125,7 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
         )
 
         viewModel.toAccountError.observe(
-            this,
+            viewLifecycleOwner,
             androidx.lifecycle.Observer { errorRes ->
                 errorRes?.let {
                     toAccount.error = getString(it)
@@ -136,7 +134,7 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
         )
 
         viewModel.amountError.observe(
-            this,
+            viewLifecycleOwner,
             androidx.lifecycle.Observer { errorRes ->
                 errorRes?.let {
                     binding.transferAmount.error = getString(it)
@@ -158,7 +156,7 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
         val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
         datePickerFragment.setTargetFragment(this, REQUEST_DATE)
         datePickerFragment.show(
-            requireFragmentManager(),
+            childFragmentManager,
             AddTransactionDialog::class.java.simpleName
         )
     }

@@ -25,7 +25,7 @@ class DatePickerFragment : DialogFragment() {
 
         // TODO: Consider a better callback than the target fragment.
         return DatePickerDialog(
-            activity,
+            requireContext(),
             targetFragment as DatePickerDialog.OnDateSetListener,
             year,
             month,

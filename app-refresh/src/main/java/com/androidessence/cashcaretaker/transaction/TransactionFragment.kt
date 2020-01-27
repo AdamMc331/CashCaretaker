@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -94,8 +93,8 @@ class TransactionFragment : Fragment() {
      * and the click subject to edit a transaction.
      */
     private fun initializeViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(TransactionFragmentViewModel::class.java)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(TransactionFragmentViewModel::class.java)
 
         viewModel.state.observe(
             this,
@@ -123,8 +122,8 @@ class TransactionFragment : Fragment() {
         )
 
         // https://stackoverflow.com/a/39813266/3131147
-        binding.transactionsRecyclerView.addOnScrollListener(object :
-                RecyclerView.OnScrollListener() {
+        binding.transactionsRecyclerView.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     if (dy > 0 || dy < 0 && binding.addTransactionButton.isShown) {
                         binding.addTransactionButton.hide()
@@ -144,12 +143,12 @@ class TransactionFragment : Fragment() {
     //region UI Events
     private fun showAddTransaction() {
         val dialog = AddTransactionDialog.newInstance(accountName, true)
-        dialog.show(requireFragmentManager(), AddTransactionDialog.FRAGMENT_NAME)
+        dialog.show(childFragmentManager, AddTransactionDialog.FRAGMENT_NAME)
     }
 
     private fun showEditTransaction(transaction: Transaction) {
         val dialog = AddTransactionDialog.newInstance(transaction)
-        dialog.show(requireFragmentManager(), AddTransactionDialog.FRAGMENT_NAME)
+        dialog.show(childFragmentManager, AddTransactionDialog.FRAGMENT_NAME)
     }
 
     private fun onTransactionLongClicked(transaction: Transaction) {

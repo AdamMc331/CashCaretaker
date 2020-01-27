@@ -10,7 +10,6 @@ import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.androidessence.cashcaretaker.DatePickerFragment
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
@@ -105,7 +104,7 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         val dialog = super.onCreateDialog(savedInstanceState)
 
         viewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(AddTransactionViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(AddTransactionViewModel::class.java)
         subscribeToViewModel()
         readArguments()
         return dialog
@@ -113,7 +112,7 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
     private fun setupTitle() {
         val titleResource = if (isEditing) R.string.edit_transaction else R.string.add_transaction
-        binding.title?.setText(titleResource)
+        binding.title.setText(titleResource)
     }
 
     override fun onResume() {
@@ -195,7 +194,7 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
         val datePickerFragment = DatePickerFragment.newInstance(selectedDate)
         datePickerFragment.setTargetFragment(this, REQUEST_DATE)
         datePickerFragment.show(
-            requireFragmentManager(),
+            childFragmentManager,
             AddTransactionDialog::class.java.simpleName
         )
     }
