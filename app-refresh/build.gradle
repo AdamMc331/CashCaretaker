@@ -57,9 +57,9 @@ dependencies {
 
     // Kotlin/Android
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
-    implementation "com.google.android.material:material:$materialVersion"
+    implementation "com.google.android.material:material:1.1.0-rc02"
     annotationProcessor "androidx.databinding:databinding-compiler:$build_tools_version"
     kapt "androidx.databinding:databinding-compiler:$build_tools_version"
 
@@ -68,31 +68,31 @@ dependencies {
     implementation "com.androidessence:materialdesignspecs:$materialDesignSpecsVersion"
 
     // Room components
-    implementation "androidx.room:room-runtime:$roomVersion"
-    implementation "androidx.room:room-ktx:$roomVersion"
-    androidTestImplementation "androidx.room:room-testing:$roomVersion"
-    annotationProcessor "androidx.room:room-compiler:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-runtime:2.2.3"
+    implementation "androidx.room:room-ktx:2.2.3"
+    androidTestImplementation "androidx.room:room-testing:2.2.3"
+    annotationProcessor "androidx.room:room-compiler:2.2.3"
+    kapt "androidx.room:room-compiler:2.2.3"
 
     // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
-    androidTestImplementation "androidx.arch.core:core-testing:$lifecycleVersion"
-    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.2.0"
 
     // ViewModel Kotlin support
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     // Testing
-    testImplementation 'junit:junit:4.12'
-    testImplementation "org.mockito:mockito-core:2.27.0"
-    androidTestImplementation 'androidx.test:core:1.1.0'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    testImplementation 'junit:junit:4.13'
+    testImplementation "org.mockito:mockito-core:3.2.4"
+    androidTestImplementation 'androidx.test:core:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
