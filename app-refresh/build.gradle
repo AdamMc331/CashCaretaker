@@ -12,7 +12,6 @@ android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
 
     compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
-    buildToolsVersion globalConfiguration["androidBuildToolsVersion"]
 
     defaultConfig {
         applicationId "com.androidessence.cashcaretaker"
@@ -59,6 +58,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    //noinspection GradleDependency
     implementation "com.google.android.material:material:1.1.0-rc02"
     annotationProcessor "androidx.databinding:databinding-compiler:$build_tools_version"
     kapt "androidx.databinding:databinding-compiler:$build_tools_version"
