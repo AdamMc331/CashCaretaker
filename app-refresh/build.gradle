@@ -40,9 +40,6 @@ android {
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
-    lintOptions {
-        abortOnError false
-    }
     dataBinding {
         enabled = true
     }

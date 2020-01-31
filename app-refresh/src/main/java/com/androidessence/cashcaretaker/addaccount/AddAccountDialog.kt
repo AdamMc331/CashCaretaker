@@ -9,7 +9,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCDatabaseService
@@ -84,8 +83,7 @@ class AddAccountDialog : DialogFragment() {
     }
 
     private fun initializeViewModel() {
-        viewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(AddAccountViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(AddAccountViewModel::class.java)
 
         viewModel.accountNameError.observe(
             this,

@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -84,7 +83,7 @@ class AccountFragment : Fragment() {
 
         binding.addAccountButton.setOnClickListener { showAddAccountView() }
 
-        fragmentManager?.addOnBackStackChangedListener { viewModel.clearActionMode() }
+        childFragmentManager.addOnBackStackChangedListener { viewModel.clearActionMode() }
     }
     //endregion
 
@@ -98,7 +97,7 @@ class AccountFragment : Fragment() {
         return when (item.itemId) {
             R.id.action_transfer -> {
                 val dialog = AddTransferDialog()
-                dialog.show(requireFragmentManager(), AddTransferDialog::class.java.simpleName)
+                dialog.show(childFragmentManager, AddTransferDialog::class.java.simpleName)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -141,7 +140,7 @@ class AccountFragment : Fragment() {
      */
     private fun initializeViewModel() {
         viewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(AccountFragmentViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(AccountFragmentViewModel::class.java)
 
         viewModel.state.observe(
             this,
@@ -163,12 +162,12 @@ class AccountFragment : Fragment() {
     //region UI Events
     private fun onWithdrawalButtonClicked(account: Account) {
         val dialog = AddTransactionDialog.newInstance(account.name, true)
-        dialog.show(requireFragmentManager(), AddTransactionDialog.FRAGMENT_NAME)
+        dialog.show(childFragmentManager, AddTransactionDialog.FRAGMENT_NAME)
     }
 
     private fun onDepositButtonClicked(account: Account) {
         val dialog = AddTransactionDialog.newInstance(account.name, false)
-        dialog.show(requireFragmentManager(), AddTransactionDialog.FRAGMENT_NAME)
+        dialog.show(childFragmentManager, AddTransactionDialog.FRAGMENT_NAME)
     }
 
     private fun onAccountSelected(account: Account) {
@@ -181,7 +180,7 @@ class AccountFragment : Fragment() {
 
     private fun showAddAccountView() {
         val dialog = AddAccountDialog()
-        dialog.show(requireFragmentManager(), AddAccountDialog.FRAGMENT_NAME)
+        dialog.show(childFragmentManager, AddAccountDialog.FRAGMENT_NAME)
     }
     //endregion
 
