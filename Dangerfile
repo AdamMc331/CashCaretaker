@@ -5,7 +5,7 @@ message "Thanks @#{github.pr_author}!"
 
 # Report inline ktlint issues
 checkstyle_format.base_path = Dir.pwd
-checkstyle_format.report 'scripts/ktlint-report.xml'
+checkstyle_format.report 'app/build/reports/ktlint/ktlintMainSourceSetCheck.xml'
 
 # Notify of outdated dependencies
 update_count = File.readlines("build/dependencyUpdates/report.txt").select { |line| line =~ /->/ }.count
