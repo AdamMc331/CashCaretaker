@@ -17,6 +17,8 @@ import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.data.CCDatabase
 import com.androidessence.cashcaretaker.data.CCDatabaseService
 import com.androidessence.cashcaretaker.data.DataViewState
+import com.androidessence.cashcaretaker.data.DatabaseService
+import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
 
 /**
@@ -37,8 +39,9 @@ class TransactionFragment : Fragment() {
     private val viewModelFactory: ViewModelProvider.Factory by lazy {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                val database = CCDatabase.getInMemoryDatabase(context!!)
-                val repository = CCDatabaseService(database)
+                val repository = DatabaseService(
+                    database = RoomDatabase(requireContext())
+                )
 
                 @Suppress("UNCHECKED_CAST")
                 return TransactionFragmentViewModel(

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     indices = [(Index("name"))],
-    tableName = "account"
+    tableName = "Account"
 )
 data class PersistableAccount(
     @PrimaryKey(autoGenerate = false) val name: String = "",
