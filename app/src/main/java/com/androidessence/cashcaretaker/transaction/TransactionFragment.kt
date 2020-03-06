@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.data.CCDatabase
-import com.androidessence.cashcaretaker.data.CCDatabaseService
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.data.DatabaseService
 import com.androidessence.cashcaretaker.database.RoomDatabase

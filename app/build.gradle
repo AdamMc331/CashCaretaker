@@ -65,13 +65,6 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation "com.androidessence:materialdesignspecs:$materialDesignSpecsVersion"
 
-    // Room components
-    implementation "androidx.room:room-runtime:2.2.4"
-    implementation "androidx.room:room-ktx:2.2.4"
-    androidTestImplementation "androidx.room:room-testing:2.2.4"
-    annotationProcessor "androidx.room:room-compiler:2.2.4"
-    kapt "androidx.room:room-compiler:2.2.4"
-
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
