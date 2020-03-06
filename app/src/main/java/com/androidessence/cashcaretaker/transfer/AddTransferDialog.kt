@@ -15,8 +15,8 @@ import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.data.CCDatabase
-import com.androidessence.cashcaretaker.data.CCDatabaseService
+import com.androidessence.cashcaretaker.data.DatabaseService
+import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.DialogAddTransferBinding
 import com.androidessence.cashcaretaker.util.asUIString
 import com.androidessence.cashcaretaker.views.SpinnerInputEditText
@@ -42,8 +42,9 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private val viewModelFactory: ViewModelProvider.Factory by lazy {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                val database = CCDatabase.getInMemoryDatabase(context!!)
-                val repository = CCDatabaseService(database)
+                val repository = DatabaseService(
+                    database = RoomDatabase(requireContext())
+                )
 
                 @Suppress("UNCHECKED_CAST")
                 return AddTransferViewModel(
