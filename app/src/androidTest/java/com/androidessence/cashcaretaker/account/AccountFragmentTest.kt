@@ -3,8 +3,8 @@ package com.androidessence.cashcaretaker.account
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.data.AccountDAO
-import com.androidessence.cashcaretaker.data.CCDatabase
+import com.androidessence.cashcaretaker.database.CCDatabase
+import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.main.MainActivity
 import com.androidessence.cashcaretaker.transaction.TransactionRobot
 import kotlinx.coroutines.runBlocking
@@ -25,20 +25,20 @@ class AccountFragmentTest {
     @Rule
     var activityTestRule = ActivityTestRule(MainActivity::class.java)
 
-    private val accountDao: AccountDAO
-        get() = CCDatabase.getInMemoryDatabase(activityTestRule.activity).accountDao()
+    private val database: CCDatabase
+        get() = RoomDatabase(activityTestRule.activity)
 
     @Before
     fun setUp() {
         runBlocking {
-            accountDao.deleteAll()
+            database.deleteAllAccounts()
         }
     }
 
     @After
     fun tearDown() {
         runBlocking {
-            accountDao.deleteAll()
+            database.deleteAllAccounts()
         }
     }
 
