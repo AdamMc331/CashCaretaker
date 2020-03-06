@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.androidessence.cashcaretaker.account.Account
+import com.androidessence.cashcaretaker.database.PersistableTransaction
 import java.util.Date
 import kotlinx.android.parcel.Parcelize
 
@@ -32,4 +33,25 @@ data class Transaction(
     var withdrawal: Boolean = true,
     var date: Date = Date(),
     @PrimaryKey(autoGenerate = true) var id: Long = 0
-) : Parcelable
+) : Parcelable {
+
+    fun toPersistableTransaction(): PersistableTransaction {
+        return PersistableTransaction(
+            accountName = this.accountName,
+            description = this.description,
+            amount = this.amount,
+            withdrawal = this.withdrawal,
+            date = this.date
+        )
+    }
+}
+
+fun PersistableTransaction.toTransaction(): Transaction {
+    return Transaction(
+        accountName = this.accountName,
+        description = this.description,
+        amount = this.amount,
+        withdrawal = this.withdrawal,
+        date = this.date
+    )
+}
