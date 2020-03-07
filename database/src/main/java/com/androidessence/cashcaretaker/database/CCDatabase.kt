@@ -20,7 +20,8 @@ interface CCDatabase {
     )
 }
 
-class RoomDatabase(context: Context): CCDatabase {
+class RoomDatabase(context: Context) : CCDatabase {
+    @Suppress("MemberNameEqualsClassName")
     private val roomDatabase = CashCaretakerRoomDatabase.getInMemoryDatabase(context)
 
     override fun fetchAllAccounts(): LiveData<List<PersistableAccount>> {
@@ -39,7 +40,9 @@ class RoomDatabase(context: Context): CCDatabase {
         return roomDatabase.accountDao().deleteAll()
     }
 
-    override fun fetchTransactionsForAccount(accountName: String): LiveData<List<PersistableTransaction>> {
+    override fun fetchTransactionsForAccount(
+        accountName: String
+    ): LiveData<List<PersistableTransaction>> {
         return roomDatabase.transactionDao().getAllForAccount(accountName)
     }
 

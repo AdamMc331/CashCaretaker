@@ -51,25 +51,38 @@ class AddTransactionViewModel(
      * Checks that the information passed in is valid, and updates the transaction if it is.
      */
     fun updateTransaction(
-        id: Long,
-        accountName: String,
-        transactionDescription: String,
-        transactionAmount: String,
-        withdrawal: Boolean,
-        date: Date
+        input: TransactionInput
     ) {
-        val amount = transactionAmount.toDoubleOrNull()
+        val amount = input.transactionAmount.toDoubleOrNull()
         if (amount == null) {
             transactionAmountError.value = R.string.error_invalid_amount
             return
         }
 
-        val transaction =
-            Transaction(accountName, transactionDescription, amount, withdrawal, date, id)
+        val transaction = Transaction(
+            input.accountName,
+            input.transactionDescription,
+            amount,
+            input.withdrawal,
+            input.date,
+            input.id
+        )
 
         job = CoroutineScope(Dispatchers.IO).launch {
             val updatedCount = repository.updateTransaction(transaction)
             transactionUpdated.invoke(updatedCount)
         }
     }
+
+    /**
+     * Data class defining all of the input required for updating a Transaction.
+     */
+    data class TransactionInput(
+        val id: Long,
+        val accountName: String,
+        val transactionDescription: String,
+        val transactionAmount: String,
+        val withdrawal: Boolean,
+        val date: Date
+    )
 }

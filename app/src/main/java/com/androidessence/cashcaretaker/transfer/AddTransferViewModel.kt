@@ -27,25 +27,24 @@ class AddTransferViewModel(
     val amountError = MutableLiveData<Int>()
 
     fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {
-        if (fromAccount == null) {
-            fromAccountError.value = R.string.from_account_invalid
-            return
-        }
-
-        if (toAccount == null) {
-            toAccountError.value = R.string.to_account_invalid
-            return
-        }
-
         val transferAmount = amount.toDoubleOrNull()
-        if (transferAmount == null) {
-            amountError.value = R.string.amount_invalid
-            return
-        }
 
-        job = CoroutineScope(Dispatchers.IO).launch {
-            repository.transfer(fromAccount, toAccount, transferAmount, date)
-            transferInserted.invoke(true)
+        when {
+            fromAccount == null -> {
+                fromAccountError.value = R.string.from_account_invalid
+            }
+            toAccount == null -> {
+                toAccountError.value = R.string.to_account_invalid
+            }
+            transferAmount == null -> {
+                amountError.value = R.string.amount_invalid
+            }
+            else -> {
+                job = CoroutineScope(Dispatchers.IO).launch {
+                    repository.transfer(fromAccount, toAccount, transferAmount, date)
+                    transferInserted.invoke(true)
+                }
+            }
         }
     }
 }
