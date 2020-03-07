@@ -34,6 +34,7 @@ import com.androidessence.cashcaretaker.transfer.AddTransferDialog
  * @property[viewModel] A LifeCycle aware component that is responsible for fetching accounts and
  * notifying the fragment. This component also handles the ActionMode behavior.
  */
+@Suppress("TooManyFunctions")
 class AccountFragment : Fragment() {
     //region Properties
     private val adapter = AccountAdapter(

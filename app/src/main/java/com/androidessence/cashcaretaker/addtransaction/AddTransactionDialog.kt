@@ -140,7 +140,7 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
             selectedDate = transaction.date
 
             binding.submitButton.setOnClickListener {
-                viewModel.updateTransaction(
+                val input = AddTransactionViewModel.TransactionInput(
                     transaction.id,
                     transaction.accountName,
                     binding.transactionDescription.text.toString(),
@@ -148,6 +148,8 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
                     isWithdrawal,
                     selectedDate
                 )
+
+                viewModel.updateTransaction(input)
             }
         }
     }

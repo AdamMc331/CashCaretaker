@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'org.jlleitschuh.gradle.ktlint'
+apply plugin: 'io.gitlab.arturbosch.detekt'
 
 androidExtensions {
     experimental = true
@@ -110,4 +111,12 @@ ktlint {
     }
     additionalEditorconfigFile = file("${project.projectDir}/.editorConfig")
     outputColorName = "RED"
+}
+
+detekt {
+    config = files("${rootProject.projectDir}/config/detekt/detekt.yml")
+
+    reports {
+        txt.enabled = true // similar to the console output, contains issue signature to manually edit baseline files
+    }
 }

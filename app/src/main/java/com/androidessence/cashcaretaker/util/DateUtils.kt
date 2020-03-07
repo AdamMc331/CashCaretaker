@@ -9,7 +9,6 @@ import java.util.Locale
 /**
  * Utility methods for Dates in Kotlin
  */
-
 object DateFormats {
     private const val UI_DATE_FORMAT = "MMMM dd, yyyy"
 
