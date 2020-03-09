@@ -32,6 +32,7 @@ jobs:
       script:
         - ./gradlew ktlintCheck
         - ./gradlew lint
+        - ./gradlew detekt
 
     - stage: danger checks
       script:

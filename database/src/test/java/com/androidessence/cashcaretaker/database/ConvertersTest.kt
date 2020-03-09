@@ -1,9 +1,9 @@
 package com.androidessence.cashcaretaker.database
 
+import java.util.Date
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
-import java.util.Date
 
 class ConvertersTest {
     private val converter = Converters()

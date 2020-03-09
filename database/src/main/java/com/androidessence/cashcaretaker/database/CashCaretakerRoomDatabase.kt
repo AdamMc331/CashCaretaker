@@ -35,6 +35,7 @@ internal abstract class CashCaretakerRoomDatabase : RoomDatabase() {
          * actions to the transaction table.
          */
         val CALLBACK = object : RoomDatabase.Callback() {
+            @Suppress("LongMethod")
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
 
