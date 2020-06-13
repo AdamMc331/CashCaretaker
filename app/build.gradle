@@ -80,7 +80,7 @@ dependencies {
 
     // Testing
     testImplementation 'junit:junit:4.13'
-    testImplementation "org.mockito:mockito-core:3.3.1"
+    testImplementation "org.mockito:mockito-core:3.3.3"
     androidTestImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
