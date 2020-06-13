@@ -5,6 +5,8 @@ import java.util.Locale
 
 /**
  * Extension method for Doubles
+ *
+ * TODO: Shouldn't be US specific.
  */
 
-fun Double.asCurrency(): String = NumberFormat.getCurrencyInstance(Locale.getDefault()).format(this)
+fun Double.asCurrency(): String = NumberFormat.getCurrencyInstance(Locale.US).format(this)
