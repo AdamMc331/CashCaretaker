@@ -1,7 +1,6 @@
 package com.androidessence.cashcaretaker.database
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 
 interface CCDatabase {
