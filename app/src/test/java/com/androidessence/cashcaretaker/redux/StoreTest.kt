@@ -12,8 +12,8 @@ class StoreTest {
         val reducer = TestReducer()
 
         val store = Store(
-                initialState = initialState,
-                reducer = reducer
+            initialState = initialState,
+            reducer = reducer
         )
 
         store.dispatch(TestAction())
@@ -40,9 +40,9 @@ class StoreTest {
         }
 
         val store = Store(
-                initialState = initialState,
-                reducer = reducer,
-                middlewares = listOf(middleware)
+            initialState = initialState,
+            reducer = reducer,
+            middlewares = listOf(middleware)
         )
 
         store.dispatch(TestAction())
