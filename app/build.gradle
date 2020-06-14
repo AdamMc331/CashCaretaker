@@ -71,6 +71,9 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     kapt "androidx.lifecycle:lifecycle-compiler:2.2.0"
 
+    // Logging
+    implementation "com.jakewharton.timber:timber:4.7.1"
+
     // ViewModel Kotlin support
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
 
