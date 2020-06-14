@@ -27,7 +27,10 @@ class TransactionFragmentViewModel(
     }
 
     val transactions: LiveData<List<Transaction>> = Transformations.map(_state) { state ->
-        (state as? DataViewState.Success<*>)?.result?.filterIsInstance(Transaction::class.java).orEmpty()
+        (state as? DataViewState.Success<*>)
+            ?.result
+            ?.filterIsInstance(Transaction::class.java)
+            .orEmpty()
     }
 
     val showTransactions: LiveData<Boolean> = Transformations.map(_state) { state ->
