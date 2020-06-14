@@ -10,7 +10,7 @@ interface CCDatabase {
     suspend fun deleteAccount(account: PersistableAccount): Int
     suspend fun deleteAllAccounts(): Int
 
-    fun fetchTransactionsForAccount(accountName: String): LiveData<List<PersistableTransaction>>
+    fun fetchTransactionsForAccount(accountName: String): Flow<List<PersistableTransaction>>
     suspend fun insertTransaction(transaction: PersistableTransaction): Long
     suspend fun updateTransaction(transaction: PersistableTransaction): Int
     suspend fun deleteTransaction(transaction: PersistableTransaction): Int
@@ -43,8 +43,8 @@ class RoomDatabase(context: Context) : CCDatabase {
 
     override fun fetchTransactionsForAccount(
         accountName: String
-    ): LiveData<List<PersistableTransaction>> {
-        return roomDatabase.transactionDao().getAllForAccount(accountName)
+    ): Flow<List<PersistableTransaction>> {
+        return roomDatabase.transactionDao().fetchTransactionsForAccount(accountName)
     }
 
     override suspend fun insertTransaction(transaction: PersistableTransaction): Long {

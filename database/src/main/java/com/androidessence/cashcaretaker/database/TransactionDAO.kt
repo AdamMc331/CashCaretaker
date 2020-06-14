@@ -6,11 +6,12 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface TransactionDAO {
     @Query("SELECT * FROM transactionTable WHERE accountName = :accountName ORDER BY date DESC")
-    fun getAllForAccount(accountName: String): LiveData<List<PersistableTransaction>>
+    fun fetchTransactionsForAccount(accountName: String): Flow<List<PersistableTransaction>>
 
     @Insert
     suspend fun insert(transaction: PersistableTransaction): Long

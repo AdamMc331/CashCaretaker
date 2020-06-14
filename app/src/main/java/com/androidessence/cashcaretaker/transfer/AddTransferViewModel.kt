@@ -2,7 +2,6 @@ package com.androidessence.cashcaretaker.transfer
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account

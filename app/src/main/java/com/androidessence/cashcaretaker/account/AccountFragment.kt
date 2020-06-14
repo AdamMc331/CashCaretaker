@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.data.DatabaseService
 import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding

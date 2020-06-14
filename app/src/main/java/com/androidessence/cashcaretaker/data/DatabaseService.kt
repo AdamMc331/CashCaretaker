@@ -9,9 +9,9 @@ import com.androidessence.cashcaretaker.database.PersistableAccount
 import com.androidessence.cashcaretaker.database.PersistableTransaction
 import com.androidessence.cashcaretaker.transaction.Transaction
 import com.androidessence.cashcaretaker.transaction.toTransaction
+import java.util.Date
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.Date
 
 class DatabaseService(
     private val database: CCDatabase
@@ -30,9 +30,10 @@ class DatabaseService(
         return database.deleteAccount(account.toPersistableAccount())
     }
 
-    override fun getTransactionsForAccount(accountName: String): LiveData<List<Transaction>> {
-        return database.fetchTransactionsForAccount(accountName)
-            .map(PersistableTransaction::toTransaction)
+    override fun fetchTransactionsForAccount(accountName: String): Flow<List<Transaction>> {
+        return database.fetchTransactionsForAccount(accountName).map { transactions ->
+            transactions.map(PersistableTransaction::toTransaction)
+        }
     }
 
     override suspend fun insertTransaction(transaction: Transaction): Long {

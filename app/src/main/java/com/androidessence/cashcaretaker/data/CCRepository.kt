@@ -1,17 +1,16 @@
 package com.androidessence.cashcaretaker.data
 
-import androidx.lifecycle.LiveData
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.transaction.Transaction
-import kotlinx.coroutines.flow.Flow
 import java.util.Date
+import kotlinx.coroutines.flow.Flow
 
 interface CCRepository {
     fun fetchAllAccounts(): Flow<List<Account>>
     suspend fun insertAccount(account: Account): Long
     suspend fun deleteAccount(account: Account): Int
 
-    fun getTransactionsForAccount(accountName: String): LiveData<List<Transaction>>
+    fun fetchTransactionsForAccount(accountName: String): Flow<List<Transaction>>
     suspend fun insertTransaction(transaction: Transaction): Long
     suspend fun updateTransaction(transaction: Transaction): Int
     suspend fun deleteTransaction(transaction: Transaction): Int
