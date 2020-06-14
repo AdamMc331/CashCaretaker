@@ -20,6 +20,36 @@ class StoreTest {
 
         reducer.assertReduceCalls(1)
     }
+
+    @Test
+    fun callMiddlewareBeforeReducer() {
+        val callList: MutableList<String> = mutableListOf()
+
+        val initialState = TestState()
+        val reducer = object : Reducer<State> {
+            override fun reduce(state: State, action: Action): State {
+                callList.add("Reducer")
+                return state
+            }
+        }
+        val middleware = object : Middleware {
+            override fun dispatch(action: Action, next: NextDispatcher) {
+                callList.add("Middleware")
+                next.dispatch(action)
+            }
+        }
+
+        val store = Store(
+                initialState = initialState,
+                reducer = reducer,
+                middlewares = listOf(middleware)
+        )
+
+        store.dispatch(TestAction())
+
+        val expectedCalls = listOf("Middleware", "Reducer")
+        assertEquals(expectedCalls, callList)
+    }
 }
 
 private class TestAction : Action
