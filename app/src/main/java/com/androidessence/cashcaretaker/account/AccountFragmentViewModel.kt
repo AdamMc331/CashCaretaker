@@ -5,46 +5,50 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
- * LifeCycle aware class that fetches accounts from the database and exposes them through the [state].
+ * LifeCycle aware class that fetches accounts from the database and exposes them through the [_state].
  */
 class AccountFragmentViewModel(
-    private val repository: CCRepository
+        private val repository: CCRepository
 ) : BaseViewModel() {
-    val state: LiveData<DataViewState> = Transformations.map(repository.getAllAccounts()) {
-        notifyChange()
+    private val _state: MutableLiveData<DataViewState> = MutableLiveData<DataViewState>().apply {
+        value = DataViewState.Loading
+    }
 
-        when {
-            it == null -> DataViewState.Loading
-            it.isEmpty() -> DataViewState.Empty
-            else -> DataViewState.Success(it)
-        }
+    val accounts: LiveData<List<Account>> = Transformations.map(_state) { state ->
+        (state as? DataViewState.Success<*>)?.result?.filterIsInstance(Account::class.java).orEmpty()
     }
 
     val allowTransfers: Boolean
         get() {
             @Suppress("UNCHECKED_CAST")
-            val count = (state.value as? DataViewState.Success<Account>)?.result?.count() ?: 0
+            val count = (_state.value as? DataViewState.Success<Account>)?.result?.count() ?: 0
             return count >= 2
         }
 
-    val showAccounts: Boolean
-        get() = state.value is DataViewState.Success<*>
+    val showAccounts: LiveData<Boolean> = Transformations.map(_state) { state ->
+        state is DataViewState.Success<*>
+    }
 
-    val showEmptyMessage: Boolean
-        get() = state.value is DataViewState.Empty
+    val showEmptyMessage: LiveData<Boolean> = Transformations.map(_state) { state ->
+        state is DataViewState.Empty
+    }
 
-    val showLoading: Boolean
-        get() = state.value == null || state.value is DataViewState.Loading
+    val showLoading: LiveData<Boolean> = Transformations.map(_state) { state ->
+        state == null || state is DataViewState.Loading
+    }
 
     //region Action Mode
     private var selectedAccount: Account? = null
@@ -80,6 +84,20 @@ class AccountFragmentViewModel(
 
     fun clearActionMode() = actionMode?.finish()
     //endregion
+
+    init {
+        viewModelScope.launch {
+            repository.fetchAllAccounts().collect { accounts ->
+                val dataViewState = when {
+                    accounts.isEmpty() -> DataViewState.Empty
+                    else -> DataViewState.Success(accounts)
+                }
+
+                _state.value = dataViewState
+                notifyChange()
+            }
+        }
+    }
 
     /**
      * Deletes whatever account was selected by the user in the [actionMode].

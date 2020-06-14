@@ -2,9 +2,11 @@ package com.androidessence.cashcaretaker.database
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 
 interface CCDatabase {
     fun fetchAllAccounts(): LiveData<List<PersistableAccount>>
+    fun fetchAllAccountsFlow(): Flow<List<PersistableAccount>>
     suspend fun insertAccount(account: PersistableAccount): Long
     suspend fun deleteAccount(account: PersistableAccount): Int
     suspend fun deleteAllAccounts(): Int
@@ -26,6 +28,10 @@ class RoomDatabase(context: Context) : CCDatabase {
 
     override fun fetchAllAccounts(): LiveData<List<PersistableAccount>> {
         return roomDatabase.accountDao().getAll()
+    }
+
+    override fun fetchAllAccountsFlow(): Flow<List<PersistableAccount>> {
+        return roomDatabase.accountDao().fetchAllAccounts()
     }
 
     override suspend fun insertAccount(account: PersistableAccount): Long {
