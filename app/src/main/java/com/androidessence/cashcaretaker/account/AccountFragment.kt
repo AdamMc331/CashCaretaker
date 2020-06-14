@@ -21,7 +21,10 @@ import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.data.DatabaseService
 import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
+import com.androidessence.cashcaretaker.logging.AndroidLogger
 import com.androidessence.cashcaretaker.main.MainController
+import com.androidessence.cashcaretaker.redux.LoggingMiddleware
+import com.androidessence.cashcaretaker.redux.Store
 import com.androidessence.cashcaretaker.transfer.AddTransferDialog
 
 /**
@@ -42,7 +45,7 @@ class AccountFragment : Fragment() {
         withdrawalClicked = this::onWithdrawalButtonClicked,
         depositClicked = this::onDepositButtonClicked
     )
-    private lateinit var viewModel: AccountFragmentViewModel
+    private lateinit var viewModel: AccountListViewModel
     private lateinit var binding: FragmentAccountBinding
 
     private val viewModelFactory: ViewModelProvider.Factory by lazy {
@@ -52,8 +55,17 @@ class AccountFragment : Fragment() {
                     database = RoomDatabase(requireContext())
                 )
 
+                val store = Store(
+                    initialState = AccountListState.loading(),
+                    reducer = AccountListReducer(),
+                    middlewares = listOf(
+                        LoggingMiddleware(AndroidLogger()),
+                        AccountListDataMiddleware(repository)
+                    )
+                )
+
                 @Suppress("UNCHECKED_CAST")
-                return AccountFragmentViewModel(repository) as T
+                return AccountListViewModel(repository, store) as T
             }
         }
     }
@@ -142,7 +154,7 @@ class AccountFragment : Fragment() {
      */
     private fun initializeViewModel() {
         viewModel =
-            ViewModelProvider(this, viewModelFactory).get(AccountFragmentViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(AccountListViewModel::class.java)
 
         viewModel.accounts.observe(
             this,
