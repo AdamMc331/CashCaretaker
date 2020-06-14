@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.data.DatabaseService
 import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
@@ -75,6 +74,7 @@ class AccountFragment : Fragment() {
     ): View? {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -144,18 +144,11 @@ class AccountFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(AccountFragmentViewModel::class.java)
 
-        viewModel.state.observe(
+        viewModel.accounts.observe(
             this,
-            Observer { state ->
-                when (state) {
-                    is DataViewState.Success<*> -> {
-                        @Suppress("UNCHECKED_CAST")
-                        (state.result as? List<Account>)?.let { accounts ->
-                            adapter.items = accounts
-                            activity?.invalidateOptionsMenu()
-                        }
-                    }
-                }
+            Observer { accounts ->
+                adapter.items = accounts
+                activity?.invalidateOptionsMenu()
             }
         )
     }

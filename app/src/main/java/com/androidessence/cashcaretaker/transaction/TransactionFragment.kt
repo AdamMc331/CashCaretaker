@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.data.DatabaseService
 import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
@@ -66,6 +65,7 @@ class TransactionFragment : Fragment() {
     ): View? {
         binding = FragmentTransactionBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         setHasOptionsMenu(false)
         return binding.root
     }
@@ -97,17 +97,10 @@ class TransactionFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(TransactionFragmentViewModel::class.java)
 
-        viewModel.state.observe(
+        viewModel.transactions.observe(
             this,
-            Observer { state ->
-                when (state) {
-                    is DataViewState.Success<*> -> {
-                        @Suppress("UNCHECKED_CAST")
-                        (state.result as? List<Transaction>)?.let { transactions ->
-                            adapter.items = transactions
-                        }
-                    }
-                }
+            Observer { transactions ->
+                adapter.items = transactions
             }
         )
     }
