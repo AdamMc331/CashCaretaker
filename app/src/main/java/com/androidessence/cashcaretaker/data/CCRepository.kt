@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
 interface CCRepository {
-    fun getAllAccounts(): LiveData<List<Account>>
     fun fetchAllAccounts(): Flow<List<Account>>
     suspend fun insertAccount(account: Account): Long
     suspend fun deleteAccount(account: Account): Int

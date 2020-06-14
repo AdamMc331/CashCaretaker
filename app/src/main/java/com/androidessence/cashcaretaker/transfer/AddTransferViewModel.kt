@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.transfer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.base.BaseViewModel
@@ -10,21 +11,27 @@ import com.androidessence.cashcaretaker.data.CCRepository
 import java.util.Date
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AddTransferViewModel(
     private val repository: CCRepository,
     private val transferInserted: (Boolean) -> Unit
 ) : BaseViewModel() {
-    val accounts: LiveData<List<Account>> = Transformations.map(repository.getAllAccounts()) {
-        when {
-            it.isNotEmpty() -> it
-            else -> null
-        }
-    }
+    private val _accounts: MutableLiveData<List<Account>> = MutableLiveData()
+    val accounts: LiveData<List<Account>> = _accounts
+
     val fromAccountError = MutableLiveData<Int>()
     val toAccountError = MutableLiveData<Int>()
     val amountError = MutableLiveData<Int>()
+
+    init {
+        viewModelScope.launch {
+            repository.fetchAllAccounts().collect { accounts ->
+                this@AddTransferViewModel._accounts.value = accounts
+            }
+        }
+    }
 
     fun addTransfer(fromAccount: Account?, toAccount: Account?, amount: String, date: Date) {
         val transferAmount = amount.toDoubleOrNull()

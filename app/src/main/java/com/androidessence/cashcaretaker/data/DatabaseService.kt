@@ -16,10 +16,6 @@ import java.util.Date
 class DatabaseService(
     private val database: CCDatabase
 ) : CCRepository {
-    override fun getAllAccounts(): LiveData<List<Account>> {
-        return database.fetchAllAccounts().map(PersistableAccount::toAccount)
-    }
-
     override fun fetchAllAccounts(): Flow<List<Account>> {
         return database.fetchAllAccountsFlow().map { persistableAccounts ->
             persistableAccounts.map(PersistableAccount::toAccount)

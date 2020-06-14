@@ -9,8 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface AccountDAO {
-    @Query("SELECT * FROM account ORDER BY name")
-    fun getAll(): LiveData<List<PersistableAccount>>
 
     @Query("SELECT * FROM account ORDER BY name")
     fun fetchAllAccounts(): Flow<List<PersistableAccount>>
