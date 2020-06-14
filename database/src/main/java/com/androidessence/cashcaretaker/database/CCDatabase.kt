@@ -1,15 +1,15 @@
 package com.androidessence.cashcaretaker.database
 
 import android.content.Context
-import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 
 interface CCDatabase {
-    fun fetchAllAccounts(): LiveData<List<PersistableAccount>>
+    fun fetchAllAccountsFlow(): Flow<List<PersistableAccount>>
     suspend fun insertAccount(account: PersistableAccount): Long
     suspend fun deleteAccount(account: PersistableAccount): Int
     suspend fun deleteAllAccounts(): Int
 
-    fun fetchTransactionsForAccount(accountName: String): LiveData<List<PersistableTransaction>>
+    fun fetchTransactionsForAccount(accountName: String): Flow<List<PersistableTransaction>>
     suspend fun insertTransaction(transaction: PersistableTransaction): Long
     suspend fun updateTransaction(transaction: PersistableTransaction): Int
     suspend fun deleteTransaction(transaction: PersistableTransaction): Int
@@ -24,8 +24,8 @@ class RoomDatabase(context: Context) : CCDatabase {
     @Suppress("MemberNameEqualsClassName")
     private val roomDatabase = CashCaretakerRoomDatabase.getInMemoryDatabase(context)
 
-    override fun fetchAllAccounts(): LiveData<List<PersistableAccount>> {
-        return roomDatabase.accountDao().getAll()
+    override fun fetchAllAccountsFlow(): Flow<List<PersistableAccount>> {
+        return roomDatabase.accountDao().fetchAllAccounts()
     }
 
     override suspend fun insertAccount(account: PersistableAccount): Long {
@@ -42,8 +42,8 @@ class RoomDatabase(context: Context) : CCDatabase {
 
     override fun fetchTransactionsForAccount(
         accountName: String
-    ): LiveData<List<PersistableTransaction>> {
-        return roomDatabase.transactionDao().getAllForAccount(accountName)
+    ): Flow<List<PersistableTransaction>> {
+        return roomDatabase.transactionDao().fetchTransactionsForAccount(accountName)
     }
 
     override suspend fun insertTransaction(transaction: PersistableTransaction): Long {
