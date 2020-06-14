@@ -102,7 +102,7 @@ repositories {
 }
 
 ktlint {
-    ktlint.version = "0.36.0"
+    ktlint.version = "0.37.0"
     android = true
     enableExperimentalRules = true
     reporters {
