@@ -10,47 +10,41 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
-import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.data.DataViewState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.androidessence.cashcaretaker.redux.Store
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
  * LifeCycle aware class that fetches accounts from the database and exposes them through the [_state].
  */
-class AccountFragmentViewModel(
-    private val repository: CCRepository
+@ExperimentalCoroutinesApi
+class AccountListViewModel(
+    private val store: Store<AccountListState>
 ) : BaseViewModel() {
-    private val _state: MutableLiveData<DataViewState> = MutableLiveData<DataViewState>().apply {
-        value = DataViewState.Loading
-    }
+    private val _state: MutableLiveData<AccountListState> = MutableLiveData<AccountListState>()
 
     val accounts: LiveData<List<Account>> = Transformations.map(_state) { state ->
-        (state as? DataViewState.Success<*>)
-            ?.result
-            ?.filterIsInstance(Account::class.java)
-            .orEmpty()
+        state?.data.orEmpty()
     }
 
     val allowTransfers: Boolean
         get() {
             @Suppress("UNCHECKED_CAST")
-            val count = (_state.value as? DataViewState.Success<Account>)?.result?.count() ?: 0
+            val count = (_state.value)?.data?.count() ?: 0
             return count >= 2
         }
 
     val showAccounts: LiveData<Boolean> = Transformations.map(_state) { state ->
-        state is DataViewState.Success<*>
+        !state.loading
     }
 
     val showEmptyMessage: LiveData<Boolean> = Transformations.map(_state) { state ->
-        state is DataViewState.Empty
+        !state.loading && state.data.isEmpty()
     }
 
     val showLoading: LiveData<Boolean> = Transformations.map(_state) { state ->
-        state == null || state is DataViewState.Loading
+        state.loading
     }
 
     //region Action Mode
@@ -90,15 +84,12 @@ class AccountFragmentViewModel(
 
     init {
         viewModelScope.launch {
-            repository.fetchAllAccounts().collect { accounts ->
-                val dataViewState = when {
-                    accounts.isEmpty() -> DataViewState.Empty
-                    else -> DataViewState.Success(accounts)
-                }
-
-                _state.value = dataViewState
+            store.state.collect { newState ->
+                _state.value = newState
             }
         }
+
+        store.dispatch(AccountListAction.FetchAccounts(viewModelScope))
     }
 
     /**
@@ -106,11 +97,9 @@ class AccountFragmentViewModel(
      */
     private fun deleteSelectedAccount() {
         selectedAccount?.let { account ->
-            job = CoroutineScope(Dispatchers.IO).launch {
-                repository.deleteAccount(account)
-                clearActionMode()
-                notifyChange()
-            }
+            store.dispatch(AccountListAction.DeleteAccount(viewModelScope, account))
+            clearActionMode()
+            notifyChange()
         }
     }
 
