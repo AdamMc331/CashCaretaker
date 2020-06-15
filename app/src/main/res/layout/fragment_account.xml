@@ -4,7 +4,7 @@
 
         <variable
             name="viewModel"
-            type="com.androidessence.cashcaretaker.account.AccountFragmentViewModel" />
+            type="com.androidessence.cashcaretaker.account.AccountListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
