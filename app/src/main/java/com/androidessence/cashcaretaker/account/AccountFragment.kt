@@ -18,9 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.data.DatabaseService
-import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
+import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.logging.AndroidLogger
 import com.androidessence.cashcaretaker.main.MainController
 import com.androidessence.cashcaretaker.redux.LoggingMiddleware
@@ -51,9 +50,7 @@ class AccountFragment : Fragment() {
     private val viewModelFactory: ViewModelProvider.Factory by lazy {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                val repository = DatabaseService(
-                    database = RoomDatabase(requireContext())
-                )
+                val repository = requireContext().graph().dataGraph.repository
 
                 val store = Store(
                     initialState = AccountListState.loading(),
