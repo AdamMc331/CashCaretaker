@@ -10,11 +10,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
-import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.redux.Store
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -24,15 +20,12 @@ import kotlinx.coroutines.launch
  */
 @ExperimentalCoroutinesApi
 class AccountListViewModel(
-    private val repository: CCRepository,
     private val store: Store<AccountListState>
 ) : BaseViewModel() {
     private val _state: MutableLiveData<AccountListState> = MutableLiveData<AccountListState>()
 
     val accounts: LiveData<List<Account>> = Transformations.map(_state) { state ->
-        state
-            ?.data
-            .orEmpty()
+        state?.data.orEmpty()
     }
 
     val allowTransfers: Boolean
@@ -104,11 +97,9 @@ class AccountListViewModel(
      */
     private fun deleteSelectedAccount() {
         selectedAccount?.let { account ->
-            job = CoroutineScope(Dispatchers.IO).launch {
-                repository.deleteAccount(account)
-                clearActionMode()
-                notifyChange()
-            }
+            store.dispatch(AccountListAction.DeleteAccount(viewModelScope, account))
+            clearActionMode()
+            notifyChange()
         }
     }
 

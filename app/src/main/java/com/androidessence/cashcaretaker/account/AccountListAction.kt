@@ -7,4 +7,8 @@ sealed class AccountListAction : Action {
     data class FetchAccounts(val scope: CoroutineScope) : AccountListAction()
     object AccountsLoading : AccountListAction()
     data class LoadedAccounts(val accounts: List<Account>) : AccountListAction()
+    data class DeleteAccount(
+        val scope: CoroutineScope,
+        val account: Account
+    ) : AccountListAction()
 }

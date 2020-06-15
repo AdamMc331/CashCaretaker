@@ -65,7 +65,7 @@ class AccountFragment : Fragment() {
                 )
 
                 @Suppress("UNCHECKED_CAST")
-                return AccountListViewModel(repository, store) as T
+                return AccountListViewModel(store) as T
             }
         }
     }

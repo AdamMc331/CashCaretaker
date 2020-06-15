@@ -13,15 +13,25 @@ data class AccountListDataMiddleware(
     override fun dispatch(action: Action, next: NextDispatcher) {
         when (action) {
             is AccountListAction.FetchAccounts -> {
-                next.dispatch(AccountListAction.AccountsLoading)
-
                 requestAccounts(action, next)
+            }
+            is AccountListAction.DeleteAccount -> {
+                deleteAccount(action, next)
             }
             else -> next.dispatch(action)
         }
     }
 
+    private fun deleteAccount(action: AccountListAction.DeleteAccount, next: NextDispatcher) {
+        action.scope.launch {
+            repository.deleteAccount(action.account)
+            next.dispatch(action)
+        }
+    }
+
     private fun requestAccounts(action: AccountListAction.FetchAccounts, next: NextDispatcher) {
+        next.dispatch(AccountListAction.AccountsLoading)
+
         action.scope.launch {
             repository.fetchAllAccounts().collect { accounts ->
                 next.dispatch(AccountListAction.LoadedAccounts(accounts))
