@@ -69,7 +69,7 @@ dependencies {
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-    kapt "androidx.lifecycle:lifecycle-compiler:2.2.0"
+    kapt "androidx.lifecycle:lifecycle-common-java8:2.2.0"
 
     // Logging
     implementation "com.jakewharton.timber:timber:4.7.1"
@@ -105,7 +105,7 @@ repositories {
 }
 
 ktlint {
-    ktlint.version = "0.37.0"
+    ktlint.version = "0.37.2"
     android = true
     enableExperimentalRules = true
     reporters {

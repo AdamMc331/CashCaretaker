@@ -54,7 +54,7 @@ dependencies {
 }
 
 ktlint {
-    ktlint.version = "0.37.0"
+    ktlint.version = "0.37.2"
     android = true
     enableExperimentalRules = true
     reporters {
