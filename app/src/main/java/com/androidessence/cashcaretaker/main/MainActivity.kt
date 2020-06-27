@@ -8,7 +8,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.account.AccountFragment
+import com.androidessence.cashcaretaker.account.AccountListFragment
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.transaction.TransactionFragment
 import timber.log.Timber
@@ -50,7 +50,7 @@ class MainActivity :
     }
 
     override fun showAccounts() {
-        showFragment(AccountFragment.newInstance(), AccountFragment.FRAGMENT_NAME)
+        showFragment(AccountListFragment.newInstance(), AccountListFragment.FRAGMENT_NAME)
     }
 
     /**
@@ -94,7 +94,7 @@ class MainActivity :
         val lastPosition = supportFragmentManager.backStackEntryCount - 1
         val lastEntry = supportFragmentManager.getBackStackEntryAt(lastPosition)
         when (lastEntry.name) {
-            AccountFragment.FRAGMENT_NAME -> supportActionBar?.setTitle(R.string.app_name)
+            AccountListFragment.FRAGMENT_NAME -> supportActionBar?.setTitle(R.string.app_name)
         }
     }
 

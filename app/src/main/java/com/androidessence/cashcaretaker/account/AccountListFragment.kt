@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,8 +21,6 @@ import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.logging.AndroidLogger
 import com.androidessence.cashcaretaker.main.MainController
-import com.androidessence.cashcaretaker.redux.LoggingMiddleware
-import com.androidessence.cashcaretaker.redux.Store
 import com.androidessence.cashcaretaker.transfer.AddTransferDialog
 
 /**
@@ -36,7 +33,7 @@ import com.androidessence.cashcaretaker.transfer.AddTransferDialog
  * notifying the fragment. This component also handles the ActionMode behavior.
  */
 @Suppress("TooManyFunctions")
-class AccountFragment : Fragment() {
+class AccountListFragment : Fragment() {
     //region Properties
     private val adapter = AccountAdapter(
         accountClicked = this::onAccountSelected,
@@ -46,26 +43,6 @@ class AccountFragment : Fragment() {
     )
     private lateinit var viewModel: AccountListViewModel
     private lateinit var binding: FragmentAccountBinding
-
-    private val viewModelFactory: ViewModelProvider.Factory by lazy {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                val repository = requireContext().graph().dataGraph.repository
-
-                val store = Store(
-                    initialState = AccountListState.loading(),
-                    reducer = AccountListReducer(),
-                    middlewares = listOf(
-                        LoggingMiddleware(AndroidLogger()),
-                        AccountListDataMiddleware(repository)
-                    )
-                )
-
-                @Suppress("UNCHECKED_CAST")
-                return AccountListViewModel(store) as T
-            }
-        }
-    }
     //endregion
 
     //region Lifecycle Methods
@@ -150,6 +127,11 @@ class AccountFragment : Fragment() {
      * which we use to update the adpater when a list is pulled successfully.
      */
     private fun initializeViewModel() {
+        val viewModelFactory = requireContext()
+                .graph()
+                .viewModelFactoryGraph
+                .accountListViewModelFactory()
+
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(AccountListViewModel::class.java)
 
@@ -189,7 +171,7 @@ class AccountFragment : Fragment() {
     //endregion
 
     companion object {
-        val FRAGMENT_NAME: String = AccountFragment::class.java.simpleName
-        fun newInstance(): AccountFragment = AccountFragment()
+        val FRAGMENT_NAME: String = AccountListFragment::class.java.simpleName
+        fun newInstance(): AccountListFragment = AccountListFragment()
     }
 }
