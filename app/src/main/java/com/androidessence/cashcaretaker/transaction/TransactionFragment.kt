@@ -7,16 +7,14 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
-import com.androidessence.cashcaretaker.data.DatabaseService
-import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
+import com.androidessence.cashcaretaker.graph
 
 /**
  * Fragment that displays a list of Transactions.
@@ -30,25 +28,8 @@ class TransactionFragment : Fragment() {
     private val accountName: String
         get() = arguments?.getString(ARG_ACCOUNT).orEmpty()
 
-    private lateinit var viewModel: TransactionFragmentViewModel
+    private lateinit var viewModel: TransactionListViewModel
     private lateinit var binding: FragmentTransactionBinding
-
-    private val viewModelFactory: ViewModelProvider.Factory by lazy {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                val repository = DatabaseService(
-                    database = RoomDatabase(requireContext())
-                )
-
-                @Suppress("UNCHECKED_CAST")
-                return TransactionFragmentViewModel(
-                    repository = repository,
-                    accountName = accountName,
-                    editClicked = this@TransactionFragment::showEditTransaction
-                ) as T
-            }
-        }
-    }
     //endregion
 
     //region Lifecycle Methods
@@ -94,8 +75,16 @@ class TransactionFragment : Fragment() {
      * and the click subject to edit a transaction.
      */
     private fun initializeViewModel() {
+        val viewModelFactory = requireContext()
+            .graph()
+            .viewModelFactoryGraph
+            .transactionListViewModelFactory(
+                accountName = accountName,
+                editClicked = this::showEditTransaction
+            )
+
         viewModel =
-            ViewModelProvider(this, viewModelFactory).get(TransactionFragmentViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(TransactionListViewModel::class.java)
 
         viewModel.transactions.observe(
             this,
