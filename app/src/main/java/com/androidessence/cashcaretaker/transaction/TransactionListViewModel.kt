@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class TransactionFragmentViewModel(
+class TransactionListViewModel(
     private val repository: CCRepository,
     accountName: String,
     private val editClicked: (Transaction) -> Unit
