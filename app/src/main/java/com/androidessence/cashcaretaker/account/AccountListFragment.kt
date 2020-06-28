@@ -19,7 +19,6 @@ import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.graph
-import com.androidessence.cashcaretaker.logging.AndroidLogger
 import com.androidessence.cashcaretaker.main.MainController
 import com.androidessence.cashcaretaker.transfer.AddTransferDialog
 
@@ -128,9 +127,9 @@ class AccountListFragment : Fragment() {
      */
     private fun initializeViewModel() {
         val viewModelFactory = requireContext()
-                .graph()
-                .viewModelFactoryGraph
-                .accountListViewModelFactory()
+            .graph()
+            .viewModelFactoryGraph
+            .accountListViewModelFactory()
 
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(AccountListViewModel::class.java)
