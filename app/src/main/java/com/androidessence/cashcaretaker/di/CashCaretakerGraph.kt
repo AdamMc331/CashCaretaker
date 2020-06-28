@@ -15,5 +15,5 @@ class BaseCashCaretakerGraph(
 
     override val storeGraph: StoreGraph = BaseStoreGraph(dataGraph)
 
-    override val viewModelFactoryGraph: ViewModelFactoryGraph = BaseViewModelFactoryGraph(storeGraph)
+    override val viewModelFactoryGraph: ViewModelFactoryGraph = BaseViewModelFactoryGraph(storeGraph, dataGraph)
 }
