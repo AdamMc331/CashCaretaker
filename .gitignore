@@ -1,11 +1,20 @@
 *.iml
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
 .DS_Store
 /build
 /captures
 /app-refreash/release/
-## Directory-based project format:
-.idea/
+/.idea/inspectionProfiles
+/.idea/caches
+/.idea/libraries
+/.idea/encodings.xml
+/.idea/compiler.xml
+/.idea/jarRepositories.xml
+/.idea/gradle.xml
+/.idea/misc.xml
+/.idea/runConfigurations.xml
+/.idea/vcs.xml
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/assetWizardSettings.xml
