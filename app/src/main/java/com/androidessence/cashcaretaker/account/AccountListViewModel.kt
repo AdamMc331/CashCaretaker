@@ -11,14 +11,10 @@ import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
 import com.androidessence.cashcaretaker.redux.Store
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 /**
  * LifeCycle aware class that fetches accounts from the database and exposes them through the [_state].
  */
-@ExperimentalCoroutinesApi
 class AccountListViewModel(
     private val store: Store<AccountListState>
 ) : BaseViewModel() {
@@ -82,10 +78,8 @@ class AccountListViewModel(
     //endregion
 
     init {
-        viewModelScope.launch {
-            store.state.collect { newState ->
-                _state.value = newState
-            }
+        store.subscribe { newState ->
+            _state.value = newState
         }
 
         store.dispatch(AccountListAction.FetchAccounts(viewModelScope))
