@@ -32,7 +32,7 @@
             app:layout_constraintTop_toBottomOf="@id/title"
             tools:ignore="KeyboardInaccessibleWidget">
 
-            <com.androidessence.cashcaretaker.views.SpinnerInputEditText
+            <com.androidessence.cashcaretaker.ui.views.SpinnerInputEditText
                 android:id="@+id/transferFromAccount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@id/transfer_from_account_layout"
             tools:ignore="KeyboardInaccessibleWidget">
 
-            <com.androidessence.cashcaretaker.views.SpinnerInputEditText
+            <com.androidessence.cashcaretaker.ui.views.SpinnerInputEditText
                 android:id="@+id/transferToAccount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

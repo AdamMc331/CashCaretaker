@@ -2,9 +2,9 @@ package com.androidessence.cashcaretaker
 
 import android.app.Application
 import android.content.Context
-import com.androidessence.cashcaretaker.di.BaseCashCaretakerGraph
-import com.androidessence.cashcaretaker.di.CashCaretakerGraph
-import com.androidessence.cashcaretaker.di.CashCaretakerGraphProvider
+import com.androidessence.cashcaretaker.core.di.BaseCashCaretakerGraph
+import com.androidessence.cashcaretaker.core.di.CashCaretakerGraph
+import com.androidessence.cashcaretaker.core.di.CashCaretakerGraphProvider
 import timber.log.Timber
 
 /**
