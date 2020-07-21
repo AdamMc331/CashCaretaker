@@ -1,23 +1,26 @@
 package com.androidessence.cashcaretaker.redux
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-
-@ExperimentalCoroutinesApi
 class Store<S : State>(
     private val reducer: Reducer<S>,
     initialState: S,
     middlewares: List<Middleware> = emptyList()
 ) {
-    private val _state = MutableStateFlow(initialState)
+    private var stateChangeListener: ((S) -> Unit)? = null
 
-    val state: Flow<S> = _state
+    private var state: S = initialState
+        set(value) {
+            field = value
+            stateChangeListener?.invoke(value)
+        }
 
     private var dispatchers: List<NextDispatcher> = emptyList()
 
     init {
         populateDispatchers(middlewares)
+    }
+
+    fun subscribe(listener: ((S) -> Unit)) {
+        this.stateChangeListener = listener
     }
 
     private fun populateDispatchers(middlewares: List<Middleware>) {
@@ -26,7 +29,7 @@ class Store<S : State>(
         // We will always have at least one dispatcher, which is one that proxies the action to our reducer.
         val reducerDispatcher = object : NextDispatcher {
             override fun dispatch(action: Action) {
-                _state.value = reducer.reduce(_state.value, action)
+                state = reducer.reduce(state, action)
             }
         }
         dispatchers.add(reducerDispatcher)
