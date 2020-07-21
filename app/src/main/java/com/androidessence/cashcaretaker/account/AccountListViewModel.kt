@@ -10,13 +10,18 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.base.BaseViewModel
-import com.androidessence.cashcaretaker.redux.Store
+import com.androidessence.cashcaretaker.data.CCRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * LifeCycle aware class that fetches accounts from the database and exposes them through the [_state].
  */
 class AccountListViewModel(
-    private val store: Store<AccountListState>
+    private val repository: CCRepository,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : BaseViewModel() {
     private val _state: MutableLiveData<AccountListState> = MutableLiveData()
 
@@ -78,19 +83,24 @@ class AccountListViewModel(
     //endregion
 
     init {
-        store.subscribe { newState ->
-            _state.value = newState
-        }
+        _state.value = AccountListState.loading()
 
-        store.dispatch(AccountListAction.FetchAccounts(viewModelScope))
+        viewModelScope.launch {
+            repository.fetchAllAccounts().collect { accounts ->
+                _state.value = AccountListState.success(accounts)
+            }
+        }
     }
 
     /**
      * Deletes whatever account was selected by the user in the [actionMode].
      */
     private fun deleteSelectedAccount() {
-        selectedAccount?.let { account ->
-            store.dispatch(AccountListAction.DeleteAccount(viewModelScope, account))
+        val account = selectedAccount ?: return
+
+        viewModelScope.launch(ioDispatcher) {
+            repository.deleteAccount(account)
+
             clearActionMode()
             notifyChange()
         }
