@@ -4,10 +4,8 @@ package com.androidessence.cashcaretaker.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.androidessence.cashcaretaker.account.AccountListState
 import com.androidessence.cashcaretaker.account.AccountListViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.redux.Store
 import com.androidessence.cashcaretaker.transaction.Transaction
 import com.androidessence.cashcaretaker.transaction.TransactionListViewModel
 
@@ -20,11 +18,10 @@ interface ViewModelFactoryGraph {
 }
 
 class BaseViewModelFactoryGraph(
-    private val storeGraph: StoreGraph,
     private val dataGraph: DataGraph
 ) : ViewModelFactoryGraph {
     override fun accountListViewModelFactory(): ViewModelProvider.Factory {
-        return AccountListViewModelFactory(storeGraph.accountListStore())
+        return AccountListViewModelFactory(dataGraph.repository)
     }
 
     override fun transactionListViewModelFactory(
@@ -40,10 +37,10 @@ class BaseViewModelFactoryGraph(
 }
 
 private class AccountListViewModelFactory(
-    private val accountListStore: Store<AccountListState>
+    private val repository: CCRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return AccountListViewModel(accountListStore) as T
+        return AccountListViewModel(repository) as T
     }
 }
 
