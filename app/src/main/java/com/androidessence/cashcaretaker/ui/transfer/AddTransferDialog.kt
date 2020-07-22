@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.transfer
+package com.androidessence.cashcaretaker.ui.transfer
 
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -19,7 +19,7 @@ import com.androidessence.cashcaretaker.data.DatabaseService
 import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.DialogAddTransferBinding
 import com.androidessence.cashcaretaker.util.asUIString
-import com.androidessence.cashcaretaker.views.SpinnerInputEditText
+import com.androidessence.cashcaretaker.ui.views.SpinnerInputEditText
 import java.util.Calendar
 import java.util.Date
 

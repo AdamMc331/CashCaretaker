@@ -21,7 +21,7 @@ import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.main.MainController
-import com.androidessence.cashcaretaker.transfer.AddTransferDialog
+import com.androidessence.cashcaretaker.ui.transfer.AddTransferDialog
 
 /**
  * Fragment for displaying a list of accounts to the user.

@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.views
+package com.androidessence.cashcaretaker.ui.views
 
 import android.content.Context
 import android.graphics.Canvas

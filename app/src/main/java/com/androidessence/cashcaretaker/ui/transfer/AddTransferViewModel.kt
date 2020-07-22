@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.transfer
+package com.androidessence.cashcaretaker.ui.transfer
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
