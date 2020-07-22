@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.transaction
 
 import androidx.databinding.BaseObservable
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.util.asCurrency
 import com.androidessence.cashcaretaker.util.asUIString
 

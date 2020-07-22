@@ -3,8 +3,8 @@ package com.androidessence.cashcaretaker.addaccount
 import android.database.sqlite.SQLiteConstraintException
 import androidx.lifecycle.MutableLiveData
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.account.Account
-import com.androidessence.cashcaretaker.base.BaseViewModel
+import com.androidessence.cashcaretaker.core.BaseViewModel
+import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

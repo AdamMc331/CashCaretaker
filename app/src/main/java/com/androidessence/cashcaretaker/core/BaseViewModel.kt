@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.base
+package com.androidessence.cashcaretaker.core
 
 import androidx.databinding.Bindable
 import androidx.databinding.Observable

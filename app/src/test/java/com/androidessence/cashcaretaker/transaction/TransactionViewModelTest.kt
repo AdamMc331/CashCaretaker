@@ -1,6 +1,7 @@
 package com.androidessence.cashcaretaker.transaction
 
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.transaction.TransactionViewModel.Companion.NO_DESCRIPTION
 import com.androidessence.cashcaretaker.util.asCurrency
 import com.androidessence.cashcaretaker.util.asUIString

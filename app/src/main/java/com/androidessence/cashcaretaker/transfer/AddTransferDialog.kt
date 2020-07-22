@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.androidessence.cashcaretaker.DatePickerFragment
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.account.Account
 import com.androidessence.cashcaretaker.addtransaction.AddTransactionDialog
+import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.DatabaseService
 import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.DialogAddTransferBinding

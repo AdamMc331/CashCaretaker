@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.transaction
+package com.androidessence.cashcaretaker.core.models
 
 import android.os.Parcelable
 import com.androidessence.cashcaretaker.database.PersistableTransaction

@@ -2,9 +2,9 @@ package com.androidessence.cashcaretaker.addtransaction
 
 import androidx.lifecycle.MutableLiveData
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.base.BaseViewModel
+import com.androidessence.cashcaretaker.core.BaseViewModel
+import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.transaction.Transaction
 import java.util.Date
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

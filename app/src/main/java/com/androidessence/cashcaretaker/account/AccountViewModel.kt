@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.account
 
 import androidx.databinding.BaseObservable
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.util.asCurrency
 
 /**

@@ -13,10 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.androidessence.cashcaretaker.DatePickerFragment
 import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.DatabaseService
 import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.DialogAddTransactionBinding
-import com.androidessence.cashcaretaker.transaction.Transaction
 import com.androidessence.cashcaretaker.util.asUIString
 import java.util.Calendar
 import java.util.Date

@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.di
+package com.androidessence.cashcaretaker.core.di
 
 import android.content.Context
 import com.androidessence.cashcaretaker.data.CCRepository

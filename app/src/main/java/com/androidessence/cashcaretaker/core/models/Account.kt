@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.account
+package com.androidessence.cashcaretaker.core.models
 
 import com.androidessence.cashcaretaker.database.PersistableAccount
 import com.androidessence.cashcaretaker.util.asCurrency

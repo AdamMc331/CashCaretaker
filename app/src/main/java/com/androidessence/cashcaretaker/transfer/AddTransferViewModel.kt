@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.account.Account
-import com.androidessence.cashcaretaker.base.BaseViewModel
+import com.androidessence.cashcaretaker.core.BaseViewModel
+import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import java.util.Date
 import kotlinx.coroutines.CoroutineScope

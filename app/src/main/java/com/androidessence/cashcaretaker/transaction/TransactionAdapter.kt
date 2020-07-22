@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.transaction
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.databinding.ListItemTransactionBinding
 
 /**

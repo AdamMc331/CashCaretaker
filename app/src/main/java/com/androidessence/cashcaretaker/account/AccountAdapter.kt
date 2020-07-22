@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.account.AccountAdapter.AccountViewHolder
+import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.databinding.ListItemAccountBinding
 
 /**

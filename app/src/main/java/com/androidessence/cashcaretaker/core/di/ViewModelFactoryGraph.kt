@@ -1,12 +1,12 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package com.androidessence.cashcaretaker.di
+package com.androidessence.cashcaretaker.core.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.androidessence.cashcaretaker.account.AccountListViewModel
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.transaction.Transaction
+import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.transaction.TransactionListViewModel
 
 interface ViewModelFactoryGraph {

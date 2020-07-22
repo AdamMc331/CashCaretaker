@@ -1,6 +1,7 @@
 package com.androidessence.cashcaretaker.account
 
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.util.asCurrency
 import org.junit.Assert.assertEquals
 import org.junit.Test

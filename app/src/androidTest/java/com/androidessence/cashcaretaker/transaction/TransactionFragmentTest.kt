@@ -2,7 +2,7 @@ package com.androidessence.cashcaretaker.transaction
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import com.androidessence.cashcaretaker.account.Account
+import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.database.CCDatabase
 import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.main.MainActivity

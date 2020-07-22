@@ -9,7 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.base.BaseViewModel
+import com.androidessence.cashcaretaker.core.BaseViewModel
+import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import kotlinx.coroutines.CoroutineScope
