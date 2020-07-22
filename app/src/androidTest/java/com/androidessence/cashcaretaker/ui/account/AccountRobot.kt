@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.account
+package com.androidessence.cashcaretaker.ui.account
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.clearText

@@ -4,9 +4,9 @@ package com.androidessence.cashcaretaker.core.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.androidessence.cashcaretaker.account.AccountListViewModel
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.ui.account.AccountListViewModel
 import com.androidessence.cashcaretaker.ui.transaction.TransactionListViewModel
 
 interface ViewModelFactoryGraph {

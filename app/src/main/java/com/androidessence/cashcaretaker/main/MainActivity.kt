@@ -8,8 +8,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.account.AccountListFragment
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
+import com.androidessence.cashcaretaker.ui.account.AccountListFragment
 import com.androidessence.cashcaretaker.ui.transaction.TransactionFragment
 import timber.log.Timber
 

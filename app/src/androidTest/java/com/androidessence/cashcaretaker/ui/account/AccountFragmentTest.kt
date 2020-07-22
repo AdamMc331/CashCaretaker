@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.account
+package com.androidessence.cashcaretaker.ui.account
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule

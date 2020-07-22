@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.account
+package com.androidessence.cashcaretaker.ui.account
 
 import android.os.Bundle
 import android.view.LayoutInflater
