@@ -1,0 +1,10 @@
+package com.androidessence.cashcaretaker.ui.main
+
+/**
+ * Functionality for the main view.
+ */
+interface MainController {
+    fun navigateToAddAccount()
+    fun showTransactions(accountName: String)
+    fun showAccounts()
+}
