@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.ui.accountlist.AccountListViewModel
 import com.androidessence.cashcaretaker.ui.transactionlist.TransactionListViewModel
 
@@ -21,7 +22,10 @@ class BaseViewModelFactoryGraph(
     private val dataGraph: DataGraph
 ) : ViewModelFactoryGraph {
     override fun accountListViewModelFactory(): ViewModelProvider.Factory {
-        return AccountListViewModelFactory(dataGraph.repository)
+        return AccountListViewModelFactory(
+            dataGraph.repository,
+            dataGraph.analyticsTracker
+        )
     }
 
     override fun transactionListViewModelFactory(
@@ -37,10 +41,14 @@ class BaseViewModelFactoryGraph(
 }
 
 private class AccountListViewModelFactory(
-    private val repository: CCRepository
+    private val repository: CCRepository,
+    private val analyticsTracker: AnalyticsTracker
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return AccountListViewModel(repository) as T
+        return AccountListViewModel(
+            repository = repository,
+            analyticsTracker = analyticsTracker
+        ) as T
     }
 }
 

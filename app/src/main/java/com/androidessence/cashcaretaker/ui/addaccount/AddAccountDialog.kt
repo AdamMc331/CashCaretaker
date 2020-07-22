@@ -9,9 +9,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.androidessence.cashcaretaker.data.DatabaseService
-import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
+import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 
 /**
@@ -24,16 +23,16 @@ class AddAccountDialog : DialogFragment() {
     private val viewModelFactory: ViewModelProvider.Factory by lazy {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                val repository = DatabaseService(
-                    database = RoomDatabase(requireContext())
-                )
+                val repository = requireContext().graph().dataGraph.repository
+                val analyticsTracker = requireContext().graph().dataGraph.analyticsTracker
 
                 @Suppress("UNCHECKED_CAST")
                 return AddAccountViewModel(
                     repository = repository,
                     accountInserted = {
                         dismiss()
-                    }
+                    },
+                    analyticsTracker = analyticsTracker
                 ) as T
             }
         }
