@@ -6,7 +6,7 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.database.CCDatabase
 import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.main.MainActivity
-import com.androidessence.cashcaretaker.transaction.TransactionRobot
+import com.androidessence.cashcaretaker.ui.transaction.TransactionRobot
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before

@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.transaction
+package com.androidessence.cashcaretaker.ui.transaction
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions

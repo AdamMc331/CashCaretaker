@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.transaction
+package com.androidessence.cashcaretaker.ui.transaction
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

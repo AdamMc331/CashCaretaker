@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.androidessence.cashcaretaker.account.AccountListViewModel
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.transaction.TransactionListViewModel
+import com.androidessence.cashcaretaker.ui.transaction.TransactionListViewModel
 
 interface ViewModelFactoryGraph {
     fun accountListViewModelFactory(): ViewModelProvider.Factory

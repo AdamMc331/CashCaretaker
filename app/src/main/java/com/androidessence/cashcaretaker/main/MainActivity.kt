@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentManager
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.account.AccountListFragment
 import com.androidessence.cashcaretaker.addaccount.AddAccountDialog
-import com.androidessence.cashcaretaker.transaction.TransactionFragment
+import com.androidessence.cashcaretaker.ui.transaction.TransactionFragment
 import timber.log.Timber
 
 /**
