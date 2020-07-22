@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.ui.account
+package com.androidessence.cashcaretaker.ui.accountlist
 
 import android.view.Menu
 import android.view.MenuItem

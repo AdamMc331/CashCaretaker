@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.ui.account
+package com.androidessence.cashcaretaker.ui.accountlist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,7 +35,7 @@ import com.androidessence.cashcaretaker.ui.transfer.AddTransferDialog
 @Suppress("TooManyFunctions")
 class AccountListFragment : Fragment() {
     //region Properties
-    private val adapter = AccountAdapter(
+    private val adapter = AccountListAdapter(
         accountClicked = this::onAccountSelected,
         accountLongClicked = this::onAccountLongClicked,
         withdrawalClicked = this::onWithdrawalButtonClicked,

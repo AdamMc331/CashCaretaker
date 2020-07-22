@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.ui.transaction
+package com.androidessence.cashcaretaker.ui.transactionlist
 
 import android.view.Menu
 import android.view.MenuItem

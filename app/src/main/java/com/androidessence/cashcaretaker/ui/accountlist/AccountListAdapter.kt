@@ -1,16 +1,17 @@
-package com.androidessence.cashcaretaker.ui.account
+package com.androidessence.cashcaretaker.ui.accountlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.databinding.ListItemAccountBinding
-import com.androidessence.cashcaretaker.ui.account.AccountAdapter.AccountViewHolder
+import com.androidessence.cashcaretaker.ui.account.AccountViewModel
+import com.androidessence.cashcaretaker.ui.accountlist.AccountListAdapter.AccountViewHolder
 
 /**
  * Adapter for displaying Accounts in a RecyclerView.
  */
-class AccountAdapter(
+class AccountListAdapter(
     private val accountClicked: (Account) -> Unit,
     private val accountLongClicked: (Account) -> Unit,
     private val withdrawalClicked: (Account) -> Unit,

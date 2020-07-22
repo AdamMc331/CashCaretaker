@@ -1,17 +1,18 @@
-package com.androidessence.cashcaretaker.ui.transaction
+package com.androidessence.cashcaretaker.ui.transactionlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.databinding.ListItemTransactionBinding
+import com.androidessence.cashcaretaker.ui.transaction.TransactionViewModel
 
 /**
  * Adapter for displaying Transactions in a RecyclerView.
  */
-class TransactionAdapter(
+class TransactionListAdapter(
     private val transactionLongClicked: (Transaction) -> Unit
-) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+) : RecyclerView.Adapter<TransactionListAdapter.TransactionViewHolder>() {
 
     var items: List<Transaction> = emptyList()
         set(value) {

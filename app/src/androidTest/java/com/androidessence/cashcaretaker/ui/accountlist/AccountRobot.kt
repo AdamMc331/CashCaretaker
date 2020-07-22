@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.ui.account
+package com.androidessence.cashcaretaker.ui.accountlist
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.clearText
@@ -55,7 +55,7 @@ class AccountRobot {
     }
 
     fun assertAccountNameInList(name: String, position: Int): AccountRobot {
-        matchTextInRecyclerView<AccountAdapter.AccountViewHolder>(
+        matchTextInRecyclerView<AccountListAdapter.AccountViewHolder>(
             name,
             RECYCLER_VIEW_ID,
             ACCOUNT_NAME_ID,
@@ -65,7 +65,7 @@ class AccountRobot {
     }
 
     fun assertAccountBalanceInList(balance: String, position: Int): AccountRobot {
-        matchTextInRecyclerView<AccountAdapter.AccountViewHolder>(
+        matchTextInRecyclerView<AccountListAdapter.AccountViewHolder>(
             balance,
             RECYCLER_VIEW_ID,
             ACCOUNT_BALANCE_ID,
@@ -75,7 +75,7 @@ class AccountRobot {
     }
 
     fun clickWithdrawalInList(position: Int): AccountRobot {
-        clickItemInRecyclerView<AccountAdapter.AccountViewHolder>(
+        clickItemInRecyclerView<AccountListAdapter.AccountViewHolder>(
             RECYCLER_VIEW_ID,
             WITHDRAWAL_BUTTON_ID,
             position
@@ -84,7 +84,7 @@ class AccountRobot {
     }
 
     fun clickDepositInList(position: Int): AccountRobot {
-        clickItemInRecyclerView<AccountAdapter.AccountViewHolder>(
+        clickItemInRecyclerView<AccountListAdapter.AccountViewHolder>(
             RECYCLER_VIEW_ID,
             DEPOSIT_BUTTON_ID,
             position
@@ -94,7 +94,7 @@ class AccountRobot {
 
     fun longClick(position: Int): AccountRobot {
         onView(RECYCLER_VIEW_MATCHER).perform(
-            RecyclerViewActions.actionOnItemAtPosition<AccountAdapter.AccountViewHolder>(
+            RecyclerViewActions.actionOnItemAtPosition<AccountListAdapter.AccountViewHolder>(
                 position,
                 longClick()
             )

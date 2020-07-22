@@ -8,9 +8,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.androidessence.cashcaretaker.R
-import com.androidessence.cashcaretaker.ui.account.AccountListFragment
+import com.androidessence.cashcaretaker.ui.accountlist.AccountListFragment
 import com.androidessence.cashcaretaker.ui.addaccount.AddAccountDialog
-import com.androidessence.cashcaretaker.ui.transaction.TransactionFragment
+import com.androidessence.cashcaretaker.ui.transactionlist.TransactionListFragment
 import timber.log.Timber
 
 /**
@@ -44,8 +44,8 @@ class MainActivity :
     override fun showTransactions(accountName: String) {
         Timber.d("Showing Transactions")
         showFragment(
-            TransactionFragment.newInstance(accountName),
-            TransactionFragment.FRAGMENT_NAME
+            TransactionListFragment.newInstance(accountName),
+            TransactionListFragment.FRAGMENT_NAME
         )
     }
 
