@@ -2,13 +2,13 @@ package com.androidessence.cashcaretaker.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.androidessence.cashcaretaker.account.Account
-import com.androidessence.cashcaretaker.account.toAccount
+import com.androidessence.cashcaretaker.core.models.Account
+import com.androidessence.cashcaretaker.core.models.Transaction
+import com.androidessence.cashcaretaker.core.models.toAccount
+import com.androidessence.cashcaretaker.core.models.toTransaction
 import com.androidessence.cashcaretaker.database.CCDatabase
 import com.androidessence.cashcaretaker.database.PersistableAccount
 import com.androidessence.cashcaretaker.database.PersistableTransaction
-import com.androidessence.cashcaretaker.transaction.Transaction
-import com.androidessence.cashcaretaker.transaction.toTransaction
 import java.util.Date
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

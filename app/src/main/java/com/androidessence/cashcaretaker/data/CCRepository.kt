@@ -1,7 +1,7 @@
 package com.androidessence.cashcaretaker.data
 
-import com.androidessence.cashcaretaker.account.Account
-import com.androidessence.cashcaretaker.transaction.Transaction
+import com.androidessence.cashcaretaker.core.models.Account
+import com.androidessence.cashcaretaker.core.models.Transaction
 import java.util.Date
 import kotlinx.coroutines.flow.Flow
 
