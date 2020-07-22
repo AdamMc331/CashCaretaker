@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.databinding.ListItemAccountBinding
+import com.androidessence.cashcaretaker.ui.account.AccountViewModel
 import com.androidessence.cashcaretaker.ui.accountlist.AccountListAdapter.AccountViewHolder
 
 /**
