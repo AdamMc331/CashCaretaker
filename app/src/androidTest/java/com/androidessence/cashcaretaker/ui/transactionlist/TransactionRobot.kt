@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.ui.transaction
+package com.androidessence.cashcaretaker.ui.transactionlist
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
@@ -73,7 +73,7 @@ class TransactionRobot {
         description: String,
         position: Int
     ): TransactionRobot {
-        matchTextInRecyclerView<TransactionAdapter.TransactionViewHolder>(
+        matchTextInRecyclerView<TransactionListAdapter.TransactionViewHolder>(
             description,
             RECYCLER_VIEW_ID,
             TRANSACTION_DESCRIPTION_ID,
@@ -83,7 +83,7 @@ class TransactionRobot {
     }
 
     fun assertTransactionAmountAtPosition(amount: String, position: Int): TransactionRobot {
-        matchTextInRecyclerView<TransactionAdapter.TransactionViewHolder>(
+        matchTextInRecyclerView<TransactionListAdapter.TransactionViewHolder>(
             amount,
             RECYCLER_VIEW_ID,
             TRANSACTION_AMOUNT_ID,
@@ -94,7 +94,8 @@ class TransactionRobot {
 
     fun longClick(position: Int): TransactionRobot {
         onView(RECYCLER_VIEW_MATCHER).perform(
-            RecyclerViewActions.actionOnItemAtPosition<TransactionAdapter.TransactionViewHolder>(
+            RecyclerViewActions.actionOnItemAtPosition<TransactionListAdapter.TransactionViewHolder>
+            (
                 position,
                 longClick()
             )
