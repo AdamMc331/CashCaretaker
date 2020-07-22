@@ -94,7 +94,8 @@ class TransactionRobot {
 
     fun longClick(position: Int): TransactionRobot {
         onView(RECYCLER_VIEW_MATCHER).perform(
-            RecyclerViewActions.actionOnItemAtPosition<TransactionListAdapter.TransactionViewHolder>(
+            RecyclerViewActions.actionOnItemAtPosition<TransactionListAdapter.TransactionViewHolder>
+            (
                 position,
                 longClick()
             )
