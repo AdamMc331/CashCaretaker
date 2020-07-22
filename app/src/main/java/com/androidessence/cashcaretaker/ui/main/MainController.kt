@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.main
+package com.androidessence.cashcaretaker.ui.main
 
 /**
  * Functionality for the main view.

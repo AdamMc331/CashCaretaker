@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.addaccount
+package com.androidessence.cashcaretaker.ui.addaccount
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.lifecycle.MutableLiveData

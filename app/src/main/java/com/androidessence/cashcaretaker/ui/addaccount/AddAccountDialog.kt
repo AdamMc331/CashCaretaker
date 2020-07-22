@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.addaccount
+package com.androidessence.cashcaretaker.ui.addaccount
 
 import android.app.Dialog
 import android.os.Bundle
@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
+import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.data.DatabaseService
 import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding

@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.cashcaretaker.ui.views
 
 import android.app.DatePickerDialog
 import android.app.Dialog

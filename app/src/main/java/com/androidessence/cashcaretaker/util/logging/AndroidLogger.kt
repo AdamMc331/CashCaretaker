@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.logging
+package com.androidessence.cashcaretaker.util.logging
 
 import timber.log.Timber
 

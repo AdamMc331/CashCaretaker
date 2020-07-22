@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.cashcaretaker.util
 
 import android.text.InputFilter
 import android.text.Spanned

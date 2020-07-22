@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.addtransaction
+package com.androidessence.cashcaretaker.ui.addtransaction
 
 import androidx.lifecycle.MutableLiveData
 import com.androidessence.cashcaretaker.R

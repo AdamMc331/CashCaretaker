@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker
+package com.androidessence.cashcaretaker.ui
 
 import android.content.Context
 import android.util.TypedValue

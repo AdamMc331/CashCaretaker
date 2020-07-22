@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.addtransaction
+package com.androidessence.cashcaretaker.ui.addtransaction
 
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -10,8 +10,8 @@ import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.androidessence.cashcaretaker.DatePickerFragment
-import com.androidessence.cashcaretaker.DecimalDigitsInputFilter
+import com.androidessence.cashcaretaker.ui.views.DatePickerFragment
+import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.DatabaseService
