@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.ui.account
+package com.androidessence.cashcaretaker.ui.accountlist
 
 import androidx.databinding.BaseObservable
 import com.androidessence.cashcaretaker.R

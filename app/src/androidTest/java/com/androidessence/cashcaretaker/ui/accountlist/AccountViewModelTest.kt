@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.ui.account
+package com.androidessence.cashcaretaker.ui.accountlist
 
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account

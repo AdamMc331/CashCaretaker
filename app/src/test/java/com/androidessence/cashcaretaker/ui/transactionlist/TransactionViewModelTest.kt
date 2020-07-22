@@ -1,8 +1,8 @@
-package com.androidessence.cashcaretaker.ui.transaction
+package com.androidessence.cashcaretaker.ui.transactionlist
 
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Transaction
-import com.androidessence.cashcaretaker.ui.transaction.TransactionViewModel.Companion.NO_DESCRIPTION
+import com.androidessence.cashcaretaker.ui.transactionlist.TransactionViewModel.Companion.NO_DESCRIPTION
 import com.androidessence.cashcaretaker.util.asCurrency
 import com.androidessence.cashcaretaker.util.asUIString
 import java.util.Date

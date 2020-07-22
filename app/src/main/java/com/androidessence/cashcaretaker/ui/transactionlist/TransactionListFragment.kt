@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.ui.transaction
+package com.androidessence.cashcaretaker.ui.transactionlist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,9 +20,9 @@ import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 /**
  * Fragment that displays a list of Transactions.
  */
-class TransactionFragment : Fragment() {
+class TransactionListFragment : Fragment() {
     //region Properties
-    private val adapter = TransactionAdapter(
+    private val adapter = TransactionListAdapter(
         this::onTransactionLongClicked
     )
 
@@ -141,14 +141,14 @@ class TransactionFragment : Fragment() {
     //endregion
 
     companion object {
-        val FRAGMENT_NAME: String = TransactionFragment::class.java.simpleName
+        val FRAGMENT_NAME: String = TransactionListFragment::class.java.simpleName
         private const val ARG_ACCOUNT = "accountName"
 
-        fun newInstance(accountName: String): TransactionFragment {
+        fun newInstance(accountName: String): TransactionListFragment {
             val args = Bundle()
             args.putString(ARG_ACCOUNT, accountName)
 
-            val fragment = TransactionFragment()
+            val fragment = TransactionListFragment()
             fragment.arguments = args
 
             return fragment
