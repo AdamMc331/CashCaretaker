@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.ui.accountlist.AccountListViewModel
+import com.androidessence.cashcaretaker.ui.addaccount.AddAccountViewModel
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionViewModel
 import com.androidessence.cashcaretaker.ui.transactionlist.TransactionListViewModel
 import com.androidessence.cashcaretaker.ui.transfer.AddTransferViewModel
@@ -25,6 +26,10 @@ interface ViewModelFactoryGraph {
 
     fun addTransferViewModelFactory(
         transferInserted: (Boolean) -> Unit
+    ): ViewModelProvider.Factory
+
+    fun addAccountViewModelFactory(
+        accountInserted: (Long) -> Unit
     ): ViewModelProvider.Factory
 }
 
@@ -63,6 +68,13 @@ class BaseViewModelFactoryGraph(
         return AddTransferViewModelFactory(
             dataGraph = dataGraph,
             transferInserted = transferInserted
+        )
+    }
+
+    override fun addAccountViewModelFactory(accountInserted: (Long) -> Unit): ViewModelProvider.Factory {
+        return AddAccountViewModelFactory(
+            dataGraph = dataGraph,
+            accountInserted = accountInserted
         )
     }
 }
@@ -114,6 +126,19 @@ private class AddTransferViewModelFactory(
         return AddTransferViewModel(
             repository = dataGraph.repository,
             transferInserted = transferInserted
+        ) as T
+    }
+}
+
+private class AddAccountViewModelFactory(
+    private val dataGraph: DataGraph,
+    private val accountInserted: (Long) -> Unit
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return AddAccountViewModel(
+            repository = dataGraph.repository,
+            accountInserted = accountInserted,
+            analyticsTracker = dataGraph.analyticsTracker
         ) as T
     }
 }
