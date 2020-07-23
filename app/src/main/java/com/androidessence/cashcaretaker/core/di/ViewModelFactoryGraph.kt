@@ -21,9 +21,7 @@ interface ViewModelFactoryGraph {
 
     fun addTransactionViewModelFactory(): ViewModelProvider.Factory
 
-    fun addTransferViewModelFactory(
-        transferInserted: (Boolean) -> Unit
-    ): ViewModelProvider.Factory
+    fun addTransferViewModelFactory(): ViewModelProvider.Factory
 
     fun addAccountViewModelFactory(): ViewModelProvider.Factory
 }
@@ -54,12 +52,9 @@ class BaseViewModelFactoryGraph(
         )
     }
 
-    override fun addTransferViewModelFactory(
-        transferInserted: (Boolean) -> Unit
-    ): ViewModelProvider.Factory {
+    override fun addTransferViewModelFactory(): ViewModelProvider.Factory {
         return AddTransferViewModelFactory(
-            dataGraph = dataGraph,
-            transferInserted = transferInserted
+            dataGraph = dataGraph
         )
     }
 
@@ -108,13 +103,11 @@ private class AddTransactionViewModelFactory(
 }
 
 private class AddTransferViewModelFactory(
-    private val dataGraph: DataGraph,
-    private val transferInserted: (Boolean) -> Unit
+    private val dataGraph: DataGraph
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return AddTransferViewModel(
             repository = dataGraph.repository,
-            transferInserted = transferInserted,
             analyticsTracker = dataGraph.analyticsTracker
         ) as T
     }
