@@ -103,7 +103,8 @@ private class TransactionListViewModelFactory(
         return TransactionListViewModel(
             repository = dataGraph.repository,
             accountName = accountName,
-            editClicked = editClicked
+            editClicked = editClicked,
+            analyticsTracker = dataGraph.analyticsTracker
         ) as T
     }
 }
@@ -117,7 +118,8 @@ private class AddTransactionViewModelFactory(
         return AddTransactionViewModel(
             repository = dataGraph.repository,
             transactionInserted = transactionInserted,
-            transactionUpdated = transactionUpdated
+            transactionUpdated = transactionUpdated,
+            analyticsTracker = dataGraph.analyticsTracker
         ) as T
     }
 }
@@ -129,7 +131,8 @@ private class AddTransferViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return AddTransferViewModel(
             repository = dataGraph.repository,
-            transferInserted = transferInserted
+            transferInserted = transferInserted,
+            analyticsTracker = dataGraph.analyticsTracker
         ) as T
     }
 }

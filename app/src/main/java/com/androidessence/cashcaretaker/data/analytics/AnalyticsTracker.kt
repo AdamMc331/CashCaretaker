@@ -8,4 +8,6 @@ interface AnalyticsTracker {
     fun trackTransactionAdded()
     fun trackTransactionEdited()
     fun trackTransactionDeleted()
+
+    fun trackTransferAdded()
 }

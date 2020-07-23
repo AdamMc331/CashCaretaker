@@ -30,6 +30,10 @@ class FirebaseAnalyticsTracker : AnalyticsTracker {
         firebase.logEvent(EVENT_TRANSACTION_EDITED, null)
     }
 
+    override fun trackTransferAdded() {
+        firebase.logEvent(EVENT_TRANSFER_ADDED, null)
+    }
+
     companion object {
         private const val EVENT_ACCOUNT_ADDED = "user_added_account"
         private const val EVENT_ACCOUNT_CLICKED = "user_clicked_account"
@@ -38,5 +42,7 @@ class FirebaseAnalyticsTracker : AnalyticsTracker {
         private const val EVENT_TRANSACTION_ADDED = "user_added_transaction"
         private const val EVENT_TRANSACTION_EDITED = "user_edited_transaction"
         private const val EVENT_TRANSACTION_DELETED = "user_deleted_transaction"
+
+        private const val EVENT_TRANSFER_ADDED = "user_added_transfer"
     }
 }
