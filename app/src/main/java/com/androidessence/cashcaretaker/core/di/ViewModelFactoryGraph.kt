@@ -64,14 +64,18 @@ class BaseViewModelFactoryGraph(
         )
     }
 
-    override fun addTransferViewModelFactory(transferInserted: (Boolean) -> Unit): ViewModelProvider.Factory {
+    override fun addTransferViewModelFactory(
+        transferInserted: (Boolean) -> Unit
+    ): ViewModelProvider.Factory {
         return AddTransferViewModelFactory(
             dataGraph = dataGraph,
             transferInserted = transferInserted
         )
     }
 
-    override fun addAccountViewModelFactory(accountInserted: (Long) -> Unit): ViewModelProvider.Factory {
+    override fun addAccountViewModelFactory(
+        accountInserted: (Long) -> Unit
+    ): ViewModelProvider.Factory {
         return AddAccountViewModelFactory(
             dataGraph = dataGraph,
             accountInserted = accountInserted
