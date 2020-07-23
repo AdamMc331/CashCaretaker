@@ -8,13 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
-import com.androidessence.cashcaretaker.data.DatabaseService
-import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.databinding.DialogAddTransferBinding
+import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.ui.views.DatePickerFragment
 import com.androidessence.cashcaretaker.ui.views.SpinnerInputEditText
@@ -39,24 +37,6 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
             field = value
         }
 
-    private val viewModelFactory: ViewModelProvider.Factory by lazy {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                val repository = DatabaseService(
-                    database = RoomDatabase(requireContext())
-                )
-
-                @Suppress("UNCHECKED_CAST")
-                return AddTransferViewModel(
-                    repository = repository,
-                    transferInserted = {
-                        dismiss()
-                    }
-                ) as T
-            }
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,6 +48,14 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
+
+        val viewModelFactory = requireContext().graph()
+            .viewModelFactoryGraph
+            .addTransferViewModelFactory(
+                transferInserted = {
+                    dismiss()
+                }
+            )
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(AddTransferViewModel::class.java)
 
