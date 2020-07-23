@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.ui.accountlist.AccountListViewModel
+import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionViewModel
 import com.androidessence.cashcaretaker.ui.transactionlist.TransactionListViewModel
 
 interface ViewModelFactoryGraph {
@@ -13,6 +14,11 @@ interface ViewModelFactoryGraph {
     fun transactionListViewModelFactory(
         accountName: String,
         editClicked: (Transaction) -> Unit
+    ): ViewModelProvider.Factory
+
+    fun addTransactionViewModelFactory(
+        transactionInserted: (Long) -> Unit,
+        transactionUpdated: (Int) -> Unit
     ): ViewModelProvider.Factory
 }
 
@@ -33,6 +39,17 @@ class BaseViewModelFactoryGraph(
             dataGraph = dataGraph,
             accountName = accountName,
             editClicked = editClicked
+        )
+    }
+
+    override fun addTransactionViewModelFactory(
+        transactionInserted: (Long) -> Unit,
+        transactionUpdated: (Int) -> Unit
+    ): ViewModelProvider.Factory {
+        return AddTransactionViewModelFactory(
+            dataGraph = dataGraph,
+            transactionInserted = transactionInserted,
+            transactionUpdated = transactionUpdated
         )
     }
 }
@@ -58,6 +75,20 @@ private class TransactionListViewModelFactory(
             repository = dataGraph.repository,
             accountName = accountName,
             editClicked = editClicked
+        ) as T
+    }
+}
+
+private class AddTransactionViewModelFactory(
+    private val dataGraph: DataGraph,
+    private val transactionInserted: (Long) -> Unit,
+    private val transactionUpdated: (Int) -> Unit
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return AddTransactionViewModel(
+            repository = dataGraph.repository,
+            transactionInserted = transactionInserted,
+            transactionUpdated = transactionUpdated
         ) as T
     }
 }
