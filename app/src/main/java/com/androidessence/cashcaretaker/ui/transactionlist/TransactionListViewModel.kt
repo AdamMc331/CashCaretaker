@@ -13,6 +13,7 @@ import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
+import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -21,7 +22,8 @@ import kotlinx.coroutines.launch
 class TransactionListViewModel(
     private val repository: CCRepository,
     accountName: String,
-    private val editClicked: (Transaction) -> Unit
+    private val editClicked: (Transaction) -> Unit,
+    private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     private val _state: MutableLiveData<DataViewState> = MutableLiveData<DataViewState>().apply {
         value = DataViewState.Loading
@@ -102,6 +104,7 @@ class TransactionListViewModel(
         selectedTransaction?.let { transaction ->
             job = CoroutineScope(Dispatchers.IO).launch {
                 repository.deleteTransaction(transaction)
+                analyticsTracker.trackTransactionDeleted()
                 clearActionMode()
                 notifyChange()
             }
