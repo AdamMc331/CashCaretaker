@@ -7,6 +7,7 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import java.util.Date
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +16,8 @@ import kotlinx.coroutines.launch
 
 class AddTransferViewModel(
     private val repository: CCRepository,
-    private val transferInserted: (Boolean) -> Unit
+    private val transferInserted: (Boolean) -> Unit,
+    private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     private val _accounts: MutableLiveData<List<Account>> = MutableLiveData()
     val accounts: LiveData<List<Account>> = _accounts
@@ -48,6 +50,7 @@ class AddTransferViewModel(
             else -> {
                 job = CoroutineScope(Dispatchers.IO).launch {
                     repository.transfer(fromAccount, toAccount, transferAmount, date)
+                    analyticsTracker.trackTransferAdded()
                     transferInserted.invoke(true)
                 }
             }
