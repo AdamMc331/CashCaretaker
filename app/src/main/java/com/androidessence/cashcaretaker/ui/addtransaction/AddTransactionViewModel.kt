@@ -1,13 +1,13 @@
 package com.androidessence.cashcaretaker.ui.addtransaction
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import java.util.Date
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -43,7 +43,7 @@ class AddTransactionViewModel(
 
         val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date)
 
-        job = CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val transactionId = repository.insertTransaction(transaction)
             transactionInserted.invoke(transactionId)
             analyticsTracker.trackTransactionAdded()
@@ -71,7 +71,7 @@ class AddTransactionViewModel(
             input.id
         )
 
-        job = CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val updatedCount = repository.updateTransaction(transaction)
             transactionUpdated.invoke(updatedCount)
             analyticsTracker.trackTransactionEdited()
