@@ -6,6 +6,7 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,7 +14,8 @@ import kotlinx.coroutines.withContext
 
 class AddAccountViewModel(
     private val repository: CCRepository,
-    private val accountInserted: (Long) -> Unit
+    private val accountInserted: (Long) -> Unit,
+    private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     val accountNameError = MutableLiveData<Int>()
     val accountBalanceError = MutableLiveData<Int>()
@@ -41,6 +43,7 @@ class AddAccountViewModel(
                 withContext(Dispatchers.Main) {
                     accountInserted.invoke(accountId)
                 }
+                analyticsTracker.trackAccountAdded()
             } catch (constraintException: SQLiteConstraintException) {
                 withContext(Dispatchers.Main) {
                     accountNameError.value = R.string.err_account_name_exists

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
+import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
 import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.ui.addaccount.AddAccountDialog
@@ -43,6 +44,9 @@ class AccountListFragment : Fragment() {
     )
     private lateinit var viewModel: AccountListViewModel
     private lateinit var binding: FragmentAccountBinding
+
+    private val analyticsTracker: AnalyticsTracker
+        get() = requireContext().graph().dataGraph.analyticsTracker
     //endregion
 
     //region Lifecycle Methods
@@ -157,6 +161,7 @@ class AccountListFragment : Fragment() {
     }
 
     private fun onAccountSelected(account: Account) {
+        analyticsTracker.trackAccountClicked()
         (activity as? MainController)?.showTransactions(account.name)
     }
 

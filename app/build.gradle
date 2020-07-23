@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'org.jlleitschuh.gradle.ktlint'
 apply plugin: 'io.gitlab.arturbosch.detekt'
+apply plugin: 'com.google.gms.google-services'
 
 androidExtensions {
     experimental = true
@@ -80,6 +81,9 @@ dependencies {
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
+    // Firebase
+    implementation "com.google.firebase:firebase-analytics-ktx:17.4.4"
 
     // Testing
     testImplementation 'junit:junit:4.13'
