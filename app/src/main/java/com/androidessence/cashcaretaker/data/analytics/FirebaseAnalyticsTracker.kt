@@ -19,8 +19,8 @@ class FirebaseAnalyticsTracker : AnalyticsTracker {
     }
 
     companion object {
-        private const val EVENT_ACCOUNT_ADDED = "user added account"
-        private const val EVENT_ACCOUNT_CLICKED = "user clicked account"
-        private const val EVENT_ACCOUNT_DELETED = "user deleted account"
+        private const val EVENT_ACCOUNT_ADDED = "user_added_account"
+        private const val EVENT_ACCOUNT_CLICKED = "user_clicked_account"
+        private const val EVENT_ACCOUNT_DELETED = "user_deleted_account"
     }
 }
