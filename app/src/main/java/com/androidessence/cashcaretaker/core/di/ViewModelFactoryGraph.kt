@@ -8,9 +8,11 @@ import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.ui.accountlist.AccountListViewModel
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionViewModel
 import com.androidessence.cashcaretaker.ui.transactionlist.TransactionListViewModel
+import com.androidessence.cashcaretaker.ui.transfer.AddTransferViewModel
 
 interface ViewModelFactoryGraph {
     fun accountListViewModelFactory(): ViewModelProvider.Factory
+
     fun transactionListViewModelFactory(
         accountName: String,
         editClicked: (Transaction) -> Unit
@@ -19,6 +21,10 @@ interface ViewModelFactoryGraph {
     fun addTransactionViewModelFactory(
         transactionInserted: (Long) -> Unit,
         transactionUpdated: (Int) -> Unit
+    ): ViewModelProvider.Factory
+
+    fun addTransferViewModelFactory(
+        transferInserted: (Boolean) -> Unit
     ): ViewModelProvider.Factory
 }
 
@@ -50,6 +56,13 @@ class BaseViewModelFactoryGraph(
             dataGraph = dataGraph,
             transactionInserted = transactionInserted,
             transactionUpdated = transactionUpdated
+        )
+    }
+
+    override fun addTransferViewModelFactory(transferInserted: (Boolean) -> Unit): ViewModelProvider.Factory {
+        return AddTransferViewModelFactory(
+            dataGraph = dataGraph,
+            transferInserted = transferInserted
         )
     }
 }
@@ -89,6 +102,18 @@ private class AddTransactionViewModelFactory(
             repository = dataGraph.repository,
             transactionInserted = transactionInserted,
             transactionUpdated = transactionUpdated
+        ) as T
+    }
+}
+
+private class AddTransferViewModelFactory(
+    private val dataGraph: DataGraph,
+    private val transferInserted: (Boolean) -> Unit
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return AddTransferViewModel(
+            repository = dataGraph.repository,
+            transferInserted = transferInserted
         ) as T
     }
 }
