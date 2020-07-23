@@ -9,16 +9,21 @@ import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AddAccountViewModel(
     private val repository: CCRepository,
-    private val accountInserted: (Long) -> Unit,
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     val accountNameError = MutableLiveData<Int>()
     val accountBalanceError = MutableLiveData<Int>()
+
+    private val dismissEventChannel: Channel<Boolean> = Channel()
+    val dismissEvents: Flow<Boolean> = dismissEventChannel.receiveAsFlow()
 
     /**
      * Checks that the information passed in is valid, and inserts an account if it is.
@@ -39,9 +44,9 @@ class AddAccountViewModel(
 
         job = CoroutineScope(Dispatchers.IO).launch {
             try {
-                val accountId = repository.insertAccount(account)
+                repository.insertAccount(account)
                 withContext(Dispatchers.Main) {
-                    accountInserted.invoke(accountId)
+                    dismissEventChannel.send(true)
                 }
                 analyticsTracker.trackAccountAdded()
             } catch (constraintException: SQLiteConstraintException) {
@@ -50,5 +55,10 @@ class AddAccountViewModel(
                 }
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        dismissEventChannel.close()
     }
 }
