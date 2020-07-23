@@ -5,8 +5,6 @@ package com.androidessence.cashcaretaker.core.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.androidessence.cashcaretaker.core.models.Transaction
-import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.ui.accountlist.AccountListViewModel
 import com.androidessence.cashcaretaker.ui.transactionlist.TransactionListViewModel
 
@@ -23,8 +21,7 @@ class BaseViewModelFactoryGraph(
 ) : ViewModelFactoryGraph {
     override fun accountListViewModelFactory(): ViewModelProvider.Factory {
         return AccountListViewModelFactory(
-            dataGraph.repository,
-            dataGraph.analyticsTracker
+            dataGraph
         )
     }
 
@@ -33,7 +30,7 @@ class BaseViewModelFactoryGraph(
         editClicked: (Transaction) -> Unit
     ): ViewModelProvider.Factory {
         return TransactionListViewModelFactory(
-            repository = dataGraph.repository,
+            dataGraph = dataGraph,
             accountName = accountName,
             editClicked = editClicked
         )
@@ -41,25 +38,24 @@ class BaseViewModelFactoryGraph(
 }
 
 private class AccountListViewModelFactory(
-    private val repository: CCRepository,
-    private val analyticsTracker: AnalyticsTracker
+    private val dataGraph: DataGraph
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return AccountListViewModel(
-            repository = repository,
-            analyticsTracker = analyticsTracker
+            repository = dataGraph.repository,
+            analyticsTracker = dataGraph.analyticsTracker
         ) as T
     }
 }
 
 private class TransactionListViewModelFactory(
-    private val repository: CCRepository,
+    private val dataGraph: DataGraph,
     private val accountName: String,
     private val editClicked: (Transaction) -> Unit
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return TransactionListViewModel(
-            repository = repository,
+            repository = dataGraph.repository,
             accountName = accountName,
             editClicked = editClicked
         ) as T
