@@ -4,15 +4,8 @@ import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.databinding.PropertyChangeRegistry
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.Job
 
 open class BaseViewModel : ViewModel(), Observable {
-    protected var job: Job? = null
-
-    override fun onCleared() {
-        super.onCleared()
-        job?.cancel()
-    }
 
     @Transient
     private var mCallbacks: PropertyChangeRegistry? = null
