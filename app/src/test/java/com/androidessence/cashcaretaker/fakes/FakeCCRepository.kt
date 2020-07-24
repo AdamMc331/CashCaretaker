@@ -3,7 +3,7 @@ package com.androidessence.cashcaretaker.fakes
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
-import java.util.*
+import java.util.Date
 import kotlinx.coroutines.flow.Flow
 
 class FakeCCRepository : CCRepository {
