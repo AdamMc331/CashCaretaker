@@ -6,6 +6,7 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.DispatcherProvider
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import java.util.Date
 import kotlinx.coroutines.channels.Channel
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
  */
 class AddTransactionViewModel(
     private val repository: CCRepository,
-    private val analyticsTracker: AnalyticsTracker
+    private val analyticsTracker: AnalyticsTracker,
+    private val dispatcherProvider: DispatcherProvider
 ) : BaseViewModel() {
     val transactionDescriptionError = MutableLiveData<Int>()
     val transactionAmountError = MutableLiveData<Int>()
@@ -46,10 +48,11 @@ class AddTransactionViewModel(
 
         val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date)
 
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.mainDispatcher) {
             repository.insertTransaction(transaction)
             analyticsTracker.trackTransactionAdded()
             dismissEventChannel.send(true)
+            dismissEventChannel.close()
         }
     }
 
@@ -74,11 +77,17 @@ class AddTransactionViewModel(
             input.id
         )
 
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.mainDispatcher) {
             repository.updateTransaction(transaction)
             analyticsTracker.trackTransactionEdited()
             dismissEventChannel.send(true)
+            dismissEventChannel.close()
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        dismissEventChannel.close()
     }
 
     /**
