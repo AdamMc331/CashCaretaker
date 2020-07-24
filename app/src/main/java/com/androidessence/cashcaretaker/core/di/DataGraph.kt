@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.core.di
 
 import android.content.Context
 import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.DataDispatcherProvider
 import com.androidessence.cashcaretaker.data.DispatcherProvider
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.data.analytics.FirebaseAnalyticsTracker
@@ -18,7 +19,7 @@ class SQLiteDatabaseGraph(
     private val context: Context
 ) : DataGraph {
     override val dispatcherProvider: DispatcherProvider by lazy {
-        DispatcherProvider()
+        DataDispatcherProvider()
     }
 
     override val repository: CCRepository by lazy {
