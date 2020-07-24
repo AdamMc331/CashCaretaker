@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.ui.addaccount
 import com.androidessence.cashcaretaker.TestDispatcherProvider
 import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
 import com.androidessence.cashcaretaker.fakes.FakeCCRepository
+import com.androidessence.cashcaretaker.testObserver
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.collect
 
@@ -40,5 +41,15 @@ class AddAccountViewModelRobot {
 
     fun assertCallToTrackAccountAdded() = apply {
         assertThat(fakeAnalyticsTracker.getTrackAccountAddedCount()).isEqualTo(1)
+    }
+
+    fun assertAccountNameError(expectedValue: Int) = apply {
+        val actualValue = viewModel.accountNameError.testObserver().observedValue
+        assertThat(actualValue).isEqualTo(expectedValue)
+    }
+
+    fun assertAccountBalanceError(expectedValue: Int) = apply {
+        val actualValue = viewModel.accountBalanceError.testObserver().observedValue
+        assertThat(actualValue).isEqualTo(expectedValue)
     }
 }
