@@ -22,6 +22,10 @@ class AddAccountViewModelRobot {
         )
     }
 
+    fun mockAccountConstraintException() = apply {
+        fakeRepository.mockAccountConstraintException(true)
+    }
+
     fun addAccount(
         accountName: String?,
         balanceString: String?
