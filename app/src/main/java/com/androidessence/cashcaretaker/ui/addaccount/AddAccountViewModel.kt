@@ -8,12 +8,10 @@ import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AddAccountViewModel(
     private val repository: CCRepository,
@@ -42,17 +40,13 @@ class AddAccountViewModel(
 
         val account = Account(name, balance)
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
                 repository.insertAccount(account)
-                withContext(Dispatchers.Main) {
-                    dismissEventChannel.send(true)
-                }
                 analyticsTracker.trackAccountAdded()
+                dismissEventChannel.send(true)
             } catch (constraintException: SQLiteConstraintException) {
-                withContext(Dispatchers.Main) {
-                    accountNameError.value = R.string.err_account_name_exists
-                }
+                accountNameError.value = R.string.err_account_name_exists
             }
         }
     }

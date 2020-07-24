@@ -9,7 +9,6 @@ import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import java.util.Date
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -52,7 +51,7 @@ class AddTransferViewModel(
                 amountError.value = R.string.amount_invalid
             }
             else -> {
-                viewModelScope.launch(Dispatchers.IO) {
+                viewModelScope.launch {
                     repository.transfer(fromAccount, toAccount, transferAmount, date)
                     analyticsTracker.trackTransferAdded()
                     dismissEventChannel.send(true)

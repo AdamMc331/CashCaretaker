@@ -14,7 +14,6 @@ import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -101,7 +100,7 @@ class TransactionListViewModel(
 
     private fun deleteSelectedTransaction() {
         selectedTransaction?.let { transaction ->
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
                 repository.deleteTransaction(transaction)
                 analyticsTracker.trackTransactionDeleted()
                 clearActionMode()
