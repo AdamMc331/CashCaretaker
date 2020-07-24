@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker.fakes
 
+import android.database.sqlite.SQLiteConstraintException
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
@@ -8,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 class FakeCCRepository : CCRepository {
     private var insertAccountCallCount = 0
+    private var shouldThrowAccountConstraintException = false
 
     override fun fetchAllAccounts(): Flow<List<Account>> {
         TODO("Not yet implemented")
@@ -15,7 +17,12 @@ class FakeCCRepository : CCRepository {
 
     override suspend fun insertAccount(account: Account): Long {
         insertAccountCallCount++
-        return 0L
+
+        if (shouldThrowAccountConstraintException) {
+            throw SQLiteConstraintException()
+        } else {
+            return 0L
+        }
     }
 
     override suspend fun deleteAccount(account: Account): Int {
@@ -45,6 +52,10 @@ class FakeCCRepository : CCRepository {
         date: Date
     ) {
         TODO("Not yet implemented")
+    }
+
+    fun mockAccountConstraintException(shouldThrow: Boolean) {
+        shouldThrowAccountConstraintException = shouldThrow
     }
 
     fun getInsertAccountCallCount(): Int {
