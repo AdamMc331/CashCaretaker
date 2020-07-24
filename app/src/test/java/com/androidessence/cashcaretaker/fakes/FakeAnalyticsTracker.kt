@@ -4,6 +4,8 @@ import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 
 class FakeAnalyticsTracker : AnalyticsTracker {
     private var trackAccountAddedCount = 0
+    private var trackTransactionAddedCount = 0
+    private var trackTransactionEditedCount = 0
 
     override fun trackAccountAdded() {
         trackAccountAddedCount++
@@ -18,11 +20,11 @@ class FakeAnalyticsTracker : AnalyticsTracker {
     }
 
     override fun trackTransactionAdded() {
-        TODO("Not yet implemented")
+        trackTransactionAddedCount++
     }
 
     override fun trackTransactionEdited() {
-        TODO("Not yet implemented")
+        trackTransactionEditedCount++
     }
 
     override fun trackTransactionDeleted() {
@@ -35,5 +37,13 @@ class FakeAnalyticsTracker : AnalyticsTracker {
 
     fun getTrackAccountAddedCount(): Int {
         return trackAccountAddedCount
+    }
+
+    fun getTrackTransactionAddedCount(): Int {
+        return trackTransactionAddedCount
+    }
+
+    fun getTrackTransactionEditedCount(): Int {
+        return trackTransactionEditedCount
     }
 }

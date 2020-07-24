@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.Flow
 
 class FakeCCRepository : CCRepository {
     private var insertAccountCallCount = 0
+    private var insertTransactionCallCount = 0
+    private var updateTransactionCallCount = 0
 
     override fun fetchAllAccounts(): Flow<List<Account>> {
         TODO("Not yet implemented")
@@ -27,11 +29,13 @@ class FakeCCRepository : CCRepository {
     }
 
     override suspend fun insertTransaction(transaction: Transaction): Long {
-        TODO("Not yet implemented")
+        insertTransactionCallCount++
+        return 0L
     }
 
     override suspend fun updateTransaction(transaction: Transaction): Int {
-        TODO("Not yet implemented")
+        updateTransactionCallCount++
+        return 0
     }
 
     override suspend fun deleteTransaction(transaction: Transaction): Int {
@@ -49,5 +53,13 @@ class FakeCCRepository : CCRepository {
 
     fun getInsertAccountCallCount(): Int {
         return insertAccountCallCount
+    }
+
+    fun getInsertTransactionCallCount(): Int {
+        return insertTransactionCallCount
+    }
+
+    fun getUpdateTransactionCallCount(): Int {
+        return updateTransactionCallCount
     }
 }
