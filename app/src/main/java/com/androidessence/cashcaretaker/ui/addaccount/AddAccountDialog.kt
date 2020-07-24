@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
 import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * Dialog to insert an account.
@@ -19,24 +21,6 @@ import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 class AddAccountDialog : DialogFragment() {
     private lateinit var binding: DialogAddAccountBinding
     private lateinit var viewModel: AddAccountViewModel
-
-    private val viewModelFactory: ViewModelProvider.Factory by lazy {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                val repository = requireContext().graph().dataGraph.repository
-                val analyticsTracker = requireContext().graph().dataGraph.analyticsTracker
-
-                @Suppress("UNCHECKED_CAST")
-                return AddAccountViewModel(
-                    repository = repository,
-                    accountInserted = {
-                        dismiss()
-                    },
-                    analyticsTracker = analyticsTracker
-                ) as T
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +53,7 @@ class AddAccountDialog : DialogFragment() {
         val dialog = super.onCreateDialog(savedInstanceState)
 
         initializeViewModel()
+        subscribeToViewModel()
 
         return dialog
     }
@@ -83,6 +68,10 @@ class AddAccountDialog : DialogFragment() {
     }
 
     private fun initializeViewModel() {
+        val viewModelFactory = requireContext().graph()
+            .viewModelFactoryGraph
+            .addAccountViewModelFactory()
+
         viewModel = ViewModelProvider(this, viewModelFactory).get(AddAccountViewModel::class.java)
 
         viewModel.accountNameError.observe(
@@ -102,6 +91,16 @@ class AddAccountDialog : DialogFragment() {
                 }
             }
         )
+    }
+
+    private fun subscribeToViewModel() {
+        lifecycleScope.launch {
+            viewModel.dismissEvents.collect { shouldDismiss ->
+                if (shouldDismiss) {
+                    dismiss()
+                }
+            }
+        }
     }
 
     companion object {

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.databinding.DialogAddTransferBinding
@@ -20,6 +21,8 @@ import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.util.asUIString
 import java.util.Calendar
 import java.util.Date
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * Dialog that allows a user to transfer money from one account to another.
@@ -51,11 +54,7 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
         val viewModelFactory = requireContext().graph()
             .viewModelFactoryGraph
-            .addTransferViewModelFactory(
-                transferInserted = {
-                    dismiss()
-                }
-            )
+            .addTransferViewModelFactory()
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(AddTransferViewModel::class.java)
 
@@ -130,6 +129,14 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
                 }
             }
         )
+
+        lifecycleScope.launch {
+            viewModel.dismissEvents.collect { shouldDismiss ->
+                if (shouldDismiss) {
+                    dismiss()
+                }
+            }
+        }
     }
 
     private fun addTransfer(

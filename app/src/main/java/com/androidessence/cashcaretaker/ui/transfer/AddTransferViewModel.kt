@@ -10,12 +10,14 @@ import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import java.util.Date
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class AddTransferViewModel(
     private val repository: CCRepository,
-    private val transferInserted: (Boolean) -> Unit,
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     private val _accounts: MutableLiveData<List<Account>> = MutableLiveData()
@@ -24,6 +26,9 @@ class AddTransferViewModel(
     val fromAccountError = MutableLiveData<Int>()
     val toAccountError = MutableLiveData<Int>()
     val amountError = MutableLiveData<Int>()
+
+    private val dismissEventChannel: Channel<Boolean> = Channel()
+    val dismissEvents: Flow<Boolean> = dismissEventChannel.receiveAsFlow()
 
     init {
         viewModelScope.launch {
@@ -50,7 +55,7 @@ class AddTransferViewModel(
                 viewModelScope.launch(Dispatchers.IO) {
                     repository.transfer(fromAccount, toAccount, transferAmount, date)
                     analyticsTracker.trackTransferAdded()
-                    transferInserted.invoke(true)
+                    dismissEventChannel.send(true)
                 }
             }
         }
