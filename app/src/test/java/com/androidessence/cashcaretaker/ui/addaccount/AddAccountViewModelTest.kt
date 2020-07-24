@@ -33,6 +33,20 @@ class AddAccountViewModelTest {
     }
 
     @Test
+    fun addingDuplicateAccountShowsError() = runBlockingTest {
+        testRobot
+            .buildViewModel()
+            .mockAccountConstraintException()
+            .addAccount(
+                accountName = "Checking",
+                balanceString = "100.00"
+            )
+            .assertAccountNameError(
+                expectedValue = R.string.err_account_name_exists
+            )
+    }
+
+    @Test
     fun addingNullAccountNameDisplaysError() {
         testRobot
             .buildViewModel()
