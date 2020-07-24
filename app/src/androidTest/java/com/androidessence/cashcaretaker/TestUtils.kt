@@ -2,8 +2,6 @@ package com.androidessence.cashcaretaker
 
 import android.view.View
 import android.widget.Checkable
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
@@ -93,16 +91,4 @@ class TestUtils {
             }
         }
     }
-}
-
-class TestObserver<T> : Observer<T> {
-    var observedValue: T? = null
-
-    override fun onChanged(t: T) {
-        observedValue = t
-    }
-}
-
-fun <T> LiveData<T>.testObserver() = TestObserver<T>().also {
-    observeForever(it)
 }
