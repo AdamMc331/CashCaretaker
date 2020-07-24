@@ -9,6 +9,9 @@ import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import java.util.Date
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -18,12 +21,13 @@ import kotlinx.coroutines.launch
  */
 class AddTransactionViewModel(
     private val repository: CCRepository,
-    private val transactionInserted: (Long) -> Unit,
-    private val transactionUpdated: (Int) -> Unit,
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     val transactionDescriptionError = MutableLiveData<Int>()
     val transactionAmountError = MutableLiveData<Int>()
+
+    private val dismissEventChannel: Channel<Boolean> = Channel()
+    val dismissEvents: Flow<Boolean> = dismissEventChannel.receiveAsFlow()
 
     /**
      * Checks that the information passed in is valid, and inserts an account if it is.
@@ -44,9 +48,9 @@ class AddTransactionViewModel(
         val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date)
 
         job = CoroutineScope(Dispatchers.IO).launch {
-            val transactionId = repository.insertTransaction(transaction)
-            transactionInserted.invoke(transactionId)
+            repository.insertTransaction(transaction)
             analyticsTracker.trackTransactionAdded()
+            dismissEventChannel.send(true)
         }
     }
 
@@ -72,9 +76,9 @@ class AddTransactionViewModel(
         )
 
         job = CoroutineScope(Dispatchers.IO).launch {
-            val updatedCount = repository.updateTransaction(transaction)
-            transactionUpdated.invoke(updatedCount)
+            repository.updateTransaction(transaction)
             analyticsTracker.trackTransactionEdited()
+            dismissEventChannel.send(true)
         }
     }
 

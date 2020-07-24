@@ -19,18 +19,11 @@ interface ViewModelFactoryGraph {
         editClicked: (Transaction) -> Unit
     ): ViewModelProvider.Factory
 
-    fun addTransactionViewModelFactory(
-        transactionInserted: (Long) -> Unit,
-        transactionUpdated: (Int) -> Unit
-    ): ViewModelProvider.Factory
+    fun addTransactionViewModelFactory(): ViewModelProvider.Factory
 
-    fun addTransferViewModelFactory(
-        transferInserted: (Boolean) -> Unit
-    ): ViewModelProvider.Factory
+    fun addTransferViewModelFactory(): ViewModelProvider.Factory
 
-    fun addAccountViewModelFactory(
-        accountInserted: (Long) -> Unit
-    ): ViewModelProvider.Factory
+    fun addAccountViewModelFactory(): ViewModelProvider.Factory
 }
 
 class BaseViewModelFactoryGraph(
@@ -53,32 +46,21 @@ class BaseViewModelFactoryGraph(
         )
     }
 
-    override fun addTransactionViewModelFactory(
-        transactionInserted: (Long) -> Unit,
-        transactionUpdated: (Int) -> Unit
-    ): ViewModelProvider.Factory {
+    override fun addTransactionViewModelFactory(): ViewModelProvider.Factory {
         return AddTransactionViewModelFactory(
-            dataGraph = dataGraph,
-            transactionInserted = transactionInserted,
-            transactionUpdated = transactionUpdated
+            dataGraph = dataGraph
         )
     }
 
-    override fun addTransferViewModelFactory(
-        transferInserted: (Boolean) -> Unit
-    ): ViewModelProvider.Factory {
+    override fun addTransferViewModelFactory(): ViewModelProvider.Factory {
         return AddTransferViewModelFactory(
-            dataGraph = dataGraph,
-            transferInserted = transferInserted
+            dataGraph = dataGraph
         )
     }
 
-    override fun addAccountViewModelFactory(
-        accountInserted: (Long) -> Unit
-    ): ViewModelProvider.Factory {
+    override fun addAccountViewModelFactory(): ViewModelProvider.Factory {
         return AddAccountViewModelFactory(
-            dataGraph = dataGraph,
-            accountInserted = accountInserted
+            dataGraph = dataGraph
         )
     }
 }
@@ -110,41 +92,33 @@ private class TransactionListViewModelFactory(
 }
 
 private class AddTransactionViewModelFactory(
-    private val dataGraph: DataGraph,
-    private val transactionInserted: (Long) -> Unit,
-    private val transactionUpdated: (Int) -> Unit
+    private val dataGraph: DataGraph
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return AddTransactionViewModel(
             repository = dataGraph.repository,
-            transactionInserted = transactionInserted,
-            transactionUpdated = transactionUpdated,
             analyticsTracker = dataGraph.analyticsTracker
         ) as T
     }
 }
 
 private class AddTransferViewModelFactory(
-    private val dataGraph: DataGraph,
-    private val transferInserted: (Boolean) -> Unit
+    private val dataGraph: DataGraph
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return AddTransferViewModel(
             repository = dataGraph.repository,
-            transferInserted = transferInserted,
             analyticsTracker = dataGraph.analyticsTracker
         ) as T
     }
 }
 
 private class AddAccountViewModelFactory(
-    private val dataGraph: DataGraph,
-    private val accountInserted: (Long) -> Unit
+    private val dataGraph: DataGraph
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return AddAccountViewModel(
             repository = dataGraph.repository,
-            accountInserted = accountInserted,
             analyticsTracker = dataGraph.analyticsTracker
         ) as T
     }
