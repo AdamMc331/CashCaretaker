@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.databinding.DialogAddTransactionBinding
@@ -18,6 +19,8 @@ import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.util.asUIString
 import java.util.Calendar
 import java.util.Date
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * Dialog for adding a new transaction.
@@ -83,14 +86,7 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
         val viewModelFactory = requireContext().graph()
             .viewModelFactoryGraph
-            .addTransactionViewModelFactory(
-                transactionInserted = {
-                    dismiss()
-                },
-                transactionUpdated = {
-                    dismiss()
-                }
-            )
+            .addTransactionViewModelFactory()
 
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(AddTransactionViewModel::class.java)
@@ -173,6 +169,14 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
                 }
             }
         )
+
+        lifecycleScope.launch {
+            viewModel.dismissEvents.collect { shouldDismiss ->
+                if (shouldDismiss) {
+                    dismiss()
+                }
+            }
+        }
     }
 
     /**
