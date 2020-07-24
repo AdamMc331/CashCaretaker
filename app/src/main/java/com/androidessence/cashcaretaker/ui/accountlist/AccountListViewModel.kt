@@ -13,8 +13,6 @@ import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -23,8 +21,7 @@ import kotlinx.coroutines.launch
  */
 class AccountListViewModel(
     private val repository: CCRepository,
-    private val analyticsTracker: AnalyticsTracker,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     private val _state: MutableLiveData<AccountListState> = MutableLiveData()
 
@@ -101,7 +98,7 @@ class AccountListViewModel(
     private fun deleteSelectedAccount() {
         val account = selectedAccount ?: return
 
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             repository.deleteAccount(account)
             analyticsTracker.trackAccountDeleted()
 

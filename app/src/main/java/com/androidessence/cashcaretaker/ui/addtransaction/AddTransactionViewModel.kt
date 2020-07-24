@@ -8,7 +8,6 @@ import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import java.util.Date
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -47,7 +46,7 @@ class AddTransactionViewModel(
 
         val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date)
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.insertTransaction(transaction)
             analyticsTracker.trackTransactionAdded()
             dismissEventChannel.send(true)
@@ -75,7 +74,7 @@ class AddTransactionViewModel(
             input.id
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.updateTransaction(transaction)
             analyticsTracker.trackTransactionEdited()
             dismissEventChannel.send(true)
