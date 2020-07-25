@@ -31,8 +31,8 @@ class TransactionListViewModel(
         value = DataViewState.Loading
     }
 
-    private val transactionClickedChannel: Channel<Transaction> = Channel()
-    val transactionClickedFlow: Flow<Transaction> = transactionClickedChannel.receiveAsFlow()
+    private val editClickedChannel: Channel<Transaction> = Channel()
+    val editClickedFlow: Flow<Transaction> = editClickedChannel.receiveAsFlow()
 
     val transactions: LiveData<List<Transaction>> = Transformations.map(_state) { state ->
         (state as? DataViewState.Success<*>)
@@ -63,8 +63,7 @@ class TransactionListViewModel(
                 R.id.action_edit -> {
                     selectedTransaction?.let { transaction ->
                         viewModelScope.launch(dispatcherProvider.mainDispatcher) {
-                            transactionClickedChannel.send(transaction)
-                            transactionClickedChannel.close()
+                            editClickedChannel.send(transaction)
                         }
                     }
                     clearActionMode()
@@ -125,5 +124,6 @@ class TransactionListViewModel(
         super.onCleared()
         actionMode = null
         selectedTransaction = null
+        editClickedChannel.close()
     }
 }

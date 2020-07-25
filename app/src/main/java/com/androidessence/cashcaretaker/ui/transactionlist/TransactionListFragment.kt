@@ -97,7 +97,7 @@ class TransactionListFragment : Fragment() {
         )
 
         lifecycleScope.launch {
-            viewModel.transactionClickedFlow.collect { transaction ->
+            viewModel.editClickedFlow.collect { transaction ->
                 showEditTransaction(transaction)
             }
         }
