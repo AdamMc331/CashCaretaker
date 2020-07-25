@@ -2,7 +2,6 @@ package com.androidessence.cashcaretaker.ui.accountlist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.androidessence.cashcaretaker.core.models.Account
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
