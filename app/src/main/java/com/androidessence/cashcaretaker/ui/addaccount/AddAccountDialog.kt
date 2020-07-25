@@ -7,20 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
-import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Dialog to insert an account.
  */
 class AddAccountDialog : DialogFragment() {
     private lateinit var binding: DialogAddAccountBinding
-    private lateinit var viewModel: AddAccountViewModel
+
+    private val viewModel: AddAccountViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,12 +68,6 @@ class AddAccountDialog : DialogFragment() {
     }
 
     private fun initializeViewModel() {
-        val viewModelFactory = requireContext().graph()
-            .viewModelFactoryGraph
-            .addAccountViewModelFactory()
-
-        viewModel = ViewModelProvider(this, viewModelFactory).get(AddAccountViewModel::class.java)
-
         viewModel.accountNameError.observe(
             this,
             Observer { errorRes ->

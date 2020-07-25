@@ -8,12 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.databinding.DialogAddTransferBinding
-import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.ui.views.DatePickerFragment
 import com.androidessence.cashcaretaker.ui.views.SpinnerInputEditText
@@ -23,16 +21,18 @@ import java.util.Calendar
 import java.util.Date
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Dialog that allows a user to transfer money from one account to another.
  */
 class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
-    private lateinit var viewModel: AddTransferViewModel
     private lateinit var binding: DialogAddTransferBinding
 
     private lateinit var fromAccount: SpinnerInputEditText<Account>
     private lateinit var toAccount: SpinnerInputEditText<Account>
+
+    private val viewModel: AddTransferViewModel by viewModel()
 
     private var selectedDate: Date = Date()
         set(value) {
@@ -51,12 +51,6 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-
-        val viewModelFactory = requireContext().graph()
-            .viewModelFactoryGraph
-            .addTransferViewModelFactory()
-
-        viewModel = ViewModelProvider(this, viewModelFactory).get(AddTransferViewModel::class.java)
 
         return dialog
     }

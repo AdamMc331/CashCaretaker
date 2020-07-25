@@ -8,12 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.databinding.DialogAddTransactionBinding
-import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.ui.views.DatePickerFragment
 import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.util.asUIString
@@ -21,6 +19,7 @@ import java.util.Calendar
 import java.util.Date
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Dialog for adding a new transaction.
@@ -35,8 +34,9 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     private val isWithdrawal: Boolean
         get() = binding.withdrawalSwitch.isChecked
 
-    private lateinit var viewModel: AddTransactionViewModel
     private lateinit var binding: DialogAddTransactionBinding
+
+    private val viewModel: AddTransactionViewModel by viewModel()
 
     private var selectedDate: Date = Date()
         set(value) {
@@ -84,12 +84,6 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
-        val viewModelFactory = requireContext().graph()
-            .viewModelFactoryGraph
-            .addTransactionViewModelFactory()
-
-        viewModel =
-            ViewModelProvider(this, viewModelFactory).get(AddTransactionViewModel::class.java)
         subscribeToViewModel()
         readArguments()
         return dialog
