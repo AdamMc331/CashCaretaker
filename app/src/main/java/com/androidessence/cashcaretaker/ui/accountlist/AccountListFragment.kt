@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +22,7 @@ import com.androidessence.cashcaretaker.ui.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.ui.main.MainController
 import com.androidessence.cashcaretaker.ui.transfer.AddTransferDialog
+import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Fragment for displaying a list of accounts to the user.
@@ -42,8 +42,9 @@ class AccountListFragment : Fragment() {
         withdrawalClicked = this::onWithdrawalButtonClicked,
         depositClicked = this::onDepositButtonClicked
     )
-    private lateinit var viewModel: AccountListViewModel
     private lateinit var binding: FragmentAccountBinding
+
+    private val viewModel: AccountListViewModel by viewModel()
 
     private val analyticsTracker: AnalyticsTracker
         get() = requireContext().graph().dataGraph.analyticsTracker
@@ -131,14 +132,6 @@ class AccountListFragment : Fragment() {
      * which we use to update the adpater when a list is pulled successfully.
      */
     private fun initializeViewModel() {
-        val viewModelFactory = requireContext()
-            .graph()
-            .viewModelFactoryGraph
-            .accountListViewModelFactory()
-
-        viewModel =
-            ViewModelProvider(this, viewModelFactory).get(AccountListViewModel::class.java)
-
         viewModel.accounts.observe(
             this,
             Observer { accounts ->
