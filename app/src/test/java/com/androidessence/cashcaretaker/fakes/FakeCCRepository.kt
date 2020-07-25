@@ -6,15 +6,19 @@ import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
 import java.util.Date
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class FakeCCRepository : CCRepository {
     private var insertAccountCallCount = 0
     private var insertTransactionCallCount = 0
     private var updateTransactionCallCount = 0
+    private var createTransferCallCount = 0
     private var shouldThrowAccountConstraintException = false
 
+    private var mockAccounts: List<Account> = emptyList()
+
     override fun fetchAllAccounts(): Flow<List<Account>> {
-        TODO("Not yet implemented")
+        return flowOf(mockAccounts)
     }
 
     override suspend fun insertAccount(account: Account): Long {
@@ -55,7 +59,7 @@ class FakeCCRepository : CCRepository {
         amount: Double,
         date: Date
     ) {
-        TODO("Not yet implemented")
+        createTransferCallCount++
     }
 
     fun mockAccountConstraintException(shouldThrow: Boolean) {
@@ -72,5 +76,13 @@ class FakeCCRepository : CCRepository {
 
     fun getUpdateTransactionCallCount(): Int {
         return updateTransactionCallCount
+    }
+
+    fun getCreateTransferCallCount(): Int {
+        return createTransferCallCount
+    }
+
+    fun mockAccounts(accounts: List<Account>) {
+        this.mockAccounts = accounts
     }
 }
