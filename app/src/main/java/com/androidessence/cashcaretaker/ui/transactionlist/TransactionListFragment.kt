@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,10 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
-import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * Fragment that displays a list of Transactions.
@@ -32,8 +32,11 @@ class TransactionListFragment : Fragment() {
     private val accountName: String
         get() = arguments?.getString(ARG_ACCOUNT).orEmpty()
 
-    private lateinit var viewModel: TransactionListViewModel
     private lateinit var binding: FragmentTransactionBinding
+
+    private val viewModel: TransactionListViewModel by viewModel {
+        parametersOf(accountName)
+    }
     //endregion
 
     //region Lifecycle Methods
@@ -79,16 +82,6 @@ class TransactionListFragment : Fragment() {
      * and the click subject to edit a transaction.
      */
     private fun initializeViewModel() {
-        val viewModelFactory = requireContext()
-            .graph()
-            .viewModelFactoryGraph
-            .transactionListViewModelFactory(
-                accountName = accountName
-            )
-
-        viewModel =
-            ViewModelProvider(this, viewModelFactory).get(TransactionListViewModel::class.java)
-
         viewModel.transactions.observe(
             this,
             Observer { transactions ->
