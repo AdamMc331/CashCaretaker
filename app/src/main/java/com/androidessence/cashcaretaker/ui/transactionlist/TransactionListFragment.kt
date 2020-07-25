@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,8 @@ import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
 import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * Fragment that displays a list of Transactions.
@@ -80,8 +83,7 @@ class TransactionListFragment : Fragment() {
             .graph()
             .viewModelFactoryGraph
             .transactionListViewModelFactory(
-                accountName = accountName,
-                editClicked = this::showEditTransaction
+                accountName = accountName
             )
 
         viewModel =
@@ -93,6 +95,12 @@ class TransactionListFragment : Fragment() {
                 adapter.items = transactions
             }
         )
+
+        lifecycleScope.launch {
+            viewModel.editClickedFlow.collect { transaction ->
+                showEditTransaction(transaction)
+            }
+        }
     }
 
     private fun initializeRecyclerView() {

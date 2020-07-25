@@ -16,6 +16,7 @@ class FakeCCRepository : CCRepository {
     private var shouldThrowAccountConstraintException = false
 
     private var mockAccounts: List<Account> = emptyList()
+    private var mockTransactions: List<Transaction> = emptyList()
 
     override fun fetchAllAccounts(): Flow<List<Account>> {
         return flowOf(mockAccounts)
@@ -36,7 +37,7 @@ class FakeCCRepository : CCRepository {
     }
 
     override fun fetchTransactionsForAccount(accountName: String): Flow<List<Transaction>> {
-        TODO("Not yet implemented")
+        return flowOf(mockTransactions)
     }
 
     override suspend fun insertTransaction(transaction: Transaction): Long {
@@ -84,5 +85,9 @@ class FakeCCRepository : CCRepository {
 
     fun mockAccounts(accounts: List<Account>) {
         this.mockAccounts = accounts
+    }
+
+    fun mockTransactions(transactions: List<Transaction>) {
+        this.mockTransactions = transactions
     }
 }
