@@ -13,19 +13,26 @@ import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
+import com.androidessence.cashcaretaker.data.DispatcherProvider
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class TransactionListViewModel(
-    private val repository: CCRepository,
     accountName: String,
-    private val editClicked: (Transaction) -> Unit,
-    private val analyticsTracker: AnalyticsTracker
+    private val repository: CCRepository,
+    private val analyticsTracker: AnalyticsTracker,
+    private val dispatcherProvider: DispatcherProvider
 ) : BaseViewModel() {
     private val _state: MutableLiveData<DataViewState> = MutableLiveData<DataViewState>().apply {
         value = DataViewState.Loading
     }
+
+    private val transactionClickedChannel: Channel<Transaction> = Channel()
+    val transactionClickedFlow: Flow<Transaction> = transactionClickedChannel.receiveAsFlow()
 
     val transactions: LiveData<List<Transaction>> = Transformations.map(_state) { state ->
         (state as? DataViewState.Success<*>)
@@ -54,7 +61,12 @@ class TransactionListViewModel(
             when (item?.itemId) {
                 R.id.action_delete -> deleteSelectedTransaction()
                 R.id.action_edit -> {
-                    selectedTransaction?.let(editClicked::invoke)
+                    selectedTransaction?.let { transaction ->
+                        viewModelScope.launch(dispatcherProvider.mainDispatcher) {
+                            transactionClickedChannel.send(transaction)
+                            transactionClickedChannel.close()
+                        }
+                    }
                     clearActionMode()
                 }
             }

@@ -4,7 +4,6 @@ package com.androidessence.cashcaretaker.core.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.ui.accountlist.AccountListViewModel
 import com.androidessence.cashcaretaker.ui.addaccount.AddAccountViewModel
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionViewModel
@@ -15,8 +14,7 @@ interface ViewModelFactoryGraph {
     fun accountListViewModelFactory(): ViewModelProvider.Factory
 
     fun transactionListViewModelFactory(
-        accountName: String,
-        editClicked: (Transaction) -> Unit
+        accountName: String
     ): ViewModelProvider.Factory
 
     fun addTransactionViewModelFactory(): ViewModelProvider.Factory
@@ -36,13 +34,11 @@ class BaseViewModelFactoryGraph(
     }
 
     override fun transactionListViewModelFactory(
-        accountName: String,
-        editClicked: (Transaction) -> Unit
+        accountName: String
     ): ViewModelProvider.Factory {
         return TransactionListViewModelFactory(
             dataGraph = dataGraph,
-            accountName = accountName,
-            editClicked = editClicked
+            accountName = accountName
         )
     }
 
@@ -79,15 +75,14 @@ private class AccountListViewModelFactory(
 
 private class TransactionListViewModelFactory(
     private val dataGraph: DataGraph,
-    private val accountName: String,
-    private val editClicked: (Transaction) -> Unit
+    private val accountName: String
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return TransactionListViewModel(
             repository = dataGraph.repository,
             accountName = accountName,
-            editClicked = editClicked,
-            analyticsTracker = dataGraph.analyticsTracker
+            analyticsTracker = dataGraph.analyticsTracker,
+            dispatcherProvider = dataGraph.dispatcherProvider
         ) as T
     }
 }
