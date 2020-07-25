@@ -97,7 +97,7 @@ class TransactionListViewModel(
     //endregion
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.mainDispatcher) {
             repository.fetchTransactionsForAccount(accountName).collect { transactions ->
                 val dataViewState = when {
                     transactions.isEmpty() -> DataViewState.Empty
@@ -111,7 +111,7 @@ class TransactionListViewModel(
 
     private fun deleteSelectedTransaction() {
         selectedTransaction?.let { transaction ->
-            viewModelScope.launch {
+            viewModelScope.launch(dispatcherProvider.mainDispatcher) {
                 repository.deleteTransaction(transaction)
                 analyticsTracker.trackTransactionDeleted()
                 clearActionMode()
