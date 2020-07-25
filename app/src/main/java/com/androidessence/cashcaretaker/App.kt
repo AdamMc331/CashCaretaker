@@ -17,7 +17,7 @@ import timber.log.Timber
 class App : Application(), CashCaretakerGraphProvider {
 
     override val graph: CashCaretakerGraph by lazy {
-        BaseCashCaretakerGraph(this)
+        BaseCashCaretakerGraph()
     }
 
     override fun onCreate() {

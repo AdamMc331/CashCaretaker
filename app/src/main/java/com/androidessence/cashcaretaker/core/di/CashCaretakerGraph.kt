@@ -1,16 +1,10 @@
 package com.androidessence.cashcaretaker.core.di
 
-import android.content.Context
-
 interface CashCaretakerGraph {
-    val dataGraph: DataGraph
     val viewModelFactoryGraph: ViewModelFactoryGraph
 }
 
-class BaseCashCaretakerGraph(
-    context: Context
-) : CashCaretakerGraph {
-    override val dataGraph: DataGraph = SQLiteDatabaseGraph(context)
+class BaseCashCaretakerGraph() : CashCaretakerGraph {
 
-    override val viewModelFactoryGraph: ViewModelFactoryGraph = BaseViewModelFactoryGraph(dataGraph)
+    override val viewModelFactoryGraph: ViewModelFactoryGraph = BaseViewModelFactoryGraph()
 }

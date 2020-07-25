@@ -17,11 +17,11 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.databinding.FragmentAccountBinding
-import com.androidessence.cashcaretaker.graph
 import com.androidessence.cashcaretaker.ui.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.ui.main.MainController
 import com.androidessence.cashcaretaker.ui.transfer.AddTransferDialog
+import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -46,8 +46,7 @@ class AccountListFragment : Fragment() {
 
     private val viewModel: AccountListViewModel by viewModel()
 
-    private val analyticsTracker: AnalyticsTracker
-        get() = requireContext().graph().dataGraph.analyticsTracker
+    private val analyticsTracker: AnalyticsTracker = get()
     //endregion
 
     //region Lifecycle Methods

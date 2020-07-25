@@ -4,7 +4,14 @@ package com.androidessence.cashcaretaker.core.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.DispatcherProvider
+import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.ui.transactionlist.TransactionListViewModel
+import org.koin.core.KoinComponent
+import org.koin.core.context.KoinContextHandler.get
+import org.koin.core.inject
+import org.koin.java.KoinJavaComponent.inject
 
 interface ViewModelFactoryGraph {
     fun transactionListViewModelFactory(
@@ -12,30 +19,30 @@ interface ViewModelFactoryGraph {
     ): ViewModelProvider.Factory
 }
 
-class BaseViewModelFactoryGraph(
-    private val dataGraph: DataGraph
-) : ViewModelFactoryGraph {
+class BaseViewModelFactoryGraph : ViewModelFactoryGraph {
 
     override fun transactionListViewModelFactory(
         accountName: String
     ): ViewModelProvider.Factory {
         return TransactionListViewModelFactory(
-            dataGraph = dataGraph,
             accountName = accountName
         )
     }
 }
 
 private class TransactionListViewModelFactory(
-    private val dataGraph: DataGraph,
     private val accountName: String
-) : ViewModelProvider.Factory {
+) : ViewModelProvider.Factory, KoinComponent {
+    private val repository: CCRepository by inject()
+    private val analyticsTracker: AnalyticsTracker by inject()
+    private val dispatcherProvider: DispatcherProvider by inject()
+
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return TransactionListViewModel(
-            repository = dataGraph.repository,
+            repository = repository,
             accountName = accountName,
-            analyticsTracker = dataGraph.analyticsTracker,
-            dispatcherProvider = dataGraph.dispatcherProvider
+            analyticsTracker = analyticsTracker,
+            dispatcherProvider = dispatcherProvider
         ) as T
     }
 }
