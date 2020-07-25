@@ -71,7 +71,8 @@ private class AccountListViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return AccountListViewModel(
             repository = dataGraph.repository,
-            analyticsTracker = dataGraph.analyticsTracker
+            analyticsTracker = dataGraph.analyticsTracker,
+            dispatcherProvider = dataGraph.dispatcherProvider
         ) as T
     }
 }
