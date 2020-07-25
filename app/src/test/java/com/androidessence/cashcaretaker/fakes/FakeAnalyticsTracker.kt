@@ -6,6 +6,7 @@ class FakeAnalyticsTracker : AnalyticsTracker {
     private var trackAccountAddedCount = 0
     private var trackTransactionAddedCount = 0
     private var trackTransactionEditedCount = 0
+    private var trackTransferAddedCount = 0
 
     override fun trackAccountAdded() {
         trackAccountAddedCount++
@@ -32,7 +33,7 @@ class FakeAnalyticsTracker : AnalyticsTracker {
     }
 
     override fun trackTransferAdded() {
-        TODO("Not yet implemented")
+        trackTransferAddedCount++
     }
 
     fun getTrackAccountAddedCount(): Int {
@@ -45,5 +46,9 @@ class FakeAnalyticsTracker : AnalyticsTracker {
 
     fun getTrackTransactionEditedCount(): Int {
         return trackTransactionEditedCount
+    }
+
+    fun getTrackTransferAddedCount(): Int {
+        return trackTransferAddedCount
     }
 }
