@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'org.jlleitschuh.gradle.ktlint'
 apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'dagger.hilt.android.plugin'
 
 androidExtensions {
     experimental = true
@@ -25,13 +26,6 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ["room.schemaLocation":
-                                     "$projectDir/schemas".toString()]
-            }
-        }
     }
     buildTypes {
         release {
@@ -102,6 +96,10 @@ dependencies {
     implementation "org.koin:koin-android-viewmodel:2.1.6"
     // Testing
     testImplementation "org.koin:koin-test:2.1.6"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:2.28-alpha"
+    kapt "com.google.dagger:hilt-android-compiler:2.28-alpha"
 
     // Testing
     testImplementation 'junit:junit:4.13'

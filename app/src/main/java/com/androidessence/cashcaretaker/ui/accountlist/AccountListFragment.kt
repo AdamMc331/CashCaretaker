@@ -21,6 +21,8 @@ import com.androidessence.cashcaretaker.ui.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.ui.main.MainController
 import com.androidessence.cashcaretaker.ui.transfer.AddTransferDialog
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -34,6 +36,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
  * notifying the fragment. This component also handles the ActionMode behavior.
  */
 @Suppress("TooManyFunctions")
+@AndroidEntryPoint
 class AccountListFragment : Fragment() {
     //region Properties
     private val adapter = AccountListAdapter(
@@ -44,9 +47,11 @@ class AccountListFragment : Fragment() {
     )
     private lateinit var binding: FragmentAccountBinding
 
-    private val viewModel: AccountListViewModel by viewModel()
+    @Inject
+    lateinit var viewModel: AccountListViewModel
 
-    private val analyticsTracker: AnalyticsTracker = get()
+    @Inject
+    lateinit var analyticsTracker: AnalyticsTracker
     //endregion
 
     //region Lifecycle Methods

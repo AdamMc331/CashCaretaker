@@ -13,13 +13,14 @@ import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
+import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
  * LifeCycle aware class that fetches accounts from the database and exposes them through the [_state].
  */
-class AccountListViewModel(
+class AccountListViewModel @Inject constructor(
     private val repository: CCRepository,
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {

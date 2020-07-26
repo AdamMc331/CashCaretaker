@@ -11,11 +11,13 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.ui.accountlist.AccountListFragment
 import com.androidessence.cashcaretaker.ui.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.ui.transactionlist.TransactionListFragment
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 /**
  * Main entry point into the application.
  */
+@AndroidEntryPoint
 class MainActivity :
     AppCompatActivity(),
     MainController,
