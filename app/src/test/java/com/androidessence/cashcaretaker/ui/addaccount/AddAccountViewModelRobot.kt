@@ -1,21 +1,23 @@
 package com.androidessence.cashcaretaker.ui.addaccount
 
-import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
+import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.fakes.FakeCCRepository
 import com.androidessence.cashcaretaker.testObserver
 import com.google.common.truth.Truth.assertThat
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.flow.collect
 
 class AddAccountViewModelRobot {
     private val fakeRepository = FakeCCRepository()
-    private val fakeAnalyticsTracker = FakeAnalyticsTracker()
+    private val mockAnalyticsTracker = mockk<AnalyticsTracker>(relaxUnitFun = true)
 
     private lateinit var viewModel: AddAccountViewModel
 
     fun buildViewModel() = apply {
         viewModel = AddAccountViewModel(
             repository = fakeRepository,
-            analyticsTracker = fakeAnalyticsTracker
+            analyticsTracker = mockAnalyticsTracker
         )
     }
 
@@ -41,7 +43,9 @@ class AddAccountViewModelRobot {
     }
 
     fun assertCallToTrackAccountAdded() = apply {
-        assertThat(fakeAnalyticsTracker.getTrackAccountAddedCount()).isEqualTo(1)
+        verify(exactly = 1) {
+            mockAnalyticsTracker.trackAccountAdded()
+        }
     }
 
     fun assertAccountNameError(expectedValue: Int) = apply {

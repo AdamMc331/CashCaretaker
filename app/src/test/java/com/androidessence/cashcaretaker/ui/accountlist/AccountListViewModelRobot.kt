@@ -1,20 +1,21 @@
 package com.androidessence.cashcaretaker.ui.accountlist
 
 import com.androidessence.cashcaretaker.core.models.Account
-import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
+import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.fakes.FakeCCRepository
 import com.androidessence.cashcaretaker.testObserver
 import com.google.common.truth.Truth.assertThat
+import io.mockk.mockkClass
 
 class AccountListViewModelRobot {
     private val fakeRepository = FakeCCRepository()
-    private val fakeAnalyticsTracker = FakeAnalyticsTracker()
+    private val mockAnalyticsTracker = mockkClass(AnalyticsTracker::class)
     private lateinit var viewModel: AccountListViewModel
 
     fun buildViewModel() = apply {
         viewModel = AccountListViewModel(
             repository = fakeRepository,
-            analyticsTracker = fakeAnalyticsTracker
+            analyticsTracker = mockAnalyticsTracker
         )
     }
 
@@ -27,6 +28,9 @@ class AccountListViewModelRobot {
         assertThat(actualAccounts).isEqualTo(expectedAccounts)
     }
 
+    /**
+     * TODO: Test this
+     */
     fun assertShouldAllowTransfers(shouldAllow: Boolean) = apply {
         assertThat(viewModel.allowTransfers).isEqualTo(shouldAllow)
     }

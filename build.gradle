@@ -47,10 +47,7 @@ allprojects {
         //Libraries
         constraintLayoutVersion = "1.1.3"
         materialDesignSpecsVersion = "2.0.1"
-        mockitoVersion = "2.16.0"
         timberVersion = "4.7.1"
-        rxJavaVersion = "2.2.1"
-        rxAndroidVersion = "2.1.1"
     }
 }
 
