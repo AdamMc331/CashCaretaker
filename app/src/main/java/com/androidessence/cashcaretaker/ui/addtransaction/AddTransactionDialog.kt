@@ -17,9 +17,9 @@ import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.util.asUIString
 import java.util.Calendar
 import java.util.Date
+import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Dialog for adding a new transaction.
@@ -36,7 +36,8 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
     private lateinit var binding: DialogAddTransactionBinding
 
-    private val viewModel: AddTransactionViewModel by viewModel()
+    @Inject
+    lateinit var viewModel: AddTransactionViewModel
 
     private var selectedDate: Date = Date()
         set(value) {

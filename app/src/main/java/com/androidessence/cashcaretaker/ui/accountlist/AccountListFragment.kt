@@ -23,8 +23,6 @@ import com.androidessence.cashcaretaker.ui.main.MainController
 import com.androidessence.cashcaretaker.ui.transfer.AddTransferDialog
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import org.koin.android.ext.android.get
-import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Fragment for displaying a list of accounts to the user.

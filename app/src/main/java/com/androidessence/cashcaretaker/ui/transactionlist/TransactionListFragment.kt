@@ -17,8 +17,6 @@ import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 /**
  * Fragment that displays a list of Transactions.
@@ -34,9 +32,7 @@ class TransactionListFragment : Fragment() {
 
     private lateinit var binding: FragmentTransactionBinding
 
-    private val viewModel: TransactionListViewModel by viewModel {
-        parametersOf(accountName)
-    }
+    private val viewModel: TransactionListViewModel by viewModels()
     //endregion
 
     //region Lifecycle Methods

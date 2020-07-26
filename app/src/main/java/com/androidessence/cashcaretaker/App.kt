@@ -1,11 +1,7 @@
 package com.androidessence.cashcaretaker
 
 import android.app.Application
-import com.androidessence.cashcaretaker.core.di.dataModule
-import com.androidessence.cashcaretaker.core.di.viewModelModule
 import dagger.hilt.android.HiltAndroidApp
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
 import timber.log.Timber
 
 /**
@@ -19,11 +15,6 @@ class App : Application() {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-        }
-
-        startKoin {
-            androidContext(this@App)
-            modules(listOf(dataModule, viewModelModule))
         }
     }
 }

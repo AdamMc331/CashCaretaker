@@ -8,12 +8,13 @@ import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class AddAccountViewModel(
+class AddAccountViewModel @Inject constructor(
     private val repository: CCRepository,
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {

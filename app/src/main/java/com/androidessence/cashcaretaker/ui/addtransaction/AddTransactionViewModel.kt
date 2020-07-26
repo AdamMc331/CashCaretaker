@@ -8,6 +8,7 @@ import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import java.util.Date
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
  *
  * @property[repository] A repository that is used to insert/update accounts.
  */
-class AddTransactionViewModel(
+class AddTransactionViewModel @Inject constructor(
     private val repository: CCRepository,
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {

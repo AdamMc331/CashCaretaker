@@ -4,6 +4,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -20,7 +21,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class TransactionListViewModel(
+class TransactionListViewModel @ViewModelInject constructor(
     accountName: String,
     private val repository: CCRepository,
     private val analyticsTracker: AnalyticsTracker

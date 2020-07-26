@@ -10,17 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
 import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
+import dagger.hilt.EntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Dialog to insert an account.
  */
+@EntryPoint
 class AddAccountDialog : DialogFragment() {
     private lateinit var binding: DialogAddAccountBinding
 
-    private val viewModel: AddAccountViewModel by viewModel()
+    @Inject
+    lateinit var viewModel: AddAccountViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
