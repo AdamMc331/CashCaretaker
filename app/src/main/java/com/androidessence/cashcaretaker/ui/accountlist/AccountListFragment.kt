@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,8 +46,7 @@ class AccountListFragment : Fragment() {
     )
     private lateinit var binding: FragmentAccountBinding
 
-    @Inject
-    lateinit var viewModel: AccountListViewModel
+    private val viewModel: AccountListViewModel by viewModels()
 
     @Inject
     lateinit var analyticsTracker: AnalyticsTracker

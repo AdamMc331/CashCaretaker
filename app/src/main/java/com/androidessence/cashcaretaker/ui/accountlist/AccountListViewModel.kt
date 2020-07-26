@@ -4,6 +4,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -13,14 +14,13 @@ import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
-import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
  * LifeCycle aware class that fetches accounts from the database and exposes them through the [_state].
  */
-class AccountListViewModel @Inject constructor(
+class AccountListViewModel @ViewModelInject constructor(
     private val repository: CCRepository,
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {

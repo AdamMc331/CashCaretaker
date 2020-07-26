@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Transaction
@@ -17,7 +18,6 @@ import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.util.asUIString
 import java.util.Calendar
 import java.util.Date
-import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -36,8 +36,7 @@ class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListene
 
     private lateinit var binding: DialogAddTransactionBinding
 
-    @Inject
-    lateinit var viewModel: AddTransactionViewModel
+    private val viewModel: AddTransactionViewModel by viewModels()
 
     private var selectedDate: Date = Date()
         set(value) {

@@ -1,6 +1,7 @@
 package com.androidessence.cashcaretaker.ui.addaccount
 
 import android.database.sqlite.SQLiteConstraintException
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
@@ -8,13 +9,12 @@ import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
-import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class AddAccountViewModel @Inject constructor(
+class AddAccountViewModel @ViewModelInject constructor(
     private val repository: CCRepository,
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {

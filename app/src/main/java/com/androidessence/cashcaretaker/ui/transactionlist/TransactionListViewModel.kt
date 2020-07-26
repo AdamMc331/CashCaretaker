@@ -4,9 +4,11 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
@@ -22,10 +24,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class TransactionListViewModel @ViewModelInject constructor(
-    accountName: String,
     private val repository: CCRepository,
-    private val analyticsTracker: AnalyticsTracker
+    private val analyticsTracker: AnalyticsTracker,
+    @Assisted private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
+    private val accountName = savedStateHandle.get<String>("accountName").orEmpty()
+
     private val _state: MutableLiveData<DataViewState> = MutableLiveData<DataViewState>().apply {
         value = DataViewState.Loading
     }

@@ -6,24 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
 import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
-import dagger.hilt.EntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
  * Dialog to insert an account.
  */
-@EntryPoint
 class AddAccountDialog : DialogFragment() {
     private lateinit var binding: DialogAddAccountBinding
 
-    @Inject
-    lateinit var viewModel: AddAccountViewModel
+    private val viewModel: AddAccountViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

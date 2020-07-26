@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker.ui.transactionlist
 
+import androidx.lifecycle.SavedStateHandle
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
 import com.androidessence.cashcaretaker.fakes.FakeCCRepository
@@ -15,11 +16,14 @@ class TransactionListViewModelRobot {
         fakeRepository.mockTransactions(transactions)
     }
 
+    /**
+     * TODO: This mess now with SavedStateHandle
+     */
     fun buildViewModel(accountName: String) = apply {
         viewModel = TransactionListViewModel(
-            accountName = accountName,
             repository = fakeRepository,
-            analyticsTracker = fakeAnalyticsTracker
+            analyticsTracker = fakeAnalyticsTracker,
+            savedStateHandle = SavedStateHandle()
         )
     }
 

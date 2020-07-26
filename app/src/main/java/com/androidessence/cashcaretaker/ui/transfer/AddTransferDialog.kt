@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
@@ -21,7 +22,6 @@ import java.util.Calendar
 import java.util.Date
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Dialog that allows a user to transfer money from one account to another.
@@ -32,7 +32,7 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var fromAccount: SpinnerInputEditText<Account>
     private lateinit var toAccount: SpinnerInputEditText<Account>
 
-    private val viewModel: AddTransferViewModel by viewModel()
+    private val viewModel: AddTransferViewModel by viewModels()
 
     private var selectedDate: Date = Date()
         set(value) {

@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker.ui.addtransaction
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.androidessence.cashcaretaker.R
@@ -8,7 +9,6 @@ import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import java.util.Date
-import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
  *
  * @property[repository] A repository that is used to insert/update accounts.
  */
-class AddTransactionViewModel @Inject constructor(
+class AddTransactionViewModel @ViewModelInject constructor(
     private val repository: CCRepository,
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
