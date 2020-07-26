@@ -96,6 +96,13 @@ dependencies {
     // Firebase
     implementation "com.google.firebase:firebase-analytics-ktx:17.4.4"
 
+    // Koin for Kotlin apps
+    implementation "org.koin:koin-core:2.1.6"
+    implementation "org.koin:koin-android:2.1.6"
+    implementation "org.koin:koin-android-viewmodel:2.1.6"
+    // Testing
+    testImplementation "org.koin:koin-test:2.1.6"
+
     // Testing
     testImplementation 'junit:junit:4.13'
     testImplementation "org.mockito:mockito-core:3.4.3"
