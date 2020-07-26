@@ -1,6 +1,5 @@
 package com.androidessence.cashcaretaker.ui.addtransaction
 
-import com.androidessence.cashcaretaker.TestDispatcherProvider
 import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
 import com.androidessence.cashcaretaker.fakes.FakeCCRepository
 import com.androidessence.cashcaretaker.testObserver
@@ -11,14 +10,12 @@ import kotlinx.coroutines.flow.collect
 class AddTransactionViewModelRobot {
     private val fakeRepository = FakeCCRepository()
     private val fakeAnalyticsTracker = FakeAnalyticsTracker()
-    private val testDispatcherProvider = TestDispatcherProvider()
     private lateinit var viewModel: AddTransactionViewModel
 
     fun buildViewModel() = apply {
         viewModel = AddTransactionViewModel(
             repository = fakeRepository,
-            analyticsTracker = fakeAnalyticsTracker,
-            dispatcherProvider = testDispatcherProvider
+            analyticsTracker = fakeAnalyticsTracker
         )
     }
 

@@ -12,32 +12,28 @@ val viewModelModule = module {
     viewModel {
         AccountListViewModel(
             repository = get(),
-            analyticsTracker = get(),
-            dispatcherProvider = get()
+            analyticsTracker = get()
         )
     }
 
     viewModel {
         AddTransactionViewModel(
             repository = get(),
-            analyticsTracker = get(),
-            dispatcherProvider = get()
+            analyticsTracker = get()
         )
     }
 
     viewModel {
         AddTransferViewModel(
             repository = get(),
-            analyticsTracker = get(),
-            dispatcherProvider = get()
+            analyticsTracker = get()
         )
     }
 
     viewModel {
         AddAccountViewModel(
             repository = get(),
-            analyticsTracker = get(),
-            dispatcherProvider = get()
+            analyticsTracker = get()
         )
     }
 
@@ -45,8 +41,7 @@ val viewModelModule = module {
         TransactionListViewModel(
             accountName = accountName,
             repository = get(),
-            analyticsTracker = get(),
-            dispatcherProvider = get()
+            analyticsTracker = get()
         )
     }
 }

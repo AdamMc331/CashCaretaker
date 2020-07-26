@@ -1,19 +1,26 @@
 package com.androidessence.cashcaretaker.ui.transfer
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.androidessence.cashcaretaker.CoroutinesTestRule
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
 import java.util.Date
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class AddTransferViewModelTest {
     private lateinit var testRobot: AddTransferViewModelRobot
 
     @JvmField
     @Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @JvmField
+    @Rule
+    val coroutineTestRule = CoroutinesTestRule()
 
     @Before
     fun setUp() {

@@ -1,6 +1,5 @@
 package com.androidessence.cashcaretaker.ui.addaccount
 
-import com.androidessence.cashcaretaker.TestDispatcherProvider
 import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
 import com.androidessence.cashcaretaker.fakes.FakeCCRepository
 import com.androidessence.cashcaretaker.testObserver
@@ -10,15 +9,13 @@ import kotlinx.coroutines.flow.collect
 class AddAccountViewModelRobot {
     private val fakeRepository = FakeCCRepository()
     private val fakeAnalyticsTracker = FakeAnalyticsTracker()
-    private val testDispatcherProvider = TestDispatcherProvider()
 
     private lateinit var viewModel: AddAccountViewModel
 
     fun buildViewModel() = apply {
         viewModel = AddAccountViewModel(
             repository = fakeRepository,
-            analyticsTracker = fakeAnalyticsTracker,
-            dispatcherProvider = testDispatcherProvider
+            analyticsTracker = fakeAnalyticsTracker
         )
     }
 
