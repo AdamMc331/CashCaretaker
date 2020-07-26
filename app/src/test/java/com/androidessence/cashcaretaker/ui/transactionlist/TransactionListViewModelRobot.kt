@@ -1,25 +1,32 @@
 package com.androidessence.cashcaretaker.ui.transactionlist
 
 import com.androidessence.cashcaretaker.core.models.Transaction
+import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
-import com.androidessence.cashcaretaker.fakes.FakeCCRepository
 import com.androidessence.cashcaretaker.testObserver
 import com.google.common.truth.Truth.assertThat
-import io.mockk.mockkClass
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 
 class TransactionListViewModelRobot {
-    private val fakeRepository = FakeCCRepository()
-    private val mockAnalyticsTracker = mockkClass(AnalyticsTracker::class)
+    private val mockRepository = mockk<CCRepository>(relaxed = true)
+    private val mockAnalyticsTracker = mockk<AnalyticsTracker>(relaxed = true)
     private lateinit var viewModel: TransactionListViewModel
 
-    fun mockTransactions(transactions: List<Transaction>) = apply {
-        fakeRepository.mockTransactions(transactions)
+    fun mockTransactionsForAccount(
+        accountName: String,
+        transactions: List<Transaction>
+    ) = apply {
+        coEvery {
+            mockRepository.fetchTransactionsForAccount(accountName)
+        } returns flowOf(transactions)
     }
 
     fun buildViewModel(accountName: String) = apply {
         viewModel = TransactionListViewModel(
             accountName = accountName,
-            repository = fakeRepository,
+            repository = mockRepository,
             analyticsTracker = mockAnalyticsTracker
         )
     }

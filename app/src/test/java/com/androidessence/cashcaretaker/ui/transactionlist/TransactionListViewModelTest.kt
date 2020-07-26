@@ -27,6 +27,8 @@ class TransactionListViewModelTest {
 
     @Test
     fun fetchValidTransactions() {
+        val accountName = "Checking"
+
         val testTransactions = listOf(
             Transaction(
                 description = "Test Transaction"
@@ -34,8 +36,11 @@ class TransactionListViewModelTest {
         )
 
         testRobot
-            .mockTransactions(testTransactions)
-            .buildViewModel("")
+            .mockTransactionsForAccount(
+                accountName,
+                testTransactions
+            )
+            .buildViewModel(accountName)
             .assertTransactions(testTransactions)
             .assertShowTransactions(true)
             .assertShowLoading(false)
@@ -44,9 +49,14 @@ class TransactionListViewModelTest {
 
     @Test
     fun fetchEmptyTransactionList() {
+        val accountName = "Checking"
+
         testRobot
-            .mockTransactions(emptyList())
-            .buildViewModel("")
+            .mockTransactionsForAccount(
+                accountName,
+                emptyList()
+            )
+            .buildViewModel(accountName)
             .assertTransactions(emptyList())
             .assertShowTransactions(false)
             .assertShowLoading(false)
