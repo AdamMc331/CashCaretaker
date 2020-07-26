@@ -18,6 +18,7 @@ import com.androidessence.cashcaretaker.ui.views.DatePickerFragment
 import com.androidessence.cashcaretaker.ui.views.SpinnerInputEditText
 import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.util.asUIString
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 import java.util.Date
 import kotlinx.coroutines.flow.collect
@@ -26,6 +27,7 @@ import kotlinx.coroutines.launch
 /**
  * Dialog that allows a user to transfer money from one account to another.
  */
+@AndroidEntryPoint
 class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var binding: DialogAddTransferBinding
 

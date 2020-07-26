@@ -11,12 +11,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
 import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
  * Dialog to insert an account.
  */
+@AndroidEntryPoint
 class AddAccountDialog : DialogFragment() {
     private lateinit var binding: DialogAddAccountBinding
 

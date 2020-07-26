@@ -16,12 +16,14 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
  * Fragment that displays a list of Transactions.
  */
+@AndroidEntryPoint
 class TransactionListFragment : Fragment() {
     //region Properties
     private val adapter = TransactionListAdapter(

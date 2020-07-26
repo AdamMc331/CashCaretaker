@@ -16,6 +16,7 @@ import com.androidessence.cashcaretaker.databinding.DialogAddTransactionBinding
 import com.androidessence.cashcaretaker.ui.views.DatePickerFragment
 import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.util.asUIString
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 import java.util.Date
 import kotlinx.coroutines.flow.collect
@@ -24,6 +25,7 @@ import kotlinx.coroutines.launch
 /**
  * Dialog for adding a new transaction.
  */
+@AndroidEntryPoint
 class AddTransactionDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     //region Properties
     private lateinit var accountName: String
