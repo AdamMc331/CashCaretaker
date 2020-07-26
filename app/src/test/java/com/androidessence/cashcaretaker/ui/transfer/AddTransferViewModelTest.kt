@@ -29,15 +29,25 @@ class AddTransferViewModelTest {
 
     @Test
     fun createValidTransferInsertsTracksAndDismisses() {
+        val fromAccount = Account(name = "From")
+        val toAccount = Account(name = "to")
+        val amount = 100.00
+        val date = Date()
+
         testRobot
             .buildViewModel()
             .addTransfer(
-                fromAccount = Account(),
-                toAccount = Account(),
-                amount = "100.00",
-                date = Date()
+                fromAccount = fromAccount,
+                toAccount = toAccount,
+                amount = amount.toString(),
+                date = date
             )
-            .assertCallToCreateTransfer()
+            .assertCallToCreateTransfer(
+                fromAccount = fromAccount,
+                toAccount = toAccount,
+                amount = amount,
+                date = date
+            )
             .assertCallToTrackTransfer()
     }
 
