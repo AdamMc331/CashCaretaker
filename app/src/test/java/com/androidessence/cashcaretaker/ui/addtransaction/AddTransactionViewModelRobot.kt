@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.collect
 
 class AddTransactionViewModelRobot {
     private val fakeRepository = FakeCCRepository()
-    private val mockAnalyticsTracker = mockk<AnalyticsTracker>(relaxUnitFun = true)
+    private val mockAnalyticsTracker = mockk<AnalyticsTracker>(relaxed = true)
     private lateinit var viewModel: AddTransactionViewModel
 
     fun buildViewModel() = apply {

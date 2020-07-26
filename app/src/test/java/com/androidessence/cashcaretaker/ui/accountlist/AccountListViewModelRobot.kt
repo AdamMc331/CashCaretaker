@@ -1,26 +1,30 @@
 package com.androidessence.cashcaretaker.ui.accountlist
 
 import com.androidessence.cashcaretaker.core.models.Account
+import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
-import com.androidessence.cashcaretaker.fakes.FakeCCRepository
 import com.androidessence.cashcaretaker.testObserver
 import com.google.common.truth.Truth.assertThat
-import io.mockk.mockkClass
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 
 class AccountListViewModelRobot {
-    private val fakeRepository = FakeCCRepository()
-    private val mockAnalyticsTracker = mockkClass(AnalyticsTracker::class)
+    private val mockRepository = mockk<CCRepository>()
+    private val mockAnalyticsTracker = mockk<AnalyticsTracker>()
     private lateinit var viewModel: AccountListViewModel
 
     fun buildViewModel() = apply {
         viewModel = AccountListViewModel(
-            repository = fakeRepository,
+            repository = mockRepository,
             analyticsTracker = mockAnalyticsTracker
         )
     }
 
     fun mockAccounts(accounts: List<Account>) = apply {
-        fakeRepository.mockAccounts(accounts)
+        coEvery {
+            mockRepository.fetchAllAccounts()
+        } returns flowOf(accounts)
     }
 
     fun assertAccounts(expectedAccounts: List<Account>) = apply {

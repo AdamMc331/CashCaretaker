@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.ui.addaccount
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.androidessence.cashcaretaker.CoroutinesTestRule
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.core.models.Account
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
@@ -28,25 +29,41 @@ class AddAccountViewModelTest {
 
     @Test
     fun addingValidAccountInsertsTracksAndDismisses() = runBlockingTest {
+        val testAccountName = "Checking"
+        val testAccountBalance = "100.00"
+
+        val testAccount = Account(
+            name = testAccountName,
+            balance = 100.00
+        )
+
         testRobot
             .buildViewModel()
             .addAccount(
-                accountName = "Checking",
-                balanceString = "100.00"
+                accountName = testAccountName,
+                balanceString = testAccountBalance
             )
-            .assertCallToInsertAccount()
+            .assertCallToInsertAccount(testAccount)
             .assertCallToTrackAccountAdded()
             .assertDismissEventEmitted()
     }
 
     @Test
     fun addingDuplicateAccountShowsError() = runBlockingTest {
+        val testAccountName = "Checking"
+        val testAccountBalance = "100.00"
+
+        val testAccount = Account(
+            name = testAccountName,
+            balance = 100.00
+        )
+
         testRobot
             .buildViewModel()
-            .mockAccountConstraintException()
+            .mockAccountConstraintException(testAccount)
             .addAccount(
-                accountName = "Checking",
-                balanceString = "100.00"
+                accountName = testAccountName,
+                balanceString = testAccountBalance
             )
             .assertAccountNameError(
                 expectedValue = R.string.err_account_name_exists
