@@ -1,19 +1,26 @@
 package com.androidessence.cashcaretaker.ui.addtransaction
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.androidessence.cashcaretaker.CoroutinesTestRule
 import com.androidessence.cashcaretaker.R
 import java.util.Date
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class AddTransactionViewModelTest {
     private lateinit var testRobot: AddTransactionViewModelRobot
 
     @JvmField
     @Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @JvmField
+    @Rule
+    val coroutineTestRule = CoroutinesTestRule()
 
     @Before
     fun setUp() {

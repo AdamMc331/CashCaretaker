@@ -6,7 +6,6 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.data.DispatcherProvider
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import java.util.Date
 import kotlinx.coroutines.channels.Channel
@@ -21,8 +20,7 @@ import kotlinx.coroutines.launch
  */
 class AddTransactionViewModel(
     private val repository: CCRepository,
-    private val analyticsTracker: AnalyticsTracker,
-    private val dispatcherProvider: DispatcherProvider
+    private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     val transactionDescriptionError = MutableLiveData<Int>()
     val transactionAmountError = MutableLiveData<Int>()
@@ -48,7 +46,7 @@ class AddTransactionViewModel(
 
         val transaction = Transaction(accountName, transactionDescription, amount, withdrawal, date)
 
-        viewModelScope.launch(dispatcherProvider.mainDispatcher) {
+        viewModelScope.launch {
             repository.insertTransaction(transaction)
             analyticsTracker.trackTransactionAdded()
             dismissEventChannel.send(true)
@@ -77,7 +75,7 @@ class AddTransactionViewModel(
             input.id
         )
 
-        viewModelScope.launch(dispatcherProvider.mainDispatcher) {
+        viewModelScope.launch {
             repository.updateTransaction(transaction)
             analyticsTracker.trackTransactionEdited()
             dismissEventChannel.send(true)

@@ -1,6 +1,5 @@
 package com.androidessence.cashcaretaker.ui.transactionlist
 
-import com.androidessence.cashcaretaker.TestDispatcherProvider
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
 import com.androidessence.cashcaretaker.fakes.FakeCCRepository
@@ -10,7 +9,6 @@ import com.google.common.truth.Truth.assertThat
 class TransactionListViewModelRobot {
     private val fakeRepository = FakeCCRepository()
     private val fakeAnalyticsTracker = FakeAnalyticsTracker()
-    private val testDispatcherProvider = TestDispatcherProvider()
     private lateinit var viewModel: TransactionListViewModel
 
     fun mockTransactions(transactions: List<Transaction>) = apply {
@@ -21,8 +19,7 @@ class TransactionListViewModelRobot {
         viewModel = TransactionListViewModel(
             accountName = accountName,
             repository = fakeRepository,
-            analyticsTracker = fakeAnalyticsTracker,
-            dispatcherProvider = testDispatcherProvider
+            analyticsTracker = fakeAnalyticsTracker
         )
     }
 

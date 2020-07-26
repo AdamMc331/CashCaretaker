@@ -13,7 +13,6 @@ import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
-import com.androidessence.cashcaretaker.data.DispatcherProvider
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -24,8 +23,7 @@ import kotlinx.coroutines.launch
 class TransactionListViewModel(
     accountName: String,
     private val repository: CCRepository,
-    private val analyticsTracker: AnalyticsTracker,
-    private val dispatcherProvider: DispatcherProvider
+    private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     private val _state: MutableLiveData<DataViewState> = MutableLiveData<DataViewState>().apply {
         value = DataViewState.Loading
@@ -62,7 +60,7 @@ class TransactionListViewModel(
                 R.id.action_delete -> deleteSelectedTransaction()
                 R.id.action_edit -> {
                     selectedTransaction?.let { transaction ->
-                        viewModelScope.launch(dispatcherProvider.mainDispatcher) {
+                        viewModelScope.launch {
                             editClickedChannel.send(transaction)
                         }
                     }
@@ -97,7 +95,7 @@ class TransactionListViewModel(
     //endregion
 
     init {
-        viewModelScope.launch(dispatcherProvider.mainDispatcher) {
+        viewModelScope.launch {
             repository.fetchTransactionsForAccount(accountName).collect { transactions ->
                 val dataViewState = when {
                     transactions.isEmpty() -> DataViewState.Empty
@@ -111,7 +109,7 @@ class TransactionListViewModel(
 
     private fun deleteSelectedTransaction() {
         selectedTransaction?.let { transaction ->
-            viewModelScope.launch(dispatcherProvider.mainDispatcher) {
+            viewModelScope.launch {
                 repository.deleteTransaction(transaction)
                 analyticsTracker.trackTransactionDeleted()
                 clearActionMode()

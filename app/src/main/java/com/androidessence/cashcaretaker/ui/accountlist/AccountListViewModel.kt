@@ -12,7 +12,6 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.data.DispatcherProvider
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -22,8 +21,7 @@ import kotlinx.coroutines.launch
  */
 class AccountListViewModel(
     private val repository: CCRepository,
-    private val analyticsTracker: AnalyticsTracker,
-    dispatcherProvider: DispatcherProvider
+    private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     private val _state: MutableLiveData<AccountListState> = MutableLiveData()
 
@@ -87,7 +85,7 @@ class AccountListViewModel(
     init {
         _state.value = AccountListState.loading()
 
-        viewModelScope.launch(dispatcherProvider.mainDispatcher) {
+        viewModelScope.launch {
             repository.fetchAllAccounts().collect { accounts ->
                 _state.value = AccountListState.success(accounts)
             }

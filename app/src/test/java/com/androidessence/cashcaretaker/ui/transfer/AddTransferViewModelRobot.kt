@@ -1,6 +1,5 @@
 package com.androidessence.cashcaretaker.ui.transfer
 
-import com.androidessence.cashcaretaker.TestDispatcherProvider
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
 import com.androidessence.cashcaretaker.fakes.FakeCCRepository
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.collect
 class AddTransferViewModelRobot {
     private val fakeRepository = FakeCCRepository()
     private val fakeAnalyticsTracker = FakeAnalyticsTracker()
-    private val testDispatcherProvider = TestDispatcherProvider()
     private lateinit var viewModel: AddTransferViewModel
 
     fun mockAccountsFromRepo(accounts: List<Account>) = apply {
@@ -22,8 +20,7 @@ class AddTransferViewModelRobot {
     fun buildViewModel() = apply {
         viewModel = AddTransferViewModel(
             repository = fakeRepository,
-            analyticsTracker = fakeAnalyticsTracker,
-            dispatcherProvider = testDispatcherProvider
+            analyticsTracker = fakeAnalyticsTracker
         )
     }
 

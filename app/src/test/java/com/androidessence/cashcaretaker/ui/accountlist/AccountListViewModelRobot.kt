@@ -1,6 +1,5 @@
 package com.androidessence.cashcaretaker.ui.accountlist
 
-import com.androidessence.cashcaretaker.TestDispatcherProvider
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
 import com.androidessence.cashcaretaker.fakes.FakeCCRepository
@@ -10,14 +9,12 @@ import com.google.common.truth.Truth.assertThat
 class AccountListViewModelRobot {
     private val fakeRepository = FakeCCRepository()
     private val fakeAnalyticsTracker = FakeAnalyticsTracker()
-    private val testDispatcherProvider = TestDispatcherProvider()
     private lateinit var viewModel: AccountListViewModel
 
     fun buildViewModel() = apply {
         viewModel = AccountListViewModel(
             repository = fakeRepository,
-            analyticsTracker = fakeAnalyticsTracker,
-            dispatcherProvider = testDispatcherProvider
+            analyticsTracker = fakeAnalyticsTracker
         )
     }
 

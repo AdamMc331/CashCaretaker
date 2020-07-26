@@ -7,7 +7,6 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.data.DispatcherProvider
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -16,8 +15,7 @@ import kotlinx.coroutines.launch
 
 class AddAccountViewModel(
     private val repository: CCRepository,
-    private val analyticsTracker: AnalyticsTracker,
-    private val dispatcherProvider: DispatcherProvider
+    private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     val accountNameError = MutableLiveData<Int>()
     val accountBalanceError = MutableLiveData<Int>()
@@ -42,7 +40,7 @@ class AddAccountViewModel(
 
         val account = Account(name, balance)
 
-        viewModelScope.launch(dispatcherProvider.mainDispatcher) {
+        viewModelScope.launch {
             try {
                 repository.insertAccount(account)
                 analyticsTracker.trackAccountAdded()

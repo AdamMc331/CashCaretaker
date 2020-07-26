@@ -1,18 +1,25 @@
 package com.androidessence.cashcaretaker.ui.addaccount
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.androidessence.cashcaretaker.CoroutinesTestRule
 import com.androidessence.cashcaretaker.R
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class AddAccountViewModelTest {
     private lateinit var testRobot: AddAccountViewModelRobot
 
     @JvmField
     @Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @JvmField
+    @Rule
+    val coroutineTestRule = CoroutinesTestRule()
 
     @Before
     fun setUp() {
