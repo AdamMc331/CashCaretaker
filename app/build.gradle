@@ -116,6 +116,8 @@ dependencies {
         exclude module: 'recyclerview-v7'
         exclude module: 'design'
     }
+
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
 }
 repositories {
     mavenCentral()

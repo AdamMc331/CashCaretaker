@@ -53,12 +53,13 @@ dependencies {
     implementation "androidx.room:room-runtime:2.2.5"
     implementation "androidx.room:room-ktx:2.2.5"
     androidTestImplementation "androidx.room:room-testing:2.2.5"
-    annotationProcessor "androidx.room:room-compiler:2.2.5"
     kapt "androidx.room:room-compiler:2.2.5"
 
     testImplementation "junit:junit:4.13"
     androidTestImplementation "androidx.test.ext:junit:1.1.1"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
+
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
 }
 
 ktlint {
