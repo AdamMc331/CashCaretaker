@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker.ui.addtransaction
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.androidessence.cashcaretaker.CoroutinesTestRule
 import com.androidessence.cashcaretaker.R
+import com.androidessence.cashcaretaker.core.models.Transaction
 import java.util.Date
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -29,35 +30,63 @@ class AddTransactionViewModelTest {
 
     @Test
     fun addValidTransactionInsertsTracksAndDismisses() = runBlockingTest {
+        val accountName = "Checking"
+        val transactionDescription = "Test Transaction"
+        val transactionAmountString = "100.00"
+        val isWithdrawal = true
+        val date = Date()
+
+        val testTransaction = Transaction(
+            accountName = accountName,
+            description = transactionDescription,
+            amount = transactionAmountString.toDouble(),
+            withdrawal = isWithdrawal,
+            date = date
+        )
+
         testRobot
             .buildViewModel()
             .addTransaction(
-                accountName = "Checking",
-                transactionDescription = "Test transaction",
-                transactionAmount = "100.00",
-                withdrawal = true,
-                date = Date()
+                accountName = accountName,
+                transactionDescription = transactionDescription,
+                transactionAmount = transactionAmountString,
+                withdrawal = isWithdrawal,
+                date = date
             )
-            .assertCallToInsertTransaction()
+            .assertCallToInsertTransaction(testTransaction)
             .assertCallToTrackTransactionInserted()
             .assertDismissEventEmitted()
     }
 
     @Test
     fun editValidTransactionUpdatesTracksAndDismisses() = runBlockingTest {
+        val accountName = "Checking"
+        val transactionDescription = "Test Transaction"
+        val transactionAmountString = "100.00"
+        val isWithdrawal = true
+        val date = Date()
+
+        val testTransaction = Transaction(
+            accountName = accountName,
+            description = transactionDescription,
+            amount = transactionAmountString.toDouble(),
+            withdrawal = isWithdrawal,
+            date = date
+        )
+
         val input = AddTransactionViewModel.TransactionInput(
             id = 0L,
-            accountName = "Checking",
-            transactionDescription = "Test transaction",
-            transactionAmount = "100.00",
-            withdrawal = true,
-            date = Date()
+            accountName = accountName,
+            transactionDescription = transactionDescription,
+            transactionAmount = transactionAmountString,
+            withdrawal = isWithdrawal,
+            date = date
         )
 
         testRobot
             .buildViewModel()
             .updateTransaction(input)
-            .assertCallToUpdateTransaction()
+            .assertCallToUpdateTransaction(testTransaction)
             .assertCallToTrackTransactionEdited()
             .assertDismissEventEmitted()
     }

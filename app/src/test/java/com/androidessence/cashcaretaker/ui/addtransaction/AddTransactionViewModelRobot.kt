@@ -1,24 +1,31 @@
 package com.androidessence.cashcaretaker.ui.addtransaction
 
-import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
-import com.androidessence.cashcaretaker.fakes.FakeCCRepository
+import com.androidessence.cashcaretaker.core.models.Transaction
+import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.testObserver
 import com.google.common.truth.Truth.assertThat
+import io.mockk.coVerify
+import io.mockk.mockk
+import io.mockk.verify
 import java.util.Date
 import kotlinx.coroutines.flow.collect
 
 class AddTransactionViewModelRobot {
-    private val fakeRepository = FakeCCRepository()
-    private val fakeAnalyticsTracker = FakeAnalyticsTracker()
+    private val mockRepository = mockk<CCRepository>(relaxed = true)
+    private val mockAnalyticsTracker = mockk<AnalyticsTracker>(relaxed = true)
     private lateinit var viewModel: AddTransactionViewModel
 
     fun buildViewModel() = apply {
         viewModel = AddTransactionViewModel(
-            repository = fakeRepository,
-            analyticsTracker = fakeAnalyticsTracker
+            repository = mockRepository,
+            analyticsTracker = mockAnalyticsTracker
         )
     }
 
+    /**
+     * TODO: Test this
+     */
     fun assertTransactionDescriptionError(expectedValue: Int) = apply {
         val actualValue = viewModel.transactionDescriptionError.testObserver().observedValue
         assertThat(actualValue).isEqualTo(expectedValue)
@@ -57,19 +64,27 @@ class AddTransactionViewModelRobot {
         viewModel.updateTransaction(input)
     }
 
-    fun assertCallToInsertTransaction() = apply {
-        assertThat(fakeRepository.getInsertTransactionCallCount()).isEqualTo(1)
+    fun assertCallToInsertTransaction(transaction: Transaction) = apply {
+        coVerify(exactly = 1) {
+            mockRepository.insertTransaction(transaction)
+        }
     }
 
-    fun assertCallToUpdateTransaction() = apply {
-        assertThat(fakeRepository.getUpdateTransactionCallCount()).isEqualTo(1)
+    fun assertCallToUpdateTransaction(transaction: Transaction) = apply {
+        coVerify(exactly = 1) {
+            mockRepository.updateTransaction(transaction)
+        }
     }
 
     fun assertCallToTrackTransactionInserted() = apply {
-        assertThat(fakeAnalyticsTracker.getTrackTransactionAddedCount()).isEqualTo(1)
+        verify(exactly = 1) {
+            mockAnalyticsTracker.trackTransactionAdded()
+        }
     }
 
     fun assertCallToTrackTransactionEdited() = apply {
-        assertThat(fakeAnalyticsTracker.getTrackTransactionEditedCount()).isEqualTo(1)
+        verify(exactly = 1) {
+            mockAnalyticsTracker.trackTransactionEdited()
+        }
     }
 }

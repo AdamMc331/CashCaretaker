@@ -8,7 +8,12 @@ interface DispatcherProvider {
     val mainDispatcher: CoroutineDispatcher
 }
 
-class DataDispatcherProvider : DispatcherProvider {
+/**
+ * This class will provide the [CoroutineDispatcher]s that are used in production, and
+ * run the necessary [ioDispatcher] and [mainDispatcher] threads for networking and other
+ * data requests.
+ */
+class ProductionDispatcherProvider : DispatcherProvider {
     override val ioDispatcher: CoroutineDispatcher
         get() = Dispatchers.IO
 

@@ -1,26 +1,34 @@
 package com.androidessence.cashcaretaker.ui.addaccount
 
-import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
-import com.androidessence.cashcaretaker.fakes.FakeCCRepository
+import android.database.sqlite.SQLiteConstraintException
+import com.androidessence.cashcaretaker.core.models.Account
+import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.testObserver
 import com.google.common.truth.Truth.assertThat
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.flow.collect
 
 class AddAccountViewModelRobot {
-    private val fakeRepository = FakeCCRepository()
-    private val fakeAnalyticsTracker = FakeAnalyticsTracker()
+    private val mockRepository = mockk<CCRepository>(relaxed = true)
+    private val mockAnalyticsTracker = mockk<AnalyticsTracker>(relaxed = true)
 
     private lateinit var viewModel: AddAccountViewModel
 
     fun buildViewModel() = apply {
         viewModel = AddAccountViewModel(
-            repository = fakeRepository,
-            analyticsTracker = fakeAnalyticsTracker
+            repository = mockRepository,
+            analyticsTracker = mockAnalyticsTracker
         )
     }
 
-    fun mockAccountConstraintException() = apply {
-        fakeRepository.mockAccountConstraintException(true)
+    fun mockAccountConstraintException(account: Account) = apply {
+        coEvery {
+            mockRepository.insertAccount(account)
+        } throws SQLiteConstraintException()
     }
 
     fun addAccount(
@@ -36,12 +44,16 @@ class AddAccountViewModelRobot {
         }
     }
 
-    fun assertCallToInsertAccount() = apply {
-        assertThat(fakeRepository.getInsertAccountCallCount()).isEqualTo(1)
+    fun assertCallToInsertAccount(account: Account) = apply {
+        coVerify(exactly = 1) {
+            mockRepository.insertAccount(account)
+        }
     }
 
     fun assertCallToTrackAccountAdded() = apply {
-        assertThat(fakeAnalyticsTracker.getTrackAccountAddedCount()).isEqualTo(1)
+        verify(exactly = 1) {
+            mockAnalyticsTracker.trackAccountAdded()
+        }
     }
 
     fun assertAccountNameError(expectedValue: Int) = apply {

@@ -1,26 +1,33 @@
 package com.androidessence.cashcaretaker.ui.transfer
 
 import com.androidessence.cashcaretaker.core.models.Account
-import com.androidessence.cashcaretaker.fakes.FakeAnalyticsTracker
-import com.androidessence.cashcaretaker.fakes.FakeCCRepository
+import com.androidessence.cashcaretaker.data.CCRepository
+import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.testObserver
 import com.google.common.truth.Truth.assertThat
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
+import io.mockk.verify
 import java.util.Date
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
 
 class AddTransferViewModelRobot {
-    private val fakeRepository = FakeCCRepository()
-    private val fakeAnalyticsTracker = FakeAnalyticsTracker()
+    private val mockRepository = mockk<CCRepository>(relaxed = true)
+    private val mockAnalyticsTracker = mockk<AnalyticsTracker>(relaxed = true)
     private lateinit var viewModel: AddTransferViewModel
 
     fun mockAccountsFromRepo(accounts: List<Account>) = apply {
-        fakeRepository.mockAccounts(accounts)
+        coEvery {
+            mockRepository.fetchAllAccounts()
+        } returns flowOf(accounts)
     }
 
     fun buildViewModel() = apply {
         viewModel = AddTransferViewModel(
-            repository = fakeRepository,
-            analyticsTracker = fakeAnalyticsTracker
+            repository = mockRepository,
+            analyticsTracker = mockAnalyticsTracker
         )
     }
 
@@ -64,11 +71,25 @@ class AddTransferViewModelRobot {
         )
     }
 
-    fun assertCallToCreateTransfer() = apply {
-        assertThat(fakeRepository.getCreateTransferCallCount()).isEqualTo(1)
+    fun assertCallToCreateTransfer(
+        fromAccount: Account,
+        toAccount: Account,
+        amount: Double,
+        date: Date
+    ) = apply {
+        coVerify(exactly = 1) {
+            mockRepository.transfer(
+                fromAccount,
+                toAccount,
+                amount,
+                date
+            )
+        }
     }
 
     fun assertCallToTrackTransfer() = apply {
-        assertThat(fakeAnalyticsTracker.getTrackTransferAddedCount()).isEqualTo(1)
+        verify(exactly = 1) {
+            mockAnalyticsTracker.trackTransferAdded()
+        }
     }
 }
