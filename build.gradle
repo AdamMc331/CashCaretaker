@@ -62,6 +62,8 @@ def isNonStable = { String version ->
 }
 
 dependencyUpdates {
+    gradleReleaseChannel = "current"
+
     rejectVersionIf {
         isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
     }
