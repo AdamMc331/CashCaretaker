@@ -53,6 +53,7 @@ allprojects {
         junitVersion = "4.13"
         mockkVersion = "1.10.0"
         truthVersion = "1.0.1"
+        androidxCoreVersion = "1.3.1"
     }
 }
 
