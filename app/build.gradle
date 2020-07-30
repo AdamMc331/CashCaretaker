@@ -1,10 +1,10 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'org.jlleitschuh.gradle.ktlint'
-apply plugin: 'io.gitlab.arturbosch.detekt'
-apply plugin: 'com.google.gms.google-services'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
+apply plugin: "kotlin-kapt"
+apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: "io.gitlab.arturbosch.detekt"
+apply plugin: "com.google.gms.google-services"
 
 androidExtensions {
     experimental = true
@@ -36,7 +36,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
     sourceSets {
@@ -46,7 +46,7 @@ android {
         enabled = true
     }
     packagingOptions {
-        exclude 'META-INF/atomicfu.kotlin_module'
+        exclude "META-INF/atomicfu.kotlin_module"
     }
 
     compileOptions {
@@ -55,12 +55,12 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation(project(":database"))
     implementation(project(":analytics"))
 
@@ -102,27 +102,27 @@ dependencies {
     testImplementation "org.koin:koin-test:2.1.6"
 
     // Testing
-    testImplementation 'junit:junit:4.13'
+    testImplementation "junit:junit:4.13"
     testImplementation "io.mockk:mockk:1.10.0"
     testImplementation "com.google.truth:truth:1.0.1"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation 'androidx.test:core:1.2.0'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation "androidx.test:core:1.2.0"
+    androidTestImplementation "androidx.test:runner:1.2.0"
+    androidTestImplementation "androidx.test:rules:1.2.0"
+    androidTestImplementation "androidx.test.ext:junit:1.1.1"
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion", {
-        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: "com.android.support", module: "support-annotations"
     })
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion") {
-        exclude group: 'com.android.support'
-        exclude module: 'support-annotations'
-        exclude module: 'support-v4'
-        exclude module: 'support-v13'
-        exclude module: 'recyclerview-v7'
-        exclude module: 'design'
+        exclude group: "com.android.support"
+        exclude module: "support-annotations"
+        exclude module: "support-v4"
+        exclude module: "support-v13"
+        exclude module: "recyclerview-v7"
+        exclude module: "design"
     }
 
-    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
+    compileOnly "org.glassfish:javax.annotation:10.0-b28"
 }
 repositories {
     mavenCentral()
