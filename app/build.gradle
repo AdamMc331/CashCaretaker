@@ -66,10 +66,9 @@ dependencies {
 
     // Kotlin/Android
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
-    //noinspection GradleDependency
-    implementation "com.google.android.material:material:1.1.0"
+    implementation "com.google.android.material:material:$materialVersion"
     annotationProcessor "androidx.databinding:databinding-compiler:$build_tools_version"
     kapt "androidx.databinding:databinding-compiler:$build_tools_version"
 
@@ -78,49 +77,35 @@ dependencies {
     implementation "com.androidessence:materialdesignspecs:$materialDesignSpecsVersion"
 
     // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-    kapt "androidx.lifecycle:lifecycle-common-java8:2.2.0"
-
-    // Logging
-    implementation "com.jakewharton.timber:timber:4.7.1"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    androidTestImplementation "androidx.arch.core:core-testing:$androidxArchVersion"
+    kapt "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
 
     // ViewModel Kotlin support
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 
-    // Koin for Kotlin apps
-    implementation "org.koin:koin-core:2.1.6"
-    implementation "org.koin:koin-android:2.1.6"
-    implementation "org.koin:koin-android-viewmodel:2.1.6"
-    // Testing
-    testImplementation "org.koin:koin-test:2.1.6"
+    implementation "org.koin:koin-core:$koinVersion"
+    implementation "org.koin:koin-android:$koinVersion"
+    implementation "org.koin:koin-android-viewmodel:$koinVersion"
+    testImplementation "org.koin:koin-test:$koinVersion"
 
     // Testing
-    testImplementation "junit:junit:4.13"
-    testImplementation "io.mockk:mockk:1.10.0"
-    testImplementation "com.google.truth:truth:1.0.1"
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation "androidx.test:core:1.2.0"
-    androidTestImplementation "androidx.test:runner:1.2.0"
-    androidTestImplementation "androidx.test:rules:1.2.0"
-    androidTestImplementation "androidx.test.ext:junit:1.1.1"
-    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion", {
-        exclude group: "com.android.support", module: "support-annotations"
-    })
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion") {
-        exclude group: "com.android.support"
-        exclude module: "support-annotations"
-        exclude module: "support-v4"
-        exclude module: "support-v13"
-        exclude module: "recyclerview-v7"
-        exclude module: "design"
-    }
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "com.google.truth:truth:$truthVersion"
+    testImplementation "androidx.arch.core:core-testing:$androidxArchVersion"
+    androidTestImplementation "androidx.test:core:$androidxTestVersion"
+    androidTestImplementation "androidx.test:runner:$androidxTestVersion"
+    androidTestImplementation "androidx.test:rules:$androidxTestVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
 
     compileOnly "org.glassfish:javax.annotation:10.0-b28"
 }
