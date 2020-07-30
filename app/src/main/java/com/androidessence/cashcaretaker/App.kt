@@ -3,6 +3,7 @@ package com.androidessence.cashcaretaker
 import android.app.Application
 import com.androidessence.cashcaretaker.core.di.dataModule
 import com.androidessence.cashcaretaker.core.di.viewModelModule
+import com.androidessence.cashcaretaker.database.databaseModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -21,7 +22,9 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(listOf(dataModule, viewModelModule))
+            modules(dataModule)
+            modules(viewModelModule)
+            modules(databaseModule)
         }
     }
 }
