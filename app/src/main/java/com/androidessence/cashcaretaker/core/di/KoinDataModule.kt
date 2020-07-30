@@ -6,8 +6,6 @@ import com.androidessence.cashcaretaker.data.ProductionDispatcherProvider
 import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.data.analytics.FirebaseAnalyticsTracker
 import com.androidessence.cashcaretaker.data.local.DatabaseService
-import com.androidessence.cashcaretaker.database.RoomDatabase
-import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -21,7 +19,7 @@ val dataModule = module {
 
     single<CCRepository> {
         DatabaseService(
-            database = RoomDatabase(androidContext()),
+            database = get(),
             dispatcherProvider = get()
         )
     }
