@@ -1,9 +1,9 @@
 package com.androidessence.cashcaretaker.ui.addaccount
 
 import android.database.sqlite.SQLiteConstraintException
+import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.data.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.testObserver
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery

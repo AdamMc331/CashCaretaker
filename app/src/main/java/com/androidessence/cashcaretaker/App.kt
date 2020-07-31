@@ -1,6 +1,7 @@
 package com.androidessence.cashcaretaker
 
 import android.app.Application
+import com.adammcneilly.cashcaretaker.analytics.analyticsModule
 import com.androidessence.cashcaretaker.core.di.dataModule
 import com.androidessence.cashcaretaker.core.di.viewModelModule
 import com.androidessence.cashcaretaker.database.databaseModule
@@ -25,6 +26,7 @@ class App : Application() {
             modules(dataModule)
             modules(viewModelModule)
             modules(databaseModule)
+            modules(analyticsModule)
         }
     }
 }

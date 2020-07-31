@@ -1,9 +1,9 @@
-package com.androidessence.cashcaretaker.data.analytics
+package com.adammcneilly.cashcaretaker.analytics
 
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 
-class FirebaseAnalyticsTracker : AnalyticsTracker {
+internal class FirebaseAnalyticsTracker : AnalyticsTracker {
     private val firebase = Firebase.analytics
 
     override fun trackAccountAdded() {

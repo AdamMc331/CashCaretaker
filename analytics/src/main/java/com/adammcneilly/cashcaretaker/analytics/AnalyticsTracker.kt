@@ -1,4 +1,4 @@
-package com.androidessence.cashcaretaker.data.analytics
+package com.adammcneilly.cashcaretaker.analytics
 
 interface AnalyticsTracker {
     fun trackAccountAdded()
