@@ -3,8 +3,6 @@ plugins {
     id "kotlin-android"
     id "kotlin-android-extensions"
     id "kotlin-kapt"
-    id "org.jlleitschuh.gradle.ktlint"
-    id "io.gitlab.arturbosch.detekt"
 }
 
 android {
@@ -65,24 +63,4 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 
     compileOnly "org.glassfish:javax.annotation:10.0-b28"
-}
-
-ktlint {
-    ktlint.version = "0.37.2"
-    android = true
-    enableExperimentalRules = true
-    reporters {
-        reporter "plain"
-        reporter "checkstyle"
-    }
-    additionalEditorconfigFile = file("${project.projectDir}/.editorConfig")
-    outputColorName = "RED"
-}
-
-detekt {
-    config = files("${rootProject.projectDir}/config/detekt/detekt.yml")
-
-    reports {
-        txt.enabled = true // similar to the console output, contains issue signature to manually edit baseline files
-    }
 }

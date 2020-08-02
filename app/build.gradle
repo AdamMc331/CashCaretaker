@@ -3,8 +3,6 @@ plugins {
     id "kotlin-android"
     id "kotlin-android-extensions"
     id "kotlin-kapt"
-    id "org.jlleitschuh.gradle.ktlint"
-    id "io.gitlab.arturbosch.detekt"
     id "com.google.gms.google-services"
 }
 
@@ -109,24 +107,4 @@ dependencies {
 }
 repositories {
     mavenCentral()
-}
-
-ktlint {
-    ktlint.version = "0.37.2"
-    android = true
-    enableExperimentalRules = true
-    reporters {
-        reporter "plain"
-        reporter "checkstyle"
-    }
-    additionalEditorconfigFile = file("${project.projectDir}/.editorConfig")
-    outputColorName = "RED"
-}
-
-detekt {
-    config = files("${rootProject.projectDir}/config/detekt/detekt.yml")
-
-    reports {
-        txt.enabled = true // similar to the console output, contains issue signature to manually edit baseline files
-    }
 }
