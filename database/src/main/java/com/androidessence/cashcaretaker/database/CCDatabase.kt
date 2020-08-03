@@ -20,7 +20,7 @@ interface CCDatabase {
     )
 }
 
-class RoomDatabase(context: Context) : CCDatabase {
+internal class RoomDatabase(context: Context) : CCDatabase {
     @Suppress("MemberNameEqualsClassName")
     private val roomDatabase = CashCaretakerRoomDatabase.getInMemoryDatabase(context)
 
