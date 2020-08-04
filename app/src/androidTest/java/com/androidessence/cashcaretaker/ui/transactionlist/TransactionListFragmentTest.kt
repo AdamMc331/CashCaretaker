@@ -4,7 +4,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.database.CCDatabase
-import com.androidessence.cashcaretaker.database.RoomDatabase
 import com.androidessence.cashcaretaker.ui.main.MainActivity
 import com.androidessence.cashcaretaker.ui.main.MainController
 import kotlinx.coroutines.runBlocking
@@ -14,16 +13,17 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.KoinComponent
+import org.koin.core.get
 
 @RunWith(AndroidJUnit4::class)
-class TransactionListFragmentTest {
+class TransactionListFragmentTest : KoinComponent {
 
     @JvmField
     @Rule
     var activityTestRule = ActivityTestRule(MainActivity::class.java)
 
-    private val database: CCDatabase
-        get() = RoomDatabase(activityTestRule.activity)
+    private val database: CCDatabase = get()
 
     @Before
     fun setUp() {

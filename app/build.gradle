@@ -90,6 +90,8 @@ dependencies {
     implementation "org.koin:koin-android:$koinVersion"
     implementation "org.koin:koin-android-viewmodel:$koinVersion"
     testImplementation "org.koin:koin-test:$koinVersion"
+    androidTestImplementation "org.koin:koin-core:$koinVersion"
+    androidTestImplementation "org.koin:koin-android:$koinVersion"
 
     // Testing
     testImplementation "junit:junit:$junitVersion"
