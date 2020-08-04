@@ -5,7 +5,9 @@ import com.androidessence.cashcaretaker.CoroutinesTestRule
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
 import java.util.Date
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,8 +29,9 @@ class AddTransferViewModelTest {
         testRobot = AddTransferViewModelRobot()
     }
 
+    @OptIn(ExperimentalTime::class)
     @Test
-    fun createValidTransferInsertsTracksAndDismisses() {
+    fun createValidTransferInsertsTracksAndDismisses() = runBlockingTest {
         val fromAccount = Account(name = "From")
         val toAccount = Account(name = "to")
         val amount = 100.00
@@ -49,6 +52,13 @@ class AddTransferViewModelTest {
                 date = date
             )
             .assertCallToTrackTransfer()
+            .assertCallToCreateTransfer(
+                fromAccount,
+                toAccount,
+                amount,
+                date
+            )
+            .assertDismissEventEmitted()
     }
 
     @Test

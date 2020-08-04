@@ -1,5 +1,6 @@
 package com.androidessence.cashcaretaker.ui.transfer
 
+import app.cash.turbine.test
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
@@ -10,9 +11,11 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.verify
 import java.util.Date
-import kotlinx.coroutines.flow.collect
+import kotlin.time.ExperimentalTime
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 
+@ExperimentalCoroutinesApi
 class AddTransferViewModelRobot {
     private val mockRepository = mockk<CCRepository>(relaxed = true)
     private val mockAnalyticsTracker = mockk<AnalyticsTracker>(relaxed = true)
@@ -51,9 +54,11 @@ class AddTransferViewModelRobot {
         assertThat(actualValue).isEqualTo(expectedValue)
     }
 
+    @ExperimentalTime
     suspend fun assertDismissEventEmitted() = apply {
-        viewModel.dismissEvents.collect { shouldDismiss ->
-            assertThat(shouldDismiss).isTrue()
+        viewModel.dismissEvents.test {
+            assertThat(expectItem()).isTrue()
+            expectComplete()
         }
     }
 

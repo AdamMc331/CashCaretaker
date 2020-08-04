@@ -4,12 +4,14 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.androidessence.cashcaretaker.CoroutinesTestRule
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalTime
 @ExperimentalCoroutinesApi
 class AddAccountViewModelTest {
     private lateinit var testRobot: AddAccountViewModelRobot
