@@ -1,6 +1,7 @@
 package com.androidessence.cashcaretaker.ui.addaccount
 
 import android.database.sqlite.SQLiteConstraintException
+import app.cash.turbine.test
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
@@ -10,8 +11,11 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.collect
+import kotlin.time.ExperimentalTime
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
+@ExperimentalTime
 class AddAccountViewModelRobot {
     private val mockRepository = mockk<CCRepository>(relaxed = true)
     private val mockAnalyticsTracker = mockk<AnalyticsTracker>(relaxed = true)
@@ -39,8 +43,9 @@ class AddAccountViewModelRobot {
     }
 
     suspend fun assertDismissEventEmitted() = apply {
-        viewModel.dismissEvents.collect { shouldDismiss ->
-            assertThat(shouldDismiss).isTrue()
+        viewModel.dismissEvents.test {
+            assertThat(expectItem()).isTrue()
+            expectComplete()
         }
     }
 
