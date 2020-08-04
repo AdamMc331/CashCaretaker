@@ -12,6 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalTime
 @ExperimentalCoroutinesApi
 class AddTransferViewModelTest {
     private lateinit var testRobot: AddTransferViewModelRobot
@@ -62,7 +63,7 @@ class AddTransferViewModelTest {
     }
 
     @Test
-    fun createTransferWithInvalidFromAccountShowsError() {
+    fun createTransferWithInvalidFromAccountShowsError() = runBlockingTest {
         testRobot
             .buildViewModel()
             .addTransfer(
@@ -77,7 +78,7 @@ class AddTransferViewModelTest {
     }
 
     @Test
-    fun createTransferWithInvalidToAccountShowsError() {
+    fun createTransferWithInvalidToAccountShowsError() = runBlockingTest {
         testRobot
             .buildViewModel()
             .addTransfer(
@@ -92,7 +93,7 @@ class AddTransferViewModelTest {
     }
 
     @Test
-    fun createTransferWithInvalidAmountShowsError() {
+    fun createTransferWithInvalidAmountShowsError() = runBlockingTest {
         testRobot
             .buildViewModel()
             .addTransfer(
@@ -107,7 +108,7 @@ class AddTransferViewModelTest {
     }
 
     @Test
-    fun fetchAccountsOnInitialization() {
+    fun fetchAccountsOnInitialization() = runBlockingTest {
         val fakeAccountList = listOf(
             Account(name = "Test Account")
         )

@@ -4,7 +4,6 @@ import app.cash.turbine.test
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.testObserver
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -15,6 +14,7 @@ import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 
+@ExperimentalTime
 @ExperimentalCoroutinesApi
 class AddTransferViewModelRobot {
     private val mockRepository = mockk<CCRepository>(relaxed = true)
@@ -34,24 +34,32 @@ class AddTransferViewModelRobot {
         )
     }
 
-    fun assertAccounts(expectedAccount: List<Account>) = apply {
-        val actualAccounts = viewModel.accounts.testObserver().observedValue
-        assertThat(actualAccounts).isEqualTo(expectedAccount)
+    suspend fun assertAccounts(expectedAccount: List<Account>) = apply {
+        viewModel.viewState.test {
+            assertThat(expectItem().accounts).isEqualTo(expectedAccount)
+            expectComplete()
+        }
     }
 
-    fun assertFromAccountError(expectedValue: Int) = apply {
-        val actualValue = viewModel.fromAccountError.testObserver().observedValue
-        assertThat(actualValue).isEqualTo(expectedValue)
+    suspend fun assertFromAccountError(expectedValue: Int) = apply {
+        viewModel.viewState.test {
+            assertThat(expectItem().fromAccountErrorRes).isEqualTo(expectedValue)
+            expectComplete()
+        }
     }
 
-    fun assertToAccountError(expectedValue: Int) = apply {
-        val actualValue = viewModel.toAccountError.testObserver().observedValue
-        assertThat(actualValue).isEqualTo(expectedValue)
+    suspend fun assertToAccountError(expectedValue: Int) = apply {
+        viewModel.viewState.test {
+            assertThat(expectItem().toAccountErrorRes).isEqualTo(expectedValue)
+            expectComplete()
+        }
     }
 
-    fun assertAmountError(expectedValue: Int) = apply {
-        val actualValue = viewModel.amountError.testObserver().observedValue
-        assertThat(actualValue).isEqualTo(expectedValue)
+    suspend fun assertAmountError(expectedValue: Int) = apply {
+        viewModel.viewState.test {
+            assertThat(expectItem().amountErrorRes).isEqualTo(expectedValue)
+            expectComplete()
+        }
     }
 
     @ExperimentalTime
