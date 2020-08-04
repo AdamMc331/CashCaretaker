@@ -21,7 +21,9 @@ class AddTransferViewModel(
     private val repository: CCRepository,
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
-    private val _viewState: MutableStateFlow<AddTransferViewState> = MutableStateFlow(AddTransferViewState())
+    private val _viewState: MutableStateFlow<AddTransferViewState> =
+        MutableStateFlow(AddTransferViewState())
+
     val viewState: StateFlow<AddTransferViewState> = _viewState
 
     private val dismissEventChannel: Channel<Boolean> = Channel()
