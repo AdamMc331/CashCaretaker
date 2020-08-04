@@ -98,6 +98,7 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockkVersion"
     testImplementation "com.google.truth:truth:$truthVersion"
     testImplementation "androidx.arch.core:core-testing:$androidxArchVersion"
+    testImplementation "app.cash.turbine:turbine:$turbineVersion"
     androidTestImplementation "androidx.test:core:$androidxTestVersion"
     androidTestImplementation "androidx.test:runner:$androidxTestVersion"
     androidTestImplementation "androidx.test:rules:$androidxTestVersion"
