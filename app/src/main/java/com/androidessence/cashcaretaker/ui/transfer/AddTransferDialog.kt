@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
@@ -20,7 +21,6 @@ import java.util.Calendar
 import java.util.Date
 import kotlinx.android.synthetic.main.dialog_add_transfer.transferAmount
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -83,34 +83,31 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun subscribeToViewModel() {
-        lifecycleScope.launch {
-            viewModel.viewState.collect { viewState ->
-                viewState.accounts?.let { accounts ->
-                    fromAccount.items = accounts
-                    toAccount.items = accounts
-                }
-
-                viewState.fromAccountErrorRes
-                    ?.let(::getString)
-                    .let(fromAccount::setError)
-
-                viewState.toAccountErrorRes
-                    ?.let(::getString)
-                    .let(toAccount::setError)
-
-                viewState.amountErrorRes
-                    ?.let(::getString)
-                    .let(binding.transferAmount::setError)
-            }
-        }
+        viewModel.viewState.observe(viewLifecycleOwner, Observer(this::processViewState))
 
         lifecycleScope.launch {
-            viewModel.dismissEvents.collect { shouldDismiss ->
-                if (shouldDismiss) {
-                    dismiss()
-                }
-            }
+            val shouldDismiss = viewModel.dismissEventChannel.receive()
+            if (shouldDismiss) dismiss()
         }
+    }
+
+    private fun processViewState(viewState: AddTransferViewState) {
+        viewState.accounts?.let { accounts ->
+            fromAccount.items = accounts
+            toAccount.items = accounts
+        }
+
+        viewState.fromAccountErrorRes
+            ?.let(::getString)
+            .let(fromAccount::setError)
+
+        viewState.toAccountErrorRes
+            ?.let(::getString)
+            .let(toAccount::setError)
+
+        viewState.amountErrorRes
+            ?.let(::getString)
+            .let(binding.transferAmount::setError)
     }
 
     private fun addTransfer(

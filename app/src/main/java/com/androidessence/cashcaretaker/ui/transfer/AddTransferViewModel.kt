@@ -1,5 +1,7 @@
 package com.androidessence.cashcaretaker.ui.transfer
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.R
@@ -7,32 +9,26 @@ import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import java.util.Date
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
 class AddTransferViewModel(
     private val repository: CCRepository,
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
-    private val _viewState: MutableStateFlow<AddTransferViewState> =
-        MutableStateFlow(AddTransferViewState())
+    private val _viewState: MutableLiveData<AddTransferViewState> = MutableLiveData()
+    val viewState: LiveData<AddTransferViewState> = _viewState
 
-    val viewState: StateFlow<AddTransferViewState> = _viewState
+    val dismissEventChannel: Channel<Boolean> = Channel()
 
-    private val dismissEventChannel: Channel<Boolean> = Channel()
-    val dismissEvents: Flow<Boolean> = dismissEventChannel.receiveAsFlow()
+    private val currentState: AddTransferViewState
+        get() = _viewState.value ?: AddTransferViewState()
 
     init {
         viewModelScope.launch {
             repository.fetchAllAccounts().collect { accounts ->
-                _viewState.value = _viewState.value.copy(accounts = accounts)
+                _viewState.value = currentState.copy(accounts = accounts)
             }
         }
     }
@@ -47,7 +43,7 @@ class AddTransferViewModel(
             val toAccountError = if (toAccount == null) R.string.to_account_invalid else null
             val amountError = if (transferAmount == null) R.string.amount_invalid else null
 
-            _viewState.value = _viewState.value.copy(
+            _viewState.value = currentState.copy(
                 fromAccountErrorRes = fromAccountError,
                 toAccountErrorRes = toAccountError,
                 amountErrorRes = amountError
