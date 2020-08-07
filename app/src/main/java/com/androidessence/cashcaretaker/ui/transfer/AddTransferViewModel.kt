@@ -65,7 +65,6 @@ class AddTransferViewModel(
             repository.transfer(fromAccount, toAccount, transferAmount, date)
             analyticsTracker.trackTransferAdded()
             dismissEventChannel.send(true)
-            dismissEventChannel.close()
         }
     }
 
