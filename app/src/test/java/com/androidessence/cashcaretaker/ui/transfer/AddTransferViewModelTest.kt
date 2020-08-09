@@ -5,7 +5,6 @@ import com.androidessence.cashcaretaker.CoroutinesTestRule
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
 import java.util.Date
-import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
@@ -29,7 +28,6 @@ class AddTransferViewModelTest {
         testRobot = AddTransferViewModelRobot()
     }
 
-    @OptIn(ExperimentalTime::class)
     @Test
     fun createValidTransferInsertsTracksAndDismisses() = runBlockingTest {
         val fromAccount = Account(name = "From")
@@ -62,7 +60,7 @@ class AddTransferViewModelTest {
     }
 
     @Test
-    fun createTransferWithInvalidFromAccountShowsError() {
+    fun createTransferWithInvalidFromAccountShowsError() = runBlockingTest {
         testRobot
             .buildViewModel()
             .addTransfer(
@@ -77,7 +75,7 @@ class AddTransferViewModelTest {
     }
 
     @Test
-    fun createTransferWithInvalidToAccountShowsError() {
+    fun createTransferWithInvalidToAccountShowsError() = runBlockingTest {
         testRobot
             .buildViewModel()
             .addTransfer(
@@ -92,7 +90,7 @@ class AddTransferViewModelTest {
     }
 
     @Test
-    fun createTransferWithInvalidAmountShowsError() {
+    fun createTransferWithInvalidAmountShowsError() = runBlockingTest {
         testRobot
             .buildViewModel()
             .addTransfer(
@@ -107,7 +105,7 @@ class AddTransferViewModelTest {
     }
 
     @Test
-    fun fetchAccountsOnInitialization() {
+    fun fetchAccountsOnInitialization() = runBlockingTest {
         val fakeAccountList = listOf(
             Account(name = "Test Account")
         )

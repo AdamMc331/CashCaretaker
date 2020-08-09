@@ -1,6 +1,5 @@
 package com.androidessence.cashcaretaker.ui.transfer
 
-import app.cash.turbine.test
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
@@ -11,11 +10,8 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.verify
 import java.util.Date
-import kotlin.time.ExperimentalTime
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 
-@ExperimentalCoroutinesApi
 class AddTransferViewModelRobot {
     private val mockRepository = mockk<CCRepository>(relaxed = true)
     private val mockAnalyticsTracker = mockk<AnalyticsTracker>(relaxed = true)
@@ -35,31 +31,27 @@ class AddTransferViewModelRobot {
     }
 
     fun assertAccounts(expectedAccount: List<Account>) = apply {
-        val actualAccounts = viewModel.accounts.testObserver().observedValue
+        val actualAccounts = viewModel.viewState.testObserver().observedValue?.accounts
         assertThat(actualAccounts).isEqualTo(expectedAccount)
     }
 
     fun assertFromAccountError(expectedValue: Int) = apply {
-        val actualValue = viewModel.fromAccountError.testObserver().observedValue
-        assertThat(actualValue).isEqualTo(expectedValue)
+        val actualRes = viewModel.viewState.testObserver().observedValue?.fromAccountErrorRes
+        assertThat(actualRes).isEqualTo(expectedValue)
     }
 
     fun assertToAccountError(expectedValue: Int) = apply {
-        val actualValue = viewModel.toAccountError.testObserver().observedValue
-        assertThat(actualValue).isEqualTo(expectedValue)
+        val actualRes = viewModel.viewState.testObserver().observedValue?.toAccountErrorRes
+        assertThat(actualRes).isEqualTo(expectedValue)
     }
 
     fun assertAmountError(expectedValue: Int) = apply {
-        val actualValue = viewModel.amountError.testObserver().observedValue
-        assertThat(actualValue).isEqualTo(expectedValue)
+        val actualRes = viewModel.viewState.testObserver().observedValue?.amountErrorRes
+        assertThat(actualRes).isEqualTo(expectedValue)
     }
 
-    @ExperimentalTime
     suspend fun assertDismissEventEmitted() = apply {
-        viewModel.dismissEvents.test {
-            assertThat(expectItem()).isTrue()
-            expectComplete()
-        }
+        assertThat(viewModel.dismissEventChannel.receive()).isTrue()
     }
 
     fun addTransfer(

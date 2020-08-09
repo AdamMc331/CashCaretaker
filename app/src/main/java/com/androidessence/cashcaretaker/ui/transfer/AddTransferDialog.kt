@@ -1,13 +1,13 @@
 package com.androidessence.cashcaretaker.ui.transfer
 
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
@@ -19,13 +19,15 @@ import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
 import com.androidessence.cashcaretaker.util.asUIString
 import java.util.Calendar
 import java.util.Date
-import kotlinx.coroutines.flow.collect
+import kotlinx.android.synthetic.main.dialog_add_transfer.transferAmount
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Dialog that allows a user to transfer money from one account to another.
  */
+@ExperimentalCoroutinesApi
 class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var binding: DialogAddTransferBinding
 
@@ -47,12 +49,6 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     ): View? {
         binding = DialogAddTransferBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-
-        return dialog
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,50 +83,31 @@ class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun subscribeToViewModel() {
-        viewModel.accounts.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer { accounts ->
-                accounts?.let {
-                    fromAccount.items = it
-                    toAccount.items = it
-                }
-            }
-        )
-
-        viewModel.fromAccountError.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer { errorRes ->
-                errorRes?.let {
-                    fromAccount.error = getString(it)
-                }
-            }
-        )
-
-        viewModel.toAccountError.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer { errorRes ->
-                errorRes?.let {
-                    toAccount.error = getString(it)
-                }
-            }
-        )
-
-        viewModel.amountError.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer { errorRes ->
-                errorRes?.let {
-                    binding.transferAmount.error = getString(it)
-                }
-            }
-        )
+        viewModel.viewState.observe(viewLifecycleOwner, Observer(this::processViewState))
 
         lifecycleScope.launch {
-            viewModel.dismissEvents.collect { shouldDismiss ->
-                if (shouldDismiss) {
-                    dismiss()
-                }
-            }
+            val shouldDismiss = viewModel.dismissEventChannel.receive()
+            if (shouldDismiss) dismiss()
         }
+    }
+
+    private fun processViewState(viewState: AddTransferViewState) {
+        viewState.accounts?.let { accounts ->
+            fromAccount.items = accounts
+            toAccount.items = accounts
+        }
+
+        viewState.fromAccountErrorRes
+            ?.let(::getString)
+            .let(fromAccount::setError)
+
+        viewState.toAccountErrorRes
+            ?.let(::getString)
+            .let(toAccount::setError)
+
+        viewState.amountErrorRes
+            ?.let(::getString)
+            .let(binding.transferAmount::setError)
     }
 
     private fun addTransfer(
