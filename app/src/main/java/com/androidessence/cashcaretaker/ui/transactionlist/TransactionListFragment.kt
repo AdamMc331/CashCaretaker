@@ -17,6 +17,7 @@ import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import me.ibrahimyilmaz.kiel.adapterOf
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -25,9 +26,17 @@ import org.koin.core.parameter.parametersOf
  */
 class TransactionListFragment : Fragment() {
     //region Properties
-    private val adapter = TransactionListAdapter(
-        this::onTransactionLongClicked
-    )
+    private val adapter = adapterOf<Transaction> {
+        register(
+            layoutResource = R.layout.list_item_transaction,
+            viewHolder = ::TransactionViewHolder,
+            onViewHolderCreated = { viewHolder ->
+                viewHolder.apply {
+                    setOnTransactionLongClickedListener()
+                }
+            }
+        )
+    }
 
     private val accountName: String
         get() = arguments?.getString(ARG_ACCOUNT).orEmpty()
@@ -84,9 +93,7 @@ class TransactionListFragment : Fragment() {
     private fun initializeViewModel() {
         viewModel.transactions.observe(
             this,
-            Observer { transactions ->
-                adapter.items = transactions
-            }
+            Observer(adapter::submitList)
         )
 
         lifecycleScope.launch {
@@ -122,6 +129,13 @@ class TransactionListFragment : Fragment() {
                     super.onScrollStateChanged(recyclerView, newState)
                 }
             })
+    }
+
+    private fun TransactionViewHolder.setOnTransactionLongClickedListener() {
+        itemView.setOnLongClickListener {
+            viewModel.transaction?.let(::onTransactionLongClicked)
+            true
+        }
     }
     //endregion
 
