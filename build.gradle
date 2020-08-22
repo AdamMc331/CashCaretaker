@@ -57,6 +57,11 @@ allprojects {
         turbineVersion = "0.1.1"
         kielVersion = "1.2.0"
     }
+    configurations.all {
+        resolutionStrategy {
+            force "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+        }
+    }
 }
 
 subprojects {
@@ -79,7 +84,8 @@ subprojects {
         config = files("${rootProject.projectDir}/config/detekt/detekt.yml")
 
         reports {
-            txt.enabled = true // similar to the console output, contains issue signature to manually edit baseline files
+            txt.enabled = true
+            // similar to the console output, contains issue signature to manually edit baseline files
         }
     }
 }
