@@ -20,7 +20,8 @@ internal abstract class CashCaretakerRoomDatabase : RoomDatabase() {
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(
                     context,
-                    CashCaretakerRoomDatabase::class.java, "cashcaretaker.db"
+                    CashCaretakerRoomDatabase::class.java,
+                    "cashcaretaker.db"
                 )
                     .addCallback(CALLBACK)
                     .build()

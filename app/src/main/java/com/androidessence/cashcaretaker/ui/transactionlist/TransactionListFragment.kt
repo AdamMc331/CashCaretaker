@@ -128,7 +128,8 @@ class TransactionListFragment : Fragment() {
                     }
                     super.onScrollStateChanged(recyclerView, newState)
                 }
-            })
+            }
+        )
     }
 
     private fun TransactionViewHolder.setOnTransactionLongClickedListener() {
