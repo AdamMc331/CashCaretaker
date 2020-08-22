@@ -3,7 +3,6 @@ package com.androidessence.cashcaretaker.ui.transactionlist
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.clearText
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.action.ViewActions.typeText
@@ -94,8 +93,7 @@ class TransactionRobot {
 
     fun longClick(position: Int): TransactionRobot {
         onView(RECYCLER_VIEW_MATCHER).perform(
-            RecyclerViewActions.actionOnItemAtPosition<TransactionViewHolder>
-            (
+            RecyclerViewActions.actionOnItemAtPosition<TransactionViewHolder>(
                 position,
                 longClick()
             )
