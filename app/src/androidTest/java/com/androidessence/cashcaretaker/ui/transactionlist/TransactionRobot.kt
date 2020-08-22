@@ -73,7 +73,7 @@ class TransactionRobot {
         description: String,
         position: Int
     ): TransactionRobot {
-        matchTextInRecyclerView<TransactionListAdapter.TransactionViewHolder>(
+        matchTextInRecyclerView<TransactionViewHolder>(
             description,
             RECYCLER_VIEW_ID,
             TRANSACTION_DESCRIPTION_ID,
@@ -83,7 +83,7 @@ class TransactionRobot {
     }
 
     fun assertTransactionAmountAtPosition(amount: String, position: Int): TransactionRobot {
-        matchTextInRecyclerView<TransactionListAdapter.TransactionViewHolder>(
+        matchTextInRecyclerView<TransactionViewHolder>(
             amount,
             RECYCLER_VIEW_ID,
             TRANSACTION_AMOUNT_ID,
@@ -94,7 +94,7 @@ class TransactionRobot {
 
     fun longClick(position: Int): TransactionRobot {
         onView(RECYCLER_VIEW_MATCHER).perform(
-            RecyclerViewActions.actionOnItemAtPosition<TransactionListAdapter.TransactionViewHolder>
+            RecyclerViewActions.actionOnItemAtPosition<TransactionViewHolder>
             (
                 position,
                 longClick()

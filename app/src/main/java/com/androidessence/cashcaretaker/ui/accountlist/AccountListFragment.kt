@@ -21,6 +21,7 @@ import com.androidessence.cashcaretaker.ui.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.ui.main.MainController
 import com.androidessence.cashcaretaker.ui.transfer.AddTransferDialog
+import me.ibrahimyilmaz.kiel.adapterOf
 import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -36,12 +37,17 @@ import org.koin.android.viewmodel.ext.android.viewModel
 @Suppress("TooManyFunctions")
 class AccountListFragment : Fragment() {
     //region Properties
-    private val adapter = AccountListAdapter(
-        accountClicked = this::onAccountSelected,
-        accountLongClicked = this::onAccountLongClicked,
-        withdrawalClicked = this::onWithdrawalButtonClicked,
-        depositClicked = this::onDepositButtonClicked
-    )
+
+    private val adapter = adapterOf<Account> {
+        register(
+            layoutResource = R.layout.list_item_account,
+            viewHolder = ::AccountViewHolder,
+            onViewHolderCreated = { vh ->
+                vh.apply { setClickListeners() }
+            }
+        )
+    }
+
     private lateinit var binding: FragmentAccountBinding
 
     private val viewModel: AccountListViewModel by viewModel()
@@ -134,11 +140,30 @@ class AccountListFragment : Fragment() {
         viewModel.accounts.observe(
             this,
             Observer { accounts ->
-                adapter.items = accounts
+                adapter.submitList(accounts)
                 activity?.invalidateOptionsMenu()
             }
         )
     }
+
+    private fun AccountViewHolder.setClickListeners() {
+        binding.withdrawalButton.setOnClickListener {
+            viewModel.account?.let(::onWithdrawalButtonClicked)
+        }
+
+        binding.depositButton.setOnClickListener {
+            viewModel.account?.let(::onDepositButtonClicked)
+        }
+
+        itemView.setOnClickListener {
+            viewModel.account?.let(::onAccountSelected)
+        }
+        itemView.setOnLongClickListener {
+            viewModel.account?.let(::onAccountLongClicked)
+            true
+        }
+    }
+
     //endregion
 
     //region UI Events
