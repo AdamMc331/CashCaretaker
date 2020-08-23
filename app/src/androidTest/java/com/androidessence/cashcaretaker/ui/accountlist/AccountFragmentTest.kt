@@ -31,14 +31,16 @@ class AccountFragmentTest : KoinComponent {
     @Before
     fun setUp() {
         runBlocking {
-            database.deleteAllAccounts()
+
+//            database.deleteAllAccounts()
         }
     }
 
     @After
     fun tearDown() {
         runBlocking {
-            database.deleteAllAccounts()
+
+//            database.deleteAllAccounts()
         }
     }
 
