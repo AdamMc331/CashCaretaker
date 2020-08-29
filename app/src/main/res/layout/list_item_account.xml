@@ -20,6 +20,15 @@
         android:paddingEnd="@dimen/double_margin"
         android:paddingBottom="@dimen/single_margin">
 
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/accountNameEditText"
             android:layout_width="0dp"
