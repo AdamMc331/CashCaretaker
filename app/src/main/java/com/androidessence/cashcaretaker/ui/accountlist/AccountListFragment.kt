@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
@@ -18,7 +17,6 @@ import com.androidessence.cashcaretaker.ui.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.ui.main.MainController
 import com.androidessence.cashcaretaker.ui.transfer.AddTransferDialog
-import me.ibrahimyilmaz.kiel.adapterOf
 import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -34,16 +32,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 @Suppress("TooManyFunctions")
 class AccountListFragment : Fragment() {
     //region Properties
-
-    private val adapter = adapterOf<Account> {
-        register(
-            layoutResource = R.layout.list_item_account,
-            viewHolder = ::AccountViewHolder,
-            onViewHolderCreated = { vh ->
-                vh.apply { setClickListeners() }
-            }
-        )
-    }
 
     private lateinit var binding: FragmentAccountBinding
 
@@ -105,48 +93,20 @@ class AccountListFragment : Fragment() {
      * which we use to update the adpater when a list is pulled successfully.
      */
     private fun initializeViewModel() {
-        viewModel.accounts.observe(
-            this,
-            Observer { accounts ->
-                adapter.submitList(accounts)
-                activity?.invalidateOptionsMenu()
-            }
-        )
-
         viewModel.state.observe(
-            viewLifecycleOwner,
-            Observer { viewState ->
-                binding.composeView.setContent {
-                    AccountListScreen(
-                        viewState = viewState,
-                        accountClickListener = this::onAccountSelected,
-                        accountLongClickListener = this::onAccountLongClicked,
-                        withdrawalClickListener = this::onWithdrawalButtonClicked,
-                        depositClickListener = this::onDepositButtonClicked
-                    )
-                }
+            viewLifecycleOwner
+        ) { viewState ->
+            binding.composeView.setContent {
+                AccountListScreen(
+                    viewState = viewState,
+                    accountClickListener = this::onAccountSelected,
+                    accountLongClickListener = this::onAccountLongClicked,
+                    withdrawalClickListener = this::onWithdrawalButtonClicked,
+                    depositClickListener = this::onDepositButtonClicked
+                )
             }
-        )
-    }
-
-    private fun AccountViewHolder.setClickListeners() {
-        withdrawalClickListener = { account ->
-            onWithdrawalButtonClicked(account)
-        }
-
-        depositClickListener = { account ->
-            onDepositButtonClicked(account)
-        }
-
-        accountClickListener = { account ->
-            onAccountSelected(account)
-        }
-
-        accountLongClickListener = { account ->
-            onAccountLongClicked(account)
         }
     }
-
     //endregion
 
     //region UI Events
