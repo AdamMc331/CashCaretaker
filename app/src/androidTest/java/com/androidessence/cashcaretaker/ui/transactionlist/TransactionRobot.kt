@@ -1,8 +1,8 @@
 package com.androidessence.cashcaretaker.ui.transactionlist
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.clearText
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.action.ViewActions.typeText
@@ -21,12 +21,12 @@ import com.androidessence.cashcaretaker.TestUtils.Companion.setChecked
  */
 class TransactionRobot {
     fun clickNew(): TransactionRobot {
-        onView(ADD_BUTTON_MATCHER).perform(ViewActions.click())
+        onView(ADD_BUTTON_MATCHER).perform(click())
         return this
     }
 
     fun submit(): TransactionRobot {
-        onView(SUBMIT_BUTTON_MATCHER).perform(ViewActions.click())
+        onView(SUBMIT_BUTTON_MATCHER).perform(click())
         return this
     }
 
