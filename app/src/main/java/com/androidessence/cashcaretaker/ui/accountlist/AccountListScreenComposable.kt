@@ -14,7 +14,13 @@ import androidx.ui.tooling.preview.Preview
 import com.androidessence.cashcaretaker.core.models.Account
 
 @Composable
-fun AccountListScreen(viewState: AccountListState) {
+fun AccountListScreen(
+    viewState: AccountListState,
+    accountClickListener: (Account) -> Unit,
+    accountLongClickListener: (Account) -> Unit,
+    withdrawalClickListener: (Account) -> Unit,
+    depositClickListener: (Account) -> Unit
+) {
     when {
         viewState.loading -> {
             Box(
@@ -31,10 +37,10 @@ fun AccountListScreen(viewState: AccountListState) {
                     viewState.data.forEach { account ->
                         AccountListItem(
                             account = account,
-                            accountClickListener = {},
-                            accountLongClickListener = {},
-                            withdrawalClickListener = {},
-                            depositClickListener = {}
+                            accountClickListener = accountClickListener,
+                            accountLongClickListener = accountLongClickListener,
+                            withdrawalClickListener = withdrawalClickListener,
+                            depositClickListener = depositClickListener
                         )
                         Divider(color = Color.LightGray)
                     }
@@ -51,7 +57,11 @@ fun AccountListScreen(viewState: AccountListState) {
 @Composable
 fun PreviewLoadingState() {
     AccountListScreen(
-        viewState = AccountListState.loading()
+        viewState = AccountListState.loading(),
+        accountClickListener = {},
+        accountLongClickListener = {},
+        withdrawalClickListener = {},
+        depositClickListener = {}
     )
 }
 
@@ -59,7 +69,11 @@ fun PreviewLoadingState() {
 @Composable
 fun PreviewEmptyAccounts() {
     AccountListScreen(
-        viewState = AccountListState.success(emptyList())
+        viewState = AccountListState.success(emptyList()),
+        accountClickListener = {},
+        accountLongClickListener = {},
+        withdrawalClickListener = {},
+        depositClickListener = {}
     )
 }
 
@@ -73,6 +87,10 @@ fun PreviewAccountList() {
                 Account(name = "Test Two", 500.00),
                 Account(name = "Test Three", -100.00)
             )
-        )
+        ),
+        accountClickListener = {},
+        accountLongClickListener = {},
+        withdrawalClickListener = {},
+        depositClickListener = {}
     )
 }

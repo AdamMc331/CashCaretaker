@@ -10,8 +10,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
@@ -58,8 +56,6 @@ class AccountListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-        initializeViewModel()
     }
 
     override fun onCreateView(
@@ -76,7 +72,7 @@ class AccountListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeRecyclerView()
+        initializeViewModel()
 
         binding.addAccountButton.setOnClickListener { showAddAccountView() }
 
@@ -103,17 +99,6 @@ class AccountListFragment : Fragment() {
     //endregion
 
     //region Initializations
-    private fun initializeRecyclerView() {
-        val layoutManager = LinearLayoutManager(context)
-        binding.accountsRecyclerView.adapter = adapter
-        binding.accountsRecyclerView.layoutManager = layoutManager
-        binding.accountsRecyclerView.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                DividerItemDecoration.VERTICAL
-            )
-        )
-    }
 
     /**
      * Subscribes to any subjects that the [viewModel] is exposing. This includes the [viewModel] state,
@@ -125,6 +110,21 @@ class AccountListFragment : Fragment() {
             Observer { accounts ->
                 adapter.submitList(accounts)
                 activity?.invalidateOptionsMenu()
+            }
+        )
+
+        viewModel.state.observe(
+            viewLifecycleOwner,
+            Observer { viewState ->
+                binding.composeView.setContent {
+                    AccountListScreen(
+                        viewState = viewState,
+                        accountClickListener = this::onAccountSelected,
+                        accountLongClickListener = this::onAccountLongClicked,
+                        withdrawalClickListener = this::onWithdrawalButtonClicked,
+                        depositClickListener = this::onDepositButtonClicked
+                    )
+                }
             }
         )
     }
