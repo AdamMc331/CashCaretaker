@@ -21,7 +21,14 @@ import com.androidessence.cashcaretaker.util.asCurrency
 @Composable
 fun AccountListItem(account: Account) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = dimensionResource(id = R.dimen.double_margin),
+                end = dimensionResource(id = R.dimen.double_margin),
+                top = dimensionResource(id = R.dimen.single_margin),
+                bottom = dimensionResource(id = R.dimen.single_margin)
+            )
     ) {
         Text(
             modifier = Modifier

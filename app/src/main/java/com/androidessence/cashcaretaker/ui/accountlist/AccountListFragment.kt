@@ -143,6 +143,10 @@ class AccountListFragment : Fragment() {
             Observer { accounts ->
                 adapter.submitList(accounts)
                 activity?.invalidateOptionsMenu()
+
+                binding.composeView.setContent {
+                    AccountListScroller(accounts = accounts)
+                }
             }
         )
     }
