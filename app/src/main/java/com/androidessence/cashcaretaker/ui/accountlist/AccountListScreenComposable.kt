@@ -8,10 +8,34 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.LiveData
 import androidx.ui.tooling.preview.Preview
 import com.androidessence.cashcaretaker.core.models.Account
+
+@Composable
+fun AccountListScreenLiveData(
+    viewStateLiveData: LiveData<AccountListState>,
+    accountClickListener: (Account) -> Unit,
+    accountLongClickListener: (Account) -> Unit,
+    withdrawalClickListener: (Account) -> Unit,
+    depositClickListener: (Account) -> Unit
+) {
+    val viewState by viewStateLiveData.observeAsState(
+        initial = AccountListState.loading()
+    )
+
+    AccountListScreen(
+        viewState = viewState,
+        accountClickListener = accountClickListener,
+        accountLongClickListener = accountLongClickListener,
+        withdrawalClickListener = withdrawalClickListener,
+        depositClickListener = depositClickListener
+    )
+}
 
 @Composable
 fun AccountListScreen(
