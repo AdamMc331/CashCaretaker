@@ -31,6 +31,7 @@
 
         <TextView
             android:id="@+id/accountNameEditText"
+            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{viewModel.name}"
@@ -47,6 +48,7 @@
             android:id="@+id/accountBalanceEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginLeft="@dimen/double_margin"
             android:layout_marginRight="@dimen/double_margin"
             android:gravity="center"
@@ -62,6 +64,7 @@
         <ImageView
             android:id="@+id/deposit_button"
             android:layout_width="wrap_content"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:contentDescription="@string/create_deposit"
             android:padding="@dimen/double_margin"
@@ -73,6 +76,7 @@
         <ImageView
             android:id="@+id/withdrawal_button"
             android:layout_width="wrap_content"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:contentDescription="@string/create_withdrawal"
             android:padding="@dimen/double_margin"
