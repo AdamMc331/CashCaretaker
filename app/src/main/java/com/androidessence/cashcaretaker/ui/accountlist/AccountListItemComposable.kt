@@ -14,7 +14,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 import androidx.ui.tooling.preview.Preview
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
@@ -34,7 +33,6 @@ fun AccountListItem(account: Account) {
                 .gravity(Alignment.CenterVertically)
                 .weight(1F),
             text = account.name,
-            fontSize = 18.sp,
             style = MaterialTheme.typography.h6,
             fontWeight = FontWeight.Bold,
         )
