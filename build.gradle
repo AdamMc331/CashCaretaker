@@ -33,7 +33,7 @@ allprojects {
     }
 
     ext {
-        androidMinSdkVersion = 19
+        androidMinSdkVersion = 21
         androidTargetSdkVersion = 29
         androidCompileSdkVersion = 29
 
