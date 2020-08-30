@@ -4,4 +4,6 @@
 
     <dimen name="single_margin">8dp</dimen>
     <dimen name="double_margin">16dp</dimen>
+
+    <dimen name="account_list_item_text_size">18sp</dimen>
 </resources>

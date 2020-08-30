@@ -21,6 +21,10 @@ class AccountViewHolder(
     override fun bind(position: Int, item: Account) {
         super.bind(position, item)
         viewModel.account = item
-        binding.executePendingBindings()
+
+        // TODO: Text color resource
+        binding.composeView.setContent {
+            AccountListItem(account = item)
+        }
     }
 }
