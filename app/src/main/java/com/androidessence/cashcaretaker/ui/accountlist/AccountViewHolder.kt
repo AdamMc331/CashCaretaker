@@ -16,6 +16,8 @@ class AccountViewHolder(
      */
     var withdrawalClickListener: (Account) -> Unit = {}
     var depositClickListener: (Account) -> Unit = {}
+    var accountClickListener: (Account) -> Unit = {}
+    var accountLongClickListener: (Account) -> Unit = {}
 
     val binding = ListItemAccountBinding.bind(view)
 
@@ -32,6 +34,12 @@ class AccountViewHolder(
         binding.composeView.setContent {
             AccountListItem(
                 account = item,
+                accountClickListener = { account ->
+                    accountClickListener.invoke(account)
+                },
+                accountLongClickListener = { account ->
+                    accountLongClickListener.invoke(account)
+                },
                 withdrawalClickListener = { account ->
                     withdrawalClickListener.invoke(account)
                 },

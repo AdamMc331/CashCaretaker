@@ -138,12 +138,12 @@ class AccountListFragment : Fragment() {
             onDepositButtonClicked(account)
         }
 
-        itemView.setOnClickListener {
-            viewModel.account?.let(::onAccountSelected)
+        accountClickListener = { account ->
+            onAccountSelected(account)
         }
-        itemView.setOnLongClickListener {
-            viewModel.account?.let(::onAccountLongClicked)
-            true
+
+        accountLongClickListener = { account ->
+            onAccountLongClicked(account)
         }
     }
 

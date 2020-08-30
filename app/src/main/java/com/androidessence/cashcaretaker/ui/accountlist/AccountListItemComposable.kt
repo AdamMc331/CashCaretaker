@@ -23,6 +23,8 @@ import com.androidessence.cashcaretaker.util.asCurrency
 @Composable
 fun AccountListItem(
     account: Account,
+    accountClickListener: (Account) -> Unit,
+    accountLongClickListener: (Account) -> Unit,
     withdrawalClickListener: (Account) -> Unit,
     depositClickListener: (Account) -> Unit
 ) {
@@ -31,6 +33,10 @@ fun AccountListItem(
             .fillMaxWidth()
             .padding(
                 dimensionResource(id = R.dimen.single_margin)
+            )
+            .clickable(
+                onClick = { accountClickListener.invoke(account) },
+                onLongClick = { accountLongClickListener.invoke(account) }
             )
     ) {
         Text(
@@ -75,6 +81,8 @@ fun PreviewPositiveAccount() {
             name = "Checking",
             balance = 100.23
         ),
+        accountClickListener = {},
+        accountLongClickListener = {},
         withdrawalClickListener = {},
         depositClickListener = {}
     )
@@ -88,6 +96,8 @@ fun PreviewNegativeAccount() {
             name = "Checking",
             balance = -500.00
         ),
+        accountClickListener = {},
+        accountLongClickListener = {},
         withdrawalClickListener = {},
         depositClickListener = {}
     )
