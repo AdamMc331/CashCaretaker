@@ -130,13 +130,13 @@ class AccountListFragment : Fragment() {
     }
 
     private fun AccountViewHolder.setClickListeners() {
-//        binding.withdrawalButton.setOnClickListener {
-//            viewModel.account?.let(::onWithdrawalButtonClicked)
-//        }
-//
-//        binding.depositButton.setOnClickListener {
-//            viewModel.account?.let(::onDepositButtonClicked)
-//        }
+        withdrawalClickListener = { account ->
+            onWithdrawalButtonClicked(account)
+        }
+
+        depositClickListener = { account ->
+            onDepositButtonClicked(account)
+        }
 
         itemView.setOnClickListener {
             viewModel.account?.let(::onAccountSelected)

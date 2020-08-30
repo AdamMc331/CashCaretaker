@@ -10,6 +10,13 @@ class AccountViewHolder(
     view: View
 ) : RecyclerViewHolder<Account>(view) {
 
+    /**
+     * NOTE: This field injection here isn't great, but we'll remove this VH
+     * entirely when the scroller itself is in Compose, so it's fine for this step.
+     */
+    var withdrawalClickListener: (Account) -> Unit = {}
+    var depositClickListener: (Account) -> Unit = {}
+
     val binding = ListItemAccountBinding.bind(view)
 
     val viewModel = AccountViewModel()
@@ -22,9 +29,16 @@ class AccountViewHolder(
         super.bind(position, item)
         viewModel.account = item
 
-        // TODO: Text color resource
         binding.composeView.setContent {
-            AccountListItem(account = item)
+            AccountListItem(
+                account = item,
+                withdrawalClickListener = { account ->
+                    withdrawalClickListener.invoke(account)
+                },
+                depositClickListener = { account ->
+                    depositClickListener.invoke(account)
+                }
+            )
         }
     }
 }

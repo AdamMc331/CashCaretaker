@@ -2,6 +2,7 @@ package com.androidessence.cashcaretaker.ui.accountlist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,11 @@ import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.util.asCurrency
 
 @Composable
-fun AccountListItem(account: Account) {
+fun AccountListItem(
+    account: Account,
+    withdrawalClickListener: (Account) -> Unit,
+    depositClickListener: (Account) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -48,14 +53,16 @@ fun AccountListItem(account: Account) {
         Image(
             modifier = Modifier
                 .gravity(Alignment.CenterVertically)
-                .padding(dimensionResource(id = R.dimen.double_margin)),
+                .padding(dimensionResource(id = R.dimen.double_margin))
+                .clickable(onClick = { withdrawalClickListener.invoke(account) }),
             asset = vectorResource(id = R.drawable.ic_add_green_24dp),
         )
         Image(
             modifier = Modifier
                 .gravity(Alignment.CenterVertically)
-                .padding(dimensionResource(id = R.dimen.double_margin)),
-            asset = vectorResource(id = R.drawable.ic_remove_red_24dp)
+                .padding(dimensionResource(id = R.dimen.double_margin))
+                .clickable(onClick = { depositClickListener.invoke(account) }),
+            asset = vectorResource(id = R.drawable.ic_remove_red_24dp),
         )
     }
 }
@@ -67,7 +74,9 @@ fun PreviewPositiveAccount() {
         account = Account(
             name = "Checking",
             balance = 100.23
-        )
+        ),
+        withdrawalClickListener = {},
+        depositClickListener = {}
     )
 }
 
@@ -78,6 +87,8 @@ fun PreviewNegativeAccount() {
         account = Account(
             name = "Checking",
             balance = -500.00
-        )
+        ),
+        withdrawalClickListener = {},
+        depositClickListener = {}
     )
 }
