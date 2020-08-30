@@ -17,7 +17,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.github.ben-manes:gradle-versions-plugin:0.29.0"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:9.3.0"
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.11.2"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.12.0"
         classpath "com.google.gms:google-services:4.3.3"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -42,19 +42,19 @@ allprojects {
         coroutinesVersion = "1.3.9"
         architectureComponentsVersion = "2.1.0"
         materialVersion = "1.2.0"
-        espressoVersion = "3.2.0"
-        constraintLayoutVersion = "2.0.0"
+        espressoVersion = "3.3.0"
+        constraintLayoutVersion = "2.0.1"
         materialDesignSpecsVersion = "2.0.1"
         timberVersion = "4.7.1"
         koinVersion = "2.1.6"
         androidxArchVersion = "2.1.0"
-        androidxTestVersion = "1.2.0"
-        androidxJunitVersion = "1.1.1"
+        androidxTestVersion = "1.3.0"
+        androidxJunitVersion = "1.1.2"
         junitVersion = "4.13"
         mockkVersion = "1.10.0"
         truthVersion = "1.0.1"
         androidxCoreVersion = "1.3.1"
-        turbineVersion = "0.2.0"
+        turbineVersion = "0.2.1"
         kielVersion = "1.2.1"
     }
     configurations.all {
