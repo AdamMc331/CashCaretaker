@@ -24,6 +24,7 @@ class AccountListViewModel(
     private val analyticsTracker: AnalyticsTracker
 ) : BaseViewModel() {
     private val _state: MutableLiveData<AccountListState> = MutableLiveData()
+    val state: LiveData<AccountListState> = _state
 
     val accounts: LiveData<List<Account>> = Transformations.map(_state) { state ->
         state?.data.orEmpty()

@@ -9,9 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
@@ -20,7 +17,6 @@ import com.androidessence.cashcaretaker.ui.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.ui.main.MainController
 import com.androidessence.cashcaretaker.ui.transfer.AddTransferDialog
-import me.ibrahimyilmaz.kiel.adapterOf
 import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -37,16 +33,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class AccountListFragment : Fragment() {
     //region Properties
 
-    private val adapter = adapterOf<Account> {
-        register(
-            layoutResource = R.layout.list_item_account,
-            viewHolder = ::AccountViewHolder,
-            onViewHolderCreated = { vh ->
-                vh.apply { setClickListeners() }
-            }
-        )
-    }
-
     private lateinit var binding: FragmentAccountBinding
 
     private val viewModel: AccountListViewModel by viewModel()
@@ -58,8 +44,6 @@ class AccountListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-        initializeViewModel()
     }
 
     override fun onCreateView(
@@ -76,7 +60,7 @@ class AccountListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeRecyclerView()
+        initializeViewModel()
 
         binding.addAccountButton.setOnClickListener { showAddAccountView() }
 
@@ -103,50 +87,26 @@ class AccountListFragment : Fragment() {
     //endregion
 
     //region Initializations
-    private fun initializeRecyclerView() {
-        val layoutManager = LinearLayoutManager(context)
-        binding.accountsRecyclerView.adapter = adapter
-        binding.accountsRecyclerView.layoutManager = layoutManager
-        binding.accountsRecyclerView.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                DividerItemDecoration.VERTICAL
-            )
-        )
-    }
 
     /**
      * Subscribes to any subjects that the [viewModel] is exposing. This includes the [viewModel] state,
      * which we use to update the adpater when a list is pulled successfully.
      */
     private fun initializeViewModel() {
-        viewModel.accounts.observe(
-            this,
-            Observer { accounts ->
-                adapter.submitList(accounts)
-                activity?.invalidateOptionsMenu()
+        viewModel.state.observe(
+            viewLifecycleOwner
+        ) { viewState ->
+            binding.composeView.setContent {
+                AccountListScreen(
+                    viewState = viewState,
+                    accountClickListener = this::onAccountSelected,
+                    accountLongClickListener = this::onAccountLongClicked,
+                    withdrawalClickListener = this::onWithdrawalButtonClicked,
+                    depositClickListener = this::onDepositButtonClicked
+                )
             }
-        )
-    }
-
-    private fun AccountViewHolder.setClickListeners() {
-        withdrawalClickListener = { account ->
-            onWithdrawalButtonClicked(account)
-        }
-
-        depositClickListener = { account ->
-            onDepositButtonClicked(account)
-        }
-
-        accountClickListener = { account ->
-            onAccountSelected(account)
-        }
-
-        accountLongClickListener = { account ->
-            onAccountLongClicked(account)
         }
     }
-
     //endregion
 
     //region UI Events
