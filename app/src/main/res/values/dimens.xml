@@ -6,4 +6,5 @@
     <dimen name="double_margin">16dp</dimen>
 
     <dimen name="account_list_item_text_size">18sp</dimen>
+    <dimen name="empty_accounts_padding">32dp</dimen>
 </resources>

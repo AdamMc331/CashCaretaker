@@ -79,6 +79,7 @@ fun PreviewEmptyAccounts() {
 
 @Preview
 @Composable
+@Suppress("MagicNumber")
 fun PreviewAccountList() {
     AccountListScreen(
         viewState = AccountListState.success(
