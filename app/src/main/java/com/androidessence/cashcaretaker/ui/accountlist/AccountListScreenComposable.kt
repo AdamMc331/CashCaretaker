@@ -38,7 +38,7 @@ fun AccountListScreenLiveData(
 }
 
 @Composable
-fun AccountListScreen(
+private fun AccountListScreen(
     viewState: AccountListState,
     accountClickListener: (Account) -> Unit,
     accountLongClickListener: (Account) -> Unit,
@@ -47,33 +47,55 @@ fun AccountListScreen(
 ) {
     when {
         viewState.loading -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                gravity = ContentGravity.Center,
-                backgroundColor = Color.White
-            ) {
-                CircularProgressIndicator()
-            }
+            LoadingState()
         }
         viewState.data.isNotEmpty() -> {
-            Surface(color = Color.White) {
-                ScrollableColumn {
-                    viewState.data.forEach { account ->
-                        AccountListItem(
-                            account = account,
-                            accountClickListener = accountClickListener,
-                            accountLongClickListener = accountLongClickListener,
-                            withdrawalClickListener = withdrawalClickListener,
-                            depositClickListener = depositClickListener
-                        )
-                        Divider(color = Color.LightGray)
-                    }
-                }
-            }
+            AccountListView(
+                viewState,
+                accountClickListener,
+                accountLongClickListener,
+                withdrawalClickListener,
+                depositClickListener
+            )
         }
         else -> {
             NoAccountsMessage()
         }
+    }
+}
+
+@Composable
+private fun AccountListView(
+    viewState: AccountListState,
+    accountClickListener: (Account) -> Unit,
+    accountLongClickListener: (Account) -> Unit,
+    withdrawalClickListener: (Account) -> Unit,
+    depositClickListener: (Account) -> Unit
+) {
+    Surface(color = Color.White) {
+        ScrollableColumn {
+            viewState.data.forEach { account ->
+                AccountListItem(
+                    account = account,
+                    accountClickListener = accountClickListener,
+                    accountLongClickListener = accountLongClickListener,
+                    withdrawalClickListener = withdrawalClickListener,
+                    depositClickListener = depositClickListener
+                )
+                Divider(color = Color.LightGray)
+            }
+        }
+    }
+}
+
+@Composable
+private fun LoadingState() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        gravity = ContentGravity.Center,
+        backgroundColor = Color.White
+    ) {
+        CircularProgressIndicator()
     }
 }
 
