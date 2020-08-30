@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Account
@@ -113,24 +112,6 @@ class AccountListFragment : Fragment() {
                 context,
                 DividerItemDecoration.VERTICAL
             )
-        )
-
-        // https://stackoverflow.com/a/39813266/3131147
-        binding.accountsRecyclerView.addOnScrollListener(
-            object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (dy > 0 || dy < 0 && binding.addAccountButton.isShown) {
-                        binding.addAccountButton.hide()
-                    }
-                }
-
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        binding.addAccountButton.show()
-                    }
-                    super.onScrollStateChanged(recyclerView, newState)
-                }
-            }
         )
     }
 

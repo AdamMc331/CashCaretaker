@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
@@ -111,24 +110,6 @@ class TransactionListFragment : Fragment() {
                 context,
                 DividerItemDecoration.VERTICAL
             )
-        )
-
-        // https://stackoverflow.com/a/39813266/3131147
-        binding.transactionsRecyclerView.addOnScrollListener(
-            object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (dy > 0 || dy < 0 && binding.addTransactionButton.isShown) {
-                        binding.addTransactionButton.hide()
-                    }
-                }
-
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        binding.addTransactionButton.show()
-                    }
-                    super.onScrollStateChanged(recyclerView, newState)
-                }
-            }
         )
     }
 
