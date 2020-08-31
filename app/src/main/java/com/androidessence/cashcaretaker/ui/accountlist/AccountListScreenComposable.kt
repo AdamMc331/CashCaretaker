@@ -19,10 +19,7 @@ import com.androidessence.cashcaretaker.core.models.Account
 @Composable
 fun AccountListScreenLiveData(
     viewStateLiveData: LiveData<AccountListState>,
-    accountClickListener: (Account) -> Unit,
-    accountLongClickListener: (Account) -> Unit,
-    withdrawalClickListener: (Account) -> Unit,
-    depositClickListener: (Account) -> Unit
+    accountClickListener: AccountListItemClickListener
 ) {
     val viewState by viewStateLiveData.observeAsState(
         initial = AccountListState.loading()
@@ -30,20 +27,14 @@ fun AccountListScreenLiveData(
 
     AccountListScreen(
         viewState = viewState,
-        accountClickListener = accountClickListener,
-        accountLongClickListener = accountLongClickListener,
-        withdrawalClickListener = withdrawalClickListener,
-        depositClickListener = depositClickListener
+        accountClickListener = accountClickListener
     )
 }
 
 @Composable
 private fun AccountListScreen(
     viewState: AccountListState,
-    accountClickListener: (Account) -> Unit,
-    accountLongClickListener: (Account) -> Unit,
-    withdrawalClickListener: (Account) -> Unit,
-    depositClickListener: (Account) -> Unit
+    accountClickListener: AccountListItemClickListener? = null
 ) {
     when {
         viewState.loading -> {
@@ -52,10 +43,7 @@ private fun AccountListScreen(
         viewState.data.isNotEmpty() -> {
             AccountListView(
                 viewState,
-                accountClickListener,
-                accountLongClickListener,
-                withdrawalClickListener,
-                depositClickListener
+                accountClickListener
             )
         }
         else -> {
@@ -67,20 +55,14 @@ private fun AccountListScreen(
 @Composable
 private fun AccountListView(
     viewState: AccountListState,
-    accountClickListener: (Account) -> Unit,
-    accountLongClickListener: (Account) -> Unit,
-    withdrawalClickListener: (Account) -> Unit,
-    depositClickListener: (Account) -> Unit
+    accountClickListener: AccountListItemClickListener? = null
 ) {
     Surface(color = Color.White) {
         ScrollableColumn {
             viewState.data.forEach { account ->
                 AccountListItem(
                     account = account,
-                    accountClickListener = accountClickListener,
-                    accountLongClickListener = accountLongClickListener,
-                    withdrawalClickListener = withdrawalClickListener,
-                    depositClickListener = depositClickListener
+                    accountClickListener = accountClickListener
                 )
                 Divider(color = Color.LightGray)
             }
@@ -103,11 +85,7 @@ private fun LoadingState() {
 @Composable
 fun PreviewLoadingState() {
     AccountListScreen(
-        viewState = AccountListState.loading(),
-        accountClickListener = {},
-        accountLongClickListener = {},
-        withdrawalClickListener = {},
-        depositClickListener = {}
+        viewState = AccountListState.loading()
     )
 }
 
@@ -115,11 +93,7 @@ fun PreviewLoadingState() {
 @Composable
 fun PreviewEmptyAccounts() {
     AccountListScreen(
-        viewState = AccountListState.success(emptyList()),
-        accountClickListener = {},
-        accountLongClickListener = {},
-        withdrawalClickListener = {},
-        depositClickListener = {}
+        viewState = AccountListState.success(emptyList())
     )
 }
 
@@ -134,10 +108,6 @@ fun PreviewAccountList() {
                 Account(name = "Test Two", 500.00),
                 Account(name = "Test Three", -100.00)
             )
-        ),
-        accountClickListener = {},
-        accountLongClickListener = {},
-        withdrawalClickListener = {},
-        depositClickListener = {}
+        )
     )
 }

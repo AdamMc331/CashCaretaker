@@ -23,10 +23,7 @@ import com.androidessence.cashcaretaker.util.asCurrency
 @Composable
 fun AccountListItem(
     account: Account,
-    accountClickListener: (Account) -> Unit,
-    accountLongClickListener: (Account) -> Unit,
-    withdrawalClickListener: (Account) -> Unit,
-    depositClickListener: (Account) -> Unit
+    accountClickListener: AccountListItemClickListener? = null
 ) {
     Row(
         modifier = Modifier
@@ -35,8 +32,12 @@ fun AccountListItem(
                 dimensionResource(id = R.dimen.single_margin)
             )
             .clickable(
-                onClick = { accountClickListener.invoke(account) },
-                onLongClick = { accountLongClickListener.invoke(account) }
+                onClick = {
+                    accountClickListener?.onAccountClicked(account)
+                },
+                onLongClick = {
+                    accountClickListener?.onAccountLongClicked(account)
+                }
             )
     ) {
         Text(
@@ -60,14 +61,22 @@ fun AccountListItem(
             modifier = Modifier
                 .gravity(Alignment.CenterVertically)
                 .padding(dimensionResource(id = R.dimen.double_margin))
-                .clickable(onClick = { withdrawalClickListener.invoke(account) }),
+                .clickable(
+                    onClick = {
+                        accountClickListener?.onWithdrawalClicked(account)
+                    }
+                ),
             asset = vectorResource(id = R.drawable.ic_add_green_24dp),
         )
         Image(
             modifier = Modifier
                 .gravity(Alignment.CenterVertically)
                 .padding(dimensionResource(id = R.dimen.double_margin))
-                .clickable(onClick = { depositClickListener.invoke(account) }),
+                .clickable(
+                    onClick = {
+                        accountClickListener?.onDepositClicked(account)
+                    }
+                ),
             asset = vectorResource(id = R.drawable.ic_remove_red_24dp),
         )
     }
@@ -80,11 +89,7 @@ fun PreviewPositiveAccount() {
         account = Account(
             name = "Checking",
             balance = 100.23
-        ),
-        accountClickListener = {},
-        accountLongClickListener = {},
-        withdrawalClickListener = {},
-        depositClickListener = {}
+        )
     )
 }
 
@@ -95,10 +100,6 @@ fun PreviewNegativeAccount() {
         account = Account(
             name = "Checking",
             balance = -500.00
-        ),
-        accountClickListener = {},
-        accountLongClickListener = {},
-        withdrawalClickListener = {},
-        depositClickListener = {}
+        )
     )
 }
