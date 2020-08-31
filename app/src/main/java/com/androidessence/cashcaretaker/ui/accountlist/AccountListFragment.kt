@@ -54,13 +54,22 @@ class AccountListFragment : Fragment() {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        binding.composeView.setContent {
+            AccountListScreenLiveData(
+                viewStateLiveData = viewModel.state,
+                accountClickListener = this::onAccountSelected,
+                accountLongClickListener = this::onAccountLongClicked,
+                withdrawalClickListener = this::onWithdrawalButtonClicked,
+                depositClickListener = this::onDepositButtonClicked
+            )
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initializeViewModel()
 
         binding.addAccountButton.setOnClickListener { showAddAccountView() }
 
@@ -82,29 +91,6 @@ class AccountListFragment : Fragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-    //endregion
-
-    //region Initializations
-
-    /**
-     * Subscribes to any subjects that the [viewModel] is exposing. This includes the [viewModel] state,
-     * which we use to update the adpater when a list is pulled successfully.
-     */
-    private fun initializeViewModel() {
-        viewModel.state.observe(
-            viewLifecycleOwner
-        ) { viewState ->
-            binding.composeView.setContent {
-                AccountListScreen(
-                    viewState = viewState,
-                    accountClickListener = this::onAccountSelected,
-                    accountLongClickListener = this::onAccountLongClicked,
-                    withdrawalClickListener = this::onWithdrawalButtonClicked,
-                    depositClickListener = this::onDepositButtonClicked
-                )
-            }
         }
     }
     //endregion
