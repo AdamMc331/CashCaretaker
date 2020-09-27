@@ -30,9 +30,8 @@ import org.koin.android.viewmodel.ext.android.viewModel
  * notifying the fragment. This component also handles the ActionMode behavior.
  */
 @Suppress("TooManyFunctions")
-class AccountListFragment : Fragment() {
+class AccountListFragment : Fragment(), AccountListItemClickListener {
     //region Properties
-
     private lateinit var binding: FragmentAccountBinding
 
     private val viewModel: AccountListViewModel by viewModel()
@@ -58,10 +57,7 @@ class AccountListFragment : Fragment() {
         binding.composeView.setContent {
             AccountListScreenLiveData(
                 viewStateLiveData = viewModel.state,
-                accountClickListener = this::onAccountSelected,
-                accountLongClickListener = this::onAccountLongClicked,
-                withdrawalClickListener = this::onWithdrawalButtonClicked,
-                depositClickListener = this::onDepositButtonClicked
+                accountClickListener = this
             )
         }
 
@@ -96,22 +92,22 @@ class AccountListFragment : Fragment() {
     //endregion
 
     //region UI Events
-    private fun onWithdrawalButtonClicked(account: Account) {
+    override fun onWithdrawalClicked(account: Account) {
         val dialog = AddTransactionDialog.newInstance(account.name, true)
         dialog.show(childFragmentManager, AddTransactionDialog.FRAGMENT_NAME)
     }
 
-    private fun onDepositButtonClicked(account: Account) {
+    override fun onDepositClicked(account: Account) {
         val dialog = AddTransactionDialog.newInstance(account.name, false)
         dialog.show(childFragmentManager, AddTransactionDialog.FRAGMENT_NAME)
     }
 
-    private fun onAccountSelected(account: Account) {
+    override fun onAccountClicked(account: Account) {
         analyticsTracker.trackAccountClicked()
         (activity as? MainController)?.showTransactions(account.name)
     }
 
-    private fun onAccountLongClicked(account: Account) {
+    override fun onAccountLongClicked(account: Account) {
         viewModel.startActionModeForAccount(account, activity as AppCompatActivity)
     }
 
