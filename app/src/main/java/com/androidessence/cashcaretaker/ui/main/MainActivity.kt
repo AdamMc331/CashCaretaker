@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.compose.foundation.Text
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.platform.setContent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.androidessence.cashcaretaker.R
@@ -23,17 +25,22 @@ class MainActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        supportFragmentManager.addOnBackStackChangedListener(this)
-        initializeBackButton()
-
-        if (savedInstanceState == null) {
-            showAccounts()
+        setContent {
+            MaterialTheme {
+                Text(text = "Hello World")
+            }
         }
+//        setContentView(R.layout.activity_main)
+//
+//        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+//        setSupportActionBar(toolbar)
+//
+//        supportFragmentManager.addOnBackStackChangedListener(this)
+//        initializeBackButton()
+//
+//        if (savedInstanceState == null) {
+//            showAccounts()
+//        }
     }
 
     override fun navigateToAddAccount() {

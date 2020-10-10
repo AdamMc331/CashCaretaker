@@ -60,7 +60,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.0.0-alpha01"
+        kotlinCompilerExtensionVersion "1.0.0-alpha04"
     }
 }
 
@@ -119,10 +119,10 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
 
     // Compose
-    implementation 'androidx.compose.ui:ui:1.0.0-alpha01'
-    implementation 'androidx.compose.material:material:1.0.0-alpha01'
-    implementation 'androidx.compose.runtime:runtime-livedata:1.0.0-alpha01'
-    implementation 'androidx.ui:ui-tooling:1.0.0-alpha01'
+    implementation 'androidx.compose.ui:ui:1.0.0-alpha04'
+    implementation 'androidx.compose.material:material:1.0.0-alpha04'
+    implementation 'androidx.compose.runtime:runtime-livedata:1.0.0-alpha04'
+    implementation 'androidx.ui:ui-tooling:1.0.0-alpha04'
 
     compileOnly "org.glassfish:javax.annotation:10.0-b28"
 }
