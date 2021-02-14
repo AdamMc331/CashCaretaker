@@ -18,10 +18,8 @@ file_list = []
 
 module_list = [
 	"app",
-	"network",
-	"image-loader",
 	"database",
-	"core"
+	"analytics"
 ]
 
 for module in module_list:
