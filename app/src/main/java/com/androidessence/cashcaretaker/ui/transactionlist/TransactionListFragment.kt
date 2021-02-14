@@ -59,7 +59,7 @@ class TransactionListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentTransactionBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -79,10 +79,15 @@ class TransactionListFragment : Fragment() {
 
     //region Initializations
     private fun setupTitle() {
-        val title = if (accountName.isEmpty()) getString(R.string.app_name) else getString(
-            R.string.account_transactions,
-            accountName
-        )
+        val title = if (accountName.isEmpty()) {
+            getString(R.string.app_name)
+        } else {
+            getString(
+                R.string.account_transactions,
+                accountName
+            )
+        }
+
         (activity as AppCompatActivity).supportActionBar?.title = title
     }
 
