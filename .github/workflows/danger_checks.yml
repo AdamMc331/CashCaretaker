@@ -24,12 +24,20 @@ jobs:
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
         run: echo $FIREBASE_SECRET > app/google-services.json
 
+      - name: Detekt
+        run: ./gradlew detekt
+
+      - name: ktlint
+          run: ./gradlew ktlintCheck
+
+      - name: Android Lint
+          run: ./gradlew lint
+
+      - name: Dependency Updates
+          run: ./gradlew dependencyUpdates
+
       - name: Danger Checks
         run: |
-          ./gradlew detekt
-          ./gradlew ktlintCheck
-          ./gradlew lint
-          ./gradlew dependencyUpdates
           cd scripts
           touch ktlint-report-orig.xml
           touch ktlint-report.xml
