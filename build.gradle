@@ -5,7 +5,7 @@ apply plugin: "io.gitlab.arturbosch.detekt"
 
 buildscript {
     ext.kotlin_version = "1.4.0"
-    ext.build_tools_version = '4.2.0-alpha08'
+    ext.build_tools_version = '4.1.0'
     repositories {
         jcenter()
         maven { url "https://maven.google.com" }
