@@ -73,7 +73,7 @@ dependencies {
     implementation "com.androidessence:materialdesignspecs:$materialDesignSpecsVersion"
 
     // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     androidTestImplementation "androidx.arch.core:core-testing:$androidxArchVersion"
     kapt "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
 
