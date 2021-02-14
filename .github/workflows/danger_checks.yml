@@ -28,13 +28,13 @@ jobs:
         run: ./gradlew detekt
 
       - name: ktlint
-          run: ./gradlew ktlintCheck
+        run: ./gradlew ktlintCheck
 
       - name: Android Lint
-          run: ./gradlew lint
+        run: ./gradlew lint
 
       - name: Dependency Updates
-          run: ./gradlew dependencyUpdates
+        run: ./gradlew dependencyUpdates
 
       - name: Danger Checks
         run: |
