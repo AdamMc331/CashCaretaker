@@ -27,7 +27,6 @@ for module in module_list:
 	file_list.append(parentDirectory + module + ktlintTest)
 	file_list.append(parentDirectory + module + ktlintAndroidTest)
 	file_list.append(parentDirectory + module + detekt)
-	file_list.append(parentDirectory + module + lint)
 
 print(file_list)
 
