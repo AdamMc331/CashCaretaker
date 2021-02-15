@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +21,8 @@ import com.androidessence.cashcaretaker.ui.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.ui.main.MainController
 import com.androidessence.cashcaretaker.ui.transfer.AddTransferDialog
+import com.androidessence.cashcaretaker.ui.utils.visibleIf
+import kotlinx.coroutines.flow.collect
 import me.ibrahimyilmaz.kiel.adapterOf
 import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -60,17 +62,15 @@ class AccountListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        initializeViewModel()
+        subscribeToViewModel()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -88,7 +88,7 @@ class AccountListFragment : Fragment() {
     //region Menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_accounts, menu)
-        menu.findItem(R.id.action_transfer)?.isVisible = viewModel.allowTransfers
+        menu.findItem(R.id.action_transfer)?.isVisible = viewModel.viewState.value.allowTransfers
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -138,14 +138,21 @@ class AccountListFragment : Fragment() {
      * Subscribes to any subjects that the [viewModel] is exposing. This includes the [viewModel] state,
      * which we use to update the adpater when a list is pulled successfully.
      */
-    private fun initializeViewModel() {
-        viewModel.accounts.observe(
-            this,
-            Observer { accounts ->
-                adapter.submitList(accounts)
-                activity?.invalidateOptionsMenu()
+    private fun subscribeToViewModel() {
+        lifecycleScope.launchWhenResumed {
+            viewModel.viewState.collect { viewState ->
+                processViewState(viewState)
             }
-        )
+        }
+    }
+
+    private fun processViewState(viewState: AccountListViewState) {
+        binding.progressBar.visibleIf(viewState.showLoading)
+        binding.accountsRecyclerView.visibleIf(viewState.showContent)
+        binding.emptyStateGroup.visibleIf(viewState.showEmptyState)
+
+        adapter.submitList(viewState.accounts)
+        activity?.invalidateOptionsMenu()
     }
 
     private fun AccountViewHolder.setClickListeners() {

@@ -35,12 +35,16 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
-    dataBinding {
-        enabled = true
+
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
     }
+
     packagingOptions {
         exclude "META-INF/atomicfu.kotlin_module"
     }
@@ -52,6 +56,8 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+
+        freeCompilerArgs += ["-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi", "-Xopt-in=kotlin.contracts.ExperimentalContracts"]
     }
 }
 
