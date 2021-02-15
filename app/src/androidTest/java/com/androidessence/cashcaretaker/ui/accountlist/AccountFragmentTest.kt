@@ -13,8 +13,8 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.core.KoinComponent
-import org.koin.core.get
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 
 /**
  * Tests the fragment responsible for displaying accounts.
@@ -31,16 +31,14 @@ class AccountFragmentTest : KoinComponent {
     @Before
     fun setUp() {
         runBlocking {
-
-//            database.deleteAllAccounts()
+            database.deleteAllAccounts()
         }
     }
 
     @After
     fun tearDown() {
         runBlocking {
-
-//            database.deleteAllAccounts()
+            database.deleteAllAccounts()
         }
     }
 
