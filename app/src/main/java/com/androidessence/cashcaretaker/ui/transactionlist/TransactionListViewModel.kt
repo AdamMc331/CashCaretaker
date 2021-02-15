@@ -16,6 +16,8 @@ import com.androidessence.cashcaretaker.data.CCRepository
 import com.androidessence.cashcaretaker.data.DataViewState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -23,8 +25,18 @@ import kotlinx.coroutines.launch
 class TransactionListViewModel(
     accountName: String,
     private val repository: CCRepository,
-    private val analyticsTracker: AnalyticsTracker
+    private val analyticsTracker: AnalyticsTracker,
 ) : BaseViewModel() {
+    private val _viewState: MutableStateFlow<TransactionListViewState> = MutableStateFlow(
+        TransactionListViewState(
+            showLoading = true,
+            accountName = accountName,
+            transactions = emptyList(),
+        )
+    )
+
+    val viewState: StateFlow<TransactionListViewState> = _viewState
+
     private val _state: MutableLiveData<DataViewState> = MutableLiveData<DataViewState>().apply {
         value = DataViewState.Loading
     }

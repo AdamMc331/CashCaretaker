@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +14,7 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.databinding.FragmentTransactionBinding
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
+import com.androidessence.cashcaretaker.ui.utils.visibleIf
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.ibrahimyilmaz.kiel.adapterOf
@@ -61,8 +61,6 @@ class TransactionListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTransactionBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
         setHasOptionsMenu(false)
         return binding.root
     }
@@ -96,16 +94,25 @@ class TransactionListFragment : Fragment() {
      * and the click subject to edit a transaction.
      */
     private fun initializeViewModel() {
-        viewModel.transactions.observe(
-            this,
-            Observer(adapter::submitList)
-        )
+        lifecycleScope.launchWhenResumed {
+            viewModel.viewState.collect { viewState ->
+                processViewState(viewState)
+            }
+        }
 
         lifecycleScope.launch {
             viewModel.editClickedFlow.collect { transaction ->
                 showEditTransaction(transaction)
             }
         }
+    }
+
+    private fun processViewState(viewState: TransactionListViewState) {
+        binding.progressBar.visibleIf(viewState.showLoading)
+        binding.transactionsRecyclerView.visibleIf(viewState.showContent)
+        binding.emptyStateGroup.visibleIf(viewState.showEmptyState)
+
+        adapter.submitList(viewState.transactions)
     }
 
     private fun initializeRecyclerView() {
