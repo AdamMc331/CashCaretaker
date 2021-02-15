@@ -4,48 +4,29 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
- * LifeCycle aware class that fetches accounts from the database and exposes them through the [_state].
+ * LifeCycle aware class that fetches accounts from the database and exposes them through the [_viewState].
  */
 class AccountListViewModel(
     private val repository: CCRepository,
-    private val analyticsTracker: AnalyticsTracker
+    private val analyticsTracker: AnalyticsTracker,
 ) : BaseViewModel() {
-    private val _state: MutableLiveData<AccountListState> = MutableLiveData()
+    private val _viewState: MutableStateFlow<AccountListViewState> = MutableStateFlow(
+        AccountListViewState.loading()
+    )
 
-    val accounts: LiveData<List<Account>> = Transformations.map(_state) { state ->
-        state?.data.orEmpty()
-    }
-
-    val allowTransfers: Boolean
-        get() {
-            val count = (_state.value)?.data?.count() ?: 0
-            return count >= 2
-        }
-
-    val showAccounts: LiveData<Boolean> = Transformations.map(_state) { state ->
-        !state.loading && state.data.isNotEmpty()
-    }
-
-    val showEmptyMessage: LiveData<Boolean> = Transformations.map(_state) { state ->
-        !state.loading && state.data.isEmpty()
-    }
-
-    val showLoading: LiveData<Boolean> = Transformations.map(_state) { state ->
-        state.loading
-    }
+    val viewState: StateFlow<AccountListViewState> = _viewState
 
     //region Action Mode
     private var selectedAccount: Account? = null
@@ -83,11 +64,11 @@ class AccountListViewModel(
     //endregion
 
     init {
-        _state.value = AccountListState.loading()
+        _viewState.value = AccountListViewState.loading()
 
         viewModelScope.launch {
             repository.fetchAllAccounts().collect { accounts ->
-                _state.value = AccountListState.success(accounts)
+                _viewState.value = AccountListViewState.success(accounts)
             }
         }
     }
