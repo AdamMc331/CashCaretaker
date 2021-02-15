@@ -13,12 +13,14 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 /**
  * Tests the fragment responsible for displaying accounts.
  */
+@KoinApiExtension
 @RunWith(AndroidJUnit4::class)
 class AccountFragmentTest : KoinComponent {
 
