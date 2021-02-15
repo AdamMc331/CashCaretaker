@@ -8,9 +8,9 @@ from xml.etree import ElementTree
 
 first = None
 parentDirectory = "../"
-ktlintMain = "/build/reports/ktlint/ktlintMainSourceSetCheck.xml"
-ktlintTest = "/build/reports/ktlint/ktlintTestSourceSetCheck.xml"
-ktlintAndroidTest = "/build/reports/ktlint/ktlintAndroidTestSourceSetCheck.xml"
+ktlintMain = "/build/reports/ktlint/ktlintMainSourceSetCheck/ktlintMainSourceSetCheck.xml"
+ktlintTest = "/build/reports/ktlint/ktlintTestSourceSetCheck/ktlintTestSourceSetCheck.xml"
+ktlintAndroidTest = "/build/reports/ktlint/ktlintAndroidTestSourceSetCheck/ktlintAndroidTestSourceSetCheck.xml"
 detekt = "/build/reports/detekt/detekt.xml"
 lint = "/build/reports/lint-results.xml"
 
@@ -18,10 +18,8 @@ file_list = []
 
 module_list = [
 	"app",
-	"network",
-	"image-loader",
 	"database",
-	"core"
+	"analytics"
 ]
 
 for module in module_list:
@@ -29,6 +27,8 @@ for module in module_list:
 	file_list.append(parentDirectory + module + ktlintTest)
 	file_list.append(parentDirectory + module + ktlintAndroidTest)
 	file_list.append(parentDirectory + module + detekt)
+
+print(file_list)
 
 ktlintFile = 'ktlint-report-orig.xml'
 editedKtlintFile = 'ktlint-report.xml'

@@ -24,12 +24,23 @@ jobs:
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
         run: echo $FIREBASE_SECRET > app/google-services.json
 
+      - name: Detekt
+        run: ./gradlew detekt
+
+      - name: ktlint
+        run: ./gradlew ktlintCheck
+        if: ${{ always() }}
+
+      - name: Android Lint
+        run: ./gradlew lint
+        if: ${{ always() }}
+
+      - name: Dependency Updates
+        run: ./gradlew dependencyUpdates
+        if: ${{ always() }}
+
       - name: Danger Checks
         run: |
-          ./gradlew detekt
-          ./gradlew ktlintCheck
-          ./gradlew lint
-          ./gradlew dependencyUpdates
           cd scripts
           touch ktlint-report-orig.xml
           touch ktlint-report.xml
@@ -40,3 +51,4 @@ jobs:
           bundle exec danger
         env:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ always() }}

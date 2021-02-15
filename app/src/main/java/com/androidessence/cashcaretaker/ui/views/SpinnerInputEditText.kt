@@ -6,11 +6,11 @@ import android.util.AttributeSet
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
 
-@Suppress("MemberVisibilityCanPrivate")
 /**
  * CustomView that shows an alert dialog of a list of items when selected, and puts that selected
  * item inside this edit text.
  */
+@Suppress("MemberVisibilityCanPrivate")
 class SpinnerInputEditText<T> : AppCompatEditText {
 
     var items: List<T> = ArrayList()
