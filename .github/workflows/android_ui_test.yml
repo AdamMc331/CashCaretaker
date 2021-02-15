@@ -9,6 +9,12 @@
 #      - name: checkout
 #        uses: actions/checkout@v2
 #
+#      # https://medium.com/@thiagolopessilva/running-android-unit-testing-on-github-action-with-a-project-that-contains-firebase-dependency-621603363bc1
+#      - name: Decode google-services.json
+#        env:
+#          FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
+#        run: echo $FIREBASE_SECRET > app/google-services.json
+#
 #      - name: run tests
 #        uses: reactivecircus/android-emulator-runner@v2
 #        with:
