@@ -6,12 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.androidessence.cashcaretaker.databinding.DialogAddAccountBinding
+import com.androidessence.cashcaretaker.ui.utils.launchWhenResumed
 import com.androidessence.cashcaretaker.util.DecimalDigitsInputFilter
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -26,7 +25,7 @@ class AddAccountDialog : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DialogAddAccountBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -52,7 +51,6 @@ class AddAccountDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
-        initializeViewModel()
         subscribeToViewModel()
 
         return dialog
@@ -67,34 +65,30 @@ class AddAccountDialog : DialogFragment() {
         )
     }
 
-    private fun initializeViewModel() {
-        viewModel.accountNameError.observe(
-            this,
-            Observer { errorRes ->
-                errorRes?.let {
-                    binding.accountNameEditText.error = getString(errorRes)
-                }
-            }
-        )
+    private fun processViewState(viewState: AddAccountViewState) {
+        viewState.accountNameErrorTextRes
+            ?.let(::getString)
+            ?.let(binding.accountNameEditText::setError)
 
-        viewModel.accountBalanceError.observe(
-            this,
-            Observer { errorRes ->
-                errorRes?.let {
-                    binding.accountBalanceEditText.error = getString(errorRes)
-                }
-            }
-        )
+        viewState.accountBalanceErrorTextRes
+            ?.let(::getString)
+            ?.let(binding.accountBalanceEditText::setError)
     }
 
     private fun subscribeToViewModel() {
-        lifecycleScope.launch {
-            viewModel.dismissEvents.collect { shouldDismiss ->
+        viewModel.dismissEvents
+            .onEach { shouldDismiss ->
                 if (shouldDismiss) {
                     dismiss()
                 }
             }
-        }
+            .launchWhenResumed(lifecycleScope)
+
+        viewModel.viewState
+            .onEach { viewState ->
+                processViewState(viewState)
+            }
+            .launchWhenResumed(lifecycleScope)
     }
 
     companion object {

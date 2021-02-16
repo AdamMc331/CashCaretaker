@@ -5,16 +5,13 @@ import app.cash.turbine.test
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.testObserver
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.verify
 import kotlin.time.ExperimentalTime
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 @ExperimentalTime
 class AddAccountViewModelRobot {
     private val mockRepository = mockk<CCRepository>(relaxed = true)
@@ -62,12 +59,12 @@ class AddAccountViewModelRobot {
     }
 
     fun assertAccountNameError(expectedValue: Int) = apply {
-        val actualValue = viewModel.accountNameError.testObserver().observedValue
+        val actualValue = viewModel.viewState.value.accountNameErrorTextRes
         assertThat(actualValue).isEqualTo(expectedValue)
     }
 
     fun assertAccountBalanceError(expectedValue: Int) = apply {
-        val actualValue = viewModel.accountBalanceError.testObserver().observedValue
+        val actualValue = viewModel.viewState.value.accountBalanceErrorTextRes
         assertThat(actualValue).isEqualTo(expectedValue)
     }
 }

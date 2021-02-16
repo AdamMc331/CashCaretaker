@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import com.androidessence.cashcaretaker.data.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -32,7 +31,6 @@ class TestDispatcherProvider : DispatcherProvider {
         get() = Dispatchers.Unconfined
 }
 
-@ExperimentalCoroutinesApi
 class CoroutinesTestRule(
     private val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
 ) : TestWatcher() {

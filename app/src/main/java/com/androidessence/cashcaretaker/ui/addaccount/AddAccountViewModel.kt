@@ -1,7 +1,6 @@
 package com.androidessence.cashcaretaker.ui.addaccount
 
 import android.database.sqlite.SQLiteConstraintException
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.R
@@ -10,15 +9,20 @@ import com.androidessence.cashcaretaker.core.models.Account
 import com.androidessence.cashcaretaker.data.CCRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class AddAccountViewModel(
     private val repository: CCRepository,
-    private val analyticsTracker: AnalyticsTracker
+    private val analyticsTracker: AnalyticsTracker,
 ) : BaseViewModel() {
-    val accountNameError = MutableLiveData<Int>()
-    val accountBalanceError = MutableLiveData<Int>()
+    private val _viewState: MutableStateFlow<AddAccountViewState> = MutableStateFlow(
+        AddAccountViewState()
+    )
+
+    val viewState: StateFlow<AddAccountViewState> = _viewState
 
     private val dismissEventChannel: Channel<Boolean> = Channel()
     val dismissEvents: Flow<Boolean> = dismissEventChannel.receiveAsFlow()
@@ -28,13 +32,17 @@ class AddAccountViewModel(
      */
     fun addAccount(name: String?, balanceString: String?) {
         if (name == null || name.isEmpty()) {
-            accountNameError.value = R.string.err_account_name_invalid
+            _viewState.value = _viewState.value.copy(
+                accountNameErrorTextRes = R.string.err_account_name_invalid
+            )
             return
         }
 
         val balance = balanceString?.toDoubleOrNull()
         if (balance == null) {
-            accountBalanceError.value = R.string.err_account_balance_invalid
+            _viewState.value = _viewState.value.copy(
+                accountBalanceErrorTextRes = R.string.err_account_balance_invalid
+            )
             return
         }
 
@@ -47,7 +55,9 @@ class AddAccountViewModel(
                 dismissEventChannel.send(true)
                 dismissEventChannel.close()
             } catch (constraintException: SQLiteConstraintException) {
-                accountNameError.value = R.string.err_account_name_exists
+                _viewState.value = _viewState.value.copy(
+                    accountNameErrorTextRes = R.string.err_account_name_exists
+                )
             }
         }
     }

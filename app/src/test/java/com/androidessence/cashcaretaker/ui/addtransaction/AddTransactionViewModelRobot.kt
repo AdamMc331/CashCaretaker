@@ -11,9 +11,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.util.Date
 import kotlin.time.ExperimentalTime
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 @ExperimentalTime
 class AddTransactionViewModelRobot {
     private val mockRepository = mockk<CCRepository>(relaxed = true)
