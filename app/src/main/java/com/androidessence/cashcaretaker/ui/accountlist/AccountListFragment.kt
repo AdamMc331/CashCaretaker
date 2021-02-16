@@ -21,8 +21,9 @@ import com.androidessence.cashcaretaker.ui.addaccount.AddAccountDialog
 import com.androidessence.cashcaretaker.ui.addtransaction.AddTransactionDialog
 import com.androidessence.cashcaretaker.ui.main.MainController
 import com.androidessence.cashcaretaker.ui.transfer.AddTransferDialog
+import com.androidessence.cashcaretaker.ui.utils.launchWhenResumed
 import com.androidessence.cashcaretaker.ui.utils.visibleIf
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import me.ibrahimyilmaz.kiel.adapterOf
 import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -136,14 +137,14 @@ class AccountListFragment : Fragment() {
 
     /**
      * Subscribes to any subjects that the [viewModel] is exposing. This includes the [viewModel] state,
-     * which we use to update the adpater when a list is pulled successfully.
+     * which we use to update the adapter when a list is pulled successfully.
      */
     private fun subscribeToViewModel() {
-        lifecycleScope.launchWhenResumed {
-            viewModel.viewState.collect { viewState ->
+        viewModel.viewState
+            .onEach { viewState ->
                 processViewState(viewState)
             }
-        }
+            .launchWhenResumed(lifecycleScope)
     }
 
     private fun processViewState(viewState: AccountListViewState) {
