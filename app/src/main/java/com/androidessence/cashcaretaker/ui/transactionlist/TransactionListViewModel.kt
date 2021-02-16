@@ -4,21 +4,18 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.adammcneilly.cashcaretaker.analytics.AnalyticsTracker
 import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.BaseViewModel
 import com.androidessence.cashcaretaker.core.models.Transaction
 import com.androidessence.cashcaretaker.data.CCRepository
-import com.androidessence.cashcaretaker.data.DataViewState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -37,31 +34,8 @@ class TransactionListViewModel(
 
     val viewState: StateFlow<TransactionListViewState> = _viewState
 
-    private val _state: MutableLiveData<DataViewState> = MutableLiveData<DataViewState>().apply {
-        value = DataViewState.Loading
-    }
-
     private val editClickedChannel: Channel<Transaction> = Channel()
     val editClickedFlow: Flow<Transaction> = editClickedChannel.receiveAsFlow()
-
-    val transactions: LiveData<List<Transaction>> = Transformations.map(_state) { state ->
-        (state as? DataViewState.Success<*>)
-            ?.result
-            ?.filterIsInstance(Transaction::class.java)
-            .orEmpty()
-    }
-
-    val showTransactions: LiveData<Boolean> = Transformations.map(_state) { state ->
-        state is DataViewState.Success<*>
-    }
-
-    val showEmptyMessage: LiveData<Boolean> = Transformations.map(_state) { state ->
-        state is DataViewState.Empty
-    }
-
-    val showLoading: LiveData<Boolean> = Transformations.map(_state) { state ->
-        state is DataViewState.Loading
-    }
 
     //region Action Mode
     private var selectedTransaction: Transaction? = null
@@ -107,16 +81,14 @@ class TransactionListViewModel(
     //endregion
 
     init {
-        viewModelScope.launch {
-            repository.fetchTransactionsForAccount(accountName).collect { transactions ->
-                val dataViewState = when {
-                    transactions.isEmpty() -> DataViewState.Empty
-                    else -> DataViewState.Success(transactions)
-                }
-
-                _state.value = dataViewState
+        repository.fetchTransactionsForAccount(accountName)
+            .onEach { transactions ->
+                _viewState.value = _viewState.value.copy(
+                    showLoading = false,
+                    transactions = transactions,
+                )
             }
-        }
+            .launchIn(viewModelScope)
     }
 
     private fun deleteSelectedTransaction() {

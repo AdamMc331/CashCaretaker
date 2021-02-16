@@ -1,20 +1,13 @@
 package com.androidessence.cashcaretaker.ui.transactionlist
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.androidessence.cashcaretaker.CoroutinesTestRule
 import com.androidessence.cashcaretaker.core.models.Transaction
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@ExperimentalCoroutinesApi
 class TransactionListViewModelTest {
     private lateinit var testRobot: TransactionListViewModelRobot
-
-    @JvmField
-    @Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @JvmField
     @Rule
@@ -35,21 +28,30 @@ class TransactionListViewModelTest {
             )
         )
 
+        val expectedViewState = TransactionListViewState(
+            showLoading = false,
+            accountName = accountName,
+            transactions = testTransactions,
+        )
+
         testRobot
             .mockTransactionsForAccount(
                 accountName,
                 testTransactions
             )
             .buildViewModel(accountName)
-            .assertTransactions(testTransactions)
-            .assertShowTransactions(true)
-            .assertShowLoading(false)
-            .assertShowEmptyMessage(false)
+            .assertViewState(expectedViewState)
     }
 
     @Test
     fun fetchEmptyTransactionList() {
         val accountName = "Checking"
+
+        val expectedViewState = TransactionListViewState(
+            showLoading = false,
+            accountName = accountName,
+            transactions = emptyList(),
+        )
 
         testRobot
             .mockTransactionsForAccount(
@@ -57,9 +59,6 @@ class TransactionListViewModelTest {
                 emptyList()
             )
             .buildViewModel(accountName)
-            .assertTransactions(emptyList())
-            .assertShowTransactions(false)
-            .assertShowLoading(false)
-            .assertShowEmptyMessage(true)
+            .assertViewState(expectedViewState)
     }
 }
