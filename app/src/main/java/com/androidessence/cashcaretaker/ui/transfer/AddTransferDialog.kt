@@ -20,14 +20,12 @@ import com.androidessence.cashcaretaker.util.asUIString
 import java.util.Calendar
 import java.util.Date
 import kotlinx.android.synthetic.main.dialog_add_transfer.transferAmount
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Dialog that allows a user to transfer money from one account to another.
  */
-@ExperimentalCoroutinesApi
 class AddTransferDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var binding: DialogAddTransferBinding
 

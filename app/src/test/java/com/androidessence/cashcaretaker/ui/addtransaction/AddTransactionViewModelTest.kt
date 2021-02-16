@@ -6,14 +6,12 @@ import com.androidessence.cashcaretaker.R
 import com.androidessence.cashcaretaker.core.models.Transaction
 import java.util.Date
 import kotlin.time.ExperimentalTime
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalTime
-@ExperimentalCoroutinesApi
 class AddTransactionViewModelTest {
     private lateinit var testRobot: AddTransactionViewModelRobot
 
