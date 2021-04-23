@@ -43,6 +43,7 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
+        compose true
     }
 
     packagingOptions {
@@ -62,6 +63,11 @@ android {
 
     lintOptions {
         abortOnError = false
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerVersion '1.4.30'
     }
 }
 
@@ -117,6 +123,13 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+
+    // Compose
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 
     compileOnly "org.glassfish:javax.annotation:10.0-b28"
 }
