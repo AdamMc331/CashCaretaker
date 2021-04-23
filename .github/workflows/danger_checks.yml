@@ -11,7 +11,7 @@ jobs:
       - name: Set Up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 1.11
 
       - name: Set Up Ruby
         uses: actions/setup-ruby@v1
@@ -41,11 +41,6 @@ jobs:
 
       - name: Danger Checks
         run: |
-          cd scripts
-          touch ktlint-report-orig.xml
-          touch ktlint-report.xml
-          python combine_ktlint_reports.py
-          cd ..
           gem install bundler
           bundle install
           bundle exec danger
