@@ -59,6 +59,10 @@ android {
 
         freeCompilerArgs += ["-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi", "-Xopt-in=kotlin.contracts.ExperimentalContracts"]
     }
+
+    lintOptions {
+        abortOnError = false
+    }
 }
 
 dependencies {
