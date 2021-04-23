@@ -76,7 +76,6 @@ dependencies {
 
     // Third party
     implementation "com.jakewharton.timber:timber:$timberVersion"
-    implementation "com.androidessence:materialdesignspecs:$materialDesignSpecsVersion"
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
