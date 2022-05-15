@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-    def roomVersion = "2.3.0"
+    def roomVersion = "2.4.2"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
