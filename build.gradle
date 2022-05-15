@@ -35,8 +35,8 @@ allprojects {
 
     ext {
         androidMinSdkVersion = 21
-        androidTargetSdkVersion = 29
-        androidCompileSdkVersion = 29
+        androidTargetSdkVersion = 31
+        androidCompileSdkVersion = 31
 
         appCompatVersion = "1.4.1"
         lifecycleVersion = "2.3.1"
