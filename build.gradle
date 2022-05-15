@@ -4,9 +4,9 @@ apply plugin: "org.jlleitschuh.gradle.ktlint"
 apply plugin: "io.gitlab.arturbosch.detekt"
 
 buildscript {
-    ext.kotlin_version = "1.4.32"
+    ext.kotlin_version = "1.6.10"
     ext.build_tools_version = '7.0.4'
-    ext.compose_version = '1.0.0-beta05'
+    ext.compose_version = '1.1.1'
 
     repositories {
         jcenter()
@@ -38,7 +38,7 @@ allprojects {
         androidTargetSdkVersion = 29
         androidCompileSdkVersion = 29
 
-        appCompatVersion = "1.2.0"
+        appCompatVersion = "1.4.1"
         lifecycleVersion = "2.3.1"
         coroutinesVersion = "1.4.3"
         architectureComponentsVersion = "2.1.0"
